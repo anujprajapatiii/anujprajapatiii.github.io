@@ -7,52 +7,129 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
-  Design tokens — STARTER PALETTE.
-  Neutral by design: replace these values in the design token session
-  (see agent-os/parking-lot.md). Components must only ever reference the
-  semantic tokens below, so retheming the whole site happens in this file.
+  Design tokens — Anuj's palette (imported from his Figma variables, 2026-06).
+  Two-tier system (see agent-os/plans/design-token-session.md and /style-guide):
+
+  1. PRIMITIVES — raw hex values straight from Figma. One value, period.
+     Never re-mapped by themes, never referenced by components directly.
+  2. SEMANTIC — Figma's variable names (kebab-cased). Reference primitives
+     via var() only. Light values in :root, dark re-maps in .dark
+     (only the tokens that differ).
+  3. ALIASES — the shadcn/Tailwind names components already use, pointed at
+     semantic tokens so the palette swaps without touching components.
 */
 :root {
-    --background: oklch(0.985 0.002 90);
-    --foreground: oklch(0.16 0.005 90);
-    --card: oklch(0.965 0.003 90);
-    --card-foreground: oklch(0.16 0.005 90);
-    --popover: oklch(0.985 0.002 90);
-    --popover-foreground: oklch(0.16 0.005 90);
-    --primary: oklch(0.16 0.005 90);
-    --primary-foreground: oklch(0.985 0.002 90);
-    --secondary: oklch(0.945 0.004 90);
-    --secondary-foreground: oklch(0.26 0.005 90);
-    --muted: oklch(0.945 0.004 90);
-    --muted-foreground: oklch(0.50 0.008 90);
-    --accent: oklch(0.55 0.16 255);
-    --accent-foreground: oklch(0.985 0.002 90);
-    --destructive: oklch(0.58 0.22 27);
-    --border: oklch(0.90 0.005 90);
-    --input: oklch(0.90 0.005 90);
-    --ring: oklch(0.55 0.16 255);
+    /* ---- 1. PRIMITIVES ---- */
+    /* Neutral */
+    --neutral-black: #000000;
+    --neutral-900: #0e0f12;
+    --neutral-800: #141619;
+    --neutral-700: #1c1f24;
+    --neutral-600: #21252b;
+    --neutral-500: #2c323a;
+    --neutral-400: #434b56;
+    --neutral-300: #99a1ac;
+    --neutral-200: #d3d7dd;
+    --neutral-100: #f6f7f8;
+    --neutral-white: #ffffff;
+    /* Brown */
+    --brown-600: #2e2d2c;
+    --brown-500: #302f2e;
+    --brown-400: #595551;
+    --brown-300: #847b73;
+    --brown-200: #aba199;
+    --brown-100: #cfc7c1;
+    --brown-50: #f1eeec;
+    /* Amber */
+    --amber-400: #7c370e;
+    --amber-300: #e66c24;
+    --amber-200: #ee9a68;
+    --amber-100: #f5c2a3;
+    /* Blue */
+    --blue-600: #002c83;
+    --blue-500: #1841ac;
+    --blue-400: #1e50d3;
+    --blue-300: #99b6ff;
+    --blue-200: #dae5ff;
+    --blue-100: #f0f3ff;
+    /* Green */
+    --green-400: #1a4723;
+    --green-300: #37954a;
+    --green-200: #53c069;
+    --green-100: #b4e4be;
+    /* Red */
+    --red-400: #67090a;
+    --red-300: #ec2426;
+    --red-200: #f2696a;
+    --red-100: #f7a1a2;
+    /* Yellow */
+    --yellow-600: #853e0f;
+    --yellow-500: #d17600;
+    --yellow-400: #ffb700;
+    --yellow-300: #ffd293;
+    --yellow-200: #ffe9d0;
+    --yellow-100: #fff5f5;
+
+    /* ---- 2. SEMANTIC (Figma names) — light mode ---- */
+    --background-primary: var(--neutral-100);
+    --background-secondary: var(--neutral-200);
+    --background-tertiary: var(--yellow-500);
+    --background-alternate: var(--neutral-800);
+    --background-success: var(--green-100);
+    --background-warning: var(--yellow-200);
+    --background-error: var(--red-100);
+    --background-hover: var(--neutral-200);
+    --border-primary: var(--neutral-300);
+    --border-secondary: var(--brown-200);
+    --border-alternate: var(--neutral-500);
+    --border-hover: var(--neutral-800);
+    --text-primary: var(--neutral-600);
+    --text-secondary: var(--brown-400);
+    --text-alternate: var(--neutral-100);
+    --text-success: var(--green-400);
+    --text-warning: var(--yellow-600);
+    --text-error: var(--red-400);
+    --link-primary: var(--text-primary);
+    --link-secondary: var(--neutral-800);
+    --link-alternate: var(--neutral-100);
+
+    /* ---- 3. ALIASES (shadcn/Tailwind names used by components) ---- */
+    --background: var(--background-primary);
+    --foreground: var(--text-primary);
+    --card: var(--background-secondary);
+    --card-foreground: var(--text-primary);
+    --popover: var(--background-primary);
+    --popover-foreground: var(--text-primary);
+    --primary: var(--background-alternate);
+    --primary-foreground: var(--text-alternate);
+    --secondary: var(--background-secondary);
+    --secondary-foreground: var(--text-primary);
+    --muted: var(--background-secondary);
+    --muted-foreground: var(--text-secondary);
+    --accent: var(--text-secondary);
+    --accent-foreground: var(--text-alternate);
+    --destructive: var(--text-error);
+    --border: var(--border-primary);
+    --input: var(--border-primary);
+    --ring: var(--border-hover);
     --radius: 0.5rem;
 }
 
 .dark {
-    --background: oklch(0.15 0.005 90);
-    --foreground: oklch(0.92 0.005 90);
-    --card: oklch(0.19 0.005 90);
-    --card-foreground: oklch(0.92 0.005 90);
-    --popover: oklch(0.19 0.005 90);
-    --popover-foreground: oklch(0.92 0.005 90);
-    --primary: oklch(0.92 0.005 90);
-    --primary-foreground: oklch(0.15 0.005 90);
-    --secondary: oklch(0.23 0.005 90);
-    --secondary-foreground: oklch(0.88 0.005 90);
-    --muted: oklch(0.23 0.005 90);
-    --muted-foreground: oklch(0.71 0.005 90);
-    --accent: oklch(0.70 0.14 255);
-    --accent-foreground: oklch(0.15 0.005 90);
-    --destructive: oklch(0.70 0.19 22);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.70 0.14 255);
+    /* Semantic re-maps only — primitives and aliases never appear here. */
+    --background-primary: var(--neutral-800);
+    --background-secondary: var(--neutral-600);
+    --background-alternate: var(--neutral-100);
+    --background-hover: var(--neutral-600);
+    --border-primary: var(--neutral-500);
+    --border-secondary: var(--brown-400);
+    --border-alternate: var(--neutral-300);
+    --border-hover: var(--neutral-100);
+    --text-primary: var(--neutral-200);
+    --text-secondary: var(--brown-200);
+    --text-alternate: var(--neutral-800);
+    --link-secondary: var(--neutral-100);
+    --link-alternate: var(--neutral-800);
 }
 
 @theme inline {
@@ -76,6 +153,28 @@
     --color-card: var(--card);
     --color-foreground: var(--foreground);
     --color-background: var(--background);
+    /* Figma semantic names as utilities (bg-background-primary, etc.) */
+    --color-background-primary: var(--background-primary);
+    --color-background-secondary: var(--background-secondary);
+    --color-background-tertiary: var(--background-tertiary);
+    --color-background-alternate: var(--background-alternate);
+    --color-background-success: var(--background-success);
+    --color-background-warning: var(--background-warning);
+    --color-background-error: var(--background-error);
+    --color-background-hover: var(--background-hover);
+    --color-border-primary: var(--border-primary);
+    --color-border-secondary: var(--border-secondary);
+    --color-border-alternate: var(--border-alternate);
+    --color-border-hover: var(--border-hover);
+    --color-text-primary: var(--text-primary);
+    --color-text-secondary: var(--text-secondary);
+    --color-text-alternate: var(--text-alternate);
+    --color-text-success: var(--text-success);
+    --color-text-warning: var(--text-warning);
+    --color-text-error: var(--text-error);
+    --color-link-primary: var(--link-primary);
+    --color-link-secondary: var(--link-secondary);
+    --color-link-alternate: var(--link-alternate);
     --radius-sm: calc(var(--radius) * 0.6);
     --radius-md: calc(var(--radius) * 0.8);
     --radius-lg: var(--radius);
@@ -140,8 +239,11 @@
 .prose blockquote {
   @apply border-l-2 border-border pl-4 text-muted-foreground;
 }
-.prose code {
+.prose :not(pre) > code {
   @apply rounded bg-muted px-1.5 py-0.5 font-mono text-sm;
+}
+.prose pre {
+  @apply my-6 overflow-x-auto rounded-lg border border-border p-4 text-sm;
 }
 .prose hr {
   @apply my-10 border-border;

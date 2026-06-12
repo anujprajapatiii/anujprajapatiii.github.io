@@ -1,16 +1,144 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
 
-const colorTokens = [
-  { name: "background", class: "bg-background" },
-  { name: "foreground", class: "bg-foreground" },
-  { name: "card", class: "bg-card" },
-  { name: "muted", class: "bg-muted" },
-  { name: "muted-foreground", class: "bg-muted-foreground" },
-  { name: "secondary", class: "bg-secondary" },
-  { name: "accent", class: "bg-accent" },
-  { name: "border", class: "bg-border" },
-  { name: "destructive", class: "bg-destructive" },
+/* Keep these arrays in sync with the token block in src/styles/global.css
+   (see agent-os/plans/design-token-session.md). */
+
+const primitiveFamilies = [
+  {
+    name: "Neutral",
+    swatches: [
+      { name: "black", value: "#000000" },
+      { name: "900", value: "#0e0f12" },
+      { name: "800", value: "#141619" },
+      { name: "700", value: "#1c1f24" },
+      { name: "600", value: "#21252b" },
+      { name: "500", value: "#2c323a" },
+      { name: "400", value: "#434b56" },
+      { name: "300", value: "#99a1ac" },
+      { name: "200", value: "#d3d7dd" },
+      { name: "100", value: "#f6f7f8" },
+      { name: "white", value: "#ffffff" },
+    ],
+  },
+  {
+    name: "Brown",
+    swatches: [
+      { name: "600", value: "#2e2d2c" },
+      { name: "500", value: "#302f2e" },
+      { name: "400", value: "#595551" },
+      { name: "300", value: "#847b73" },
+      { name: "200", value: "#aba199" },
+      { name: "100", value: "#cfc7c1" },
+      { name: "50", value: "#f1eeec" },
+    ],
+  },
+  {
+    name: "Amber",
+    swatches: [
+      { name: "400", value: "#7c370e" },
+      { name: "300", value: "#e66c24" },
+      { name: "200", value: "#ee9a68" },
+      { name: "100", value: "#f5c2a3" },
+    ],
+  },
+  {
+    name: "Blue",
+    swatches: [
+      { name: "600", value: "#002c83" },
+      { name: "500", value: "#1841ac" },
+      { name: "400", value: "#1e50d3" },
+      { name: "300", value: "#99b6ff" },
+      { name: "200", value: "#dae5ff" },
+      { name: "100", value: "#f0f3ff" },
+    ],
+  },
+  {
+    name: "Green",
+    swatches: [
+      { name: "400", value: "#1a4723" },
+      { name: "300", value: "#37954a" },
+      { name: "200", value: "#53c069" },
+      { name: "100", value: "#b4e4be" },
+    ],
+  },
+  {
+    name: "Red",
+    swatches: [
+      { name: "400", value: "#67090a" },
+      { name: "300", value: "#ec2426" },
+      { name: "200", value: "#f2696a" },
+      { name: "100", value: "#f7a1a2" },
+    ],
+  },
+  {
+    name: "Yellow",
+    swatches: [
+      { name: "600", value: "#853e0f" },
+      { name: "500", value: "#d17600" },
+      { name: "400", value: "#ffb700" },
+      { name: "300", value: "#ffd293" },
+      { name: "200", value: "#ffe9d0" },
+      { name: "100", value: "#fff5f5" },
+    ],
+  },
+];
+
+const semanticGroups = [
+  {
+    name: "Background",
+    tokens: [
+      { name: "background-primary", light: "neutral-100", dark: "neutral-800" },
+      { name: "background-secondary", light: "neutral-200", dark: "neutral-600" },
+      { name: "background-tertiary", light: "yellow-500", dark: "yellow-500" },
+      { name: "background-alternate", light: "neutral-800", dark: "neutral-100" },
+      { name: "background-success", light: "green-100", dark: "green-100" },
+      { name: "background-warning", light: "yellow-200", dark: "yellow-200" },
+      { name: "background-error", light: "red-100", dark: "red-100" },
+      { name: "background-hover", light: "neutral-200", dark: "neutral-600" },
+    ],
+  },
+  {
+    name: "Border",
+    tokens: [
+      { name: "border-primary", light: "neutral-300", dark: "neutral-500" },
+      { name: "border-secondary", light: "brown-200", dark: "brown-400" },
+      { name: "border-alternate", light: "neutral-500", dark: "neutral-300" },
+      { name: "border-hover", light: "neutral-800", dark: "neutral-100" },
+    ],
+  },
+  {
+    name: "Text",
+    tokens: [
+      { name: "text-primary", light: "neutral-600", dark: "neutral-200" },
+      { name: "text-secondary", light: "brown-400", dark: "brown-200" },
+      { name: "text-alternate", light: "neutral-100", dark: "neutral-800" },
+      { name: "text-success", light: "green-400", dark: "green-400" },
+      { name: "text-warning", light: "yellow-600", dark: "yellow-600" },
+      { name: "text-error", light: "red-400", dark: "red-400" },
+    ],
+  },
+  {
+    name: "Link",
+    tokens: [
+      { name: "link-primary", light: "text-primary", dark: "text-primary" },
+      { name: "link-secondary", light: "neutral-800", dark: "neutral-100" },
+      { name: "link-alternate", light: "neutral-100", dark: "neutral-800" },
+    ],
+  },
+];
+
+const aliases = [
+  { name: "background", to: "background-primary" },
+  { name: "foreground", to: "text-primary" },
+  { name: "card", to: "background-secondary" },
+  { name: "muted", to: "background-secondary" },
+  { name: "muted-foreground", to: "text-secondary" },
+  { name: "accent", to: "text-secondary" },
+  { name: "border / input", to: "border-primary" },
+  { name: "ring", to: "border-hover" },
+  { name: "primary", to: "background-alternate" },
+  { name: "destructive", to: "text-error" },
 ];
 ---
 
@@ -18,20 +146,83 @@ const colorTokens = [
   <div class="mx-auto max-w-3xl px-6 pt-12 pb-24 sm:pt-20">
     <h1 class="mb-2 text-4xl font-medium tracking-tight">Style guide</h1>
     <p class="mb-12 text-muted-foreground">
-      Internal reference for the token system. Toggle dark mode in the header
-      to check both themes. Update this page whenever tokens change.
+      Internal reference for the token system, mirroring the Figma variables.
+      Toggle dark mode in the header to check both themes. Update this page
+      whenever tokens change.
     </p>
 
     <section class="border-t border-border py-10">
-      <h2 class="mb-6 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-        Color tokens
+      <h2 class="mb-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+        Primitives
       </h2>
-      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
-        {colorTokens.map((token) => (
-          <div class="rounded-lg border border-border p-3">
-            <div class={`h-12 rounded-md border border-border ${token.class}`}></div>
-            <p class="mt-2 font-mono text-xs text-muted-foreground">--{token.name}</p>
+      <p class="mb-6 text-sm text-muted-foreground">
+        Raw palette. Same values in both themes; components never use these directly.
+      </p>
+      <div class="flex flex-col gap-6">
+        {primitiveFamilies.map((family) => (
+          <div>
+            <p class="mb-2 text-sm font-medium">{family.name}</p>
+            <div class="flex flex-wrap gap-2">
+              {family.swatches.map((swatch) => (
+                <div class="w-16">
+                  <div
+                    class="h-10 rounded-md border border-border"
+                    style={`background: ${swatch.value}`}
+                  ></div>
+                  <p class="mt-1 font-mono text-[10px] leading-tight text-muted-foreground">
+                    {swatch.name}<br />{swatch.value}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="border-t border-border py-10">
+      <h2 class="mb-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+        Semantic tokens
+      </h2>
+      <p class="mb-6 text-sm text-muted-foreground">
+        Figma variable names. The swatch shows the token in the theme you're
+        viewing; the caption lists its light → dark primitive mapping.
+      </p>
+      <div class="flex flex-col gap-8">
+        {semanticGroups.map((group) => (
+          <div>
+            <p class="mb-2 text-sm font-medium">{group.name}</p>
+            <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
+              {group.tokens.map((token) => (
+                <div class="rounded-lg border border-border p-3">
+                  <div
+                    class="h-12 rounded-md border border-border"
+                    style={`background: var(--${token.name})`}
+                  ></div>
+                  <p class="mt-2 font-mono text-xs">--{token.name}</p>
+                  <p class="font-mono text-[10px] text-muted-foreground">
+                    {token.light} → {token.dark}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="border-t border-border py-10">
+      <h2 class="mb-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+        Aliases
+      </h2>
+      <p class="mb-6 text-sm text-muted-foreground">
+        Internal names the components use, pointed at the semantic tokens above.
+      </p>
+      <div class="grid grid-cols-1 gap-x-8 gap-y-1 sm:grid-cols-2">
+        {aliases.map((alias) => (
+          <p class="font-mono text-xs text-muted-foreground">
+            --{alias.name} → {alias.to}
+          </p>
         ))}
       </div>
     </section>
