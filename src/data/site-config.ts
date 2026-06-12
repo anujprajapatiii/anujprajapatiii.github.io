@@ -1,9 +1,8 @@
 export const siteConfig = {
   name: "Anuj Prajapati",
-  title: "Anuj Prajapati — Designer",
-  // TODO(Anuj): one sentence about who you are and what you do.
+  title: "Anuj Prajapati — Brand & Growth Designer",
   description:
-    "Designer building thoughtful digital products. Portfolio and selected work.",
+    "Brand and growth designer crafting identities, campaigns, and product experiences that help things grow.",
   url: "https://anujprajapatiii.github.io",
   nav: [
     { label: "Home", href: "/" },
@@ -12,7 +11,7 @@ export const siteConfig = {
   ],
   social: {
     github: "https://github.com/anujprajapatiii",
-    // TODO(Anuj): confirm or update these.
+    // Intentionally blank for now — add when Anuj shares the URL.
     linkedin: "",
     email: "anujhprajapati@gmail.com",
   },

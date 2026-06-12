@@ -1,30 +1,26 @@
 # Strategy
 
-> STATUS: Draft scaffold. Anuj — fill in the TODO sections in your first
-> session. Everything here steers every future agent session, so keep it
-> honest and current.
+> STATUS: Active. Everything here steers every future agent session, so
+> keep it honest and current.
 
 ## Purpose
 
-This site is Anuj Prajapati's personal portfolio and home on the web. It
-should help people understand the shape of his design work and the judgment
-behind it.
-
-TODO(Anuj): sharpen this to one or two sentences in your own words. What
-should a visitor walk away knowing?
+This site is Anuj Prajapati's personal portfolio and home on the web. A
+visitor should walk away knowing that Anuj is a brand and growth designer
+and understanding the judgment behind the work — why it worked, not just
+what it looked like.
 
 ## Audience
 
-TODO(Anuj): who is this for, in priority order? For example:
+No single group dominates — the site should read equally well for all of
+these:
 
 - Design and product leaders evaluating collaboration or hiring.
+- Founders and teams considering brand or growth engagements.
 - Peers interested in the craft behind the work.
 - Future maintainers and agents working on the site.
 
 ## Experience Principles
-
-TODO(Anuj): 3-5 adjectives or short phrases that define the feel, plus any
-hard rules. Starter suggestions to edit or replace:
 
 - Minimal and content-first over decorative complexity.
 - The work is the hero; chrome stays quiet.
@@ -38,7 +34,7 @@ hard rules. Starter suggestions to edit or replace:
 | About | Personal narrative and context |
 | System | Astro architecture, design tokens, deployment, agent workflow |
 
-TODO(Anuj): add tracks as the site grows (Writing, Lab, etc.).
+Add tracks here as the site grows (Writing, Lab, etc.).
 
 ## Non-Goals
 
