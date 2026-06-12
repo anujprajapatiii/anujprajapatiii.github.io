@@ -2,7 +2,7 @@
 
 ## Status
 
-Planned
+Complete (shipped 2026-06-12)
 
 ## Context
 
@@ -120,13 +120,14 @@ Out:
 
 ## Steps
 
-- [ ] Anuj approves this plan (especially Scope and the judgment calls)
-- [ ] Write primitives, semantic tokens, aliases, `@theme` block
-- [ ] Rebuild style-guide color sections
-- [ ] `corepack pnpm build` passes
-- [ ] Preview: screenshot every page, light and dark; check text contrast
-- [ ] Show Anuj screenshots; adjust judgment calls if needed
-- [ ] Deploy and verify live
+- [x] Anuj approves this plan (especially Scope and the judgment calls)
+- [x] Write primitives, semantic tokens, aliases, `@theme` block
+- [x] Rebuild style-guide color sections
+- [x] `corepack pnpm build` passes
+- [x] Preview: screenshot every page, light and dark; check text contrast
+- [x] Show Anuj screenshots; adjust judgment calls if needed
+      (card surface revised → new `--background-elevated` token)
+- [x] Deploy and verify live
 
 ## Review
 
@@ -137,5 +138,14 @@ Out:
 
 ## Learnings
 
-To capture after completion: any contrast fixes needed, and the
-Figma-name-to-Tailwind-utility mapping convention.
+- Figma semantic names are exposed as Tailwind utilities via `@theme inline`
+  (`--color-background-primary` → `bg-background-primary`); components keep
+  using the shadcn aliases, which point at the Figma tokens.
+- Surfacing screenshots to Anuj caught two things the mapping table didn't:
+  the `.prose code` background was washing out Shiki code blocks (now scoped
+  to inline code only), and cards wanted a subtler step than
+  `background-secondary` — which produced the new `--background-elevated`
+  token (white / neutral-700). **Action: mirror `background elevated` into
+  the Figma variables so the two systems stay identical.**
+- No contrast fixes were needed; Figma's light/dark mappings held up on
+  every page.
