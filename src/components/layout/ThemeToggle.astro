@@ -26,18 +26,28 @@
 </button>
 
 <script>
-  let transitionTimeout: ReturnType<typeof setTimeout> | undefined;
+  /* theme-switching suppresses element-level transitions (see global.css)
+     so the flip is atomic; the two rAFs keep it on until the new state has
+     painted. The View Transition then crossfades old/new snapshots. */
+  function flipTheme() {
+    const root = document.documentElement;
+    root.classList.add("theme-switching");
+    const isDark = root.classList.toggle("dark");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => root.classList.remove("theme-switching")),
+    );
+  }
 
   function init() {
     document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]").forEach((button) => {
       button.addEventListener("click", () => {
-        const root = document.documentElement;
-        // Duration must match the theme-transitioning rule in global.css.
-        root.classList.add("theme-transitioning");
-        clearTimeout(transitionTimeout);
-        transitionTimeout = setTimeout(() => root.classList.remove("theme-transitioning"), 300);
-        const isDark = root.classList.toggle("dark");
-        localStorage.setItem("theme", isDark ? "dark" : "light");
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (!reduceMotion && document.startViewTransition) {
+          document.startViewTransition(flipTheme);
+        } else {
+          flipTheme();
+        }
       });
     });
   }

@@ -147,17 +147,16 @@
   @apply my-10 border-border;
 }
 
-/* Theme switch crossfade. ThemeToggle adds this class for the duration of
-   the switch so every element fades together — the !important overrides the
-   faster hover-only transition-colors that would otherwise lag behind. */
-@media (prefers-reduced-motion: no-preference) {
-  html.theme-transitioning,
-  html.theme-transitioning * {
-    transition:
-      background-color 300ms ease,
-      border-color 300ms ease,
-      color 300ms ease,
-      fill 300ms ease,
-      stroke 300ms ease !important;
-  }
+/* Theme switching. ThemeToggle flips the theme inside a View Transition:
+   the browser crossfades a snapshot of the whole page, so every element
+   changes together. While the class is on, element-level transitions are
+   suppressed so hover transition-colors can't chase the flipping colors
+   underneath the snapshot. */
+html.theme-switching,
+html.theme-switching * {
+  transition: none !important;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 300ms;
 }
