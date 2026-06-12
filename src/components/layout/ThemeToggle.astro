@@ -26,10 +26,17 @@
 </button>
 
 <script>
+  let transitionTimeout: ReturnType<typeof setTimeout> | undefined;
+
   function init() {
     document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]").forEach((button) => {
       button.addEventListener("click", () => {
-        const isDark = document.documentElement.classList.toggle("dark");
+        const root = document.documentElement;
+        // Duration must match the theme-transitioning rule in global.css.
+        root.classList.add("theme-transitioning");
+        clearTimeout(transitionTimeout);
+        transitionTimeout = setTimeout(() => root.classList.remove("theme-transitioning"), 300);
+        const isDark = root.classList.toggle("dark");
         localStorage.setItem("theme", isDark ? "dark" : "light");
       });
     });

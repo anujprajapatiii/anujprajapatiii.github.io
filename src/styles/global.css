@@ -146,3 +146,18 @@
 .prose hr {
   @apply my-10 border-border;
 }
+
+/* Theme switch crossfade. ThemeToggle adds this class for the duration of
+   the switch so every element fades together — the !important overrides the
+   faster hover-only transition-colors that would otherwise lag behind. */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-transitioning,
+  html.theme-transitioning * {
+    transition:
+      background-color 300ms ease,
+      border-color 300ms ease,
+      color 300ms ease,
+      fill 300ms ease,
+      stroke 300ms ease !important;
+  }
+}
