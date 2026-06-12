@@ -1,6 +1,8 @@
 ---
 import "../styles/global.css";
 import { siteConfig } from "@/data/site-config";
+import geistWoff2 from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url";
+import geistMonoWoff2 from "@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2?url";
 
 interface Props {
   title?: string;
@@ -26,6 +28,10 @@ const ogImage = image ? new URL(image, siteConfig.url).toString() : undefined;
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
+
+    {/* Preload fonts so text never paints in a fallback and swaps (FOUT) */}
+    <link rel="preload" href={geistWoff2} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={geistMonoWoff2} as="font" type="font/woff2" crossorigin />
     <title>{pageTitle}</title>
 
     {/* Open Graph */}
