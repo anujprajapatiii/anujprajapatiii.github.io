@@ -1,0 +1,36 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  description: string;
+  role?: string;
+  year?: string;
+  thumbnail?: string;
+}
+
+const { id, title, description, role, year, thumbnail } = Astro.props;
+---
+
+<a
+  href={`/work/${id}`}
+  class="group block rounded-xl border border-border bg-card p-6 transition-colors hover:border-foreground/30"
+>
+  {thumbnail && (
+    <img
+      src={thumbnail}
+      alt=""
+      loading="lazy"
+      class="mb-5 aspect-[16/10] w-full rounded-lg border border-border object-cover"
+    />
+  )}
+  <div class="flex items-baseline justify-between gap-4">
+    <h3 class="text-lg font-medium tracking-tight transition-colors group-hover:text-accent">
+      {title}
+    </h3>
+    {year && <span class="shrink-0 font-mono text-xs text-muted-foreground">{year}</span>}
+  </div>
+  {role && (
+    <p class="mt-1 font-mono text-xs uppercase tracking-wide text-muted-foreground">{role}</p>
+  )}
+  <p class="mt-2 text-sm leading-relaxed text-muted-foreground">{description}</p>
+</a>

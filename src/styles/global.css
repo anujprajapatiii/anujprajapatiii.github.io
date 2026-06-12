@@ -1,0 +1,148 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+  Design tokens — STARTER PALETTE.
+  Neutral by design: replace these values in the design token session
+  (see agent-os/parking-lot.md). Components must only ever reference the
+  semantic tokens below, so retheming the whole site happens in this file.
+*/
+:root {
+    --background: oklch(0.985 0.002 90);
+    --foreground: oklch(0.16 0.005 90);
+    --card: oklch(0.965 0.003 90);
+    --card-foreground: oklch(0.16 0.005 90);
+    --popover: oklch(0.985 0.002 90);
+    --popover-foreground: oklch(0.16 0.005 90);
+    --primary: oklch(0.16 0.005 90);
+    --primary-foreground: oklch(0.985 0.002 90);
+    --secondary: oklch(0.945 0.004 90);
+    --secondary-foreground: oklch(0.26 0.005 90);
+    --muted: oklch(0.945 0.004 90);
+    --muted-foreground: oklch(0.50 0.008 90);
+    --accent: oklch(0.55 0.16 255);
+    --accent-foreground: oklch(0.985 0.002 90);
+    --destructive: oklch(0.58 0.22 27);
+    --border: oklch(0.90 0.005 90);
+    --input: oklch(0.90 0.005 90);
+    --ring: oklch(0.55 0.16 255);
+    --radius: 0.5rem;
+}
+
+.dark {
+    --background: oklch(0.15 0.005 90);
+    --foreground: oklch(0.92 0.005 90);
+    --card: oklch(0.19 0.005 90);
+    --card-foreground: oklch(0.92 0.005 90);
+    --popover: oklch(0.19 0.005 90);
+    --popover-foreground: oklch(0.92 0.005 90);
+    --primary: oklch(0.92 0.005 90);
+    --primary-foreground: oklch(0.15 0.005 90);
+    --secondary: oklch(0.23 0.005 90);
+    --secondary-foreground: oklch(0.88 0.005 90);
+    --muted: oklch(0.23 0.005 90);
+    --muted-foreground: oklch(0.71 0.005 90);
+    --accent: oklch(0.70 0.14 255);
+    --accent-foreground: oklch(0.15 0.005 90);
+    --destructive: oklch(0.70 0.19 22);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.70 0.14 255);
+}
+
+@theme inline {
+    --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'Geist Mono Variable', ui-monospace, 'SFMono-Regular', monospace;
+    --color-ring: var(--ring);
+    --color-input: var(--input);
+    --color-border: var(--border);
+    --color-destructive: var(--destructive);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* Markdown prose for case-study bodies (custom, not @tailwindcss/typography) */
+.prose {
+  @apply text-foreground;
+}
+.prose > * + * {
+  margin-top: 1.25em;
+}
+.prose h2 {
+  @apply mt-12 text-2xl font-medium tracking-tight;
+}
+.prose h3 {
+  @apply mt-8 text-xl font-medium tracking-tight;
+}
+.prose p,
+.prose ul,
+.prose ol {
+  @apply text-base leading-relaxed text-foreground/90;
+}
+.prose ul {
+  @apply list-disc pl-5;
+}
+.prose ol {
+  @apply list-decimal pl-5;
+}
+.prose li + li {
+  margin-top: 0.4em;
+}
+.prose a {
+  @apply text-foreground underline underline-offset-4 transition-colors hover:text-accent;
+}
+.prose strong {
+  @apply font-medium;
+}
+.prose img {
+  @apply rounded-lg border border-border;
+}
+.prose figure {
+  @apply my-8;
+}
+.prose figcaption {
+  @apply mt-2 font-mono text-xs text-muted-foreground;
+}
+.prose blockquote {
+  @apply border-l-2 border-border pl-4 text-muted-foreground;
+}
+.prose code {
+  @apply rounded bg-muted px-1.5 py-0.5 font-mono text-sm;
+}
+.prose hr {
+  @apply my-10 border-border;
+}

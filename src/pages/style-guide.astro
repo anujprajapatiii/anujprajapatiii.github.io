@@ -1,0 +1,72 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+
+const colorTokens = [
+  { name: "background", class: "bg-background" },
+  { name: "foreground", class: "bg-foreground" },
+  { name: "card", class: "bg-card" },
+  { name: "muted", class: "bg-muted" },
+  { name: "muted-foreground", class: "bg-muted-foreground" },
+  { name: "secondary", class: "bg-secondary" },
+  { name: "accent", class: "bg-accent" },
+  { name: "border", class: "bg-border" },
+  { name: "destructive", class: "bg-destructive" },
+];
+---
+
+<PageLayout title="Style Guide — Anuj Prajapati" description="Internal design-system reference." noindex>
+  <div class="mx-auto max-w-3xl px-6 pt-12 pb-24 sm:pt-20">
+    <h1 class="mb-2 text-4xl font-medium tracking-tight">Style guide</h1>
+    <p class="mb-12 text-muted-foreground">
+      Internal reference for the token system. Toggle dark mode in the header
+      to check both themes. Update this page whenever tokens change.
+    </p>
+
+    <section class="border-t border-border py-10">
+      <h2 class="mb-6 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+        Color tokens
+      </h2>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
+        {colorTokens.map((token) => (
+          <div class="rounded-lg border border-border p-3">
+            <div class={`h-12 rounded-md border border-border ${token.class}`}></div>
+            <p class="mt-2 font-mono text-xs text-muted-foreground">--{token.name}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="border-t border-border py-10">
+      <h2 class="mb-6 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+        Typography
+      </h2>
+      <div class="flex flex-col gap-6">
+        <p class="text-5xl font-medium tracking-tight">Display / 5xl medium</p>
+        <p class="text-4xl font-medium tracking-tight">Heading 1 / 4xl medium</p>
+        <p class="text-2xl font-medium tracking-tight">Heading 2 / 2xl medium</p>
+        <p class="text-lg text-muted-foreground">Lead paragraph / lg muted</p>
+        <p class="text-base">Body text / base. The quick brown fox jumps over the lazy dog.</p>
+        <p class="text-sm text-muted-foreground">Secondary text / sm muted</p>
+        <p class="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+          Section label / mono xs wide
+        </p>
+      </div>
+    </section>
+
+    <section class="border-t border-border py-10">
+      <h2 class="mb-6 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+        Surfaces
+      </h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div class="rounded-xl border border-border bg-card p-6">
+          <p class="font-medium">Card surface</p>
+          <p class="mt-1 text-sm text-muted-foreground">bg-card with border-border</p>
+        </div>
+        <div class="rounded-xl bg-muted p-6">
+          <p class="font-medium">Muted surface</p>
+          <p class="mt-1 text-sm text-muted-foreground">bg-muted, no border</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</PageLayout>

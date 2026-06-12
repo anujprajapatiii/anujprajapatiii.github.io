@@ -1,0 +1,37 @@
+---
+import { siteConfig } from "@/data/site-config";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-border">
+  <div class="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-4 px-6 py-8">
+    <p class="font-mono text-xs text-muted-foreground">
+      © {year} {siteConfig.name}
+    </p>
+    <nav aria-label="Social links" class="flex items-center gap-4">
+      {siteConfig.social.github && (
+        <a
+          href={siteConfig.social.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
+        >GitHub</a>
+      )}
+      {siteConfig.social.linkedin && (
+        <a
+          href={siteConfig.social.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
+        >LinkedIn</a>
+      )}
+      {siteConfig.social.email && (
+        <a
+          href={`mailto:${siteConfig.social.email}`}
+          class="font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
+        >Email</a>
+      )}
+    </nav>
+  </div>
+</footer>

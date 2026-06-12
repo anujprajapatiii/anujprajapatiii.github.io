@@ -1,0 +1,32 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import { getCollection } from "astro:content";
+
+const projects = (await getCollection("projects", ({ data }) => !data.draft))
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+---
+
+<PageLayout title="Work — Anuj Prajapati" description="Selected design work and case studies.">
+  <section class="mx-auto max-w-3xl px-6 pt-12 pb-16 sm:pt-20">
+    <h1 class="mb-4 text-4xl font-medium tracking-tight sm:text-5xl">Work</h1>
+    <p class="max-w-xl text-lg text-muted-foreground">
+      Selected projects and case studies.
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-3xl px-6 pb-24">
+    <div class="grid gap-4 sm:grid-cols-2">
+      {projects.map((project) => (
+        <ProjectCard
+          id={project.id}
+          title={project.data.title}
+          description={project.data.description}
+          role={project.data.role}
+          year={project.data.year}
+          thumbnail={project.data.thumbnail}
+        />
+      ))}
+    </div>
+  </section>
+</PageLayout>
