@@ -79,6 +79,9 @@
     --background-warning: var(--yellow-200);
     --background-error: var(--red-100);
     --background-hover: var(--neutral-200);
+    /* Not in the Figma set yet — added per Anuj's review for card surfaces
+       that sit one subtle step off the page, not a full secondary step. */
+    --background-elevated: var(--neutral-white);
     --border-primary: var(--neutral-300);
     --border-secondary: var(--brown-200);
     --border-alternate: var(--neutral-500);
@@ -96,7 +99,7 @@
     /* ---- 3. ALIASES (shadcn/Tailwind names used by components) ---- */
     --background: var(--background-primary);
     --foreground: var(--text-primary);
-    --card: var(--background-secondary);
+    --card: var(--background-elevated);
     --card-foreground: var(--text-primary);
     --popover: var(--background-primary);
     --popover-foreground: var(--text-primary);
@@ -121,6 +124,7 @@
     --background-secondary: var(--neutral-600);
     --background-alternate: var(--neutral-100);
     --background-hover: var(--neutral-600);
+    --background-elevated: var(--neutral-700);
     --border-primary: var(--neutral-500);
     --border-secondary: var(--brown-400);
     --border-alternate: var(--neutral-300);
@@ -162,6 +166,7 @@
     --color-background-warning: var(--background-warning);
     --color-background-error: var(--background-error);
     --color-background-hover: var(--background-hover);
+    --color-background-elevated: var(--background-elevated);
     --color-border-primary: var(--border-primary);
     --color-border-secondary: var(--border-secondary);
     --color-border-alternate: var(--border-alternate);

@@ -80,7 +80,7 @@ and future shadcn components keep working:
 | --- | --- | --- |
 | `--background` | background-primary | |
 | `--foreground` | text-primary | |
-| `--card` | background-secondary | yes — cards read as "secondary surface" |
+| `--card` | background-elevated | revised per Anuj's review: cards sit one subtle step off the page (white / neutral-700), not the full secondary step. `--background-elevated` is a new semantic token not yet in Figma — mirror it there. |
 | `--card-foreground` | text-primary | |
 | `--muted` | background-secondary | |
 | `--muted-foreground` | text-secondary | yes — secondary text goes warm brown |
