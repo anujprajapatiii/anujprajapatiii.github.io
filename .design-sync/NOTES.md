@@ -26,7 +26,8 @@ regenerate `ds-bundle/tokens/tokens.css` to match, refresh the swatches in
 `colours.html`, and re-run the upload to project
 `8b771c23-a549-49dc-b6b2-5189d309df80` (pinned in config.json).
 
-## Follow-up
+## Source of truth
 
-`--background-elevated` (card surface: white / neutral-700) exists here but
-is not yet in the Figma variables — mirror it into Figma.
+`src/styles/global.css` is the sole source of truth for the palette. Figma
+has been dropped (2026-07-21) — there is no external design file to mirror
+to or from.

@@ -80,7 +80,7 @@ and future shadcn components keep working:
 | --- | --- | --- |
 | `--background` | background-primary | |
 | `--foreground` | text-primary | |
-| `--card` | background-elevated | revised per Anuj's review: cards sit one subtle step off the page (white / neutral-700), not the full secondary step. `--background-elevated` is a new semantic token not yet in Figma — mirror it there. |
+| `--card` | background-elevated | revised per Anuj's review: cards sit one subtle step off the page (white / neutral-700), not the full secondary step. `--background-elevated` is a semantic token that originated in code, not Figma. |
 | `--card-foreground` | text-primary | |
 | `--muted` | background-secondary | |
 | `--muted-foreground` | text-secondary | yes — secondary text goes warm brown |
@@ -145,7 +145,8 @@ Out:
   the `.prose code` background was washing out Shiki code blocks (now scoped
   to inline code only), and cards wanted a subtler step than
   `background-secondary` — which produced the new `--background-elevated`
-  token (white / neutral-700). **Action: mirror `background elevated` into
-  the Figma variables so the two systems stay identical.**
-- No contrast fixes were needed; Figma's light/dark mappings held up on
-  every page.
+  token (white / neutral-700).
+- No contrast fixes were needed; the light/dark mappings held up on every page.
+- **Update 2026-07-21: Figma has been dropped.** `src/styles/global.css` is
+  now the sole source of truth for the palette; the earlier "mirror
+  `background elevated` back into Figma" action is cancelled and moot.

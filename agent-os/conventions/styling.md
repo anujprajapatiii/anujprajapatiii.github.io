@@ -13,8 +13,12 @@ complexity.
 ## Rules
 
 - Tailwind CSS v4 is configured through the Vite plugin, not PostCSS.
-- All colors are OKLCH design tokens in `src/styles/global.css`, defined for
-  light mode in `:root` and dark mode in `.dark`.
+- `src/styles/global.css` is the **source of truth** for the colour system.
+  Figma has been dropped — never treat an external design file as canonical,
+  and there is no "mirror back to Figma" step.
+- Colours are a two-tier token system in `src/styles/global.css`: primitives
+  (raw hex, `:root` only) and semantic role tokens that reference them via
+  `var()`, defined for light mode in `:root` and re-mapped for dark in `.dark`.
 - Components use semantic Tailwind tokens (`bg-background`, `text-foreground`,
   `text-muted-foreground`, `bg-card`, `border-border`, `text-accent`) — never
   raw hex values, named colors, or palette classes like `bg-zinc-100`.

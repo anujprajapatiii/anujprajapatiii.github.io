@@ -2,7 +2,7 @@
   Colour Tokens — Anuj Prajapati's palette.
   Extracted verbatim from the portfolio's src/styles/global.css.
   Two-tier system:
-    1. PRIMITIVES  — raw hex values (from Figma). One value, theme-agnostic.
+    1. PRIMITIVES  — raw hex values. One value, theme-agnostic.
     2. SEMANTIC    — role names referencing primitives via var(). Light in
                      :root, dark overrides in .dark (only tokens that differ).
 */
