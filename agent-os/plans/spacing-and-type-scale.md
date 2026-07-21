@@ -78,25 +78,33 @@ The tokens a brief actually names. Change one, the whole site follows.
 
 ### Type scale
 
-Each entry defines size, line-height, weight and tracking together — the
-whole reason type "looks off" is usually these drifting apart. Display and
-h1 are fluid so a 72px hero doesn't overflow a phone.
+**One font (Geist Sans), sizes only.** No per-role tracking or weight in the
+tokens — apply weight or uppercase as ordinary utilities where a specific
+design needs them. Display and h1 are fluid so a 72px hero doesn't overflow
+a phone.
 
-| Token | Size | Line-height | Weight | Tracking |
-| --- | --- | --- | --- | --- |
-| `--text-display` | `clamp(2.5rem, 8vw, 4.5rem)` (40→72) | 1.05 | 500 | -0.03em |
-| `--text-h1` | `clamp(2rem, 5vw, 3rem)` (32→48) | 1.1 | 500 | -0.02em |
-| `--text-h2` | 2rem (32) | 1.2 | 500 | -0.015em |
-| `--text-h3` | 1.5rem (24) | 1.3 | 500 | -0.01em |
-| `--text-lead` | 1.25rem (20) | 1.5 | 400 | 0 |
-| `--text-body` | 1rem (16) | 1.6 | 400 | 0 |
-| `--text-small` | 0.875rem (14) | 1.5 | 400 | 0 |
-| `--text-label` | 0.75rem (12) | 1.4 | 500 | 0.12em, uppercase, mono |
+| Token | Size |
+| --- | --- |
+| `--text-display` | `clamp(2.5rem, 8vw, 4.5rem)` → 40–72px |
+| `--text-h1` | `clamp(2rem, 5vw, 3rem)` → 32–48px |
+| `--text-h2` | 2rem → 32px |
+| `--text-h3` | 1.5rem → 24px |
+| `--text-lead` | 1.125rem → 18px |
+| `--text-body` | 1rem → 16px |
+| `--text-small` | 0.875rem → 14px |
+| `--text-label` | 0.75rem → 12px |
 
-`--text-label` formalizes the existing mono/uppercase/wide-tracking section
-labels. Note: `--text-*` names already exist for colour roles
-(`--text-primary`); implementation must namespace these (e.g. `--font-size-*`
-/ Tailwind `text-display`) to avoid collision. **Open detail for build time.**
+Each size ships with a sensible default line-height (tight for display and
+headings, roomy for body) so large text doesn't break. These are
+implementation defaults, not knobs to manage.
+
+Naming note: `--text-*` already exists for colour roles (`--text-primary`),
+so sizes get namespaced at build time (Tailwind `text-display` etc.).
+
+**Open question, deliberately out of scope here:** the site currently uses a
+second font, Geist Mono, for section labels, the header wordmark and card
+metadata. "One font" implies retiring it — but that visibly changes the live
+site, so it's a separate decision from adding these tokens.
 
 ### Breakpoints
 
@@ -110,13 +118,15 @@ In:
 
 - Spacing primitives + semantic spacing tokens in `global.css`
 - Container width tokens
-- Type scale tokens, exposed as Tailwind utilities via `@theme`
+- Type scale tokens (sizes only, one font), exposed via `@theme`
 - `/style-guide` sections cataloging both scales
 
 Out:
 
 - **Typeface choice** — Geist stays; the scale is font-agnostic and survives
   a later typeface swap.
+- **Retiring Geist Mono** from existing components — see the open question
+  above; that's a visual change to the live site, decided separately.
 - **Layout primitives** (`PageWrapper`/`Section`/`Container`/`Stack`/`Grid`)
   — these consume the tokens and are the natural *next* plan.
 - Refactoring existing pages onto the new tokens — separate pass, so this
