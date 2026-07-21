@@ -1,0 +1,4 @@
+/* Entry stylesheet the design agent's rendered designs receive.
+   Its transitive @import closure is the whole design system — here, the
+   colour tokens. Reference tokens as var(--…) in any design. */
+@import "./tokens/tokens.css";

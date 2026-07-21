@@ -1,0 +1,104 @@
+/*
+  Colour Tokens — Anuj Prajapati's palette.
+  Extracted verbatim from the portfolio's src/styles/global.css.
+  Two-tier system:
+    1. PRIMITIVES  — raw hex values (from Figma). One value, theme-agnostic.
+    2. SEMANTIC    — role names referencing primitives via var(). Light in
+                     :root, dark overrides in .dark (only tokens that differ).
+*/
+:root {
+    /* ---- PRIMITIVES ---- */
+    /* Neutral */
+    --neutral-black: #000000;
+    --neutral-900: #0e0f12;
+    --neutral-800: #141619;
+    --neutral-700: #1c1f24;
+    --neutral-600: #21252b;
+    --neutral-500: #2c323a;
+    --neutral-400: #434b56;
+    --neutral-300: #99a1ac;
+    --neutral-200: #d3d7dd;
+    --neutral-100: #f6f7f8;
+    --neutral-white: #ffffff;
+    /* Brown */
+    --brown-600: #2e2d2c;
+    --brown-500: #302f2e;
+    --brown-400: #595551;
+    --brown-300: #847b73;
+    --brown-200: #aba199;
+    --brown-100: #cfc7c1;
+    --brown-50: #f1eeec;
+    /* Amber */
+    --amber-400: #7c370e;
+    --amber-300: #e66c24;
+    --amber-200: #ee9a68;
+    --amber-100: #f5c2a3;
+    /* Blue */
+    --blue-600: #002c83;
+    --blue-500: #1841ac;
+    --blue-400: #1e50d3;
+    --blue-300: #99b6ff;
+    --blue-200: #dae5ff;
+    --blue-100: #f0f3ff;
+    /* Green */
+    --green-400: #1a4723;
+    --green-300: #37954a;
+    --green-200: #53c069;
+    --green-100: #b4e4be;
+    /* Red */
+    --red-400: #67090a;
+    --red-300: #ec2426;
+    --red-200: #f2696a;
+    --red-100: #f7a1a2;
+    /* Yellow */
+    --yellow-600: #853e0f;
+    --yellow-500: #d17600;
+    --yellow-400: #ffb700;
+    --yellow-300: #ffd293;
+    --yellow-200: #ffe9d0;
+    --yellow-100: #fff5f5;
+
+    /* ---- SEMANTIC (light mode) ---- */
+    --background-primary: var(--neutral-100);
+    --background-secondary: var(--neutral-200);
+    --background-tertiary: var(--yellow-500);
+    --background-alternate: var(--neutral-800);
+    --background-success: var(--green-100);
+    --background-warning: var(--yellow-200);
+    --background-error: var(--red-100);
+    --background-hover: var(--neutral-200);
+    --background-elevated: var(--neutral-white);
+    --border-primary: var(--neutral-300);
+    --border-secondary: var(--brown-200);
+    --border-alternate: var(--neutral-500);
+    --border-hover: var(--neutral-800);
+    --text-primary: var(--neutral-600);
+    --text-secondary: var(--brown-400);
+    --text-alternate: var(--neutral-100);
+    --text-success: var(--green-400);
+    --text-warning: var(--yellow-600);
+    --text-error: var(--red-400);
+    --link-primary: var(--text-primary);
+    --link-secondary: var(--neutral-800);
+    --link-alternate: var(--neutral-100);
+
+    --radius: 0.5rem;
+}
+
+.dark {
+    /* Semantic re-maps only — primitives never change between themes. */
+    --background-primary: var(--neutral-800);
+    --background-secondary: var(--neutral-600);
+    --background-alternate: var(--neutral-100);
+    --background-hover: var(--neutral-600);
+    --background-elevated: var(--neutral-700);
+    --border-primary: var(--neutral-500);
+    --border-secondary: var(--brown-400);
+    --border-alternate: var(--neutral-300);
+    --border-hover: var(--neutral-100);
+    --text-primary: var(--neutral-200);
+    --text-secondary: var(--brown-200);
+    --text-alternate: var(--neutral-800);
+    --link-secondary: var(--neutral-100);
+    --link-alternate: var(--neutral-800);
+}
