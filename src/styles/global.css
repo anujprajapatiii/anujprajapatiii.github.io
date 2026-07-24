@@ -2,7 +2,6 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
-@import "@fontsource-variable/geist-mono";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -139,8 +138,10 @@
 }
 
 @theme inline {
+    /* One brand font. --font-mono is a system fallback stack reserved for
+       code only (inline code + code blocks), never for design/labels. */
     --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
-    --font-mono: 'Geist Mono Variable', ui-monospace, 'SFMono-Regular', monospace;
+    --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
     --color-ring: var(--ring);
     --color-input: var(--input);
     --color-border: var(--border);
@@ -187,6 +188,55 @@
     --radius-lg: var(--radius);
     --radius-xl: calc(var(--radius) * 1.4);
     --radius-2xl: calc(var(--radius) * 1.8);
+}
+
+/*
+  Spacing, container and type scales. Kept in a plain @theme block (not
+  `inline`) so these ADD to Tailwind's built-in scales instead of replacing
+  them — existing utilities like max-w-content and px-6 must keep working.
+  See agent-os/plans/spacing-and-type-scale.md.
+*/
+@theme {
+    /* ---- SPACING (4px base) ---- */
+    --spacing-3xs: 0.25rem;
+    --spacing-2xs: 0.5rem;
+    --spacing-xs: 0.75rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    --spacing-2xl: 4rem;
+    --spacing-3xl: 6rem;
+    --spacing-4xl: 8rem;
+    /* Semantic spacing — the roles a design brief names. */
+    --spacing-gutter: 1.5rem;
+    --spacing-section: clamp(3rem, 8vw, 6rem);
+    --spacing-stack: 1rem;
+    --spacing-card: 1.5rem;
+    --spacing-grid: 1rem;
+
+    /* ---- CONTAINERS ---- */
+    --container-narrow: 36rem;
+    --container-content: 48rem;
+    --container-wide: 80rem;
+
+    /* ---- TYPE SCALE (sizes only, one font) ---- */
+    --text-display: clamp(2.5rem, 8vw, 4.5rem);
+    --text-display--line-height: 1.05;
+    --text-h1: clamp(2rem, 5vw, 3rem);
+    --text-h1--line-height: 1.1;
+    --text-h2: 2rem;
+    --text-h2--line-height: 1.2;
+    --text-h3: 1.5rem;
+    --text-h3--line-height: 1.3;
+    --text-lead: 1.125rem;
+    --text-lead--line-height: 1.6;
+    --text-body: 1rem;
+    --text-body--line-height: 1.6;
+    --text-small: 0.875rem;
+    --text-small--line-height: 1.5;
+    --text-label: 0.75rem;
+    --text-label--line-height: 1.4;
 }
 
 @layer base {
@@ -241,7 +291,7 @@
   @apply my-8;
 }
 .prose figcaption {
-  @apply mt-2 font-mono text-xs text-muted-foreground;
+  @apply mt-2 text-label text-muted-foreground;
 }
 .prose blockquote {
   @apply border-l-2 border-border pl-4 text-muted-foreground;

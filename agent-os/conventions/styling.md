@@ -24,9 +24,20 @@ complexity.
   raw hex values, named colors, or palette classes like `bg-zinc-100`.
 - Dark mode is class-based with `.dark` on `<html>`; both modes must be
   checked for any visual change.
-- Geist Sans for body text; Geist Mono for small labels and metadata
-  (placeholder fonts until the token session).
-- Section labels use mono, uppercase, small text with wide tracking.
+- **One brand font: Geist Sans** for everything visible. `--font-mono` is a
+  system fallback stack reserved for code only (inline `code` + code blocks)
+  — never for labels, wordmarks, or metadata.
+- **Spacing** uses the named scale (`p-md`, `gap-sm`, `py-xl`, …) or the
+  semantic roles (`--spacing-gutter/section/stack/card/grid`) — not arbitrary
+  Tailwind step numbers. 4px base; see `/style-guide`.
+- **Type** uses the size tokens (`text-display/h1/h2/h3/lead/body/small/label`),
+  sizes only; apply weight/uppercase as utilities where a design needs them.
+- **Containers** use `max-w-narrow` (36rem), `max-w-content` (48rem),
+  `max-w-wide` (80rem). NOTE: never name a custom container `prose` or reuse
+  Tailwind's own scale keys — `max-w-prose` is a built-in (65ch) and a
+  `--container-<key>` that matches a built-in silently overrides it. Custom
+  scale tokens live in a plain `@theme {}` block (they add), never `@theme
+  inline {}` (which replaces the built-in scale — this broke `max-w-3xl`).
 - The `/style-guide` page must stay in sync with the token system — update it
   when tokens change.
 

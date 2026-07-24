@@ -129,6 +129,44 @@ const semanticGroups = [
   },
 ];
 
+const typeScale = [
+  { name: "display", class: "text-display", size: "clamp(40px → 72px)", sample: "Display" },
+  { name: "h1", class: "text-h1", size: "clamp(32px → 48px)", sample: "Heading 1" },
+  { name: "h2", class: "text-h2", size: "32px", sample: "Heading 2" },
+  { name: "h3", class: "text-h3", size: "24px", sample: "Heading 3" },
+  { name: "lead", class: "text-lead", size: "18px", sample: "Lead paragraph" },
+  { name: "body", class: "text-body", size: "16px", sample: "Body text. The quick brown fox jumps over the lazy dog." },
+  { name: "small", class: "text-small", size: "14px", sample: "Small / secondary text" },
+  { name: "label", class: "text-label", size: "12px", sample: "Section label" },
+];
+
+const spacingScale = [
+  { name: "3xs", value: "0.25rem", px: "4px" },
+  { name: "2xs", value: "0.5rem", px: "8px" },
+  { name: "xs", value: "0.75rem", px: "12px" },
+  { name: "sm", value: "1rem", px: "16px" },
+  { name: "md", value: "1.5rem", px: "24px" },
+  { name: "lg", value: "2rem", px: "32px" },
+  { name: "xl", value: "3rem", px: "48px" },
+  { name: "2xl", value: "4rem", px: "64px" },
+  { name: "3xl", value: "6rem", px: "96px" },
+  { name: "4xl", value: "8rem", px: "128px" },
+];
+
+const semanticSpacing = [
+  { name: "gutter", value: "24px — page side padding" },
+  { name: "section", value: "clamp(48px → 96px) — section rhythm" },
+  { name: "stack", value: "16px — gap between stacked elements" },
+  { name: "card", value: "24px — card interior padding" },
+  { name: "grid", value: "16px — gap between cards" },
+];
+
+const containers = [
+  { name: "narrow", value: "36rem", px: "576px" },
+  { name: "", value: "48rem", px: "768px" },
+  { name: "wide", value: "80rem", px: "1280px" },
+];
+
 const aliases = [
   { name: "background", to: "background-primary" },
   { name: "foreground", to: "text-primary" },
@@ -144,7 +182,7 @@ const aliases = [
 ---
 
 <PageLayout title="Style Guide — Anuj Prajapati" description="Internal design-system reference." noindex>
-  <div class="mx-auto max-w-3xl px-6 pt-12 pb-24 sm:pt-20">
+  <div class="mx-auto max-w-content px-6 pt-12 pb-24 sm:pt-20">
     <h1 class="mb-2 text-4xl font-medium tracking-tight">Style guide</h1>
     <p class="mb-12 text-muted-foreground">
       Internal reference for the token system — the source of truth is
@@ -153,7 +191,7 @@ const aliases = [
     </p>
 
     <section class="border-t border-border py-10">
-      <h2 class="mb-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+      <h2 class="mb-2 text-xs uppercase tracking-widest text-muted-foreground">
         Primitives
       </h2>
       <p class="mb-6 text-sm text-muted-foreground">
@@ -170,7 +208,7 @@ const aliases = [
                     class="h-10 rounded-md border border-border"
                     style={`background: ${swatch.value}`}
                   ></div>
-                  <p class="mt-1 font-mono text-[10px] leading-tight text-muted-foreground">
+                  <p class="mt-1 text-[10px] leading-tight text-muted-foreground">
                     {swatch.name}<br />{swatch.value}
                   </p>
                 </div>
@@ -182,7 +220,7 @@ const aliases = [
     </section>
 
     <section class="border-t border-border py-10">
-      <h2 class="mb-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+      <h2 class="mb-2 text-xs uppercase tracking-widest text-muted-foreground">
         Semantic tokens
       </h2>
       <p class="mb-6 text-sm text-muted-foreground">
@@ -200,8 +238,8 @@ const aliases = [
                     class="h-12 rounded-md border border-border"
                     style={`background: var(--${token.name})`}
                   ></div>
-                  <p class="mt-2 font-mono text-xs">--{token.name}</p>
-                  <p class="font-mono text-[10px] text-muted-foreground">
+                  <p class="mt-2 text-xs">--{token.name}</p>
+                  <p class="text-[10px] text-muted-foreground">
                     {token.light} → {token.dark}
                   </p>
                 </div>
@@ -213,7 +251,7 @@ const aliases = [
     </section>
 
     <section class="border-t border-border py-10">
-      <h2 class="mb-2 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+      <h2 class="mb-2 text-xs uppercase tracking-widest text-muted-foreground">
         Aliases
       </h2>
       <p class="mb-6 text-sm text-muted-foreground">
@@ -221,7 +259,7 @@ const aliases = [
       </p>
       <div class="grid grid-cols-1 gap-x-8 gap-y-1 sm:grid-cols-2">
         {aliases.map((alias) => (
-          <p class="font-mono text-xs text-muted-foreground">
+          <p class="text-xs text-muted-foreground">
             --{alias.name} → {alias.to}
           </p>
         ))}
@@ -229,24 +267,68 @@ const aliases = [
     </section>
 
     <section class="border-t border-border py-10">
-      <h2 class="mb-6 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-        Typography
+      <h2 class="mb-2 text-xs uppercase tracking-widest text-muted-foreground">
+        Type scale
       </h2>
-      <div class="flex flex-col gap-6">
-        <p class="text-5xl font-medium tracking-tight">Display / 5xl medium</p>
-        <p class="text-4xl font-medium tracking-tight">Heading 1 / 4xl medium</p>
-        <p class="text-2xl font-medium tracking-tight">Heading 2 / 2xl medium</p>
-        <p class="text-lg text-muted-foreground">Lead paragraph / lg muted</p>
-        <p class="text-base">Body text / base. The quick brown fox jumps over the lazy dog.</p>
-        <p class="text-sm text-muted-foreground">Secondary text / sm muted</p>
-        <p class="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-          Section label / mono xs wide
-        </p>
+      <p class="mb-6 text-sm text-muted-foreground">
+        One font (Geist Sans), sizes only. Weight and uppercase are applied as
+        utilities where a design needs them, not baked into the tokens.
+      </p>
+      <div class="flex flex-col gap-5">
+        {typeScale.map((t) => (
+          <div>
+            <p class={`${t.class} font-medium`}>{t.sample}</p>
+            <p class="mt-1 text-[10px] text-muted-foreground">
+              text-{t.name} · {t.size}
+            </p>
+          </div>
+        ))}
       </div>
     </section>
 
     <section class="border-t border-border py-10">
-      <h2 class="mb-6 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+      <h2 class="mb-2 text-xs uppercase tracking-widest text-muted-foreground">
+        Spacing
+      </h2>
+      <p class="mb-6 text-sm text-muted-foreground">
+        4px base scale, plus semantic roles a brief can name directly.
+      </p>
+      <div class="flex flex-col gap-2">
+        {spacingScale.map((s) => (
+          <div class="flex items-center gap-4">
+            <span class="w-20 shrink-0 text-[10px] text-muted-foreground">{s.name}</span>
+            <span class="h-4 rounded-sm bg-accent" style={`width: ${s.value}`}></span>
+            <span class="text-[10px] text-muted-foreground">{s.px}</span>
+          </div>
+        ))}
+      </div>
+      <div class="mt-6 grid grid-cols-1 gap-x-8 gap-y-1 sm:grid-cols-2">
+        {semanticSpacing.map((s) => (
+          <p class="text-xs text-muted-foreground">--spacing-{s.name} → {s.value}</p>
+        ))}
+      </div>
+    </section>
+
+    <section class="border-t border-border py-10">
+      <h2 class="mb-2 text-xs uppercase tracking-widest text-muted-foreground">
+        Containers
+      </h2>
+      <p class="mb-6 text-sm text-muted-foreground">
+        Max content widths. Use <code>max-w-wide</code> for the homepage and
+        project grids, <code>max-w-content</code> for case-study bodies.
+      </p>
+      <div class="flex flex-col gap-2">
+        {containers.map((c) => (
+          <div>
+            <div class="h-3 rounded-sm bg-muted" style={`max-width: ${c.value}; width: 100%`}></div>
+            <p class="mt-1 text-[10px] text-muted-foreground">max-w-{c.name} · {c.value} ({c.px})</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="border-t border-border py-10">
+      <h2 class="mb-6 text-xs uppercase tracking-widest text-muted-foreground">
         Surfaces
       </h2>
       <div class="grid gap-4 sm:grid-cols-2">

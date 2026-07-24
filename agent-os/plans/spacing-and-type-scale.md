@@ -2,7 +2,9 @@
 
 ## Status
 
-Planned — awaiting Anuj's review of the numbers
+Complete — shipped 2026-07-23. Type scale simplified to one font + sizes
+only, and Geist Mono retired site-wide (kept only as a code fallback) per
+Anuj's follow-up.
 
 ## Context
 
@@ -73,7 +75,7 @@ The tokens a brief actually names. Change one, the whole site follows.
 | Token | Value | Used for |
 | --- | --- | --- |
 | `--container-narrow` | 36rem (576) | lead paragraphs (today's `max-w-xl`) |
-| `--container-prose` | 48rem (768) | case-study body (today's `max-w-3xl`) |
+| `--container-content` | 48rem (768) | case-study body (today's `max-w-3xl`) |
 | `--container-wide` | 80rem (1280) | homepage + projects grid (per mockup) |
 
 ### Type scale
@@ -156,5 +158,17 @@ Out:
 
 ## Learnings
 
-To capture: whether fluid `clamp()` rhythm removed the need for responsive
-spacing overrides in practice.
+- **Tailwind v4 `@theme inline` vs `@theme`:** custom scale tokens must go in
+  a plain `@theme {}` block. Putting `--spacing-*` / `--container-*` in the
+  existing `@theme inline {}` block *replaced* Tailwind's built-in scales, so
+  `max-w-3xl` collapsed to 96px and broke every page's layout. A plain
+  `@theme {}` block *adds* to the built-ins.
+- **Never reuse a built-in utility name:** `max-w-prose` is a Tailwind
+  built-in (65ch, font-dependent). Our `--container-prose: 48rem` looked like
+  it worked but silently resolved to 65ch. Renamed to `--container-content`.
+  Lesson: name custom scale keys distinctly from anything Tailwind ships.
+- Fluid `clamp()` on display type and section rhythm did remove the need for
+  per-breakpoint overrides — no responsive spacing utilities were needed.
+- Both regressions were caught only by the screenshot + computed-value checks,
+  not by the build (which passed clean throughout). Visual verification is
+  load-bearing for token work.

@@ -8,14 +8,14 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft))
 ---
 
 <PageLayout title="Work — Anuj Prajapati" description="Selected design work and case studies.">
-  <section class="mx-auto max-w-3xl px-6 pt-12 pb-16 sm:pt-20">
+  <section class="mx-auto max-w-content px-6 pt-12 pb-16 sm:pt-20">
     <h1 class="mb-4 text-4xl font-medium tracking-tight sm:text-5xl">Work</h1>
-    <p class="max-w-xl text-lg text-muted-foreground">
+    <p class="max-w-narrow text-lg text-muted-foreground">
       Selected projects and case studies.
     </p>
   </section>
 
-  <section class="mx-auto max-w-3xl px-6 pb-24">
+  <section class="mx-auto max-w-content px-6 pb-24">
     <div class="grid gap-4 sm:grid-cols-2">
       {projects.map((project) => (
         <ProjectCard

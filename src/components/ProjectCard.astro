@@ -27,10 +27,10 @@ const { id, title, description, role, year, thumbnail } = Astro.props;
     <h3 class="text-lg font-medium tracking-tight transition-colors group-hover:text-accent">
       {title}
     </h3>
-    {year && <span class="shrink-0 font-mono text-xs text-muted-foreground">{year}</span>}
+    {year && <span class="shrink-0 text-xs text-muted-foreground">{year}</span>}
   </div>
   {role && (
-    <p class="mt-1 font-mono text-xs uppercase tracking-wide text-muted-foreground">{role}</p>
+    <p class="mt-1 text-xs uppercase tracking-wide text-muted-foreground">{role}</p>
   )}
   <p class="mt-2 text-sm leading-relaxed text-muted-foreground">{description}</p>
 </a>

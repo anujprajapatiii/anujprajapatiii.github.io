@@ -11,22 +11,22 @@ const featured = (await getCollection("projects", ({ data }) => !data.draft))
 
 <PageLayout>
   {/* Hero — TODO(Anuj): replace with your own intro */}
-  <section class="mx-auto max-w-3xl px-6 pt-16 pb-12 sm:pt-24">
-    <p class="mb-4 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+  <section class="mx-auto max-w-content px-6 pt-16 pb-12 sm:pt-24">
+    <p class="mb-4 text-xs uppercase tracking-widest text-muted-foreground">
       Portfolio
     </p>
     <h1 class="text-4xl font-medium tracking-tight sm:text-5xl">
       {siteConfig.name}
     </h1>
-    <p class="mt-4 max-w-xl text-lg text-muted-foreground">
+    <p class="mt-4 max-w-narrow text-lg text-muted-foreground">
       {siteConfig.description}
     </p>
   </section>
 
   {/* Featured work */}
-  <section class="mx-auto max-w-3xl border-t border-border px-6 py-16">
+  <section class="mx-auto max-w-content border-t border-border px-6 py-16">
     <div class="mb-8 flex items-baseline justify-between">
-      <h2 class="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+      <h2 class="text-xs uppercase tracking-widest text-muted-foreground">
         Selected work
       </h2>
       <a
