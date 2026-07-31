@@ -6,6 +6,8 @@ year: "2026"
 skills:
   - Product design
   - Prototyping
+thumbnail: /images/work/sample-case-study/thumbnail.svg
+heroImage: /images/work/sample-case-study/hero.svg
 sortOrder: 1
 draft: false
 ---
