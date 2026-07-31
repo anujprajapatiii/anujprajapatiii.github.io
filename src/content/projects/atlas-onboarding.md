@@ -7,6 +7,8 @@ skills:
   - Growth design
   - Experimentation
   - Prototyping
+thumbnail: /images/work/atlas-onboarding/thumbnail.svg
+heroImage: /images/work/atlas-onboarding/hero.svg
 sortOrder: 3
 draft: false
 ---

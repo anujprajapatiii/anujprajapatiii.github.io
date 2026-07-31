@@ -7,6 +7,8 @@ skills:
   - Campaign design
   - Motion
   - Copywriting
+thumbnail: /images/work/lantern-campaign/thumbnail.svg
+heroImage: /images/work/lantern-campaign/hero.svg
 sortOrder: 4
 draft: false
 ---
