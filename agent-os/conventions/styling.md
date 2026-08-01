@@ -38,6 +38,13 @@ complexity.
   `--container-<key>` that matches a built-in silently overrides it. Custom
   scale tokens live in a plain `@theme {}` block (they add), never `@theme
   inline {}` (which replaces the built-in scale — this broke `max-w-3xl`).
+- **Layout comes from primitives, never inline.** Compose pages as
+  `Section > Container > Stack | Grid | Cluster` using the components in
+  `src/components/primitives/`. Never inline `max-width`, `padding-block/
+  inline`, `margin`, `display:flex/grid` for layout in a page or component —
+  all layout CSS lives in global.css's "Layout primitives" section, driven by
+  the spacing/container tokens. Container sizes: `narrow` / `content` / `wide`.
+  Component CSS is for typography, colour, and component-internal details only.
 - The `/style-guide` page must stay in sync with the token system — update it
   when tokens change.
 

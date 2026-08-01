@@ -1,32 +1,39 @@
 ---
 import { siteConfig } from "@/data/site-config";
 import ThemeToggle from "./ThemeToggle.astro";
+import Container from "@/components/primitives/Container.astro";
+import Cluster from "@/components/primitives/Cluster.astro";
 
 const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 function isActive(href: string) {
-  if (href === "/") return currentPath === "/";
-  return currentPath === href || currentPath.startsWith(`${href}/`);
+  const path = href.split("#")[0];
+  if (!path || path === "/") return false;
+  return currentPath === path || currentPath.startsWith(`${path}/`);
 }
 ---
 
-<header class="border-b border-border">
-  <div class="mx-auto flex max-w-content items-center justify-between px-6 py-4">
-    <a href="/" class="text-sm font-medium tracking-wide transition-colors hover:text-accent">
-      {siteConfig.name}
-    </a>
-    <div class="flex items-center gap-1">
-      <nav aria-label="Main navigation" class="flex items-center gap-1">
-        {siteConfig.nav.map((item) => (
-          <a
-            href={item.href}
-            aria-current={isActive(item.href) ? "page" : undefined}
-            class="rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground aria-[current=page]:text-foreground"
-          >
-            {item.label}
-          </a>
+<header class="site-header">
+  <Container size="wide">
+    <Cluster justify="between" align="center">
+      <a href="/" class="wordmark transition-colors hover:text-accent">
+        {siteConfig.name}
+      </a>
+      <Cluster as="nav" gap="md" class="text-sm">
+        {siteConfig.nav.map((item, i) => (
+          <>
+            {i > 0 && <span class="nav-pipe" aria-hidden="true"></span>}
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? "page" : undefined}
+              class="text-muted-foreground transition-colors hover:text-foreground aria-[current=page]:text-foreground"
+            >
+              {item.label}
+            </a>
+          </>
         ))}
-      </nav>
-      <ThemeToggle />
-    </div>
-  </div>
+        <span class="nav-pipe" aria-hidden="true"></span>
+        <ThemeToggle />
+      </Cluster>
+    </Cluster>
+  </Container>
 </header>

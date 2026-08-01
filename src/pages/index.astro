@@ -1,50 +1,89 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
+import Section from "@/components/primitives/Section.astro";
+import Container from "@/components/primitives/Container.astro";
+import Stack from "@/components/primitives/Stack.astro";
+import Cluster from "@/components/primitives/Cluster.astro";
+import Grid from "@/components/primitives/Grid.astro";
 import { siteConfig } from "@/data/site-config";
 import { getCollection } from "astro:content";
 
 const featured = (await getCollection("projects", ({ data }) => !data.draft))
   .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
-  .slice(0, 3);
+  .slice(0, 4);
 ---
 
 <PageLayout>
-  {/* Hero — TODO(Anuj): replace with your own intro */}
-  <section class="mx-auto max-w-content px-6 pt-16 pb-12 sm:pt-24">
-    <p class="mb-4 text-xs uppercase tracking-widest text-muted-foreground">
-      Portfolio
-    </p>
-    <h1 class="text-4xl font-medium tracking-tight sm:text-5xl">
-      {siteConfig.name}
-    </h1>
-    <p class="mt-4 max-w-narrow text-lg text-muted-foreground">
-      {siteConfig.description}
-    </p>
-  </section>
+  {/* Hero */}
+  <Section size="xl">
+    <Container size="wide">
+      <Grid min="360px" gap="lg">
+        <Stack gap="lg">
+          <p class="eyebrow">Personal Site</p>
+          <h1 class="text-display font-medium tracking-tight">
+            Monsoon Projects 2026
+          </h1>
+          <div class="info-box">
+            <div class="info-box__row">Brand &amp; Growth Designer</div>
+            <a
+              class="info-box__row flex items-center justify-between text-muted-foreground transition-colors hover:text-foreground"
+              href="#connect"
+            >
+              <span>Connect</span>
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </Stack>
+        <div class="hero-media" role="img" aria-label="Hero image placeholder"></div>
+      </Grid>
+    </Container>
+  </Section>
 
-  {/* Featured work */}
-  <section class="mx-auto max-w-content border-t border-border px-6 py-16">
-    <div class="mb-8 flex items-baseline justify-between">
-      <h2 class="text-xs uppercase tracking-widest text-muted-foreground">
-        Selected work
-      </h2>
-      <a
-        href="/work"
-        class="text-sm text-muted-foreground underline underline-offset-4 transition-colors hover:text-accent"
-      >All work</a>
-    </div>
-    <div class="grid gap-4 sm:grid-cols-2">
-      {featured.map((project) => (
-        <ProjectCard
-          id={project.id}
-          title={project.data.title}
-          description={project.data.description}
-          role={project.data.role}
-          year={project.data.year}
-          thumbnail={project.data.thumbnail}
-        />
-      ))}
-    </div>
-  </section>
+  {/* Selected work */}
+  <Section size="lg">
+    <Container size="wide">
+      <Stack gap="lg">
+        <Cluster justify="between" align="baseline">
+          <h2 class="text-label text-muted-foreground">Selected work</h2>
+          <a
+            href="/work"
+            class="text-sm text-muted-foreground underline underline-offset-4 transition-colors hover:text-accent"
+          >All work</a>
+        </Cluster>
+        <Grid min="440px" gap="lg">
+          {featured.map((project) => (
+            <ProjectCard
+              id={project.id}
+              title={project.data.title}
+              description={project.data.description}
+              role={project.data.role}
+              year={project.data.year}
+              thumbnail={project.data.thumbnail}
+            />
+          ))}
+        </Grid>
+      </Stack>
+    </Container>
+  </Section>
+
+  {/* Connect */}
+  <Section size="lg" id="connect">
+    <Container size="wide">
+      <Stack gap="md">
+        <p class="eyebrow">Connect</p>
+        <h2 class="text-h2 font-medium tracking-tight">Let’s make something grow.</h2>
+        <Cluster gap="lg" class="text-sm">
+          <a
+            href={`mailto:${siteConfig.social.email}`}
+            class="underline underline-offset-4 transition-colors hover:text-accent"
+          >{siteConfig.social.email}</a>
+          <a
+            href={siteConfig.social.github}
+            class="text-muted-foreground underline underline-offset-4 transition-colors hover:text-accent"
+          >GitHub</a>
+        </Cluster>
+      </Stack>
+    </Container>
+  </Section>
 </PageLayout>

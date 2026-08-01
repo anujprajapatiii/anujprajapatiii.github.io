@@ -1,0 +1,16 @@
+---
+/* Auto-fit responsive grid (no media query). See global.css "Layout primitives". */
+interface Props {
+  min?: "220px" | "280px" | "360px" | "440px";
+  gap?: "md" | "lg";
+  as?: string;
+  class?: string;
+}
+const { min = "280px", gap = "lg", as = "div", class: className } = Astro.props;
+const Tag = as as any;
+const minClass = `grid-auto--min-${min.replace("px", "")}`;
+---
+
+<Tag class:list={["grid-auto", minClass, `grid-auto--gap-${gap}`, className]}>
+  <slot />
+</Tag>

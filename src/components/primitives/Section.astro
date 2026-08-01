@@ -1,0 +1,15 @@
+---
+/* Vertical rhythm (padding-block). See global.css "Layout primitives". */
+interface Props {
+  size?: "sm" | "md" | "lg" | "xl";
+  as?: string;
+  id?: string;
+  class?: string;
+}
+const { size = "md", as = "section", id, class: className } = Astro.props;
+const Tag = as as any;
+---
+
+<Tag id={id} class:list={[`section--${size}`, className]}>
+  <slot />
+</Tag>

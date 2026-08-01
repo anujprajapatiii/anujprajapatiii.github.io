@@ -251,6 +251,97 @@
   }
 }
 
+/*
+  ===== Layout primitives =====
+  The ONLY place layout CSS lives. Pages compose the Astro components in
+  src/components/primitives/ (Section > Container > Stack/Grid/Cluster) and
+  never inline max-width / padding / margin / flex / grid. All values come
+  from the spacing + container tokens above. See the portfolio-layout-
+  primitives conventions and agent-os/plans/homepage-rebuild.md.
+
+  Adapted to this repo's tokens: Container sizes are narrow/content/wide
+  (matching --container-*); Container also carries the horizontal gutter so
+  it is self-sufficient (no separate global PageWrapper needed for normal
+  content — PageWrapper is only for full-bleed-then-pad exceptions).
+*/
+
+/* Container — max-width + center + horizontal gutter */
+.container { margin-inline: auto; width: 100%; padding-inline: var(--spacing-gutter); }
+.container--narrow  { max-width: var(--container-narrow); }
+.container--content { max-width: var(--container-content); }
+.container--wide    { max-width: var(--container-wide); }
+
+/* PageWrapper — horizontal gutter only, no width cap (full-bleed exceptions) */
+.page-wrapper { padding-inline: var(--spacing-gutter); }
+
+/* Section — vertical rhythm (padding-block) */
+.section--sm { padding-block: var(--spacing-lg); }              /* 32 */
+.section--md { padding-block: var(--spacing-xl); }              /* 48 */
+.section--lg { padding-block: var(--spacing-3xl); }             /* 96 */
+.section--xl { padding-block: clamp(4rem, 10vw, 8rem); }        /* 64–128, hero */
+
+/* Stack — vertical flex with consistent gap */
+.stack { display: flex; flex-direction: column; }
+.stack--sm { gap: var(--spacing-2xs); }                         /* 8 */
+.stack--md { gap: var(--spacing-sm); }                          /* 16 */
+.stack--lg { gap: var(--spacing-lg); }                          /* 32 */
+
+/* Cluster — horizontal flex with wrap */
+.cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-sm); }
+.cluster--gap-sm { gap: var(--spacing-2xs); }
+.cluster--gap-md { gap: var(--spacing-sm); }
+.cluster--gap-lg { gap: var(--spacing-lg); }
+.cluster--align-start    { align-items: flex-start; }
+.cluster--align-baseline { align-items: baseline; }
+.cluster--justify-between { justify-content: space-between; }
+
+/*
+  Grid — auto-fit responsive columns, no media query. The min(<min>, 100%)
+  guard stops a wide min from causing horizontal scroll on narrow screens.
+*/
+.grid-auto {
+  display: grid;
+  gap: var(--spacing-lg);
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--grid-min, 280px), 100%), 1fr));
+}
+.grid-auto--min-220 { --grid-min: 220px; }
+.grid-auto--min-280 { --grid-min: 280px; }
+.grid-auto--min-360 { --grid-min: 360px; }
+.grid-auto--min-440 { --grid-min: 440px; }   /* 2-up on desktop, 1-up ≤tablet */
+.grid-auto--gap-md { gap: var(--spacing-sm); }
+.grid-auto--gap-lg { gap: var(--spacing-lg); }
+
+/*
+  ===== Homepage component styling =====
+  Typography / colour / component-internal details only (no page layout).
+*/
+.site-header { border-bottom: 1px solid var(--border); padding-block: var(--spacing-sm); }
+.site-footer { border-top: 1px solid var(--border); padding-block: var(--spacing-lg); }
+.wordmark { font-size: var(--text-body); font-weight: 500; letter-spacing: 0.01em; }
+.nav-pipe { width: 1px; height: 1rem; background: var(--border); }
+
+/* Hero eyebrow: accent bar + label */
+.eyebrow {
+  display: inline-flex; align-items: center;
+  border-left: 2px solid var(--border-alternate);
+  padding-left: var(--spacing-xs);
+  font-size: var(--text-label); line-height: var(--text-label--line-height);
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--muted-foreground);
+}
+
+/* Hero info box: bordered two-row list */
+.info-box { border: 1px solid var(--border); border-radius: var(--radius); }
+.info-box__row { padding: var(--spacing-sm) var(--spacing-md); font-size: var(--text-body); }
+.info-box__row + .info-box__row { border-top: 1px solid var(--border); }
+
+/* Hero media placeholder */
+.hero-media {
+  aspect-ratio: 16 / 10; width: 100%;
+  background: var(--muted); border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
 /* Markdown prose for case-study bodies (custom, not @tailwindcss/typography) */
 .prose {
   @apply text-foreground;

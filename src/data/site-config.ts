@@ -5,9 +5,9 @@ export const siteConfig = {
     "Brand and growth designer crafting identities, campaigns, and product experiences that help things grow.",
   url: "https://anujprajapatiii.github.io",
   nav: [
-    { label: "Home", href: "/" },
-    { label: "Work", href: "/work" },
     { label: "About", href: "/about" },
+    { label: "Work", href: "/work" },
+    { label: "Connect", href: "/#connect" },
   ],
   social: {
     github: "https://github.com/anujprajapatiii",
