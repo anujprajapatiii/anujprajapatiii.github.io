@@ -6,13 +6,14 @@ interface Props {
   role?: string;
   year?: string;
   thumbnail?: string;
+  base?: string;
 }
 
-const { id, title, description, role, year, thumbnail } = Astro.props;
+const { id, title, description, role, year, thumbnail, base = "/work" } = Astro.props;
 ---
 
 <a
-  href={`/work/${id}`}
+  href={`${base}/${id}`}
   class="group block rounded-xl border border-border bg-card p-6 transition-colors hover:border-foreground/30"
 >
   {thumbnail && (

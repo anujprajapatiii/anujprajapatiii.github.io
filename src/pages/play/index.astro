@@ -1,0 +1,33 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import { getCollection } from "astro:content";
+
+const play = (await getCollection("play", ({ data }) => !data.draft))
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+---
+
+<PageLayout title="Play — Anuj Prajapati" description="Self-initiated experiments and side explorations.">
+  <section class="mx-auto max-w-content px-6 pt-12 pb-16 sm:pt-20">
+    <h1 class="mb-4 text-4xl font-medium tracking-tight sm:text-5xl">Play</h1>
+    <p class="max-w-narrow text-lg text-muted-foreground">
+      Self-initiated experiments and side explorations.
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-content px-6 pb-24">
+    <div class="grid gap-4 sm:grid-cols-2">
+      {play.map((item) => (
+        <ProjectCard
+          id={item.id}
+          title={item.data.title}
+          description={item.data.description}
+          role={item.data.role}
+          year={item.data.year}
+          thumbnail={item.data.thumbnail}
+          base="/play"
+        />
+      ))}
+    </div>
+  </section>
+</PageLayout>

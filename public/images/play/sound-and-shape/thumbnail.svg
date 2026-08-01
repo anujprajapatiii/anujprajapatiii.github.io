@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img" aria-label="Placeholder image for Sound and Shape">
+  <rect width="1600" height="1000" fill="#002c83"/>
+  <circle cx="900" cy="300" r="120" fill="#1e50d3"/>
+  <circle cx="1120" cy="360" r="180" fill="#99b6ff" opacity="0.7"/>
+  <circle cx="1340" cy="280" r="80" fill="#dae5ff" opacity="0.6"/>
+  <rect x="128" y="660" width="96" height="12" fill="#ec2426"/>
+  <text x="128" y="780" fill="#f6f7f8" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="80" font-weight="500">Sound × Shape</text>
+  <text x="128" y="860" fill="#99b6ff" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="44" letter-spacing="9.0">PLACEHOLDER IMAGE</text>
+</svg>

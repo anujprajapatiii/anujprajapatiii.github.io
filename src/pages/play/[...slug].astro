@@ -1,0 +1,68 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const play = await getCollection("play", ({ data }) => !data.draft);
+  return play.map((item) => ({
+    params: { slug: item.id },
+    props: { item },
+  }));
+}
+
+const { item } = Astro.props;
+const { Content } = await render(item);
+---
+
+<PageLayout
+  title={`${item.data.title} — Anuj Prajapati`}
+  description={item.data.description}
+  image={item.data.heroImage ?? item.data.thumbnail}
+>
+  <article class="mx-auto max-w-content px-6 pt-12 pb-24 sm:pt-20">
+    <header class="mb-12">
+      <a
+        href="/play"
+        class="text-xs uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground"
+      >&larr; Play</a>
+      <h1 class="mt-6 text-4xl font-medium tracking-tight sm:text-5xl">
+        {item.data.title}
+      </h1>
+      <p class="mt-4 max-w-narrow text-lg text-muted-foreground">
+        {item.data.description}
+      </p>
+      <dl class="mt-8 flex flex-wrap gap-x-10 gap-y-4 border-t border-border pt-6">
+        {item.data.role && (
+          <div>
+            <dt class="text-xs uppercase tracking-widest text-muted-foreground">Role</dt>
+            <dd class="mt-1 text-sm">{item.data.role}</dd>
+          </div>
+        )}
+        {item.data.year && (
+          <div>
+            <dt class="text-xs uppercase tracking-widest text-muted-foreground">Year</dt>
+            <dd class="mt-1 text-sm">{item.data.year}</dd>
+          </div>
+        )}
+        {item.data.skills.length > 0 && (
+          <div>
+            <dt class="text-xs uppercase tracking-widest text-muted-foreground">Skills</dt>
+            <dd class="mt-1 text-sm">{item.data.skills.join(", ")}</dd>
+          </div>
+        )}
+      </dl>
+    </header>
+
+    {item.data.heroImage && (
+      <img
+        src={item.data.heroImage}
+        alt=""
+        class="mb-12 w-full rounded-xl border border-border"
+      />
+    )}
+
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</PageLayout>

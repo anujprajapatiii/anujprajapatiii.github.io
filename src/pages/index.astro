@@ -12,6 +12,9 @@ import { getCollection } from "astro:content";
 const featured = (await getCollection("projects", ({ data }) => !data.draft))
   .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
   .slice(0, 4);
+
+const play = (await getCollection("play", ({ data }) => !data.draft))
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
 ---
 
 <PageLayout>
@@ -63,6 +66,33 @@ const featured = (await getCollection("projects", ({ data }) => !data.draft))
             />
           ))}
         </Grid>
+      </Stack>
+    </Container>
+  </Section>
+
+  {/* Play — tabular list */}
+  <Section size="lg">
+    <Container size="wide">
+      <Stack gap="lg">
+        <Cluster justify="between" align="baseline">
+          <h2 class="text-label text-muted-foreground">Play</h2>
+          <a
+            href="/play"
+            class="text-sm text-muted-foreground underline underline-offset-4 transition-colors hover:text-accent"
+          >All play</a>
+        </Cluster>
+        <div class="play-list">
+          {play.map((item) => (
+            <a href={`/play/${item.id}`} class="play-row">
+              <Cluster justify="between" align="baseline" gap="md">
+                <span class="play-row__title">{item.data.title}</span>
+                <span class="play-row__meta">
+                  {[item.data.role, item.data.year].filter(Boolean).join(" · ")}
+                </span>
+              </Cluster>
+            </a>
+          ))}
+        </div>
       </Stack>
     </Container>
   </Section>
