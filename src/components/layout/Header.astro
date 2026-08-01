@@ -2,7 +2,6 @@
 import { siteConfig } from "@/data/site-config";
 import ThemeToggle from "./ThemeToggle.astro";
 import Container from "@/components/primitives/Container.astro";
-import Cluster from "@/components/primitives/Cluster.astro";
 
 const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 function isActive(href: string) {
@@ -14,11 +13,14 @@ function isActive(href: string) {
 
 <header class="site-header">
   <Container size="wide">
-    <Cluster justify="between" align="center">
+    {/* Custom responsive header bar: on wide screens the nav + toggle group
+        to the right; below --bp-md the nav wraps to its own row and the
+        toggle stays pinned to the right edge. See global.css .site-nav. */}
+    <div class="site-nav">
       <a href="/" class="wordmark transition-colors hover:text-accent">
         {siteConfig.name}
       </a>
-      <Cluster as="nav" gap="md" class="text-sm">
+      <nav class="site-nav__links" aria-label="Main navigation">
         {siteConfig.nav.map((item, i) => (
           <>
             {i > 0 && <span class="nav-pipe" aria-hidden="true"></span>}
@@ -31,9 +33,8 @@ function isActive(href: string) {
             </a>
           </>
         ))}
-        <span class="nav-pipe" aria-hidden="true"></span>
-        <ThemeToggle />
-      </Cluster>
-    </Cluster>
+      </nav>
+      <div class="site-nav__toggle"><ThemeToggle /></div>
+    </div>
   </Container>
 </header>

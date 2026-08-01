@@ -320,6 +320,38 @@
 .wordmark { font-size: var(--text-body); font-weight: 500; letter-spacing: 0.01em; }
 .nav-pipe { width: 1px; height: 1rem; background: var(--border); }
 
+/*
+  Responsive header bar (component-internal layout). Mobile-first:
+  the nav wraps onto its own full-width row while the toggle stays pinned to
+  the right edge next to the wordmark. At --bp-md (768px) the nav and toggle
+  group to the right on one line.
+*/
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--spacing-md);
+  row-gap: var(--spacing-sm);
+}
+.site-nav__links {
+  order: 3;              /* below --bp-md: nav drops to its own row */
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-md);
+  font-size: var(--text-small);
+}
+.site-nav__toggle { margin-inline-start: auto; }   /* pin toggle to right edge */
+@media (min-width: 48rem) {
+  .site-nav__links {
+    order: 0;            /* rejoin the single top row, pushed right */
+    flex-basis: auto;
+    margin-inline-start: auto;
+  }
+  .site-nav__toggle { margin-inline-start: var(--spacing-sm); }
+}
+
 /* Hero eyebrow: accent bar + label */
 .eyebrow {
   display: inline-flex; align-items: center;
