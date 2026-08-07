@@ -272,7 +272,8 @@ const aliases = [
       </h2>
       <p class="mb-6 max-w-narrow text-small text-muted-foreground">
         One font — Söhne, in two weights: Buch (400) and Halbfett (600). Size,
-        line-height, tracking and weight all travel inside the token, so
+        line-height and weight travel inside the token, and tracking is 0
+        on every step, so
         <code>text-h2</code> alone produces finished type and nothing writes
         <code>tracking-*</code>, <code>leading-*</code> or <code>font-*</code>
         at a call site. Size carries the hierarchy at display scale; weight

@@ -252,38 +252,40 @@
     --container-wide: 80rem;
 
     /* ---- TYPE SCALE (one font) ----
-       Each step carries its own line-height and letter-spacing, so `text-h1`
-       alone produces finished type. Nothing in the codebase should ever set
-       tracking-* or leading-* by hand — if a size needs different spacing,
+       Each step carries its own line-height and weight, so `text-h1` alone
+       produces finished type. Nothing in the codebase should ever set
+       font-*, tracking-* or leading-* by hand — if a step needs to change,
        fix it here and every use updates.
 
+       TRACKING IS ZERO EVERYWHERE, BY DECISION. No step sets
+       letter-spacing, in either direction, and no call site may either.
+       Söhne is drawn to be spaced correctly at every size, so the scale
+       trusts the typeface instead of second-guessing it. Do not reintroduce
+       per-size tracking "to tighten the hero" — that is the variation this
+       system exists to prevent.
+
        Sizes descend without collisions so a child heading can never outrank
-       its parent: 72 → 44 → 30 → 20 → 18 → 16 → 14 → 12. */
-    /* Weight is part of the token, not a utility. Only 400 and 600 exist in
-       the licence, and the rule is: SIZE creates hierarchy at large scale,
+       its parent: 72 → 44 → 30 → 20 → 18 → 16 → 14 → 12.
+
+       Weight is part of the token too. Only 400 and 600 exist in the
+       licence, and the rule is: SIZE creates hierarchy at large scale,
        WEIGHT creates it at small scale. So display and h1 stay in Buch 400
-       and let their size do the work — the Klim habit — while h2/h3, which
-       are too close to body size for size alone to separate them, carry
-       Halbfett 600. Nothing in the codebase writes font-medium/semibold. */
+       and let their size do the work, while h2/h3 — too close to body size
+       for size alone to separate them — carry Halbfett 600. */
     --text-display: clamp(2.5rem, 8vw, 4.5rem);
     --text-display--line-height: 1.02;
-    --text-display--letter-spacing: -0.035em;
     --text-display--font-weight: 400;
     --text-h1: clamp(2rem, 5vw, 2.75rem);
     --text-h1--line-height: 1.08;
-    --text-h1--letter-spacing: -0.025em;
     --text-h1--font-weight: 400;
     --text-h2: clamp(1.5rem, 3vw, 1.875rem);
     --text-h2--line-height: 1.15;
-    --text-h2--letter-spacing: -0.02em;
     --text-h2--font-weight: 600;
     --text-h3: 1.25rem;
     --text-h3--line-height: 1.3;
-    --text-h3--letter-spacing: -0.015em;
     --text-h3--font-weight: 600;
     --text-lead: 1.125rem;
     --text-lead--line-height: 1.55;
-    --text-lead--letter-spacing: -0.01em;
     --text-lead--font-weight: 400;
     --text-body: 1rem;
     --text-body--line-height: 1.6;
@@ -291,9 +293,6 @@
     --text-small: 0.875rem;
     --text-small--line-height: 1.5;
     --text-small--font-weight: 400;
-    /* Plain 0.75rem — no tracking here. Positive tracking belongs with the
-       uppercase treatment, not the size, so it lives in .label instead;
-       sentence-case 12px text (captions, values) must not inherit it. */
     --text-label: 0.75rem;
     --text-label--line-height: 1.4;
 }
@@ -397,7 +396,7 @@
 */
 .site-header { border-bottom: 1px solid var(--border); padding-block: var(--spacing-sm); }
 .site-footer { border-top: 1px solid var(--border); padding-block: var(--spacing-lg); }
-.wordmark { font-size: var(--text-body); font-weight: 600; letter-spacing: 0.01em; }
+.wordmark { font-size: var(--text-body); font-weight: 600; }
 
 /*
   Responsive header bar (component-internal layout). Mobile-first:
@@ -455,13 +454,13 @@
   Micro-label: the uppercase meta text used for back links, definition-list
   terms, section kickers and card roles. This replaces repeating
   `text-xs uppercase tracking-widest text-muted-foreground` at every call
-  site — one class, and the tracking comes from the scale.
+  site. Tracking is zero here like everywhere else — the uppercase and the
+  600 weight carry it.
 */
 .label {
   font-size: var(--text-label);
   line-height: var(--text-label--line-height);
   text-transform: uppercase;
-  letter-spacing: 0.08em;   /* caps crowd without it */
   font-weight: 600;         /* 12px caps need Halbfett to hold their colour */
   color: var(--muted-foreground);
 }

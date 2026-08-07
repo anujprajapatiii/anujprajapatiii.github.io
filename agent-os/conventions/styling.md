@@ -16,9 +16,11 @@ What that means in practice:
 - **One font, two weights.** Söhne Buch and Halbfett. Hierarchy comes from
   size, space and colour before it comes from weight, and weight is only
   reached for when sizes get close enough that size alone can't separate them.
-- **Big type is set light and tight.** Display and h1 in Buch 400 with
-  strong negative tracking — this is the Klim habit and it is why the hero
-  reads as composed rather than shouted.
+- **Big type is set light.** Display and h1 in Buch 400 — this is the Klim
+  habit and it is why the hero reads as composed rather than shouted.
+- **Tracking is zero, everywhere.** One value for every size, in both
+  directions. Söhne is drawn to be spaced correctly at each size; the system
+  trusts it rather than second-guessing it per step.
 - **Space does the grouping.** Rules and separators are a last resort, used
   only where a line genuinely beats space (the tabular Play list).
 - **Every value comes from a token.** No one-off sizes, spacing or tracking
@@ -60,19 +62,19 @@ What that means in practice:
   600. Weight now lives inside the token — no component writes `font-*`.
 - **No decorative eyebrows or uppercase kickers.** Section headings are real
   headings. `.label` is reserved for genuine metadata (definition-list terms,
-  card roles) and is the only place uppercase, positive tracking and 600
-  weight are applied together.
+  card roles) and is the only place uppercase and 600 weight combine.
 - **Type** uses the scale tokens
   (`text-display/h1/h2/h3/lead/body/small/label`) — never raw Tailwind sizes
   (`text-lg`, `text-4xl`, `text-[10px]`). Each token carries its own
-  line-height, letter-spacing and weight, so **never write `tracking-*`,
-  `leading-*` or `font-*` at a call site**: if a size needs different spacing, change the
-  token in global.css and every use follows. Nothing below 18px goes under
-  weight 400.
-- **Uppercase micro-text uses `.label`**, not a pile of utilities. It is the
-  one place positive tracking lives, because tracking belongs with the
-  uppercase treatment and not with the 12px size — sentence-case 12px text
-  (captions, values) must not inherit it.
+  line-height and weight, so **never write `tracking-*`, `leading-*` or
+  `font-*` at a call site**: if a step needs to change, change the token in
+  global.css and every use follows. Nothing below 18px goes under weight 400.
+- **Tracking is 0 on every step and every class.** No negative tracking on
+  display type, no positive tracking on uppercase labels, no exceptions.
+  Do not reintroduce per-size tracking "to tighten the hero" — uniformity is
+  the point, and this is the variation the system exists to prevent.
+- **Uppercase micro-text uses `.label`**, not a pile of utilities. Uppercase
+  and 600 weight carry it; tracking stays at 0 like everywhere else.
 - **Long-form text is capped to the reading measure**
   (`var(--container-narrow)`, ~70 characters). `.prose` applies this to
   `p`/`ul`/`ol`/`blockquote` only, so images and code blocks still run the
