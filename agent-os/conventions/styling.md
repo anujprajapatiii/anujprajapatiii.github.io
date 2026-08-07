@@ -59,8 +59,21 @@ What that means in practice:
   `--font-mono` is a system fallback stack reserved for code only (inline
   `code` + code blocks) — never for labels, wordmarks, or metadata.
 - **Spacing** uses the named scale (`p-md`, `gap-sm`, `py-xl`, …) or the
-  semantic roles (`--spacing-gutter/section/stack/card/grid`) — not arbitrary
-  Tailwind step numbers. 4px base; see `/style-guide`.
+  semantic roles (`p-card`, `px-gutter`, …) — **never** raw Tailwind step
+  numbers (`p-6`, `mt-1`, `gap-4`). The whole codebase was converted; zero
+  raw steps ship in any page. 4px base; see `/style-guide`.
+  - Tailwind's 5 / 10 / 20 steps (20px / 40px / 80px) have no equivalent on
+    this scale. That is the point: when a value doesn't map, pick the
+    neighbour that suits the context and say why — don't round blindly and
+    don't add a scale step to accommodate one call site.
+  - Prefer the semantic role over the raw step when one exists: page side
+    padding is `px-gutter`, card interior padding is `p-card`.
+  - One deliberate exception: inline `code` keeps `px-1.5 py-0.5`. That is
+    optical padding inside a text run, and the scale's 4px floor would push
+    inline code taller than its own line.
+  - A mistyped scale name emits no CSS at all, so spacing silently collapses
+    to zero. After any conversion, measure the computed values — don't just
+    check that the build passed.
 - **Hierarchy rule: size at large scale, weight at small scale.** Display
   and h1 stay in Buch 400 and let size do the work; h2/h3 sit close enough
   to body size that size alone cannot separate them, so they carry Halbfett

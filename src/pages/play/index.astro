@@ -8,15 +8,15 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
 ---
 
 <PageLayout title="Play — Anuj Prajapati" description="Self-initiated experiments and side explorations.">
-  <section class="mx-auto max-w-content px-6 pt-12 pb-16 sm:pt-20">
-    <h1 class="mb-4 text-h1">Play</h1>
+  <section class="mx-auto max-w-content px-gutter pt-xl pb-2xl sm:pt-2xl">
+    <h1 class="mb-sm text-h1">Play</h1>
     <p class="max-w-narrow text-lead text-muted-foreground">
       Self-initiated experiments and side explorations.
     </p>
   </section>
 
-  <section class="mx-auto max-w-content px-6 pb-24">
-    <div class="grid gap-4 sm:grid-cols-2">
+  <section class="mx-auto max-w-content px-gutter pb-3xl">
+    <div class="grid gap-sm sm:grid-cols-2">
       {play.map((item) => (
         <ProjectCard
           id={item.id}

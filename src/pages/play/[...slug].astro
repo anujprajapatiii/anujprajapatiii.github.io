@@ -20,35 +20,35 @@ const { Content } = await render(item);
   description={item.data.description}
   image={item.data.heroImage ?? item.data.thumbnail}
 >
-  <article class="pt-12 pb-24 sm:pt-20">
-    <header class="mx-auto mb-12 max-w-content px-6">
+  <article class="pt-xl pb-3xl sm:pt-2xl">
+    <header class="mx-auto mb-xl max-w-content px-gutter">
       <a
         href="/play"
         class="text-small text-muted-foreground transition-colors hover:text-accent"
       >&larr; Play</a>
-      <h1 class="mt-6 text-h1">
+      <h1 class="mt-md text-h1">
         {item.data.title}
       </h1>
-      <p class="mt-4 max-w-narrow text-lead text-muted-foreground">
+      <p class="mt-sm max-w-narrow text-lead text-muted-foreground">
         {item.data.description}
       </p>
-      <dl class="mt-8 flex flex-wrap gap-x-10 gap-y-4 border-t border-border pt-6">
+      <dl class="mt-lg flex flex-wrap gap-x-lg gap-y-sm border-t border-border pt-md">
         {item.data.role && (
           <div>
             <dt class="label">Role</dt>
-            <dd class="mt-1 text-small">{item.data.role}</dd>
+            <dd class="mt-3xs text-small">{item.data.role}</dd>
           </div>
         )}
         {item.data.year && (
           <div>
             <dt class="label">Year</dt>
-            <dd class="mt-1 text-small">{item.data.year}</dd>
+            <dd class="mt-3xs text-small">{item.data.year}</dd>
           </div>
         )}
         {item.data.skills.length > 0 && (
           <div>
             <dt class="label">Skills</dt>
-            <dd class="mt-1 text-small">{item.data.skills.join(", ")}</dd>
+            <dd class="mt-3xs text-small">{item.data.skills.join(", ")}</dd>
           </div>
         )}
       </dl>
@@ -57,7 +57,7 @@ const { Content } = await render(item);
           href={item.data.liveUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="mt-8 inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-small transition-colors hover:border-border-hover hover:text-accent"
+          class="mt-lg inline-flex items-center gap-2xs rounded-md border border-border px-sm py-2xs text-small transition-colors hover:border-border-hover hover:text-accent"
         >
           Try it live
           <span aria-hidden="true">&rarr;</span>
@@ -69,12 +69,12 @@ const { Content } = await render(item);
       <EmbedFrame url={item.data.embedUrl} title={item.data.title} />
     )}
 
-    <div class="mx-auto max-w-content px-6">
+    <div class="mx-auto max-w-content px-gutter">
       {item.data.heroImage && (
         <img
           src={item.data.heroImage}
           alt=""
-          class="mb-12 w-full rounded-xl border border-border"
+          class="mb-xl w-full rounded-xl border border-border"
         />
       )}
 

@@ -229,7 +229,7 @@
 /*
   Spacing, container and type scales. Kept in a plain @theme block (not
   `inline`) so these ADD to Tailwind's built-in scales instead of replacing
-  them — existing utilities like max-w-content and px-6 must keep working.
+  them — existing utilities like max-w-content and px-gutter must keep working.
   See agent-os/plans/spacing-and-type-scale.md.
 */
 @theme {
@@ -549,10 +549,10 @@ a.label:hover { color: var(--accent); }
   margin-top: 1.25em;
 }
 .prose h2 {
-  @apply mt-12 text-h2;
+  @apply mt-xl text-h2;
 }
 .prose h3 {
-  @apply mt-8 text-h3;
+  @apply mt-lg text-h3;
 }
 /*
   Text is capped to the reading measure (~70 characters) while the wrapper
@@ -572,10 +572,10 @@ a.label:hover { color: var(--accent); }
   @apply text-body text-foreground;
 }
 .prose ul {
-  @apply list-disc ps-5;
+  @apply list-disc ps-md;
 }
 .prose ol {
-  @apply list-decimal ps-5;
+  @apply list-decimal ps-md;
 }
 .prose li + li {
   margin-top: 0.4em;
@@ -590,22 +590,28 @@ a.label:hover { color: var(--accent); }
   @apply rounded-lg border border-border;
 }
 .prose figure {
-  @apply my-8;
+  @apply my-lg;
 }
 .prose figcaption {
-  @apply mt-2 text-label text-muted-foreground;
+  @apply mt-2xs text-label text-muted-foreground;
 }
 .prose blockquote {
-  @apply border-s-2 border-border ps-4 text-muted-foreground;
+  @apply border-s-2 border-border ps-sm text-muted-foreground;
 }
+/*
+  The one deliberate exception to the spacing scale. This is optical padding
+  inside a run of text, not layout: 6px/2px keeps the tint tight around the
+  glyphs. The scale bottoms out at 4px, and 4px of vertical padding would
+  push inline code taller than its line and disturb the paragraph's rhythm.
+*/
 .prose :not(pre) > code {
   @apply rounded bg-muted px-1.5 py-0.5 font-mono text-small;
 }
 .prose pre {
-  @apply my-6 overflow-x-auto rounded-lg border border-border p-4 text-small;
+  @apply my-md overflow-x-auto rounded-lg border border-border p-sm text-small;
 }
 .prose hr {
-  @apply my-10 border-border;
+  @apply my-xl border-border;
 }
 
 /* Theme switching. ThemeToggle flips the theme inside a View Transition:

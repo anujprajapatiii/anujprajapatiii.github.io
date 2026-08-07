@@ -171,33 +171,33 @@ const aliases = [
 ---
 
 <PageLayout title="Style Guide — Anuj Prajapati" description="Internal design-system reference." noindex>
-  <div class="mx-auto max-w-content px-6 pt-12 pb-24 sm:pt-20">
-    <h1 class="mb-2 text-h1">Style guide</h1>
-    <p class="mb-12 text-muted-foreground">
+  <div class="mx-auto max-w-content px-gutter pt-xl pb-3xl sm:pt-2xl">
+    <h1 class="mb-2xs text-h1">Style guide</h1>
+    <p class="mb-xl text-muted-foreground">
       Internal reference for the token system — the source of truth is
       <code>src/styles/global.css</code>. Toggle dark mode in the header to
       check both themes. Update this page whenever tokens change.
     </p>
 
-    <section class="border-t border-border py-10">
-      <h2 class="label mb-2">
+    <section class="border-t border-border py-xl">
+      <h2 class="label mb-2xs">
         Primitives
       </h2>
-      <p class="mb-6 text-small text-muted-foreground">
+      <p class="mb-md text-small text-muted-foreground">
         Raw palette. Same values in both themes; components never use these directly.
       </p>
-      <div class="flex flex-col gap-6">
+      <div class="flex flex-col gap-md">
         {primitiveFamilies.map((family) => (
           <div>
-            <p class="mb-2 text-small font-semibold">{family.name}</p>
-            <div class="flex flex-wrap gap-2">
+            <p class="mb-2xs text-small font-semibold">{family.name}</p>
+            <div class="flex flex-wrap gap-2xs">
               {family.swatches.map((swatch) => (
                 <div class="w-16">
                   <div
                     class="h-10 rounded-md border border-border"
                     style={`background: ${swatch.value}`}
                   ></div>
-                  <p class="mt-1 text-label tabular-nums text-muted-foreground">
+                  <p class="mt-3xs text-label tabular-nums text-muted-foreground">
                     {swatch.name}<br />{swatch.value}
                   </p>
                 </div>
@@ -208,26 +208,26 @@ const aliases = [
       </div>
     </section>
 
-    <section class="border-t border-border py-10">
-      <h2 class="label mb-2">
+    <section class="border-t border-border py-xl">
+      <h2 class="label mb-2xs">
         Semantic tokens
       </h2>
-      <p class="mb-6 text-small text-muted-foreground">
+      <p class="mb-md text-small text-muted-foreground">
         Semantic role names. The swatch shows the token in the theme you're
         viewing; the caption lists its light → dark primitive mapping.
       </p>
-      <div class="flex flex-col gap-8">
+      <div class="flex flex-col gap-lg">
         {semanticGroups.map((group) => (
           <div>
-            <p class="mb-2 text-small font-semibold">{group.name}</p>
-            <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
+            <p class="mb-2xs text-small font-semibold">{group.name}</p>
+            <div class="grid grid-cols-2 gap-sm sm:grid-cols-3">
               {group.tokens.map((token) => (
-                <div class="rounded-lg border border-border p-3">
+                <div class="rounded-lg border border-border p-xs">
                   <div
                     class="h-12 rounded-md border border-border"
                     style={`background: var(--${token.name})`}
                   ></div>
-                  <p class="mt-2 text-label">--{token.name}</p>
+                  <p class="mt-2xs text-label">--{token.name}</p>
                   <p class="text-label tabular-nums text-muted-foreground">
                     {token.light} → {token.dark}
                   </p>
@@ -239,14 +239,14 @@ const aliases = [
       </div>
     </section>
 
-    <section class="border-t border-border py-10">
-      <h2 class="label mb-2">
+    <section class="border-t border-border py-xl">
+      <h2 class="label mb-2xs">
         Aliases
       </h2>
-      <p class="mb-6 text-small text-muted-foreground">
+      <p class="mb-md text-small text-muted-foreground">
         Internal names the components use, pointed at the semantic tokens above.
       </p>
-      <div class="grid grid-cols-1 gap-x-8 gap-y-1 sm:grid-cols-2">
+      <div class="grid grid-cols-1 gap-x-lg gap-y-3xs sm:grid-cols-2">
         {aliases.map((alias) => (
           <p class="text-label text-muted-foreground">
             --{alias.name} → {alias.to}
@@ -255,11 +255,11 @@ const aliases = [
       </div>
     </section>
 
-    <section class="border-t border-border py-10">
-      <h2 class="label mb-2">
+    <section class="border-t border-border py-xl">
+      <h2 class="label mb-2xs">
         Type scale
       </h2>
-      <p class="mb-6 max-w-narrow text-small text-muted-foreground">
+      <p class="mb-md max-w-narrow text-small text-muted-foreground">
         One font — Söhne, in two weights: Buch (400) and Halbfett (600). Size,
         line-height and weight travel inside the token, and tracking is 0
         on every step, so
@@ -268,11 +268,11 @@ const aliases = [
         at a call site. Size carries the hierarchy at display scale; weight
         takes over once the sizes get close to body.
       </p>
-      <div class="flex flex-col gap-5">
+      <div class="flex flex-col gap-md">
         {typeScale.map((t) => (
           <div>
             <p class={t.class}>{t.sample}</p>
-            <p class="mt-1 text-label tabular-nums text-muted-foreground">
+            <p class="mt-3xs text-label tabular-nums text-muted-foreground">
               text-{t.name} · {t.size} · {t.weight}
             </p>
           </div>
@@ -280,59 +280,59 @@ const aliases = [
       </div>
     </section>
 
-    <section class="border-t border-border py-10">
-      <h2 class="label mb-2">
+    <section class="border-t border-border py-xl">
+      <h2 class="label mb-2xs">
         Spacing
       </h2>
-      <p class="mb-6 text-small text-muted-foreground">
+      <p class="mb-md text-small text-muted-foreground">
         4px base scale, plus semantic roles a brief can name directly.
       </p>
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-2xs">
         {spacingScale.map((s) => (
-          <div class="flex items-center gap-4">
+          <div class="flex items-center gap-sm">
             <span class="w-20 shrink-0 text-label tabular-nums text-muted-foreground">{s.name}</span>
             <span class="h-4 rounded-sm bg-accent" style={`width: ${s.value}`}></span>
             <span class="text-label tabular-nums text-muted-foreground">{s.px}</span>
           </div>
         ))}
       </div>
-      <div class="mt-6 grid grid-cols-1 gap-x-8 gap-y-1 sm:grid-cols-2">
+      <div class="mt-md grid grid-cols-1 gap-x-lg gap-y-3xs sm:grid-cols-2">
         {semanticSpacing.map((s) => (
           <p class="text-label text-muted-foreground">--spacing-{s.name} → {s.value}</p>
         ))}
       </div>
     </section>
 
-    <section class="border-t border-border py-10">
-      <h2 class="label mb-2">
+    <section class="border-t border-border py-xl">
+      <h2 class="label mb-2xs">
         Containers
       </h2>
-      <p class="mb-6 text-small text-muted-foreground">
+      <p class="mb-md text-small text-muted-foreground">
         Max content widths. Use <code>max-w-wide</code> for the homepage and
         project grids, <code>max-w-content</code> for case-study bodies.
       </p>
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-2xs">
         {containers.map((c) => (
           <div>
             <div class="h-3 rounded-sm bg-muted" style={`max-width: ${c.value}; width: 100%`}></div>
-            <p class="mt-1 text-label tabular-nums text-muted-foreground">max-w-{c.name} · {c.value} ({c.px})</p>
+            <p class="mt-3xs text-label tabular-nums text-muted-foreground">max-w-{c.name} · {c.value} ({c.px})</p>
           </div>
         ))}
       </div>
     </section>
 
-    <section class="border-t border-border py-10">
-      <h2 class="label mb-6">
+    <section class="border-t border-border py-xl">
+      <h2 class="label mb-md">
         Surfaces
       </h2>
-      <div class="grid gap-4 sm:grid-cols-2">
-        <div class="rounded-xl border border-border bg-card p-6">
+      <div class="grid gap-sm sm:grid-cols-2">
+        <div class="rounded-xl border border-border bg-card p-md">
           <p class="font-semibold">Card surface</p>
-          <p class="mt-1 text-small text-muted-foreground">bg-card with border-border</p>
+          <p class="mt-3xs text-small text-muted-foreground">bg-card with border-border</p>
         </div>
-        <div class="rounded-xl bg-muted p-6">
+        <div class="rounded-xl bg-muted p-md">
           <p class="font-semibold">Muted surface</p>
-          <p class="mt-1 text-small text-muted-foreground">bg-muted, no border</p>
+          <p class="mt-3xs text-small text-muted-foreground">bg-muted, no border</p>
         </div>
       </div>
     </section>
