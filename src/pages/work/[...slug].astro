@@ -24,7 +24,7 @@ const { Content } = await render(project);
     <header class="mx-auto mb-12 max-w-content px-6">
       <a
         href="/work"
-        class="text-small text-muted-foreground transition-colors hover:text-foreground"
+        class="text-small text-muted-foreground transition-colors hover:text-accent"
       >&larr; Work</a>
       <h1 class="mt-6 text-h1">
         {project.data.title}
@@ -57,7 +57,7 @@ const { Content } = await render(project);
           href={project.data.liveUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="mt-8 inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-small transition-colors hover:border-foreground/40 hover:text-accent"
+          class="mt-8 inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-small transition-colors hover:border-border-hover hover:text-accent"
         >
           Try it live
           <span aria-hidden="true">&rarr;</span>

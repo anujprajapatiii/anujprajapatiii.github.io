@@ -14,7 +14,7 @@ const { id, title, description, role, year, thumbnail, base = "/work" } = Astro.
 
 <a
   href={`${base}/${id}`}
-  class="group block rounded-xl border border-border bg-card p-6 transition-colors hover:border-foreground/30"
+  class="group block rounded-xl border border-border bg-card p-6 transition-colors hover:border-border-hover"
 >
   {thumbnail && (
     <img

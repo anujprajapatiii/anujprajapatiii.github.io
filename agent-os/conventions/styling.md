@@ -21,6 +21,11 @@ What that means in practice:
 - **Tracking is zero, everywhere.** One value for every size, in both
   directions. Söhne is drawn to be spaced correctly at each size; the system
   trusts it rather than second-guessing it per step.
+- **Text colour is a hierarchy of prominence, never of hue.** All neutral,
+  after Apple's label model: primary label and secondary label, and nothing
+  else. Apple's tertiary/quaternary levels are for watermarks and disabled
+  states — every piece of text here is meant to be read, so there is no
+  third level.
 - **Space does the grouping.** Rules and separators are a last resort, used
   only where a line genuinely beats space (the tabular Play list).
 - **Every value comes from a token.** No one-off sizes, spacing or tracking
@@ -114,6 +119,21 @@ What that means in practice:
 - **Gutters take the safe area**: `max(var(--spacing-gutter),
   env(safe-area-inset-*))` on `.container` / `.page-wrapper`, so content
   never slides under a notch in landscape.
+- **Two text colours, both measured.** `--text-primary` (14.35:1 light,
+  12.55:1 dark) and `--text-secondary` (8.23:1 / 6.95:1), checked against
+  both the page background and the card surface. No hue: the Neutral family
+  is a cool grey and the backgrounds share its cast, so text never reads
+  warm against a cool surface.
+- **Hover always increases contrast.** One rule, one token: interactive text
+  moves to `--accent` (= `--text-interactive`, 17.87:1 / 16.90:1), which
+  out-contrasts `--text-primary` by design. Apple: "Maximize the contrast
+  between text and the background of its container." Hover must read as text
+  coming forward — the old accent was *lower* contrast than body text, so
+  hovering made links recede. Never point a hover at a dimmer colour.
+- **Never dilute a text colour with an alpha** (`text-foreground/90`). It
+  invents an undeclared colour outside the token system and quietly costs
+  contrast — prose body was rendering at 10.66:1 instead of 14.35:1. If a
+  softer colour is wanted, that is `--text-secondary`.
 - The `/style-guide` page must stay in sync with the token system — update it
   when tokens change.
 

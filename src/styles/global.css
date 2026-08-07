@@ -61,14 +61,6 @@
     --neutral-200: #d3d7dd;
     --neutral-100: #f6f7f8;
     --neutral-white: #ffffff;
-    /* Brown */
-    --brown-600: #2e2d2c;
-    --brown-500: #302f2e;
-    --brown-400: #595551;
-    --brown-300: #847b73;
-    --brown-200: #aba199;
-    --brown-100: #cfc7c1;
-    --brown-50: #f1eeec;
     /* Amber */
     --amber-400: #7c370e;
     --amber-300: #e66c24;
@@ -112,12 +104,25 @@
        off the page, not a full secondary step. */
     --background-elevated: var(--neutral-white);
     --border-primary: var(--neutral-300);
-    --border-secondary: var(--brown-200);
+    --border-secondary: var(--neutral-200);
     --border-alternate: var(--neutral-500);
     --border-hover: var(--neutral-800);
+    /*
+      Text colour is a hierarchy of prominence, never of hue — the Apple
+      label model (label / secondary label), all neutral. Two readable
+      levels only: Apple's tertiary and quaternary labels are for watermarks
+      and disabled states, and every piece of text on this site is meant to
+      be read. Measured on the page background:
+        primary   14.35:1   secondary 8.23:1   (both well past AA body)
+    */
     --text-primary: var(--neutral-600);
-    --text-secondary: var(--brown-400);
+    --text-secondary: var(--neutral-400);
     --text-alternate: var(--neutral-100);
+    /*
+      The colour text moves TO on hover. It must out-contrast --text-primary,
+      or hover reads as text going away rather than coming forward. 17.87:1.
+    */
+    --text-interactive: var(--neutral-900);
     --text-success: var(--green-400);
     --text-warning: var(--yellow-600);
     --text-error: var(--red-400);
@@ -138,7 +143,7 @@
     --secondary-foreground: var(--text-primary);
     --muted: var(--background-secondary);
     --muted-foreground: var(--text-secondary);
-    --accent: var(--text-secondary);
+    --accent: var(--text-interactive);
     --accent-foreground: var(--text-alternate);
     --destructive: var(--text-error);
     --border: var(--border-primary);
@@ -155,12 +160,14 @@
     --background-hover: var(--neutral-600);
     --background-elevated: var(--neutral-700);
     --border-primary: var(--neutral-500);
-    --border-secondary: var(--brown-400);
+    --border-secondary: var(--neutral-500);
     --border-alternate: var(--neutral-300);
     --border-hover: var(--neutral-100);
+    /* primary 12.55:1, secondary 6.95:1, interactive 16.90:1 on the dark bg */
     --text-primary: var(--neutral-200);
-    --text-secondary: var(--brown-200);
+    --text-secondary: var(--neutral-300);
     --text-alternate: var(--neutral-800);
+    --text-interactive: var(--neutral-100);
     --link-secondary: var(--neutral-100);
     --link-alternate: var(--neutral-800);
 }
@@ -204,6 +211,7 @@
     --color-border-hover: var(--border-hover);
     --color-text-primary: var(--text-primary);
     --color-text-secondary: var(--text-secondary);
+    --color-text-interactive: var(--text-interactive);
     --color-text-alternate: var(--text-alternate);
     --color-text-success: var(--text-success);
     --color-text-warning: var(--text-warning);
@@ -466,7 +474,7 @@
 }
 /* Interactive labels (back links) get a foreground hover. */
 a.label { transition: color 150ms; }
-a.label:hover { color: var(--foreground); }
+a.label:hover { color: var(--accent); }
 
 /* Hero info box: bordered two-row list */
 .info-box { border: 1px solid var(--border); border-radius: var(--radius); }
@@ -561,7 +569,7 @@ a.label:hover { color: var(--foreground); }
 .prose p,
 .prose ul,
 .prose ol {
-  @apply text-body text-foreground/90;
+  @apply text-body text-foreground;
 }
 .prose ul {
   @apply list-disc ps-5;
