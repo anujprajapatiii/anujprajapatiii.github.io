@@ -130,14 +130,14 @@ const semanticGroups = [
 ];
 
 const typeScale = [
-  { name: "display", class: "text-display", size: "clamp(40px → 72px)", sample: "Display" },
-  { name: "h1", class: "text-h1", size: "clamp(32px → 44px)", sample: "Heading 1" },
-  { name: "h2", class: "text-h2", size: "clamp(24px → 30px)", sample: "Heading 2" },
-  { name: "h3", class: "text-h3", size: "20px", sample: "Heading 3" },
-  { name: "lead", class: "text-lead", size: "18px", sample: "Lead paragraph" },
-  { name: "body", class: "text-body", size: "16px", sample: "Body text. The quick brown fox jumps over the lazy dog." },
-  { name: "small", class: "text-small", size: "14px", sample: "Small / secondary text" },
-  { name: "label", class: "text-label", size: "12px", sample: "Section label" },
+  { name: "display", class: "text-display", size: "clamp(40px → 72px)", weight: "Buch 400", sample: "Display" },
+  { name: "h1", class: "text-h1", size: "clamp(32px → 44px)", weight: "Buch 400", sample: "Heading 1" },
+  { name: "h2", class: "text-h2", size: "clamp(24px → 30px)", weight: "Halbfett 600", sample: "Heading 2" },
+  { name: "h3", class: "text-h3", size: "20px", weight: "Halbfett 600", sample: "Heading 3" },
+  { name: "lead", class: "text-lead", size: "18px", weight: "Buch 400", sample: "Lead paragraph" },
+  { name: "body", class: "text-body", size: "16px", weight: "Buch 400", sample: "Body text. The quick brown fox jumps over the lazy dog." },
+  { name: "small", class: "text-small", size: "14px", weight: "Buch 400", sample: "Small / secondary text" },
+  { name: "label", class: "text-label", size: "12px", weight: "Buch 400", sample: "Caption / value text" },
 ];
 
 const spacingScale = [
@@ -183,7 +183,7 @@ const aliases = [
 
 <PageLayout title="Style Guide — Anuj Prajapati" description="Internal design-system reference." noindex>
   <div class="mx-auto max-w-content px-6 pt-12 pb-24 sm:pt-20">
-    <h1 class="mb-2 text-h1 font-medium">Style guide</h1>
+    <h1 class="mb-2 text-h1">Style guide</h1>
     <p class="mb-12 text-muted-foreground">
       Internal reference for the token system — the source of truth is
       <code>src/styles/global.css</code>. Toggle dark mode in the header to
@@ -200,7 +200,7 @@ const aliases = [
       <div class="flex flex-col gap-6">
         {primitiveFamilies.map((family) => (
           <div>
-            <p class="mb-2 text-small font-medium">{family.name}</p>
+            <p class="mb-2 text-small font-semibold">{family.name}</p>
             <div class="flex flex-wrap gap-2">
               {family.swatches.map((swatch) => (
                 <div class="w-16">
@@ -230,7 +230,7 @@ const aliases = [
       <div class="flex flex-col gap-8">
         {semanticGroups.map((group) => (
           <div>
-            <p class="mb-2 text-small font-medium">{group.name}</p>
+            <p class="mb-2 text-small font-semibold">{group.name}</p>
             <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
               {group.tokens.map((token) => (
                 <div class="rounded-lg border border-border p-3">
@@ -270,16 +270,20 @@ const aliases = [
       <h2 class="label mb-2">
         Type scale
       </h2>
-      <p class="mb-6 text-small text-muted-foreground">
-        One font (Geist Sans), sizes only. Weight and uppercase are applied as
-        utilities where a design needs them, not baked into the tokens.
+      <p class="mb-6 max-w-narrow text-small text-muted-foreground">
+        One font — Söhne, in two weights: Buch (400) and Halbfett (600). Size,
+        line-height, tracking and weight all travel inside the token, so
+        <code>text-h2</code> alone produces finished type and nothing writes
+        <code>tracking-*</code>, <code>leading-*</code> or <code>font-*</code>
+        at a call site. Size carries the hierarchy at display scale; weight
+        takes over once the sizes get close to body.
       </p>
       <div class="flex flex-col gap-5">
         {typeScale.map((t) => (
           <div>
-            <p class={`${t.class} font-medium`}>{t.sample}</p>
+            <p class={t.class}>{t.sample}</p>
             <p class="mt-1 text-label tabular-nums text-muted-foreground">
-              text-{t.name} · {t.size}
+              text-{t.name} · {t.size} · {t.weight}
             </p>
           </div>
         ))}
@@ -333,11 +337,11 @@ const aliases = [
       </h2>
       <div class="grid gap-4 sm:grid-cols-2">
         <div class="rounded-xl border border-border bg-card p-6">
-          <p class="font-medium">Card surface</p>
+          <p class="font-semibold">Card surface</p>
           <p class="mt-1 text-small text-muted-foreground">bg-card with border-border</p>
         </div>
         <div class="rounded-xl bg-muted p-6">
-          <p class="font-medium">Muted surface</p>
+          <p class="font-semibold">Muted surface</p>
           <p class="mt-1 text-small text-muted-foreground">bg-muted, no border</p>
         </div>
       </div>

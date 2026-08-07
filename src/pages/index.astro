@@ -23,8 +23,7 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
     <Container size="wide">
       <Grid min="360px" gap="lg">
         <Stack gap="lg">
-          <p class="eyebrow">Personal Site</p>
-          <h1 class="text-display font-medium">
+          <h1 class="text-display">
             Monsoon Projects 2026
           </h1>
           <div class="info-box">
@@ -48,7 +47,7 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
     <Container size="wide">
       <Stack gap="lg">
         <Cluster justify="between" align="baseline">
-          <h2 class="label">Selected work</h2>
+          <h2 class="text-h3">Selected work</h2>
           <a
             href="/work"
             class="text-small text-muted-foreground underline underline-offset-4 transition-colors hover:text-accent"
@@ -75,7 +74,7 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
     <Container size="wide">
       <Stack gap="lg">
         <Cluster justify="between" align="baseline">
-          <h2 class="label">Play</h2>
+          <h2 class="text-h3">Play</h2>
           <a
             href="/play"
             class="text-small text-muted-foreground underline underline-offset-4 transition-colors hover:text-accent"
@@ -101,8 +100,7 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
   <Section size="lg" id="connect">
     <Container size="wide">
       <Stack gap="md">
-        <p class="eyebrow">Connect</p>
-        <h2 class="text-h2 font-medium">Let’s make something grow.</h2>
+        <h2 class="text-h2">Let’s make something grow.</h2>
         <Cluster gap="lg" class="text-small">
           <a
             href={`mailto:${siteConfig.social.email}`}

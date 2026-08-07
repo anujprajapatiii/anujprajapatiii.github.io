@@ -1,7 +1,11 @@
 ---
 import "../styles/global.css";
 import { siteConfig } from "@/data/site-config";
-import geistWoff2 from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url";
+/* Söhne (Klim Type Foundry), web-licensed. Both weights are preloaded: the
+   site uses 400 for reading and 600 for small headings, so a missing 600
+   would change layout on first paint, not just colour. */
+import soehneBuch from "../assets/fonts/soehne-buch.woff2?url";
+import soehneHalbfett from "../assets/fonts/soehne-halbfett.woff2?url";
 
 interface Props {
   title?: string;
@@ -28,8 +32,9 @@ const ogImage = image ? new URL(image, siteConfig.url).toString() : undefined;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
 
-    {/* Preload the font so text never paints in a fallback and swaps (FOUT) */}
-    <link rel="preload" href={geistWoff2} as="font" type="font/woff2" crossorigin />
+    {/* Preload both faces so text never paints in a fallback and swaps (FOUT) */}
+    <link rel="preload" href={soehneBuch} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={soehneHalbfett} as="font" type="font/woff2" crossorigin />
     <title>{pageTitle}</title>
 
     {/* Open Graph */}

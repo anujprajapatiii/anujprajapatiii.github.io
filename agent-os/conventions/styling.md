@@ -1,14 +1,29 @@
 # Styling Conventions
 
-> STATUS: Starter rules. The visual direction section is a placeholder until
-> Anuj runs the design token session. The token *system* rules below are
-> permanent.
+> STATUS: Active. Colour, type and layout systems are all in code and
+> `src/styles/global.css` is the source of truth.
 
 ## Visual Direction
 
-TODO(Anuj): describe the feel in your own words after the token session.
-Until then: neutral, minimal, content-first. Do not add decorative
-complexity.
+Clean, disciplined, structured — the reference points Anuj named are Apple
+and Klim Type Foundry.
+
+What that means in practice:
+
+- **Restraint over decoration.** No eyebrows, kickers, or ornamental labels.
+  If a piece of text is a section heading, make it a heading; don't dress it
+  up as a 12px uppercase whisper.
+- **One font, two weights.** Söhne Buch and Halbfett. Hierarchy comes from
+  size, space and colour before it comes from weight, and weight is only
+  reached for when sizes get close enough that size alone can't separate them.
+- **Big type is set light and tight.** Display and h1 in Buch 400 with
+  strong negative tracking — this is the Klim habit and it is why the hero
+  reads as composed rather than shouted.
+- **Space does the grouping.** Rules and separators are a last resort, used
+  only where a line genuinely beats space (the tabular Play list).
+- **Every value comes from a token.** No one-off sizes, spacing or tracking
+  at a call site. If something needs to change, it changes in `global.css`
+  and propagates.
 
 ## Rules
 
@@ -24,24 +39,40 @@ complexity.
   raw hex values, named colors, or palette classes like `bg-zinc-100`.
 - Dark mode is class-based with `.dark` on `<html>`; both modes must be
   checked for any visual change.
-- **One brand font: Geist Sans** for everything visible. `--font-mono` is a
-  system fallback stack reserved for code only (inline `code` + code blocks)
-  — never for labels, wordmarks, or metadata.
+- **One brand font: Söhne** (Klim Type Foundry, web-licensed), self-hosted
+  from `src/assets/fonts/`. Exactly **two weights exist: Buch 400 and
+  Halbfett 600.** There is no 500 and no italic:
+  - Never write `font-medium` — 500 resolves to Buch 400 and silently
+    flattens the hierarchy. Verified: 400 and 500 measure identically.
+  - Never set `font-synthesis: none` — with no italic face it would erase
+    `<em>` emphasis entirely. Synthetic oblique is the correct trade here.
+  - Both faces are preloaded in `BaseLayout.astro`; those URLs and the
+    `src()` paths in `global.css` must resolve to the same hashed asset or
+    the preload silently double-downloads. Check `dist/` after changing either.
+  `--font-mono` is a system fallback stack reserved for code only (inline
+  `code` + code blocks) — never for labels, wordmarks, or metadata.
 - **Spacing** uses the named scale (`p-md`, `gap-sm`, `py-xl`, …) or the
   semantic roles (`--spacing-gutter/section/stack/card/grid`) — not arbitrary
   Tailwind step numbers. 4px base; see `/style-guide`.
+- **Hierarchy rule: size at large scale, weight at small scale.** Display
+  and h1 stay in Buch 400 and let size do the work; h2/h3 sit close enough
+  to body size that size alone cannot separate them, so they carry Halbfett
+  600. Weight now lives inside the token — no component writes `font-*`.
+- **No decorative eyebrows or uppercase kickers.** Section headings are real
+  headings. `.label` is reserved for genuine metadata (definition-list terms,
+  card roles) and is the only place uppercase, positive tracking and 600
+  weight are applied together.
 - **Type** uses the scale tokens
   (`text-display/h1/h2/h3/lead/body/small/label`) — never raw Tailwind sizes
   (`text-lg`, `text-4xl`, `text-[10px]`). Each token carries its own
-  line-height and letter-spacing, so **never write `tracking-*` or
-  `leading-*` at a call site**: if a size needs different spacing, change the
-  token in global.css and every use follows. Weight is still a utility
-  (`font-medium`); nothing below 18px goes under weight 400.
+  line-height, letter-spacing and weight, so **never write `tracking-*`,
+  `leading-*` or `font-*` at a call site**: if a size needs different spacing, change the
+  token in global.css and every use follows. Nothing below 18px goes under
+  weight 400.
 - **Uppercase micro-text uses `.label`**, not a pile of utilities. It is the
   one place positive tracking lives, because tracking belongs with the
   uppercase treatment and not with the 12px size — sentence-case 12px text
-  (captions, values) must not inherit it. `.eyebrow` is `.label` plus the
-  accent bar.
+  (captions, values) must not inherit it.
 - **Long-form text is capped to the reading measure**
   (`var(--container-narrow)`, ~70 characters). `.prose` applies this to
   `p`/`ul`/`ol`/`blockquote` only, so images and code blocks still run the

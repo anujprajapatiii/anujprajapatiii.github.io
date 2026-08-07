@@ -1,7 +1,35 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
+
+/*
+  Söhne — Klim Type Foundry, web-licensed. Two faces, and only two:
+  Buch (400) for reading, Halbfett (600) for small headings and labels.
+
+  There is no 500 and no italic in this licence. That has consequences:
+    - `font-medium` (500) would silently resolve to Buch 400 and flatten
+      the hierarchy. The codebase uses 400/600 only — see the weight
+      values baked into the type scale below.
+    - `<em>` is synthesised by the browser. Do NOT set `font-synthesis:
+      none` — with no italic face it would erase emphasis entirely.
+
+  The files are preloaded in BaseLayout; the URLs there must stay in sync
+  with the src() paths here or the preload silently double-downloads.
+*/
+@font-face {
+  font-family: 'Söhne';
+  src: url('../assets/fonts/soehne-buch.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Söhne';
+  src: url('../assets/fonts/soehne-halbfett.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
 
 @custom-variant dark (&:is(.dark *));
 
@@ -140,7 +168,7 @@
 @theme inline {
     /* One brand font. --font-mono is a system fallback stack reserved for
        code only (inline code + code blocks), never for design/labels. */
-    --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'Söhne', ui-sans-serif, system-ui, sans-serif;
     --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
     --color-ring: var(--ring);
     --color-input: var(--input);
@@ -231,24 +259,38 @@
 
        Sizes descend without collisions so a child heading can never outrank
        its parent: 72 → 44 → 30 → 20 → 18 → 16 → 14 → 12. */
+    /* Weight is part of the token, not a utility. Only 400 and 600 exist in
+       the licence, and the rule is: SIZE creates hierarchy at large scale,
+       WEIGHT creates it at small scale. So display and h1 stay in Buch 400
+       and let their size do the work — the Klim habit — while h2/h3, which
+       are too close to body size for size alone to separate them, carry
+       Halbfett 600. Nothing in the codebase writes font-medium/semibold. */
     --text-display: clamp(2.5rem, 8vw, 4.5rem);
-    --text-display--line-height: 1.05;
-    --text-display--letter-spacing: -0.03em;
+    --text-display--line-height: 1.02;
+    --text-display--letter-spacing: -0.035em;
+    --text-display--font-weight: 400;
     --text-h1: clamp(2rem, 5vw, 2.75rem);
-    --text-h1--line-height: 1.1;
-    --text-h1--letter-spacing: -0.02em;
+    --text-h1--line-height: 1.08;
+    --text-h1--letter-spacing: -0.025em;
+    --text-h1--font-weight: 400;
     --text-h2: clamp(1.5rem, 3vw, 1.875rem);
-    --text-h2--line-height: 1.2;
-    --text-h2--letter-spacing: -0.015em;
+    --text-h2--line-height: 1.15;
+    --text-h2--letter-spacing: -0.02em;
+    --text-h2--font-weight: 600;
     --text-h3: 1.25rem;
-    --text-h3--line-height: 1.35;
-    --text-h3--letter-spacing: -0.01em;
+    --text-h3--line-height: 1.3;
+    --text-h3--letter-spacing: -0.015em;
+    --text-h3--font-weight: 600;
     --text-lead: 1.125rem;
-    --text-lead--line-height: 1.6;
+    --text-lead--line-height: 1.55;
+    --text-lead--letter-spacing: -0.01em;
+    --text-lead--font-weight: 400;
     --text-body: 1rem;
     --text-body--line-height: 1.6;
+    --text-body--font-weight: 400;
     --text-small: 0.875rem;
     --text-small--line-height: 1.5;
+    --text-small--font-weight: 400;
     /* Plain 0.75rem — no tracking here. Positive tracking belongs with the
        uppercase treatment, not the size, so it lives in .label instead;
        sentence-case 12px text (captions, values) must not inherit it. */
@@ -355,7 +397,7 @@
 */
 .site-header { border-bottom: 1px solid var(--border); padding-block: var(--spacing-sm); }
 .site-footer { border-top: 1px solid var(--border); padding-block: var(--spacing-lg); }
-.wordmark { font-size: var(--text-body); font-weight: 500; letter-spacing: 0.01em; }
+.wordmark { font-size: var(--text-body); font-weight: 600; letter-spacing: 0.01em; }
 
 /*
   Responsive header bar (component-internal layout). Mobile-first:
@@ -420,21 +462,12 @@
   line-height: var(--text-label--line-height);
   text-transform: uppercase;
   letter-spacing: 0.08em;   /* caps crowd without it */
+  font-weight: 600;         /* 12px caps need Halbfett to hold their colour */
   color: var(--muted-foreground);
 }
 /* Interactive labels (back links) get a foreground hover. */
 a.label { transition: color 150ms; }
 a.label:hover { color: var(--foreground); }
-
-/* Hero eyebrow: the label plus an accent bar. */
-.eyebrow {
-  display: inline-flex; align-items: center;
-  border-inline-start: 2px solid var(--border-alternate);
-  padding-inline-start: var(--spacing-xs);
-  font-size: var(--text-label); line-height: var(--text-label--line-height);
-  text-transform: uppercase; letter-spacing: 0.08em;
-  color: var(--muted-foreground);
-}
 
 /* Hero info box: bordered two-row list */
 .info-box { border: 1px solid var(--border); border-radius: var(--radius); }
@@ -498,7 +531,7 @@ a.label:hover { color: var(--foreground); }
   transition: color 150ms, border-color 150ms;
 }
 .play-row:hover { color: var(--accent); border-color: var(--border-hover); }
-.play-row__title { font-size: var(--text-body); font-weight: 500; }
+.play-row__title { font-size: var(--text-body); }
 .play-row__meta { font-size: var(--text-small); color: var(--muted-foreground); white-space: nowrap; }
 
 /* Markdown prose for case-study bodies (custom, not @tailwindcss/typography) */
@@ -509,10 +542,10 @@ a.label:hover { color: var(--foreground); }
   margin-top: 1.25em;
 }
 .prose h2 {
-  @apply mt-12 text-h2 font-medium;
+  @apply mt-12 text-h2;
 }
 .prose h3 {
-  @apply mt-8 text-h3 font-medium;
+  @apply mt-8 text-h3;
 }
 /*
   Text is capped to the reading measure (~70 characters) while the wrapper
@@ -544,7 +577,7 @@ a.label:hover { color: var(--foreground); }
   @apply text-foreground underline underline-offset-4 transition-colors hover:text-accent;
 }
 .prose strong {
-  @apply font-medium;
+  @apply font-semibold;
 }
 .prose img {
   @apply rounded-lg border border-border;
@@ -559,10 +592,10 @@ a.label:hover { color: var(--foreground); }
   @apply border-s-2 border-border ps-4 text-muted-foreground;
 }
 .prose :not(pre) > code {
-  @apply rounded bg-muted px-1.5 py-0.5 font-mono text-sm;
+  @apply rounded bg-muted px-1.5 py-0.5 font-mono text-small;
 }
 .prose pre {
-  @apply my-6 overflow-x-auto rounded-lg border border-border p-4 text-sm;
+  @apply my-6 overflow-x-auto rounded-lg border border-border p-4 text-small;
 }
 .prose hr {
   @apply my-10 border-border;
