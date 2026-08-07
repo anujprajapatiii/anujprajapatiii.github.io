@@ -147,6 +147,22 @@ What that means in practice:
   invents an undeclared colour outside the token system and quietly costs
   contrast — prose body was rendering at 10.66:1 instead of 14.35:1. If a
   softer colour is wanted, that is `--text-secondary`.
+- **`pnpm check` enforces the mechanical rules** (`scripts/check-conventions.mjs`,
+  run in CI before the build). It covers raw spacing steps, raw type sizes,
+  call-site tracking/leading, unlicensed font weights, non-zero
+  letter-spacing, physical direction properties, alpha-diluted colours, raw
+  hex in components, inline layout, and eyebrows. Add a rule whenever a
+  convention here gets broken in practice.
+  - It runs **before** the build on purpose: every one of these produces
+    valid CSS that renders wrongly, so a green build proves nothing.
+  - It cannot check contrast, reading measure, or anything visual. Those
+    still need measuring in a browser.
+  - When adding a rule, prove it fires — write the violation, watch it fail,
+    then delete it. A silently-passing rule is worse than no rule.
+- **Layout is composed, never inlined.** Every page is
+  `Section > Container > Stack | Grid | Cluster`. `Section size="page"` is
+  the asymmetric opener for the first section under the header (48→64px top,
+  96px bottom) — the header supplies weight above, so the top needs less air.
 - The `/style-guide` page must stay in sync with the token system — update it
   when tokens change.
 

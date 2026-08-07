@@ -21,6 +21,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Runs before the build on purpose: these violations produce valid CSS
+      # that renders wrongly, so a green build proves nothing about them.
+      - name: Check design system
+        run: node scripts/check-conventions.mjs
+
       - name: Build with Astro
         uses: withastro/action@v3
 

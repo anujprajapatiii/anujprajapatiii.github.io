@@ -362,6 +362,13 @@
 }
 
 /* Section — vertical rhythm (padding-block) */
+/*
+  Page opener: the first section under the site header. Asymmetric on
+  purpose — the header already supplies weight above, so the top needs less
+  air than the bottom. This replaces the `pt-xl pb-3xl sm:pt-2xl` that every
+  page used to hand-roll; the clamp reproduces it exactly (48px → 64px).
+*/
+.section--page { padding-block: clamp(3rem, 6vw, 4rem) var(--spacing-3xl); }
 .section--sm { padding-block: var(--spacing-lg); }              /* 32 */
 .section--md { padding-block: var(--spacing-xl); }              /* 48 */
 .section--lg { padding-block: var(--spacing-3xl); }             /* 96 */
@@ -372,6 +379,7 @@
 .stack--sm { gap: var(--spacing-2xs); }                         /* 8 */
 .stack--md { gap: var(--spacing-sm); }                          /* 16 */
 .stack--lg { gap: var(--spacing-lg); }                          /* 32 */
+.stack--xl { gap: var(--spacing-xl); }                          /* 48 — major blocks within a page */
 
 /* Cluster — horizontal flex with wrap */
 .cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-sm); }

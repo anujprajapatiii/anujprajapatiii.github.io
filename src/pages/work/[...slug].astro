@@ -1,6 +1,10 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
 import EmbedFrame from "@/components/EmbedFrame.astro";
+import Section from "@/components/primitives/Section.astro";
+import Container from "@/components/primitives/Container.astro";
+import Stack from "@/components/primitives/Stack.astro";
+import Cluster from "@/components/primitives/Cluster.astro";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
@@ -20,67 +24,77 @@ const { Content } = await render(project);
   description={project.data.description}
   image={project.data.heroImage ?? project.data.thumbnail}
 >
-  <article class="pt-xl pb-3xl sm:pt-2xl">
-    <header class="mx-auto mb-xl max-w-content px-gutter">
-      <a
-        href="/work"
-        class="text-small text-muted-foreground transition-colors hover:text-accent"
-      >&larr; Work</a>
-      <h1 class="mt-md text-h1">
-        {project.data.title}
-      </h1>
-      <p class="mt-sm max-w-narrow text-lead text-muted-foreground">
-        {project.data.description}
-      </p>
-      <dl class="mt-lg flex flex-wrap gap-x-lg gap-y-sm border-t border-border pt-md">
-        {project.data.role && (
-          <div>
-            <dt class="label">Role</dt>
-            <dd class="mt-3xs text-small">{project.data.role}</dd>
-          </div>
-        )}
-        {project.data.year && (
-          <div>
-            <dt class="label">Year</dt>
-            <dd class="mt-3xs text-small">{project.data.year}</dd>
-          </div>
-        )}
-        {project.data.skills.length > 0 && (
-          <div>
-            <dt class="label">Skills</dt>
-            <dd class="mt-3xs text-small">{project.data.skills.join(", ")}</dd>
-          </div>
-        )}
-      </dl>
-      {project.data.liveUrl && (
-        <a
-          href={project.data.liveUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="mt-lg inline-flex items-center gap-2xs rounded-md border border-border px-sm py-2xs text-small transition-colors hover:border-border-hover hover:text-accent"
-        >
-          Try it live
-          <span aria-hidden="true">&rarr;</span>
-        </a>
-      )}
-    </header>
+  <Section as="article" size="page">
+    <Stack gap="xl">
+    <Container as="header" size="content">
+      <Stack gap="lg">
+        <Stack gap="md">
+          <a
+            href="/work"
+            class="text-small text-muted-foreground transition-colors hover:text-accent"
+          >&larr; Work</a>
+          <h1 class="text-h1">{project.data.title}</h1>
+          <p class="max-w-narrow text-lead text-muted-foreground">
+            {project.data.description}
+          </p>
+        </Stack>
 
+        <Cluster as="dl" gap="lg" align="start" class="border-t border-border pt-md">
+          {project.data.role && (
+            <div>
+              <dt class="label">Role</dt>
+              <dd class="mt-3xs text-small">{project.data.role}</dd>
+            </div>
+          )}
+          {project.data.year && (
+            <div>
+              <dt class="label">Year</dt>
+              <dd class="mt-3xs text-small">{project.data.year}</dd>
+            </div>
+          )}
+          {project.data.skills.length > 0 && (
+            <div>
+              <dt class="label">Skills</dt>
+              <dd class="mt-3xs text-small">{project.data.skills.join(", ")}</dd>
+            </div>
+          )}
+        </Cluster>
+
+        {project.data.liveUrl && (
+          <Cluster>
+            <a
+              href={project.data.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2xs rounded-md border border-border px-sm py-2xs text-small transition-colors hover:border-border-hover hover:text-accent"
+            >
+              Try it live
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </Cluster>
+        )}
+      </Stack>
+    </Container>
+
+    {/* Breaks out of the reading column to full width — see EmbedFrame. */}
     {project.data.embedUrl && (
       <EmbedFrame url={project.data.embedUrl} title={project.data.title} />
     )}
 
-    <div class="mx-auto max-w-content px-gutter">
-      {project.data.heroImage && (
-        <img
-          src={project.data.heroImage}
-          alt=""
-          class="mb-xl w-full rounded-xl border border-border"
-        />
-      )}
-
-      <div class="prose">
-        <Content />
-      </div>
-    </div>
-  </article>
+    <Container size="content">
+      <Stack gap="lg">
+        {project.data.heroImage && (
+          <img
+            src={project.data.heroImage}
+            alt=""
+            class="w-full rounded-xl border border-border"
+          />
+        )}
+        <div class="prose">
+          <Content />
+        </div>
+      </Stack>
+    </Container>
+    </Stack>
+  </Section>
 </PageLayout>
