@@ -307,6 +307,20 @@ const aliases = [
 
     <Section size="md" class="border-t border-border">
       <h2 class="label mb-2xs">
+        Layout primitives
+      </h2>
+      <p class="mb-md max-w-measure text-small text-muted-foreground">
+        Pages compose <code>Section &gt; Container &gt; Stack | Grid | Cluster</code>
+        and never inline layout. <code>Sidebar</code> adds a two-column variant:
+        a fixed <code>--rail-width</code> (12rem) column beside a flexible one,
+        used for the on-this-page rail on case studies. It collapses to a single
+        column below 56rem, where the content column would otherwise drop under
+        the reading measure.
+      </p>
+    </Section>
+
+    <Section size="md" class="border-t border-border">
+      <h2 class="label mb-2xs">
         Containers
       </h2>
       <p class="mb-md max-w-measure text-small text-muted-foreground">

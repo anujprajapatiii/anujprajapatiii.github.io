@@ -1,0 +1,119 @@
+---
+import type { MarkdownHeading } from "astro";
+
+/*
+  Table of contents for a case-study body.
+
+  Astro already emits slugged `id`s on markdown headings, so the anchors here
+  need no plugin and no id generation — `render()` hands back the same slugs it
+  wrote into the HTML.
+
+  Depth 3 is included even though no case study uses it yet: it costs nothing
+  now and means the rail keeps working as entries grow.
+*/
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+
+/* One heading is a list of one — not worth a rail. */
+const show = items.length > 1;
+---
+
+{show && (
+  <nav class="on-this-page" aria-label="On this page">
+    <p class="label on-this-page__title">On this page</p>
+    <ul>
+      {items.map((h) => (
+        <li>
+          <a href={`#${h.slug}`} data-depth={h.depth}>{h.text}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<script>
+  /*
+    Scroll-spy. The active link is marked with `aria-current="true"` and the
+    styling hangs off that attribute, so the accessible state and the visual
+    state cannot drift apart.
+  */
+  function initOnThisPage() {
+    const nav = document.querySelector<HTMLElement>(".on-this-page");
+    if (!nav) return;
+
+    const links = [...nav.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
+    const byId = new Map<string, HTMLAnchorElement>();
+    for (const link of links) {
+      byId.set(decodeURIComponent(link.hash.slice(1)), link);
+    }
+
+    const targets = [...byId.keys()]
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+    if (targets.length === 0) return;
+
+    let active: HTMLAnchorElement | null = null;
+    function setActive(id: string) {
+      const link = byId.get(id);
+      if (!link || link === active) return;
+      active?.removeAttribute("aria-current");
+      link.setAttribute("aria-current", "true");
+      active = link;
+    }
+
+    /*
+      "Which section am I in" is a question about the last heading above a fold
+      line, not about what is currently on screen. An IntersectionObserver
+      answers the second question and leaves a dead zone in the first: scroll
+      into the middle of a long section and no heading is intersecting, so
+      nothing is active. Reading geometry on scroll has no such gap.
+
+      Positions are read fresh every frame rather than cached, so images and
+      the embed loading in and shifting the page cannot make this stale.
+    */
+    const FOLD = 0.3; // active section = last heading above 30% viewport height
+    let queued = false;
+
+    function update() {
+      queued = false;
+      const fold = window.innerHeight * FOLD;
+      let current = targets[0];
+      for (const target of targets) {
+        if (target.getBoundingClientRect().top > fold) break;
+        current = target;
+      }
+      setActive(current.id);
+    }
+
+    function schedule() {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(update);
+    }
+
+    addEventListener("scroll", schedule, { passive: true });
+    addEventListener("resize", schedule, { passive: true });
+
+    /*
+      Second trigger for the same logic. Scroll events are the normal driver,
+      but they are not guaranteed: programmatic jumps (an in-page anchor, a
+      restored scroll position, an automated browser) can move the page without
+      dispatching one — verified here, where scrollY changed and zero scroll
+      events fired. The observer fires on those crossings instead. Neither
+      decides anything; both just ask update() to re-read geometry, so having
+      both cannot double-count.
+    */
+    const observer = new IntersectionObserver(schedule, {
+      rootMargin: "0px 0px -60% 0px",
+    });
+    targets.forEach((t) => observer.observe(t));
+
+    update();
+  }
+
+  initOnThisPage();
+</script>

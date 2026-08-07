@@ -5,6 +5,8 @@ import Section from "@/components/primitives/Section.astro";
 import Container from "@/components/primitives/Container.astro";
 import Stack from "@/components/primitives/Stack.astro";
 import Cluster from "@/components/primitives/Cluster.astro";
+import Sidebar from "@/components/primitives/Sidebar.astro";
+import OnThisPage from "@/components/OnThisPage.astro";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
@@ -16,7 +18,7 @@ export async function getStaticPaths() {
 }
 
 const { item } = Astro.props;
-const { Content } = await render(item);
+const { Content, headings } = await render(item);
 ---
 
 <PageLayout
@@ -90,9 +92,14 @@ const { Content } = await render(item);
             class="w-full rounded-xl border border-border"
           />
         )}
-        <div class="prose">
-          <Content />
-        </div>
+        {/* Rail beside the body only: the table of contents belongs to the
+            prose it describes, and the header above wants its full width. */}
+        <Sidebar>
+          <OnThisPage headings={headings} />
+          <div class="prose">
+            <Content />
+          </div>
+        </Sidebar>
       </Stack>
     </Container>
     </Stack>

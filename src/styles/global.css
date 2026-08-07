@@ -265,6 +265,8 @@
        width. Body text at 1024px would run to ~127 characters. */
     --container-page: 64rem;
     --container-measure: 36rem;
+    /* Width of the on-this-page rail. See .sidebar-layout. */
+    --rail-width: 12rem;
 
     /* ---- TYPE SCALE (one font) ----
        Each step carries its own line-height and weight, so `text-h1` alone
@@ -322,6 +324,26 @@
   html {
     @apply font-sans;
   }
+  /*
+    Focus ring. The site had none — it inherited the browser default while the
+    Tailwind base overrode the outline COLOUR to a half-transparent dark token,
+    which is close to invisible on the dark background. Keyboard users need
+    this everywhere, and the on-this-page rail is explicitly tab-navigable.
+    --text-interactive is the highest-contrast neutral in both themes.
+  */
+  :focus-visible {
+    outline: 2px solid var(--text-interactive);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+  /* Anchor navigation from the on-this-page rail. Gated on reduced motion in
+     CSS rather than JS so it applies to every in-page jump, not just the rail. */
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+  /* Landing offset for those jumps — a heading pinned to the very top edge
+     reads as though the section above it is missing. */
+  :is(h2, h3, h4)[id] { scroll-margin-top: var(--spacing-xl); }
   /* Wrapping defaults, set once. `balance` evens out short multi-line
      headings; `pretty` keeps a lone word off a paragraph's last line. */
   h1, h2, h3, h4, h5, h6 {
@@ -410,6 +432,34 @@
 .grid-auto--min-440 { --grid-min: 440px; }   /* 2-up on desktop, 1-up ≤tablet */
 .grid-auto--gap-md { gap: var(--spacing-sm); }
 .grid-auto--gap-lg { gap: var(--spacing-lg); }
+
+/*
+  Sidebar — fixed-width rail beside a flexible content column.
+
+  Content-driven breakpoint, measured not guessed: the content column is
+  min(vw, 1024) - 48 gutter - 192 rail - 48 gap. That hits the 576px reading
+  measure at exactly 864px, so the rail turns on at 56rem (896px), where the
+  content column still has 608px rather than sitting on the boundary.
+
+  `:has()` keeps the grid single-column when the rail renders nothing (a case
+  study with fewer than two headings), so there is no empty gutter. Browsers
+  without :has() fall back to a full-width content column, which is the same
+  result.
+*/
+.sidebar-layout { display: grid; gap: var(--spacing-xl); }
+/*
+  Grid items default to min-width:auto, so a track refuses to shrink below its
+  content's intrinsic width — a code block or a long token in the prose blew
+  the column out to 776px inside a 327px container and scrolled the page
+  sideways. The flex Stack this replaced had no such behaviour. Same guard as
+  the min() in .grid-auto.
+*/
+.sidebar-layout > * { min-width: 0; }
+@media (min-width: 56rem) {
+  .sidebar-layout:has(> .on-this-page) {
+    grid-template-columns: var(--rail-width) 1fr;
+  }
+}
 
 /*
   ===== Homepage component styling =====
@@ -553,6 +603,44 @@ a.label:hover { color: var(--accent); }
 .play-row:hover { color: var(--accent); border-color: var(--border-hover); }
 .play-row__title { font-size: var(--text-body); }
 .play-row__meta { font-size: var(--text-small); color: var(--muted-foreground); white-space: nowrap; }
+
+/*
+  On-this-page rail. Hidden below the sidebar breakpoint — nothing is lost,
+  since the headings themselves are still in the body a few flicks away.
+
+  `align-self: start` is what makes `position: sticky` work in a grid item; a
+  stretched item is already as tall as its row and has nothing to stick within.
+*/
+.on-this-page { display: none; }
+@media (min-width: 56rem) {
+  .on-this-page {
+    display: block;
+    position: sticky;
+    top: var(--spacing-xl);
+    align-self: start;
+    max-height: calc(100vh - var(--spacing-2xl));
+    overflow-y: auto;
+  }
+}
+.on-this-page__title { margin-bottom: var(--spacing-2xs); }
+.on-this-page ul { list-style: none; }
+.on-this-page a {
+  display: block;
+  padding-block: var(--spacing-3xs);
+  padding-inline-start: var(--spacing-xs);
+  border-inline-start: 2px solid var(--border);
+  font-size: var(--text-small);
+  line-height: var(--text-small--line-height);
+  color: var(--muted-foreground);
+  transition: color 150ms, border-color 150ms;
+}
+/* Nested headings sit one step further in. */
+.on-this-page a[data-depth="3"] { padding-inline-start: var(--spacing-md); }
+.on-this-page a:hover { color: var(--accent); border-color: var(--border-hover); }
+.on-this-page a[aria-current="true"] {
+  color: var(--foreground);
+  border-color: var(--foreground);
+}
 
 /* Markdown prose for case-study bodies (custom, not @tailwindcss/typography) */
 .prose {

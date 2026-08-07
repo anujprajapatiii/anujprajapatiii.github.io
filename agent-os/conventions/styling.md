@@ -170,6 +170,23 @@ What that means in practice:
     still need measuring in a browser.
   - When adding a rule, prove it fires — write the violation, watch it fail,
     then delete it. A silently-passing rule is worse than no rule.
+- **`Sidebar` is the two-column primitive**: a fixed `--rail-width` column
+  beside a flexible one, collapsing to one column below 56rem (measured: the
+  content column hits the 576px reading measure at exactly 864px, so the rail
+  turns on at 896px with headroom rather than on the boundary).
+  - Grid items default to `min-width: auto`, so a track will not shrink below
+    its content's intrinsic width — a code block blew the column out to 776px
+    inside a 327px container and scrolled the page sideways. `.sidebar-layout
+    > * { min-width: 0 }` is the guard. Any new grid layout needs the same
+    thought; the flex primitives do not have this failure mode.
+  - `position: sticky` on a grid item needs `align-self: start`. A stretched
+    item is already as tall as its row and has nothing to stick within.
+- **Scroll-spy reads geometry, not intersection.** "Which section am I in" is
+  about the last heading above a fold line. An IntersectionObserver answers
+  "what is on screen" and leaves a dead zone mid-section where nothing is
+  active. Drive updates from both a scroll listener and an observer — a
+  programmatic jump can move the page without firing a scroll event — but let
+  geometry decide.
 - **Layout is composed, never inlined.** Every page is
   `Section > Container > Stack | Grid | Cluster`. `Section size="page"` is
   the asymmetric opener for the first section under the header (48→64px top,
