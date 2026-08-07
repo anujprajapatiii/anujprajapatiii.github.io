@@ -1,30 +1,37 @@
 ---
+/*
+  The card shows title, year and description only. Role lives on the case
+  study itself, in the Role/Year/Skills metadata — repeating it here as a
+  subtitle added a third text block to a card that only needs two.
+
+  Spacing comes from the named scale, never raw Tailwind steps: `p-card` is
+  the semantic role for card interior padding.
+*/
 interface Props {
   id: string;
   title: string;
   description: string;
-  role?: string;
   year?: string;
   thumbnail?: string;
   base?: string;
 }
 
-const { id, title, description, role, year, thumbnail, base = "/work" } = Astro.props;
+const { id, title, description, year, thumbnail, base = "/work" } = Astro.props;
 ---
 
 <a
   href={`${base}/${id}`}
-  class="group block rounded-xl border border-border bg-card p-6 transition-colors hover:border-border-hover"
+  class="group block rounded-xl border border-border bg-card p-card transition-colors hover:border-border-hover"
 >
   {thumbnail && (
     <img
       src={thumbnail}
       alt=""
       loading="lazy"
-      class="mb-5 aspect-[16/10] w-full rounded-lg border border-border object-cover"
+      class="mb-sm aspect-[16/10] w-full rounded-lg border border-border object-cover"
     />
   )}
-  <div class="flex items-baseline justify-between gap-4">
+  <div class="flex items-baseline justify-between gap-sm">
     <h3 class="text-h3 transition-colors group-hover:text-accent">
       {title}
     </h3>
@@ -32,6 +39,5 @@ const { id, title, description, role, year, thumbnail, base = "/work" } = Astro.
       <span class="shrink-0 text-small tabular-nums text-muted-foreground">{year}</span>
     )}
   </div>
-  {role && <p class="label mt-1">{role}</p>}
-  <p class="mt-2 text-small text-muted-foreground">{description}</p>
+  <p class="mt-xs text-small text-muted-foreground">{description}</p>
 </a>
