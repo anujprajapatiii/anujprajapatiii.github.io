@@ -51,6 +51,17 @@ const { Content } = await render(project);
           </div>
         )}
       </dl>
+      {project.data.liveUrl && (
+        <a
+          href={project.data.liveUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-8 inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm transition-colors hover:border-foreground/40 hover:text-accent"
+        >
+          Try it live
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+      )}
     </header>
 
     {project.data.heroImage && (

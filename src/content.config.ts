@@ -10,6 +10,9 @@ const caseStudySchema = z.object({
   skills: z.array(z.string()).default([]),
   thumbnail: z.string().optional(),
   heroImage: z.string().optional(),
+  // Optional link to a live/deployed version (e.g. an interactive experiment
+  // hosted in its own repo). Rendered as a "Try it live" link.
+  liveUrl: z.string().url().optional(),
   sortOrder: z.number().default(0),
   draft: z.boolean().default(false),
 });
