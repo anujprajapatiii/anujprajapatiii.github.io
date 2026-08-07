@@ -7,8 +7,6 @@ skills:
   - Brand identity
   - Art direction
   - Design systems
-thumbnail: /images/work/northwind-rebrand/thumbnail.svg
-heroImage: /images/work/northwind-rebrand/hero.svg
 sortOrder: 2
 draft: false
 ---

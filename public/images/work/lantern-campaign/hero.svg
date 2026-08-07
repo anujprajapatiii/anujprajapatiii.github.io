@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 1200" width="2400" height="1200" role="img" aria-label="Placeholder image for Lantern Campaign">
-  <rect width="2400" height="1200" fill="#595551"/>
-  <circle cx="1584" cy="552" r="240" fill="#847b73"/>
-  <rect x="1716" y="432" width="384" height="240" fill="#aba199" opacity="0.55"/>
-  <rect x="192" y="792" width="144" height="14" fill="#ffb700"/>
-  <text x="192" y="936" fill="#f1eeec" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="96" font-weight="500">Lantern Campaign</text>
-  <text x="192" y="1032" fill="#aba199" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="53" letter-spacing="10.8">PLACEHOLDER IMAGE</text>
-</svg>

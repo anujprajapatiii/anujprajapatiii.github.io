@@ -554,8 +554,20 @@ a.label:hover { color: var(--accent); }
 .info-box__row { padding: var(--spacing-sm) var(--spacing-md); font-size: var(--text-body); }
 .info-box__row + .info-box__row { border-top: 1px solid var(--border); }
 
-/* Hero media placeholder */
-.hero-media {
+/*
+  Media placeholder — the neutral grey stand-in for any image that does not
+  exist yet: the homepage hero, work/play cards, and case-study heroes.
+
+  It is a div, not an image file, because the grey has to be --muted in both
+  themes. A flat grey asset would hold one value and go wrong in the theme it
+  was not picked for. 16/10 matches the aspect the real images render at, so
+  swapping a placeholder for a photograph does not move the layout.
+
+  Decorative by construction: no role, no label. A placeholder depicts
+  nothing, and announcing "image placeholder" to a screen reader is noise —
+  the card title and case-study heading already carry the meaning.
+*/
+.media-placeholder {
   aspect-ratio: 16 / 10; width: 100%;
   background: var(--muted); border: 1px solid var(--border);
 }

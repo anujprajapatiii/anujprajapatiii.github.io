@@ -85,12 +85,14 @@ const { Content, headings } = await render(project);
 
     <Container>
       <Stack gap="lg">
-        {project.data.heroImage && (
+        {project.data.heroImage ? (
           <img
             src={project.data.heroImage}
             alt=""
             class="w-full border border-border"
           />
+        ) : (
+          <div class="media-placeholder"></div>
         )}
         {/* Rail beside the body only: the table of contents belongs to the
             prose it describes, and the header above wants its full width. */}

@@ -6,8 +6,10 @@ year: "2026"
 skills:
   - Product design
   - Prototyping
-thumbnail: /images/work/sample-case-study/thumbnail.svg
-heroImage: /images/work/sample-case-study/hero.svg
+# Both optional. Leave them out and the card and hero show a plain grey
+# placeholder; add them and the real image takes over, no other change needed.
+# thumbnail: /images/work/sample-case-study/cover.png
+# heroImage: /images/work/sample-case-study/hero.png
 sortOrder: 1
 draft: false
 ---
