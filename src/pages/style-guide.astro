@@ -196,7 +196,7 @@ const aliases = [
               {family.swatches.map((swatch) => (
                 <div class="w-16">
                   <div
-                    class="h-10 rounded-md border border-border"
+                    class="h-10 border border-border"
                     style={`background: ${swatch.value}`}
                   ></div>
                   <p class="mt-3xs text-label tabular-nums text-muted-foreground">
@@ -224,9 +224,9 @@ const aliases = [
             <p class="mb-2xs text-small font-semibold">{group.name}</p>
             <div class="grid grid-cols-2 gap-sm sm:grid-cols-3">
               {group.tokens.map((token) => (
-                <div class="rounded-lg border border-border p-xs">
+                <div class="border border-border p-xs">
                   <div
-                    class="h-12 rounded-md border border-border"
+                    class="h-12 border border-border"
                     style={`background: var(--${token.name})`}
                   ></div>
                   <p class="mt-2xs text-label">--{token.name}</p>
@@ -293,7 +293,7 @@ const aliases = [
         {spacingScale.map((s) => (
           <div class="flex items-center gap-sm">
             <span class="w-20 shrink-0 text-label tabular-nums text-muted-foreground">{s.name}</span>
-            <span class="h-4 rounded-sm bg-accent" style={`width: ${s.value}`}></span>
+            <span class="h-4 bg-accent" style={`width: ${s.value}`}></span>
             <span class="text-label tabular-nums text-muted-foreground">{s.px}</span>
           </div>
         ))}
@@ -333,7 +333,7 @@ const aliases = [
       <div class="flex flex-col gap-2xs">
         {containers.map((c) => (
           <div>
-            <div class="h-3 rounded-sm bg-muted" style={`max-width: ${c.value}; width: 100%`}></div>
+            <div class="h-3 bg-muted" style={`max-width: ${c.value}; width: 100%`}></div>
             <p class="mt-3xs text-label tabular-nums text-muted-foreground">max-w-{c.name} · {c.value} ({c.px})</p>
           </div>
         ))}
@@ -345,11 +345,11 @@ const aliases = [
         Surfaces
       </h2>
       <div class="grid gap-sm sm:grid-cols-2">
-        <div class="rounded-xl border border-border bg-card p-md">
+        <div class="border border-border bg-card p-md">
           <p class="font-semibold">Card surface</p>
           <p class="mt-3xs text-small text-muted-foreground">bg-card with border-border</p>
         </div>
-        <div class="rounded-xl bg-muted p-md">
+        <div class="bg-muted p-md">
           <p class="font-semibold">Muted surface</p>
           <p class="mt-3xs text-small text-muted-foreground">bg-muted, no border</p>
         </div>

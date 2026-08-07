@@ -81,8 +81,6 @@
     --link-primary: var(--text-primary);
     --link-secondary: var(--neutral-800);
     --link-alternate: var(--neutral-100);
-
-    --radius: 0.5rem;
 }
 
 .dark {

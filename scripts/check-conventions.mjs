@@ -59,6 +59,18 @@ const RULES = [
     msg: "tracking is 0 everywhere, by decision — no per-size letter-spacing",
   },
   {
+    /*
+      Corners are square by decision, and the radius tokens are gone. That
+      makes a stray `rounded-*` worse than a no-op: with no --radius-* key to
+      find, Tailwind falls back to its OWN built-in scale, so the class curves
+      the corner at a value nothing in this repo declares. Catch the utility
+      and the raw property alike.
+    */
+    id: "no-radius",
+    test: /(?<![\w-])rounded[\w\-.[\]]*|border-radius\s*:/,
+    msg: "corners are square everywhere, by decision — no rounded-* utility, no border-radius",
+  },
+  {
     id: "logical-properties",
     test: /(?<![\w-])(?:margin|padding|border)-(?:left|right)\b|(?<![\w-])(?:ml|mr|pl|pr)-[\w.]+|(?<![\w-])border-[lr]-\d/,
     msg: "use logical properties (padding-inline-start, ps-*, border-s-*) so the layout mirrors in RTL",

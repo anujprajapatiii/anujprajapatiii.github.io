@@ -11,7 +11,7 @@ workflows change.
 | --- | --- | --- |
 | Public site shell | Shared layout, navigation, footer, theme, metadata | `src/layouts/`, `src/components/layout/`, `src/data/site-config.ts` |
 | Work | Portfolio/case-study section at `/work` | `src/content/projects/`, rendered through `/work` routes |
-| Design tokens | Color, type, spacing, container, radius tokens (light + dark) | `src/styles/global.css` |
+| Design tokens | Color, type, spacing, container tokens (light + dark); no radius token — corners are square | `src/styles/global.css` |
 | Layout primitives | Section/Container/Stack/Cluster/Grid composition system | `src/components/primitives/`, CSS in `src/styles/global.css` |
 | Deployment | Static build published to GitHub Pages | `.github/workflows/deploy.yml` |
 | Work orchestration | Strategy, plans, conventions, learnings | `agent-os/` |

@@ -32,7 +32,7 @@ you do not write any dark-mode colours by hand. Primitives never change.
 <article style="background: var(--background-elevated);
                 color: var(--text-primary);
                 border: 1px solid var(--border-primary);
-                border-radius: var(--radius); padding: 24px;">
+                padding: 24px;">
   <h3 style="color: var(--text-primary);">Card title</h3>
   <p style="color: var(--text-secondary);">Secondary copy.</p>
   <a style="color: var(--link-primary);">A link</a>

@@ -26,6 +26,9 @@ What that means in practice:
   else. Apple's tertiary/quaternary levels are for watermarks and disabled
   states — every piece of text here is meant to be read, so there is no
   third level.
+- **Corners are square, everywhere.** No radius on cards, images, buttons,
+  embeds or code blocks. The edge is the edge; a border and the space around
+  it do the containing, and nothing is softened to look friendlier.
 - **Space does the grouping.** Rules and separators are a last resort, used
   only where a line genuinely beats space (the tabular Play list).
 - **Every value comes from a token.** No one-off sizes, spacing or tracking
@@ -93,6 +96,17 @@ What that means in practice:
   the point, and this is the variation the system exists to prevent.
 - **Uppercase micro-text uses `.label`**, not a pile of utilities. Uppercase
   and 600 weight carry it; tracking stays at 0 like everywhere else.
+- **Corners are square on every element, by decision.** There is no
+  `--radius` token and no `--radius-*` scale; never write `rounded-*` or
+  `border-radius`. The tokens are *absent* rather than set to 0 on purpose:
+  Tailwind keeps its own built-in radius scale for any key `global.css` does
+  not override, so a rounded-<size> utility that survived a cleanup renders
+  at Tailwind's value — a curve no file in this repo declares. `pnpm check`
+  fails on both the utility and the raw property.
+  - Tailwind scans `.astro`, `.css` and `.md` files for class candidates,
+    **comments and prose included**. Spelling a utility out verbatim while
+    documenting it puts that exact rule back in the built CSS. Refer to them
+    discursively (`rounded-<size>`) in any comment or doc.
 - **Long-form text is capped to the reading measure**
   (`var(--container-narrow)`, ~70 characters). `.prose` applies this to
   `p`/`ul`/`ol`/`blockquote` only, so images and code blocks still run the
@@ -162,8 +176,8 @@ What that means in practice:
   run in CI before the build). It covers raw spacing steps, raw type sizes,
   call-site tracking/leading, unlicensed font weights, non-zero
   letter-spacing, physical direction properties, alpha-diluted colours, raw
-  hex in components, inline layout, and eyebrows. Add a rule whenever a
-  convention here gets broken in practice.
+  hex in components, inline layout, corner radius, and eyebrows. Add a rule
+  whenever a convention here gets broken in practice.
   - It runs **before** the build on purpose: every one of these produces
     valid CSS that renders wrongly, so a green build proves nothing.
   - It cannot check contrast, reading measure, or anything visual. Those

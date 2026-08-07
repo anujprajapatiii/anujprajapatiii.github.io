@@ -149,7 +149,6 @@
     --border: var(--border-primary);
     --input: var(--border-primary);
     --ring: var(--border-hover);
-    --radius: 0.5rem;
 }
 
 .dark {
@@ -219,11 +218,23 @@
     --color-link-primary: var(--link-primary);
     --color-link-secondary: var(--link-secondary);
     --color-link-alternate: var(--link-alternate);
-    --radius-sm: calc(var(--radius) * 0.6);
-    --radius-md: calc(var(--radius) * 0.8);
-    --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius) * 1.4);
-    --radius-2xl: calc(var(--radius) * 1.8);
+
+    /*
+      CORNERS ARE SQUARE EVERYWHERE, BY DECISION. There is no --radius token
+      and no --radius-* scale: every corner on the site is a right angle.
+
+      The five --radius-* keys are deliberately left undefined rather than set
+      to 0. Tailwind keeps its own built-in radius scale for any key this file
+      does not override, so a rounded-<size> utility that survived a cleanup
+      renders at Tailwind's value, not at nothing — verified in dist/: the
+      built CSS emits --radius-lg:.5rem the moment such a class appears. The
+      utilities are therefore the only way a curve can come back, and
+      `pnpm check` fails on them (see scripts/check-conventions.mjs).
+
+      Write the utility names discursively in comments, as above: Tailwind
+      scans this file for class candidates, so spelling one out verbatim
+      generates the very rule the decision removes.
+    */
 }
 
 /*
@@ -334,7 +345,6 @@
   :focus-visible {
     outline: 2px solid var(--text-interactive);
     outline-offset: 2px;
-    border-radius: var(--radius-sm);
   }
   /* Anchor navigation from the on-this-page rail. Gated on reduced motion in
      CSS rather than JS so it applies to every in-page jump, not just the rail. */
@@ -540,7 +550,7 @@ a.label { transition: color 150ms; }
 a.label:hover { color: var(--accent); }
 
 /* Hero info box: bordered two-row list */
-.info-box { border: 1px solid var(--border); border-radius: var(--radius); }
+.info-box { border: 1px solid var(--border); }
 .info-box__row { padding: var(--spacing-sm) var(--spacing-md); font-size: var(--text-body); }
 .info-box__row + .info-box__row { border-top: 1px solid var(--border); }
 
@@ -548,7 +558,6 @@ a.label:hover { color: var(--accent); }
 .hero-media {
   aspect-ratio: 16 / 10; width: 100%;
   background: var(--muted); border: 1px solid var(--border);
-  border-radius: var(--radius);
 }
 
 /*
@@ -560,7 +569,6 @@ a.label:hover { color: var(--accent); }
 .embed-fallback {
   display: block;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
   padding: var(--spacing-md);
   font-size: var(--text-small);
   color: var(--muted-foreground);
@@ -571,7 +579,6 @@ a.label:hover { color: var(--accent); }
     width: 100%;
     aspect-ratio: 16 / 10;
     border: 1px solid var(--border);
-    border-radius: var(--radius);
     overflow: hidden;
     background: var(--muted);
   }
@@ -688,7 +695,7 @@ a.label:hover { color: var(--accent); }
   @apply font-semibold;
 }
 .prose img {
-  @apply rounded-lg border border-border;
+  @apply border border-border;
 }
 .prose figure {
   @apply my-lg;
@@ -706,10 +713,10 @@ a.label:hover { color: var(--accent); }
   push inline code taller than its line and disturb the paragraph's rhythm.
 */
 .prose :not(pre) > code {
-  @apply rounded bg-muted px-1.5 py-0.5 font-mono text-small;
+  @apply bg-muted px-1.5 py-0.5 font-mono text-small;
 }
 .prose pre {
-  @apply my-md overflow-x-auto rounded-lg border border-border p-sm text-small;
+  @apply my-md overflow-x-auto border border-border p-sm text-small;
 }
 .prose hr {
   @apply my-xl border-border;

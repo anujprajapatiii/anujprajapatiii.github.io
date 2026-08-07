@@ -21,14 +21,14 @@ const { id, title, description, year, thumbnail, base = "/work" } = Astro.props;
 
 <a
   href={`${base}/${id}`}
-  class="group block rounded-xl border border-border bg-card p-card transition-colors hover:border-border-hover"
+  class="group block border border-border bg-card p-card transition-colors hover:border-border-hover"
 >
   {thumbnail && (
     <img
       src={thumbnail}
       alt=""
       loading="lazy"
-      class="mb-sm aspect-[16/10] w-full rounded-lg border border-border object-cover"
+      class="mb-sm aspect-[16/10] w-full border border-border object-cover"
     />
   )}
   <div class="flex items-baseline justify-between gap-sm">
