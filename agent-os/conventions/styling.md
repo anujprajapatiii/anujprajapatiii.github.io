@@ -30,8 +30,25 @@ complexity.
 - **Spacing** uses the named scale (`p-md`, `gap-sm`, `py-xl`, …) or the
   semantic roles (`--spacing-gutter/section/stack/card/grid`) — not arbitrary
   Tailwind step numbers. 4px base; see `/style-guide`.
-- **Type** uses the size tokens (`text-display/h1/h2/h3/lead/body/small/label`),
-  sizes only; apply weight/uppercase as utilities where a design needs them.
+- **Type** uses the scale tokens
+  (`text-display/h1/h2/h3/lead/body/small/label`) — never raw Tailwind sizes
+  (`text-lg`, `text-4xl`, `text-[10px]`). Each token carries its own
+  line-height and letter-spacing, so **never write `tracking-*` or
+  `leading-*` at a call site**: if a size needs different spacing, change the
+  token in global.css and every use follows. Weight is still a utility
+  (`font-medium`); nothing below 18px goes under weight 400.
+- **Uppercase micro-text uses `.label`**, not a pile of utilities. It is the
+  one place positive tracking lives, because tracking belongs with the
+  uppercase treatment and not with the 12px size — sentence-case 12px text
+  (captions, values) must not inherit it. `.eyebrow` is `.label` plus the
+  accent bar.
+- **Long-form text is capped to the reading measure**
+  (`var(--container-narrow)`, ~70 characters). `.prose` applies this to
+  `p`/`ul`/`ol`/`blockquote` only, so images and code blocks still run the
+  full width of their wrapper. Body text ran to ~89 characters before this.
+- **Wrapping is set once in the base layer**: `text-wrap: balance` on
+  headings, `pretty` on paragraphs. Don't repeat either at a call site.
+- Numbers that sit in a column or change at runtime get `tabular-nums`.
 - **Containers** use `max-w-narrow` (36rem), `max-w-content` (48rem),
   `max-w-wide` (80rem). NOTE: never name a custom container `prose` or reuse
   Tailwind's own scale keys — `max-w-prose` is a built-in (65ch) and a

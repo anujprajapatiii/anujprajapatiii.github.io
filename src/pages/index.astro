@@ -24,7 +24,7 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
       <Grid min="360px" gap="lg">
         <Stack gap="lg">
           <p class="eyebrow">Personal Site</p>
-          <h1 class="text-display font-medium tracking-tight">
+          <h1 class="text-display font-medium">
             Monsoon Projects 2026
           </h1>
           <div class="info-box">
@@ -48,10 +48,10 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
     <Container size="wide">
       <Stack gap="lg">
         <Cluster justify="between" align="baseline">
-          <h2 class="text-label text-muted-foreground">Selected work</h2>
+          <h2 class="label">Selected work</h2>
           <a
             href="/work"
-            class="text-sm text-muted-foreground underline underline-offset-4 transition-colors hover:text-accent"
+            class="text-small text-muted-foreground underline underline-offset-4 transition-colors hover:text-accent"
           >All work</a>
         </Cluster>
         <Grid min="440px" gap="lg">
@@ -75,10 +75,10 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
     <Container size="wide">
       <Stack gap="lg">
         <Cluster justify="between" align="baseline">
-          <h2 class="text-label text-muted-foreground">Play</h2>
+          <h2 class="label">Play</h2>
           <a
             href="/play"
-            class="text-sm text-muted-foreground underline underline-offset-4 transition-colors hover:text-accent"
+            class="text-small text-muted-foreground underline underline-offset-4 transition-colors hover:text-accent"
           >All play</a>
         </Cluster>
         <div class="play-list">
@@ -102,8 +102,8 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
     <Container size="wide">
       <Stack gap="md">
         <p class="eyebrow">Connect</p>
-        <h2 class="text-h2 font-medium tracking-tight">Let’s make something grow.</h2>
-        <Cluster gap="lg" class="text-sm">
+        <h2 class="text-h2 font-medium">Let’s make something grow.</h2>
+        <Cluster gap="lg" class="text-small">
           <a
             href={`mailto:${siteConfig.social.email}`}
             class="underline underline-offset-4 transition-colors hover:text-accent"

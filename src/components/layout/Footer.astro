@@ -9,10 +9,10 @@ const year = new Date().getFullYear();
 <footer class="site-footer">
   <Container size="wide">
     <Cluster justify="between" gap="md">
-      <p class="text-xs text-muted-foreground">
+      <p class="text-small text-muted-foreground">
         © {year} {siteConfig.name}
       </p>
-      <Cluster as="nav" gap="lg" class="text-xs" aria-label="Social links">
+      <Cluster as="nav" gap="lg" class="text-small" aria-label="Social links">
         {siteConfig.social.github && (
           <a
             href={siteConfig.social.github}

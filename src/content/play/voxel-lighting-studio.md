@@ -66,8 +66,3 @@ Building by hand gets old when what you actually want is something to light, so
 there are six generators — **Clusters**, **Caves**, **Terrain**, **Ruins**,
 **Isles** and **Crystals** — that fill the volume with something worth
 photographing.
-
-## Notes
-
-TODO(Anuj): a couple of lines in your own voice — what you were chasing, and
-what surprised you once the lights were moving.

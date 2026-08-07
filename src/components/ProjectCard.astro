@@ -25,13 +25,13 @@ const { id, title, description, role, year, thumbnail, base = "/work" } = Astro.
     />
   )}
   <div class="flex items-baseline justify-between gap-4">
-    <h3 class="text-lg font-medium tracking-tight transition-colors group-hover:text-accent">
+    <h3 class="text-h3 font-medium transition-colors group-hover:text-accent">
       {title}
     </h3>
-    {year && <span class="shrink-0 text-xs text-muted-foreground">{year}</span>}
+    {year && (
+      <span class="shrink-0 text-small tabular-nums text-muted-foreground">{year}</span>
+    )}
   </div>
-  {role && (
-    <p class="mt-1 text-xs uppercase tracking-wide text-muted-foreground">{role}</p>
-  )}
-  <p class="mt-2 text-sm leading-relaxed text-muted-foreground">{description}</p>
+  {role && <p class="label mt-1">{role}</p>}
+  <p class="mt-2 text-small text-muted-foreground">{description}</p>
 </a>
