@@ -252,12 +252,19 @@
     --spacing-grid: 1rem;
 
     /* ---- CONTAINERS ----
-       `narrow` is also the reading measure: 36rem lands at ~70 characters at
-       --text-body, inside the comfortable 60-75 range. Long-form text is
-       capped to it (see .prose) even when its wrapper is wider. */
-    --container-narrow: 36rem;
-    --container-content: 48rem;
-    --container-wide: 80rem;
+       ONE page container, 1024px. Header, footer and every page share it, so
+       the wordmark, the nav, the hero and the footer all sit on the same two
+       vertical edges at every width. There is no `wide` or `content` variant
+       — a second container width is how a layout starts drifting.
+
+       --container-measure is NOT a layout container. It is the reading
+       measure: 36rem lands at ~70 characters at --text-body, inside the
+       comfortable 60-75 range. It is deliberately in this namespace so it
+       generates `max-w-measure`, and deliberately named so that a future
+       "standardise the containers" pass cannot collapse it into the page
+       width. Body text at 1024px would run to ~127 characters. */
+    --container-page: 64rem;
+    --container-measure: 36rem;
 
     /* ---- TYPE SCALE (one font) ----
        Each step carries its own line-height and weight, so `text-h1` alone
@@ -348,12 +355,10 @@
 .container {
   margin-inline: auto;
   width: 100%;
+  max-width: var(--container-page);
   padding-inline-start: max(var(--spacing-gutter), env(safe-area-inset-left));
   padding-inline-end: max(var(--spacing-gutter), env(safe-area-inset-right));
 }
-.container--narrow  { max-width: var(--container-narrow); }
-.container--content { max-width: var(--container-content); }
-.container--wide    { max-width: var(--container-wide); }
 
 /* PageWrapper — horizontal gutter only, no width cap (full-bleed exceptions) */
 .page-wrapper {
@@ -572,7 +577,7 @@ a.label:hover { color: var(--accent); }
 .prose ul,
 .prose ol,
 .prose blockquote {
-  max-width: var(--container-narrow);
+  max-width: var(--container-measure);
 }
 .prose p,
 .prose ul,

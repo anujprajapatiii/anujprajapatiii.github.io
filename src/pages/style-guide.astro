@@ -153,9 +153,8 @@ const semanticSpacing = [
 ];
 
 const containers = [
-  { name: "narrow", value: "36rem", px: "576px" },
-  { name: "content", value: "48rem", px: "768px" },
-  { name: "wide", value: "80rem", px: "1280px" },
+  { name: "page", value: "64rem", px: "1024px" },
+  { name: "measure", value: "36rem", px: "576px" },
 ];
 
 const aliases = [
@@ -174,7 +173,7 @@ const aliases = [
 
 <PageLayout title="Style Guide — Anuj Prajapati" description="Internal design-system reference." noindex>
   <Section size="page">
-    <Container size="content">
+    <Container>
     <h1 class="mb-2xs text-h1">Style guide</h1>
     <p class="mb-xl text-muted-foreground">
       Internal reference for the token system — the source of truth is
@@ -262,7 +261,7 @@ const aliases = [
       <h2 class="label mb-2xs">
         Type scale
       </h2>
-      <p class="mb-md max-w-narrow text-small text-muted-foreground">
+      <p class="mb-md max-w-measure text-small text-muted-foreground">
         One font — Söhne, in two weights: Buch (400) and Halbfett (600). Size,
         line-height and weight travel inside the token, and tracking is 0
         on every step, so
@@ -310,9 +309,12 @@ const aliases = [
       <h2 class="label mb-2xs">
         Containers
       </h2>
-      <p class="mb-md text-small text-muted-foreground">
-        Max content widths. Use <code>max-w-wide</code> for the homepage and
-        project grids, <code>max-w-content</code> for case-study bodies.
+      <p class="mb-md max-w-measure text-small text-muted-foreground">
+        One page container, used by the header, the footer and every page, so
+        everything sits on the same two vertical edges. <code>Container</code>
+        has no size prop. <code>max-w-measure</code> is not a container — it
+        is the reading measure (~70 characters) for long-form text and lead
+        paragraphs, and it must never be collapsed into the page width.
       </p>
       <div class="flex flex-col gap-2xs">
         {containers.map((c) => (

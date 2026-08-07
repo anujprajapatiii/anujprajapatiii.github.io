@@ -100,18 +100,29 @@ What that means in practice:
 - **Wrapping is set once in the base layer**: `text-wrap: balance` on
   headings, `pretty` on paragraphs. Don't repeat either at a call site.
 - Numbers that sit in a column or change at runtime get `tabular-nums`.
-- **Containers** use `max-w-narrow` (36rem), `max-w-content` (48rem),
-  `max-w-wide` (80rem). NOTE: never name a custom container `prose` or reuse
-  Tailwind's own scale keys — `max-w-prose` is a built-in (65ch) and a
-  `--container-<key>` that matches a built-in silently overrides it. Custom
-  scale tokens live in a plain `@theme {}` block (they add), never `@theme
-  inline {}` (which replaces the built-in scale — this broke `max-w-3xl`).
+- **One container: 1024px** (`--container-page`, 64rem). The header, the
+  footer and every page use it, so everything sits on the same two vertical
+  edges at every width. `Container` has **no size prop** — a second container
+  width is how a layout starts drifting.
+- **`max-w-measure` is not a container.** It is the reading measure (36rem,
+  ~70 characters) for long-form text and lead paragraphs. It lives in the
+  `--container-*` namespace only so Tailwind generates the utility; it is
+  named `measure` precisely so a future "standardise the containers" pass
+  cannot collapse it into the page width. Body text at 1024px runs to ~127
+  characters — worse than the ~89 that made this a problem in the first place.
+  Page width and reading width are different concerns and must stay separate
+  tokens.
+  NOTE: never name a custom container `prose` or reuse Tailwind's own scale
+  keys — `max-w-prose` is a built-in (65ch) and a `--container-<key>` that
+  matches a built-in silently overrides it. Custom scale tokens live in a
+  plain `@theme {}` block (they add), never `@theme inline {}` (which
+  replaces the built-in scale — this broke `max-w-3xl`).
 - **Layout comes from primitives, never inline.** Compose pages as
   `Section > Container > Stack | Grid | Cluster` using the components in
   `src/components/primitives/`. Never inline `max-width`, `padding-block/
   inline`, `margin`, `display:flex/grid` for layout in a page or component —
   all layout CSS lives in global.css's "Layout primitives" section, driven by
-  the spacing/container tokens. Container sizes: `narrow` / `content` / `wide`.
+  the spacing/container tokens. There is one container width.
   Component CSS is for typography, colour, and component-internal details only.
 - **Direction-dependent CSS is always logical**, never physical:
   `padding-inline-start` / `margin-inline-end` / `border-inline-start`, and

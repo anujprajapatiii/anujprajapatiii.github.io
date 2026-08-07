@@ -13,11 +13,11 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft))
 
 <PageLayout title="Work — Anuj Prajapati" description="Selected design work and case studies.">
   <Section size="page">
-    <Container size="content">
+    <Container>
       <Stack gap="lg">
         <Stack gap="md">
           <h1 class="text-h1">Work</h1>
-          <p class="max-w-narrow text-lead text-muted-foreground">
+          <p class="max-w-measure text-lead text-muted-foreground">
             Selected projects and case studies.
           </p>
         </Stack>

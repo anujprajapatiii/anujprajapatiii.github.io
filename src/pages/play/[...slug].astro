@@ -26,7 +26,7 @@ const { Content } = await render(item);
 >
   <Section as="article" size="page">
     <Stack gap="xl">
-    <Container as="header" size="content">
+    <Container as="header">
       <Stack gap="lg">
         <Stack gap="md">
           <a
@@ -34,7 +34,7 @@ const { Content } = await render(item);
             class="text-small text-muted-foreground transition-colors hover:text-accent"
           >&larr; Play</a>
           <h1 class="text-h1">{item.data.title}</h1>
-          <p class="max-w-narrow text-lead text-muted-foreground">
+          <p class="max-w-measure text-lead text-muted-foreground">
             {item.data.description}
           </p>
         </Stack>
@@ -81,7 +81,7 @@ const { Content } = await render(item);
       <EmbedFrame url={item.data.embedUrl} title={item.data.title} />
     )}
 
-    <Container size="content">
+    <Container>
       <Stack gap="lg">
         {item.data.heroImage && (
           <img
