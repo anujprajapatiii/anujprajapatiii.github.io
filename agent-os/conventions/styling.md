@@ -62,6 +62,25 @@ complexity.
   all layout CSS lives in global.css's "Layout primitives" section, driven by
   the spacing/container tokens. Container sizes: `narrow` / `content` / `wide`.
   Component CSS is for typography, colour, and component-internal details only.
+- **Direction-dependent CSS is always logical**, never physical:
+  `padding-inline-start` / `margin-inline-end` / `border-inline-start`, and
+  `ps-*` / `me-*` / `border-s-*` in Tailwind. Reserve `left`/`right` for
+  genuinely physical geometry — `env(safe-area-inset-*)`, which has no
+  logical form. Verify by setting `dir="rtl"` on `<html>`: the layout should
+  mirror with no overflow.
+- **Breakpoints come from the content, not device presets.** Measure where
+  the layout actually stops fitting and break there. The header collapsed at
+  768px while the bar genuinely fits down to ~540px, so tablets lost the
+  full nav for no reason; it now holds to 38rem. When you add a breakpoint,
+  write the measured number in a comment next to it.
+- **A separator element cannot survive a line break.** As a flex sibling it
+  dangles at the end of a wrapped row; as a `::before` it leads the next
+  one — CSS cannot know which item starts a line. Use separators only in
+  layouts that provably cannot wrap, and let space do the grouping
+  everywhere else (gap between groups ≥ 2× the gap within a group).
+- **Gutters take the safe area**: `max(var(--spacing-gutter),
+  env(safe-area-inset-*))` on `.container` / `.page-wrapper`, so content
+  never slides under a notch in landscape.
 - The `/style-guide` page must stay in sync with the token system — update it
   when tokens change.
 

@@ -290,14 +290,27 @@
   content — PageWrapper is only for full-bleed-then-pad exceptions).
 */
 
-/* Container — max-width + center + horizontal gutter */
-.container { margin-inline: auto; width: 100%; padding-inline: var(--spacing-gutter); }
+/*
+  Container — max-width + center + horizontal gutter.
+  The gutter takes the larger of the token and the device safe area, so text
+  never slides under a notch or rounded corner in landscape. env() has no
+  logical form; these are the physical insets by design.
+*/
+.container {
+  margin-inline: auto;
+  width: 100%;
+  padding-inline-start: max(var(--spacing-gutter), env(safe-area-inset-left));
+  padding-inline-end: max(var(--spacing-gutter), env(safe-area-inset-right));
+}
 .container--narrow  { max-width: var(--container-narrow); }
 .container--content { max-width: var(--container-content); }
 .container--wide    { max-width: var(--container-wide); }
 
 /* PageWrapper — horizontal gutter only, no width cap (full-bleed exceptions) */
-.page-wrapper { padding-inline: var(--spacing-gutter); }
+.page-wrapper {
+  padding-inline-start: max(var(--spacing-gutter), env(safe-area-inset-left));
+  padding-inline-end: max(var(--spacing-gutter), env(safe-area-inset-right));
+}
 
 /* Section — vertical rhythm (padding-block) */
 .section--sm { padding-block: var(--spacing-lg); }              /* 32 */
@@ -343,7 +356,6 @@
 .site-header { border-bottom: 1px solid var(--border); padding-block: var(--spacing-sm); }
 .site-footer { border-top: 1px solid var(--border); padding-block: var(--spacing-lg); }
 .wordmark { font-size: var(--text-body); font-weight: 500; letter-spacing: 0.01em; }
-.nav-pipe { width: 1px; height: 1rem; background: var(--border); }
 
 /*
   Responsive header bar (component-internal layout). Mobile-first:
@@ -359,7 +371,7 @@
   row-gap: var(--spacing-sm);
 }
 .site-nav__links {
-  order: 3;              /* below --bp-md: nav drops to its own row */
+  order: 3;              /* below the nav breakpoint: own row */
   flex-basis: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -367,14 +379,34 @@
   gap: var(--spacing-md);
   font-size: var(--text-small);
 }
+.site-nav__links a { display: inline-flex; align-items: center; }
 .site-nav__toggle { margin-inline-start: auto; }   /* pin toggle to right edge */
-@media (min-width: 48rem) {
+/*
+  Content-driven breakpoint, not a device preset: wordmark + links + toggle
+  need ~540px, so the bar holds its single row down to 38rem (608px) — the
+  extra headroom covers one more nav item before this needs revisiting.
+*/
+@media (min-width: 38rem) {
   .site-nav__links {
     order: 0;            /* rejoin the single top row, pushed right */
     flex-basis: auto;
     margin-inline-start: auto;
   }
   .site-nav__toggle { margin-inline-start: var(--spacing-sm); }
+  /*
+    Separators exist only in the single-row layout. A pipe cannot survive a
+    line break in either form: as a sibling element it dangles at the end of
+    a row, and as a pseudo-element it leads the next one — CSS cannot know
+    which item starts a line. Below this width the nav has its own full-width
+    row and 24px gaps, so space carries the separation on its own.
+  */
+  .site-nav__links a:not(:first-child)::before {
+    content: "";
+    width: 1px;
+    height: 1rem;
+    margin-inline-end: var(--spacing-md);
+    background: var(--border);
+  }
 }
 
 /*
@@ -397,8 +429,8 @@ a.label:hover { color: var(--foreground); }
 /* Hero eyebrow: the label plus an accent bar. */
 .eyebrow {
   display: inline-flex; align-items: center;
-  border-left: 2px solid var(--border-alternate);
-  padding-left: var(--spacing-xs);
+  border-inline-start: 2px solid var(--border-alternate);
+  padding-inline-start: var(--spacing-xs);
   font-size: var(--text-label); line-height: var(--text-label--line-height);
   text-transform: uppercase; letter-spacing: 0.08em;
   color: var(--muted-foreground);
@@ -500,10 +532,10 @@ a.label:hover { color: var(--foreground); }
   @apply text-body text-foreground/90;
 }
 .prose ul {
-  @apply list-disc pl-5;
+  @apply list-disc ps-5;
 }
 .prose ol {
-  @apply list-decimal pl-5;
+  @apply list-decimal ps-5;
 }
 .prose li + li {
   margin-top: 0.4em;
@@ -524,7 +556,7 @@ a.label:hover { color: var(--foreground); }
   @apply mt-2 text-label text-muted-foreground;
 }
 .prose blockquote {
-  @apply border-l-2 border-border pl-4 text-muted-foreground;
+  @apply border-s-2 border-border ps-4 text-muted-foreground;
 }
 .prose :not(pre) > code {
   @apply rounded bg-muted px-1.5 py-0.5 font-mono text-sm;

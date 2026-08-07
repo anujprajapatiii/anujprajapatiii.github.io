@@ -21,17 +21,14 @@ function isActive(href: string) {
         {siteConfig.name}
       </a>
       <nav class="site-nav__links" aria-label="Main navigation">
-        {siteConfig.nav.map((item, i) => (
-          <>
-            {i > 0 && <span class="nav-pipe" aria-hidden="true"></span>}
-            <a
-              href={item.href}
-              aria-current={isActive(item.href) ? "page" : undefined}
-              class="text-muted-foreground transition-colors hover:text-foreground aria-[current=page]:text-foreground"
-            >
-              {item.label}
-            </a>
-          </>
+        {siteConfig.nav.map((item) => (
+          <a
+            href={item.href}
+            aria-current={isActive(item.href) ? "page" : undefined}
+            class="text-muted-foreground transition-colors hover:text-foreground aria-[current=page]:text-foreground"
+          >
+            {item.label}
+          </a>
         ))}
       </nav>
       <div class="site-nav__toggle"><ThemeToggle /></div>
