@@ -9,10 +9,10 @@ skills:
   - Lighting
 thumbnail: /images/play/voxel-lighting-studio/golden-hour.jpg
 liveUrl: https://anujprajapatiii.github.io/voxel_lighting/
-# embedUrl: uncomment once the tool renders on first paint inside an iframe.
-# Today it draws an empty canvas until it receives a resize event, so an
-# embed here would show a black box. See the note in EmbedFrame.astro.
-# embedUrl: https://anujprajapatiii.github.io/voxel_lighting/
+# The tool now renders on first paint inside an iframe (verified against the
+# EmbedFrame requirement): it re-renders and re-bakes shadows when the canvas
+# gains real dimensions, so a hidden/zero-size mount no longer stays blank.
+embedUrl: https://anujprajapatiii.github.io/voxel_lighting/
 sortOrder: 0
 draft: false
 ---
