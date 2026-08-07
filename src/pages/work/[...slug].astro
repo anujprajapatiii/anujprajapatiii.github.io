@@ -1,5 +1,6 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
+import EmbedFrame from "@/components/EmbedFrame.astro";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
@@ -19,8 +20,8 @@ const { Content } = await render(project);
   description={project.data.description}
   image={project.data.heroImage ?? project.data.thumbnail}
 >
-  <article class="mx-auto max-w-content px-6 pt-12 pb-24 sm:pt-20">
-    <header class="mb-12">
+  <article class="pt-12 pb-24 sm:pt-20">
+    <header class="mx-auto mb-12 max-w-content px-6">
       <a
         href="/work"
         class="text-xs uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground"
@@ -64,16 +65,22 @@ const { Content } = await render(project);
       )}
     </header>
 
-    {project.data.heroImage && (
-      <img
-        src={project.data.heroImage}
-        alt=""
-        class="mb-12 w-full rounded-xl border border-border"
-      />
+    {project.data.embedUrl && (
+      <EmbedFrame url={project.data.embedUrl} title={project.data.title} />
     )}
 
-    <div class="prose">
-      <Content />
+    <div class="mx-auto max-w-content px-6">
+      {project.data.heroImage && (
+        <img
+          src={project.data.heroImage}
+          alt=""
+          class="mb-12 w-full rounded-xl border border-border"
+        />
+      )}
+
+      <div class="prose">
+        <Content />
+      </div>
     </div>
   </article>
 </PageLayout>

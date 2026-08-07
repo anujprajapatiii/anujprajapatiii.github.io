@@ -1,0 +1,51 @@
+---
+import Section from "@/components/primitives/Section.astro";
+import Container from "@/components/primitives/Container.astro";
+
+/*
+  Inline interactive embed for a case study (`embedUrl` frontmatter).
+
+  NOTE for future embeds: the embedded page must render itself correctly on
+  first paint inside an iframe. Some WebGL tools only draw in response to a
+  resize event and will show an empty canvas when framed — check the embed
+  actually renders before setting `embedUrl` on an entry.
+*/
+
+interface Props {
+  url: string;
+  title: string;
+}
+
+const { url, title } = Astro.props;
+---
+
+<Section size="sm">
+  <Container size="wide">
+    <div class="embed-frame">
+      <iframe
+        src={url}
+        title={`${title} — live demo`}
+        loading="lazy"
+        allow="fullscreen"
+      ></iframe>
+    </div>
+    <p class="embed-fallback">
+      This one needs a bigger screen than a phone —
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="underline underline-offset-4 hover:text-accent"
+      >open it in a new tab</a>.
+    </p>
+    <p class="embed-note">
+      Runs live in the page.
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="underline underline-offset-4 hover:text-accent"
+      >Open full screen</a>.
+    </p>
+  </Container>
+</Section>

@@ -13,6 +13,10 @@ const caseStudySchema = z.object({
   // Optional link to a live/deployed version (e.g. an interactive experiment
   // hosted in its own repo). Rendered as a "Try it live" link.
   liveUrl: z.string().url().optional(),
+  // Optional URL to embed inline as an interactive iframe. Embeds are shown
+  // at tablet width and up; below that a link is shown instead (see
+  // .embed-frame in global.css). Usually the same as liveUrl.
+  embedUrl: z.string().url().optional(),
   sortOrder: z.number().default(0),
   draft: z.boolean().default(false),
 });

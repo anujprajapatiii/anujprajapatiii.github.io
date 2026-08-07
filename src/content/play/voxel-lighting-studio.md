@@ -9,6 +9,10 @@ skills:
   - Lighting
 thumbnail: /images/play/voxel-lighting-studio/golden-hour.jpg
 liveUrl: https://anujprajapatiii.github.io/voxel_lighting/
+# embedUrl: uncomment once the tool renders on first paint inside an iframe.
+# Today it draws an empty canvas until it receives a resize event, so an
+# embed here would show a black box. See the note in EmbedFrame.astro.
+# embedUrl: https://anujprajapatiii.github.io/voxel_lighting/
 sortOrder: 0
 draft: false
 ---
