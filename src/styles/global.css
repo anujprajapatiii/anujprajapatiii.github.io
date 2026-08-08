@@ -628,8 +628,19 @@ a.label:hover { color: var(--accent); }
     to line up.
   */
   font-family: var(--font-mono);
+  /*
+    ONE SIZE AND ONE CASE FOR THE WHOLE TABLE. Both are declared here, on the
+    table, and nowhere else — a header that set its own size could drift from
+    the cells beneath it, so the way to guarantee they match is to give them
+    no opportunity to differ. Header and cell are told apart by weight and
+    colour alone.
+
+    text-transform does not touch the DOM text, so the real capitalisation is
+    still what gets read aloud, copied and searched.
+  */
   font-size: var(--text-small);
   line-height: var(--text-small--line-height);
+  text-transform: uppercase;
   font-variant-numeric: tabular-nums;
 }
 .data-table th,
@@ -643,9 +654,6 @@ a.label:hover { color: var(--accent); }
 }
 .data-table th,
 .prose table th {
-  font-size: var(--text-small);
-  line-height: var(--text-small--line-height);
-  text-transform: uppercase;
   font-weight: 600;
   color: var(--muted-foreground);
   white-space: nowrap;
