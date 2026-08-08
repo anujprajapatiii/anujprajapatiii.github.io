@@ -39,6 +39,19 @@ What that means in practice:
 ## Rules
 
 - Tailwind CSS v4 is configured through the Vite plugin, not PostCSS.
+- **Tailwind scans `src/` only**, and nothing else. `global.css` opens with
+  `@import "tailwindcss" source(none)` plus a single `@source "../../src"`,
+  because automatic detection reads the entire project — prose included — and
+  turned written-down class names into real rules. This file was generating
+  `bg-zinc-100` just by listing the classes it bans, a plan file shipped
+  nineteen more, and `astro.config.mjs` produced a `.static` rule: 42 of 176
+  rules and 2.5KB of stylesheet that nothing could reach.
+  - So docs, plans and configs can name classes plainly. They are not scanned.
+  - **`src/` still is, comments and all.** A class name spelled out in a
+    comment in `global.css` or an `.astro` file does become a rule. Name them
+    discursively *there* (`rounded-<size>`), not in documentation.
+  - If markup ever lives outside `src/`, add an `@source` line for it — with
+    automatic detection off, an unlisted directory is silently unstyled.
 - `src/styles/global.css` is the **source of truth** for the colour system.
   Figma has been dropped — never treat an external design file as canonical,
   and there is no "mirror back to Figma" step.
@@ -88,9 +101,7 @@ What that means in practice:
   uppercase and 600 weight combine.
 - **Type** uses the scale tokens
   (`text-display/h1/h2/h3/body/small`) — never raw Tailwind sizes
-  (`text-<name>`, `text-<n>xl`, or an arbitrary `text-[<value>]`; written
-  discursively here because Tailwind scans this file and spelling one out
-  puts that rule in the built CSS). Each token carries its own
+  (`text-lg`, `text-4xl`, `text-[10px]`). Each token carries its own
   line-height and weight, so **never write `tracking-*`, `leading-*` or
   `font-*` at a call site**: if a step needs to change, change the token in
   global.css and every use follows.
@@ -118,13 +129,9 @@ What that means in practice:
   `--radius` token and no `--radius-*` scale; never write `rounded-*` or
   `border-radius`. The tokens are *absent* rather than set to 0 on purpose:
   Tailwind keeps its own built-in radius scale for any key `global.css` does
-  not override, so a rounded-<size> utility that survived a cleanup renders
-  at Tailwind's value — a curve no file in this repo declares. `pnpm check`
+  not override, so a `rounded-lg` that survived a cleanup renders at
+  Tailwind's value — a curve no file in this repo declares. `pnpm check`
   fails on both the utility and the raw property.
-  - Tailwind scans `.astro`, `.css` and `.md` files for class candidates,
-    **comments and prose included**. Spelling a utility out verbatim while
-    documenting it puts that exact rule back in the built CSS. Refer to them
-    discursively (`rounded-<size>`) in any comment or doc.
 - **There is one table treatment, and it is a real table.** Full grid: every
   cell ruled, outer border included, header cells in the `.label` style,
   padding from the spacing scale, tabular figures. Never build a table out of

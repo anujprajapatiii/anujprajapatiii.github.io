@@ -1,4 +1,23 @@
-@import "tailwindcss";
+/*
+  `source(none)` turns OFF Tailwind's automatic project-wide scanning; the one
+  @source below turns it back on for src/ alone.
+
+  Documentation is not markup. Automatic detection reads the whole project,
+  prose included, so every class name written down anywhere became a real rule
+  in the built stylesheet: the conventions file generated `bg-zinc-100` and
+  friends purely by listing the classes it bans, a plan file shipped nineteen
+  more by quoting the layout it replaced, and astro.config's `output: "static"`
+  produced a `.static` rule. 42 of 176 rules, 2.5KB, none of it reachable.
+
+  Allow-listing beats excluding here. An exclusion list has to be extended
+  every time a doc, config or tool directory appears, and each miss is silent;
+  everything that renders lives in src/, so naming it once is the whole rule.
+  It also retires the workaround this caused — docs can now spell class names
+  out plainly instead of writing them discursively to dodge the scanner.
+*/
+@import "tailwindcss" source(none);
+@source "../../src";
+
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
