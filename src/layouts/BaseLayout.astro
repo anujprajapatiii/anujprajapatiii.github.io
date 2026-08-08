@@ -6,6 +6,11 @@ import { siteConfig } from "@/data/site-config";
    would change layout on first paint, not just colour. */
 import soehneBuch from "../assets/fonts/soehne-buch.woff2?url";
 import soehneHalbfett from "../assets/fonts/soehne-halbfett.woff2?url";
+/* Berkeley Mono sets tables, which are above the fold on the home page and at
+   the top of every case study. A mono face is markedly wider than Söhne, so
+   arriving late would not just repaint the text — it would re-lay-out the
+   columns. Preloaded for the same reason Halbfett is. */
+import berkeleyMono from "../assets/fonts/berkeley-mono-regular.woff2?url";
 
 interface Props {
   title?: string;
@@ -35,6 +40,7 @@ const ogImage = image ? new URL(image, siteConfig.url).toString() : undefined;
     {/* Preload both faces so text never paints in a fallback and swaps (FOUT) */}
     <link rel="preload" href={soehneBuch} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={soehneHalbfett} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={berkeleyMono} as="font" type="font/woff2" crossorigin />
     <title>{pageTitle}</title>
 
     {/* Open Graph */}
