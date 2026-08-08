@@ -87,17 +87,33 @@ What that means in practice:
   on-this-page title, style-guide section names) and is the only place
   uppercase and 600 weight combine.
 - **Type** uses the scale tokens
-  (`text-display/h1/h2/h3/lead/body/small/label`) — never raw Tailwind sizes
-  (`text-lg`, `text-4xl`, `text-[10px]`). Each token carries its own
+  (`text-display/h1/h2/h3/body/small`) — never raw Tailwind sizes
+  (`text-<name>`, `text-<n>xl`, or an arbitrary `text-[<value>]`; written
+  discursively here because Tailwind scans this file and spelling one out
+  puts that rule in the built CSS). Each token carries its own
   line-height and weight, so **never write `tracking-*`, `leading-*` or
   `font-*` at a call site**: if a step needs to change, change the token in
-  global.css and every use follows. Nothing below 18px goes under weight 400.
+  global.css and every use follows.
+- **Six steps, by decision: 72 → 44 → 30 → 20 → 16 → 14.** An 18px lead and a
+  12px label were removed because neither earned a place. The lead sat one
+  notch off body and only ever dressed intro paragraphs, which read as
+  introductions from their position and their secondary colour. The 12px
+  label existed to make metadata quiet, which `--text-secondary` already
+  does. **Intros are `text-body`; metadata is `text-small`.**
+  - `text-lead` and `text-label` now match no token, so Tailwind emits
+    nothing and the element silently inherits its parent's size — the class
+    looks right in the diff and does nothing on the page. `pnpm check` fails
+    on both names.
+  - Do not add a step back to make one call site fit. If something needs to
+    sit between two steps, it needs different space or colour, not a
+    seventh size.
 - **Tracking is 0 on every step and every class.** No negative tracking on
   display type, no positive tracking on uppercase labels, no exceptions.
   Do not reintroduce per-size tracking "to tighten the hero" — uniformity is
   the point, and this is the variation the system exists to prevent.
-- **Uppercase micro-text uses `.label`**, not a pile of utilities. Uppercase
-  and 600 weight carry it; tracking stays at 0 like everywhere else.
+- **Uppercase micro-text uses `.label`**, not a pile of utilities. It is a
+  treatment, not a size: uppercase and 600 weight carry it, it draws its size
+  from `--text-small` like everything else, and tracking stays at 0.
 - **Corners are square on every element, by decision.** There is no
   `--radius` token and no `--radius-*` scale; never write `rounded-*` or
   `border-radius`. The tokens are *absent* rather than set to 0 on purpose:
@@ -197,7 +213,8 @@ What that means in practice:
   run in CI before the build). It covers raw spacing steps, raw type sizes,
   call-site tracking/leading, unlicensed font weights, non-zero
   letter-spacing, physical direction properties, alpha-diluted colours, raw
-  hex in components, inline layout, corner radius, bare tables, and eyebrows.
+  hex in components, inline layout, corner radius, bare tables, retired type
+  steps, and eyebrows.
   Add a rule
   whenever a convention here gets broken in practice.
   - It runs **before** the build on purpose: every one of these produces

@@ -6,6 +6,13 @@ Complete — shipped 2026-07-23. Type scale simplified to one font + sizes
 only, and Geist Mono retired site-wide (kept only as a code fallback) per
 Anuj's follow-up.
 
+**Partly superseded.** The eight-step type scale below is the scale as first
+shipped; the sizes were later revised, and `--text-lead` (18px) and
+`--text-label` (12px) were removed entirely. The scale is now six steps —
+72 / 44 / 30 / 20 / 16 / 14. See the type block in `src/styles/global.css`
+and the type rules in `agent-os/conventions/styling.md` for current values;
+read the table below as history. The spacing scale is unaffected.
+
 ## Context
 
 Colour is fully tokenized; nothing else is. Every size on the site is a raw

@@ -126,10 +126,8 @@ const typeScale = [
   { name: "h1", class: "text-h1", size: "clamp(32px → 44px)", weight: "Buch 400", sample: "Heading 1" },
   { name: "h2", class: "text-h2", size: "clamp(24px → 30px)", weight: "Halbfett 600", sample: "Heading 2" },
   { name: "h3", class: "text-h3", size: "20px", weight: "Halbfett 600", sample: "Heading 3" },
-  { name: "lead", class: "text-lead", size: "18px", weight: "Buch 400", sample: "Lead paragraph" },
   { name: "body", class: "text-body", size: "16px", weight: "Buch 400", sample: "Body text. The quick brown fox jumps over the lazy dog." },
-  { name: "small", class: "text-small", size: "14px", weight: "Buch 400", sample: "Small / secondary text" },
-  { name: "label", class: "text-label", size: "12px", weight: "Buch 400", sample: "Caption / value text" },
+  { name: "small", class: "text-small", size: "14px", weight: "Buch 400", sample: "Small / secondary text, captions, metadata" },
 ];
 
 const spacingScale = [
@@ -200,7 +198,7 @@ const aliases = [
                     class="h-10 border border-border"
                     style={`background: ${swatch.value}`}
                   ></div>
-                  <p class="mt-3xs text-label tabular-nums text-muted-foreground">
+                  <p class="mt-3xs text-small tabular-nums text-muted-foreground">
                     {swatch.name}<br />{swatch.value}
                   </p>
                 </div>
@@ -230,8 +228,8 @@ const aliases = [
                     class="h-12 border border-border"
                     style={`background: var(--${token.name})`}
                   ></div>
-                  <p class="mt-2xs text-label">--{token.name}</p>
-                  <p class="text-label tabular-nums text-muted-foreground">
+                  <p class="mt-2xs text-small">--{token.name}</p>
+                  <p class="text-small tabular-nums text-muted-foreground">
                     {token.light} → {token.dark}
                   </p>
                 </div>
@@ -251,7 +249,7 @@ const aliases = [
       </p>
       <div class="grid grid-cols-1 gap-x-lg gap-y-3xs sm:grid-cols-2">
         {aliases.map((alias) => (
-          <p class="text-label text-muted-foreground">
+          <p class="text-small text-muted-foreground">
             --{alias.name} → {alias.to}
           </p>
         ))}
@@ -271,11 +269,18 @@ const aliases = [
         at a call site. Size carries the hierarchy at display scale; weight
         takes over once the sizes get close to body.
       </p>
+      <p class="mb-md max-w-measure text-small text-muted-foreground">
+        Six steps, deliberately. An 18px lead and a 12px label were removed:
+        the lead sat one notch off body for intro paragraphs that already read
+        as introductions from their position and colour, and the 12px label
+        made metadata quiet — a job <code>--text-secondary</code> does without
+        a size of its own. Intros are body; metadata is small.
+      </p>
       <div class="flex flex-col gap-md">
         {typeScale.map((t) => (
           <div>
             <p class={t.class}>{t.sample}</p>
-            <p class="mt-3xs text-label tabular-nums text-muted-foreground">
+            <p class="mt-3xs text-small tabular-nums text-muted-foreground">
               text-{t.name} · {t.size} · {t.weight}
             </p>
           </div>
@@ -293,15 +298,15 @@ const aliases = [
       <div class="flex flex-col gap-2xs">
         {spacingScale.map((s) => (
           <div class="flex items-center gap-sm">
-            <span class="w-20 shrink-0 text-label tabular-nums text-muted-foreground">{s.name}</span>
+            <span class="w-20 shrink-0 text-small tabular-nums text-muted-foreground">{s.name}</span>
             <span class="h-4 bg-accent" style={`width: ${s.value}`}></span>
-            <span class="text-label tabular-nums text-muted-foreground">{s.px}</span>
+            <span class="text-small tabular-nums text-muted-foreground">{s.px}</span>
           </div>
         ))}
       </div>
       <div class="mt-md grid grid-cols-1 gap-x-lg gap-y-3xs sm:grid-cols-2">
         {semanticSpacing.map((s) => (
-          <p class="text-label text-muted-foreground">--spacing-{s.name} → {s.value}</p>
+          <p class="text-small text-muted-foreground">--spacing-{s.name} → {s.value}</p>
         ))}
       </div>
     </Section>
@@ -335,7 +340,7 @@ const aliases = [
         {containers.map((c) => (
           <div>
             <div class="h-3 bg-muted" style={`max-width: ${c.value}; width: 100%`}></div>
-            <p class="mt-3xs text-label tabular-nums text-muted-foreground">max-w-{c.name} · {c.value} ({c.px})</p>
+            <p class="mt-3xs text-small tabular-nums text-muted-foreground">max-w-{c.name} · {c.value} ({c.px})</p>
           </div>
         ))}
       </div>

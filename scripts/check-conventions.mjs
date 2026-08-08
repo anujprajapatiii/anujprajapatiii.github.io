@@ -30,7 +30,18 @@ const RULES = [
   {
     id: "type-scale",
     test: /(?<![\w-])text-(?:xs|sm|base|lg|xl|[2-9]xl|\[[^\]]+\])(?![\w-])/,
-    msg: "raw Tailwind text size — use the scale (text-display/h1/h2/h3/lead/body/small/label)",
+    msg: "raw Tailwind text size — use the scale (text-display/h1/h2/h3/body/small)",
+  },
+  {
+    /*
+      The scale went from eight steps to six. These two names now match no
+      token, so Tailwind emits nothing for them and the element silently
+      inherits its parent's size — the class looks right in the diff and does
+      nothing on the page. Exactly the failure mode this file exists for.
+    */
+    id: "retired-type-step",
+    test: /(?<![\w-])text-(?:lead|label)(?![\w-])/,
+    msg: "that step was removed — intros are text-body, metadata is text-small (.label is still the uppercase treatment)",
   },
   {
     id: "no-call-site-type",
