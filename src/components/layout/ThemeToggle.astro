@@ -1,15 +1,57 @@
 ---
-/* Vanilla theme toggle. BaseLayout applies the saved theme before paint;
-   this button just flips the class and persists the choice. */
+/*
+  Two-state theme toggle over three storage states.
+
+  What the user sees is binary — light or dark — but the stored state has a
+  third value: absent. Absent means "follow the OS", and it is the default.
+  An explicit choice is only written while it DISAGREES with the OS; the
+  moment a click lands back on the system's own theme the key is removed and
+  the page goes back to following it. That is what makes a second click a
+  genuine reset rather than a second override, and it is why the OS listener
+  below can trust `localStorage` as the whole answer to "am I overridden?".
+
+  The icon shows the CURRENT appearance (sun in light, moon in dark), not the
+  action. It is switched in CSS off the same `.dark` class the pre-paint
+  script in BaseLayout sets, so the correct icon is there on the very first
+  paint — swapping icons from JS would show the wrong one until the script
+  ran. See `.theme-toggle__*` in global.css.
+
+  The accessible name carries the ACTION instead, since that is what pressing
+  the button does and an icon alone cannot say it.
+*/
 ---
 
 <button
   type="button"
   data-theme-toggle
-  aria-label="Toggle dark mode"
-  class="ms-3xs p-2xs text-muted-foreground transition-colors hover:text-accent"
+  aria-label="Toggle theme"
+  class="ms-3xs cursor-pointer p-2xs text-muted-foreground transition-colors hover:text-accent"
 >
   <svg
+    class="theme-toggle__sun"
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2"></path>
+    <path d="M12 20v2"></path>
+    <path d="m4.93 4.93 1.41 1.41"></path>
+    <path d="m17.66 17.66 1.41 1.41"></path>
+    <path d="M2 12h2"></path>
+    <path d="M20 12h2"></path>
+    <path d="m6.34 17.66-1.41 1.41"></path>
+    <path d="m19.07 4.93-1.41 1.41"></path>
+  </svg>
+  <svg
+    class="theme-toggle__moon"
     xmlns="http://www.w3.org/2000/svg"
     width="16"
     height="16"
@@ -26,31 +68,94 @@
 </button>
 
 <script>
-  /* theme-switching suppresses element-level transitions (see global.css)
-     so the flip is atomic; the two rAFs keep it on until the new state has
+  const STORAGE_KEY = "theme";
+  const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+  type Theme = "light" | "dark";
+
+  const systemTheme = (): Theme => (darkQuery.matches ? "dark" : "light");
+
+  /* Anything that is not one of the two valid values counts as no override —
+     a stale or hand-edited key must not strand the site on a theme. */
+  function storedTheme(): Theme | null {
+    try {
+      const value = localStorage.getItem(STORAGE_KEY);
+      return value === "light" || value === "dark" ? value : null;
+    } catch {
+      /* Storage can throw in private modes; treat it as "no override". */
+      return null;
+    }
+  }
+
+  const activeTheme = (): Theme => storedTheme() ?? systemTheme();
+
+  /* The class drives the palette AND the icon; the label is set alongside it
+     so the two can never describe different states. */
+  function render(theme: Theme) {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    const label = theme === "dark" ? "Switch to light theme" : "Switch to dark theme";
+    document
+      .querySelectorAll<HTMLButtonElement>("[data-theme-toggle]")
+      .forEach((button) => button.setAttribute("aria-label", label));
+  }
+
+  /* theme-switching suppresses element-level transitions (see global.css) so
+     the flip is atomic; the two rAFs keep it on until the new state has
      painted. The View Transition then crossfades old/new snapshots. */
-  function flipTheme() {
+  function applyTheme(theme: Theme) {
     const root = document.documentElement;
     root.classList.add("theme-switching");
-    const isDark = root.classList.toggle("dark");
-    localStorage.setItem("theme", isDark ? "dark" : "light");
+    render(theme);
     requestAnimationFrame(() =>
       requestAnimationFrame(() => root.classList.remove("theme-switching")),
     );
   }
 
+  function withTransition(theme: Theme) {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduceMotion && document.startViewTransition) {
+      document.startViewTransition(() => applyTheme(theme));
+    } else {
+      applyTheme(theme);
+    }
+  }
+
+  function toggle() {
+    const next: Theme = activeTheme() === "dark" ? "light" : "dark";
+    try {
+      /* Landing back on the OS theme clears the override instead of pinning
+         the same value — otherwise the page would stop following the system
+         even though it currently agrees with it. */
+      if (next === systemTheme()) localStorage.removeItem(STORAGE_KEY);
+      else localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      /* Persistence is best-effort; the flip itself must still happen. */
+    }
+    withTransition(next);
+  }
+
+  function onSystemChange() {
+    if (storedTheme()) return; /* an explicit choice outranks the OS */
+    withTransition(systemTheme());
+  }
+
   function init() {
     document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]").forEach((button) => {
-      button.addEventListener("click", () => {
-        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (!reduceMotion && document.startViewTransition) {
-          document.startViewTransition(flipTheme);
-        } else {
-          flipTheme();
-        }
-      });
+      button.addEventListener("click", toggle);
     });
+    /* Label the button for the theme already applied before paint. */
+    render(activeTheme());
   }
+
+  /* Bind the OS listener once per document, not once per init: this script
+     re-runs after a view-transition swap with fresh function identities, so
+     removeEventListener could not find the previous one to detach. The flag
+     lives on <html>, which survives a swap when <body> does not. */
+  if (!document.documentElement.dataset.themeListener) {
+    darkQuery.addEventListener("change", onSystemChange);
+    document.documentElement.dataset.themeListener = "on";
+  }
+
   init();
   document.addEventListener("astro:after-swap", init);
 </script>

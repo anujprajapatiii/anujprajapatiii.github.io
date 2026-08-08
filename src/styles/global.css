@@ -555,6 +555,18 @@ a.label:hover { color: var(--accent); }
 .info-box__row + .info-box__row { border-top: 1px solid var(--border); }
 
 /*
+  Theme toggle icons. The button shows the CURRENT appearance — sun in light,
+  moon in dark — and the swap is done here in CSS, off the same `.dark` class
+  the pre-paint script sets. Doing it in JS instead would paint whichever icon
+  the HTML happened to ship with and correct it a frame later, which is the
+  same flash of wrong state the pre-paint script exists to prevent.
+*/
+.theme-toggle__sun { display: block; }
+.theme-toggle__moon { display: none; }
+.dark .theme-toggle__sun { display: none; }
+.dark .theme-toggle__moon { display: block; }
+
+/*
   Media placeholder — the neutral grey stand-in for any image that does not
   exist yet: the homepage hero, work/play cards, and case-study heroes.
 

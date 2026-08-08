@@ -50,15 +50,27 @@ const ogImage = image ? new URL(image, siteConfig.url).toString() : undefined;
     <meta name="twitter:description" content={pageDescription} />
     {ogImage && <meta name="twitter:image" content={ogImage} />}
 
-    {/* Prevent flash of wrong theme: runs before paint */}
+    {/*
+      Prevent flash of wrong theme: runs before paint. Storage is tri-state —
+      "light", "dark", or absent, where absent means "follow the OS". Anything
+      else is treated as absent so a stale or hand-edited key cannot strand
+      the site on a theme. This class also selects the toggle's icon, so the
+      right one is painted too. See ThemeToggle.astro.
+    */}
     <script is:inline>
-      const theme = localStorage.getItem("theme");
-      if (
-        theme === "dark" ||
-        (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches)
-      ) {
-        document.documentElement.classList.add("dark");
-      }
+      (function () {
+        var stored = null;
+        try {
+          stored = localStorage.getItem("theme");
+        } catch (e) {}
+        var theme =
+          stored === "light" || stored === "dark"
+            ? stored
+            : window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+        if (theme === "dark") document.documentElement.classList.add("dark");
+      })();
     </script>
   </head>
   <body>
