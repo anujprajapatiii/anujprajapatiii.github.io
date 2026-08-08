@@ -187,7 +187,15 @@
     --border-primary: var(--neutral-500);
     --border-secondary: var(--neutral-500);
     --border-alternate: var(--neutral-300);
-    --border-hover: var(--neutral-100);
+    /*
+      One step softer than light mode's equivalent, by decision. Light mode
+      hovers to neutral-800, which is a dark line on a light ground; the
+      mirror image of that is neutral-100, and at near-white on a near-black
+      ground it read as a hard outline rather than a highlight. Dark grounds
+      do not need the same amplitude as light ones to register a change, so
+      dark stops one step short at neutral-200. Light is unchanged.
+    */
+    --border-hover: var(--neutral-200);
     /* primary 12.55:1, secondary 6.95:1, interactive 16.90:1 on the dark bg */
     --text-primary: var(--neutral-200);
     --text-secondary: var(--neutral-300);
