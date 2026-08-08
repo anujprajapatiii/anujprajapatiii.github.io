@@ -120,10 +120,11 @@
     --background-error: var(--red-100);
     /*
       Hover moves AWAY from the page, not toward the middle of the palette:
-      lighter on light, darker on dark. It was neutral-200, a step toward the
-      centre, which put a heavy grey band under a hovered row. One step off
-      the page background is enough to separate a row when its rules and its
-      text are moving too. Per Anuj's review.
+      light goes to white, dark goes to black (see .dark below). It was
+      neutral-200, a step toward the centre, which put a heavy grey band under
+      a hovered row. Each mode ends at the extreme of its own direction, so
+      the two are symmetrical and the row separates without a tint that has to
+      be balanced against the surfaces around it. Per Anuj's review.
     */
     --background-hover: var(--neutral-white);
     /* Added per Anuj's review for card surfaces that sit one subtle step
@@ -182,20 +183,20 @@
     --background-primary: var(--neutral-800);
     --background-secondary: var(--neutral-600);
     --background-alternate: var(--neutral-100);
-    --background-hover: var(--neutral-900);
+    --background-hover: var(--neutral-black);
     --background-elevated: var(--neutral-700);
     --border-primary: var(--neutral-500);
     --border-secondary: var(--neutral-500);
     --border-alternate: var(--neutral-300);
     /*
-      One step softer than light mode's equivalent, by decision. Light mode
-      hovers to neutral-800, which is a dark line on a light ground; the
-      mirror image of that is neutral-100, and at near-white on a near-black
-      ground it read as a hard outline rather than a highlight. Dark grounds
-      do not need the same amplitude as light ones to register a change, so
-      dark stops one step short at neutral-200. Light is unchanged.
+      Deliberately softer than light mode's equivalent. Light hovers to
+      neutral-800, a dark line on a light ground; the mirror of that is
+      neutral-100, which at near-white on near-black read as a hard outline
+      rather than a highlight. A dark ground needs less amplitude to register
+      a change, so dark stops two steps short at neutral-300 — 8.05:1 against
+      the hovered row, against 1.62:1 for a resting rule. Light is unchanged.
     */
-    --border-hover: var(--neutral-200);
+    --border-hover: var(--neutral-300);
     /* primary 12.55:1, secondary 6.95:1, interactive 16.90:1 on the dark bg */
     --text-primary: var(--neutral-200);
     --text-secondary: var(--neutral-300);

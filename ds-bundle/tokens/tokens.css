@@ -88,12 +88,12 @@
     --background-primary: var(--neutral-800);
     --background-secondary: var(--neutral-600);
     --background-alternate: var(--neutral-100);
-    --background-hover: var(--neutral-900);
+    --background-hover: var(--neutral-black);
     --background-elevated: var(--neutral-700);
     --border-primary: var(--neutral-500);
     --border-secondary: var(--brown-400);
     --border-alternate: var(--neutral-300);
-    --border-hover: var(--neutral-200);
+    --border-hover: var(--neutral-300);
     --text-primary: var(--neutral-200);
     --text-secondary: var(--brown-200);
     --text-alternate: var(--neutral-800);
