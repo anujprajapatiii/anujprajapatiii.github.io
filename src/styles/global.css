@@ -744,62 +744,44 @@
   white-space: nowrap;
 }
 /*
-  Row hover, for tables whose rows are links (the Play list).
+  Row hover, for tables whose rows are links (the Play list). The row's own
+  colours are declared in the INTERACTION block at the end of this file; what
+  stays here is the part that is about tables specifically — the shared edges.
 
   Opted into with `interactive` on DataTable, not inferred from :has(a).
   Inferring it worked for the row itself but not for its shared edges: the
   border rules have to reach a NEIGHBOUR, and "the next row is hovered and
   contains a link" cannot be expressed — :has() cannot nest inside :has().
-  A modifier class says the same thing in the markup, where it is also easier
-  to read than three chained relational selectors.
 
-  The row rests in --text-secondary and comes forward on hover to
-  --text-primary on --background-hover, with its rules at --border-hover. All
-  three move together, so the row reads as one object rather than a cell that
-  happened to light up. Resting muted is what makes the lift legible: if every
-  row already sat at full contrast there would be nothing for hover to add.
+  Collapsed borders are shared, and the shared edge belongs to the cell above,
+  so a hovered row's TOP rule is painted by whatever precedes it. Two cases:
+  a row with a row above it, and the first row, whose top edge belongs to the
+  header. `thead > tr` is not a sibling of `tbody > tr`, so that reach has to
+  be thead-to-tbody — missing it is why the first row alone once came out open
+  at the top.
 
-  :focus-within gives the same treatment to keyboard users, who reach the row
-  through its link and would otherwise get only the focus ring.
+  The transition on the cells is not decoration. `transition` does not inherit,
+  and these border rules live on the CELLS while the row carried the only
+  transition — so the fill and the text faded over 150ms while all four rules
+  snapped instantly. The row was advertised as "one object lifting" and was
+  visibly arriving in two parts.
 */
+.data-table--interactive :is(th, td) { transition: var(--lift-transition); }
+
 .data-table--interactive tbody tr {
-  color: var(--text-secondary);
-  transition: color 150ms, background-color 150ms, border-color 150ms;
+  @variant lift-on {
+    & > * { border-color: var(--border-hover); }
+  }
 }
-.data-table--interactive tbody tr:hover,
-.data-table--interactive tbody tr:focus-within {
-  color: var(--text-primary);
-  background: var(--background-hover);
+.data-table--interactive tbody tr {
+  @variant lift-on-next {
+    & > * { border-bottom-color: var(--border-hover); }
+  }
 }
-.data-table--interactive tbody tr:hover > *,
-.data-table--interactive tbody tr:focus-within > * {
-  border-color: var(--border-hover);
-}
-/*
-  Collapsed borders are shared, and the shared edge belongs to the cell above:
-  styling only the hovered row leaves its TOP rule painted by the row before
-  it, so the highlight comes out open at the top. The row above has to be told
-  to change its bottom edge too.
-
-  Note the shape of these selectors. `tr:has(+ tr:hover:has(a))` is invalid —
-  :has() cannot be nested inside :has(), and an invalid selector is dropped
-  silently, which is exactly how the open-topped highlight got through the
-  first build. The two conditions are therefore split across the same element:
-  this row contains a link, AND the next row is hovered.
-*/
-.data-table--interactive tbody tr:has(+ tr:hover) > *,
-.data-table--interactive tbody tr:has(+ tr:focus-within) > * {
-  border-bottom-color: var(--border-hover);
-}
-/*
-  The FIRST row has no previous row — its top edge is shared with the header,
-  and `thead > tr` is not a sibling of `tbody > tr`, so no sibling selector
-  reaches it. That is why the first row alone came out open at the top. The
-  header and the body ARE siblings, though, so the reach is thead-to-tbody.
-*/
-.data-table--interactive thead:has(+ tbody tr:first-child:hover) th,
-.data-table--interactive thead:has(+ tbody tr:first-child:focus-within) th {
-  border-bottom-color: var(--border-hover);
+.data-table--interactive thead {
+  @variant lift-on-below {
+    & th { border-bottom-color: var(--border-hover); }
+  }
 }
 .data-table a { color: inherit; }
 
@@ -1041,4 +1023,148 @@ html.theme-switching * {
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 300ms;
+}
+
+/* ==========================================================================
+   INTERACTION — one mechanism for hover, focus and press.
+
+   THE MODEL. An interactive object has four channels: its TEXT, its
+   UNDERLINE, its SURFACE and its RULE. It declares what each one is AT REST;
+   where they move is a constant of this block. No call site gets to invent a
+   hover, which is the whole point — there were twelve interactive-state
+   rules, four transition property-lists and two easing curves, and a hover
+   moved one, two or three properties depending on which element it was.
+
+   Every interactive element transitions all four properties over one duration
+   on one curve. Where an element has no surface or no border, that channel
+   runs transparent to transparent and costs nothing. That is deliberate: the
+   property list is then IDENTICAL everywhere, so two controls side by side
+   can never again fade on different timings. A footer link and a .btn--link
+   next to each other used to run on `ease` and on cubic-bezier(.4,0,.2,1).
+
+   WHAT MOVES: an element lifts every channel it already owns, and the
+   underline is the rule a bare link owns. Nothing grows a channel it did not
+   have — a footer link does not sprout a box on hover. So the number of
+   properties that move stops being arbitrary and becomes a fact about the
+   object's anatomy, while the destinations stay shared.
+
+   This block is LAST in the file on purpose: components own shape, this owns
+   colour and motion. `.btn`'s `border: 1px solid transparent` shorthand must
+   not land after the channel that colours it.
+   ========================================================================== */
+
+/*
+  inherits: false is load-bearing, not tidiness. A link inside an interactive
+  table row would otherwise inherit the ROW's resting --lift-text and sit
+  still while the row lifted around it.
+
+  syntax:"*" needs no initial-value, and that is what makes one rule serve an
+  element resting muted and one resting loud: unset leaves the property
+  guaranteed-invalid, so `var(--lift-text, <default>)` falls through.
+*/
+@property --lift-text       { syntax: "*"; inherits: false }
+@property --lift-line       { syntax: "*"; inherits: false }
+@property --lift-surface    { syntax: "*"; inherits: false }
+@property --lift-rule       { syntax: "*"; inherits: false }
+@property --lift-text-on    { syntax: "*"; inherits: false }
+@property --lift-line-on    { syntax: "*"; inherits: false }
+@property --lift-surface-on { syntax: "*"; inherits: false }
+@property --lift-rule-on    { syntax: "*"; inherits: false }
+
+/*
+  THE ONE TRANSITION. Every transition in this file is var(--lift-transition).
+  150ms on Tailwind's own curve, so the ten call sites already running that
+  curve do not change at all and the hand-written ones stop running on `ease`.
+*/
+:root {
+  --lift-duration: 150ms;
+  --lift-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --lift-transition:
+    color var(--lift-duration) var(--lift-ease),
+    background-color var(--lift-duration) var(--lift-ease),
+    border-color var(--lift-duration) var(--lift-ease),
+    text-decoration-color var(--lift-duration) var(--lift-ease);
+}
+/* One token, one line, and motion is off for the whole system. */
+@media (prefers-reduced-motion: reduce) { :root { --lift-duration: 0s; } }
+
+/*
+  The four triggers that produce a lift, and the ONE place the touch guard is
+  written.
+
+  Touch browsers emulate :hover and leave it latched on the last element
+  tapped. Tailwind wraps its own hovers in @media (hover: hover); every
+  hand-written hover in this file was unguarded, so .btn--secondary, .btn--link
+  and the interactive row all stuck after a tap while the Tailwind ones behaved
+  — verified in dist/. Moving everything into CSS would have made that bug
+  universal. Guarding the pointer here, and only here, fixes it for the whole
+  system in three lines.
+
+  :active and the focus triggers sit OUTSIDE the guard deliberately: a keyboard
+  user on a touch laptop still needs the lift, and a tap now produces a real
+  press for the duration of the touch instead of a stuck hover.
+*/
+@custom-variant lift-on {
+  &:is(:focus-visible, :focus-within, :active) { @slot; }
+  @media (hover: hover) { &:hover { @slot; } }
+}
+/* Same triggers, reaching a NEIGHBOUR — for collapsed table borders, where
+   the edge belongs to the element before the one being pointed at. */
+@custom-variant lift-on-next {
+  &:has(+ *:is(:focus-within, :active)) { @slot; }
+  @media (hover: hover) { &:has(+ *:hover) { @slot; } }
+}
+@custom-variant lift-on-below {
+  &:has(+ tbody tr:first-child:is(:focus-within, :active)) { @slot; }
+  @media (hover: hover) { &:has(+ tbody tr:first-child:hover) { @slot; } }
+}
+
+/*
+  THE LIST. Every interactive element on the site, named once.
+
+  A grouped selector rather than a class, because `.prose a` and markdown's
+  own `<th>`/`<tr>` cannot carry one — the same wall `.prose table` hit, solved
+  the same way. Adding a component here is one line, not four rules.
+*/
+:is(
+  .data-table--interactive tbody tr
+) {
+  color:                 var(--lift-text,    currentColor);
+  background-color:      var(--lift-surface, transparent);
+  border-color:          var(--lift-rule,    transparent);
+  text-decoration-color: var(--lift-line,    transparent);
+  transition: var(--lift-transition);
+
+  /*
+    Written once; the variant compiles it into the keyboard/press branch and
+    the pointer branch. Note the fallback chains: a channel only moves if the
+    element declared it at rest. That is the anatomy rule above, expressed as
+    a fallback rather than as a second mechanism.
+  */
+  @variant lift-on {
+    color:                 var(--lift-text-on,    var(--text-interactive));
+    background-color:      var(--lift-surface-on, var(--lift-surface, transparent));
+    border-color:          var(--lift-rule-on,    var(--lift-rule,    transparent));
+    text-decoration-color: var(--lift-line-on,    currentColor);
+  }
+
+  /* Press is the lift arriving instantly. One line, and it works for a bare
+     link and a boxed button alike — a surface step would have been invisible
+     on every text-only element and needed its own opt-in, i.e. a second
+     mechanism. */
+  &:active { transition-duration: 0s; }
+}
+
+/* ---- Per-element declarations: VALUES only, never mechanism ---- */
+
+/*
+  The interactive table row. Rests muted so the lift has somewhere to come
+  from — if every row already sat at full contrast, hover would have nothing
+  left to add — and lifts to --text-interactive like everything else on the
+  site. It used to stop at --text-primary, the one documented exception to the
+  hover rule; that exception is gone and the lift is stronger for it.
+*/
+.data-table--interactive tbody tr {
+  --lift-text: var(--text-secondary);
+  --lift-surface-on: var(--background-hover);
 }
