@@ -145,6 +145,19 @@ What that means in practice:
     requiring `class="label"`, because a markdown `<th>` cannot carry one.
   - **A table scrolls; it does not reflow.** Its columns are its meaning, so
     it scrolls inside its own container and the page never scrolls sideways.
+  - **Rows that are links hover as a whole row**: `--background-hover` behind
+    it, `--border-hover` on all four rules, text to `--text-primary`, and the
+    same treatment on `:focus-within` so keyboard users get it too. Rows
+    without a link never react — the effect is gated on `:has(a)`, which is
+    what keeps the style-guide and metadata tables inert.
+    - Collapsed borders are shared and the shared edge belongs to the cell
+      *above*, so the hovered row's top rule is painted by the row before it
+      and has to be styled through that row. Beware the shape of the
+      selector: `tr:has(+ tr:hover:has(a))` is invalid — `:has()` cannot nest
+      inside `:has()` — and an invalid selector is dropped in silence, which
+      is how an open-topped highlight shipped through a first build. Split
+      the conditions onto one element instead:
+      `tr:has(a):has(+ tr:hover)`.
   - Prose tables need `width: max-content; max-width: 100%` with their
     `display: block`. Without it the border stretches to the container while
     the cells shrink-wrap, leaving empty space inside the outer rule.
@@ -212,6 +225,12 @@ What that means in practice:
   between text and the background of its container." Hover must read as text
   coming forward — the old accent was *lower* contrast than body text, so
   hovering made links recede. Never point a hover at a dimmer colour.
+  - **A table row is the one thing that hovers as a surface, not as text.**
+    Its cells rest at `--text-secondary` and move to `--text-primary`, so the
+    contrast still climbs (8.23:1 → 14.35:1 light, 6.95:1 → 12.55:1 dark) —
+    the rule above is satisfied, it is just measured from a quieter start.
+    Resting muted is what makes the lift readable: if every row already sat at
+    full contrast, hover would have nothing left to add.
 - **Never dilute a text colour with an alpha** (`text-foreground/90`). It
   invents an undeclared colour outside the token system and quietly costs
   contrast — prose body was rendering at 10.66:1 instead of 14.35:1. If a

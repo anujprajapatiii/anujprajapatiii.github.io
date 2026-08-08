@@ -631,9 +631,47 @@ a.label:hover { color: var(--accent); }
   color: var(--muted-foreground);
   white-space: nowrap;
 }
-/* A row that is a link: the whole row lifts to the hover colour. */
-.data-table tbody tr { transition: color 150ms; }
-.data-table tbody tr:hover:has(a) { color: var(--accent); }
+/*
+  Row hover, for tables whose rows are links (the Play list).
+
+  The row rests in --text-secondary and comes forward on hover to
+  --text-primary on --background-hover, with its rules at --border-hover. All
+  three move together, so the row reads as one object rather than a cell that
+  happened to light up. Resting muted is what makes the lift legible: if every
+  row already sat at full contrast there would be nothing for hover to add.
+
+  :focus-within gives the same treatment to keyboard users, who reach the row
+  through its link and would otherwise get only the focus ring.
+*/
+.data-table tbody tr {
+  color: var(--text-secondary);
+  transition: color 150ms, background-color 150ms, border-color 150ms;
+}
+.data-table tbody tr:hover:has(a),
+.data-table tbody tr:focus-within:has(a) {
+  color: var(--text-primary);
+  background: var(--background-hover);
+}
+.data-table tbody tr:hover:has(a) > *,
+.data-table tbody tr:focus-within:has(a) > * {
+  border-color: var(--border-hover);
+}
+/*
+  Collapsed borders are shared, and the shared edge belongs to the cell above:
+  styling only the hovered row leaves its TOP rule painted by the row before
+  it, so the highlight comes out open at the top. The row above has to be told
+  to change its bottom edge too.
+
+  Note the shape of these selectors. `tr:has(+ tr:hover:has(a))` is invalid —
+  :has() cannot be nested inside :has(), and an invalid selector is dropped
+  silently, which is exactly how the open-topped highlight got through the
+  first build. The two conditions are therefore split across the same element:
+  this row contains a link, AND the next row is hovered.
+*/
+.data-table tbody tr:has(a):has(+ tr:hover) > *,
+.data-table tbody tr:has(a):has(+ tr:focus-within) > * {
+  border-bottom-color: var(--border-hover);
+}
 .data-table a { color: inherit; }
 
 /*
