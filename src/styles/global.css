@@ -120,11 +120,11 @@
     --background-error: var(--red-100);
     /*
       Hover moves AWAY from the page, not toward the middle of the palette:
-      light goes to white, dark goes to black (see .dark below). It was
+      white on light, neutral-900 on dark (see .dark below). It was
       neutral-200, a step toward the centre, which put a heavy grey band under
-      a hovered row. Each mode ends at the extreme of its own direction, so
-      the two are symmetrical and the row separates without a tint that has to
-      be balanced against the surfaces around it. Per Anuj's review.
+      a hovered row. Light goes all the way to white; dark stops one step
+      short of black, which sat too far under the page and read as a hole
+      rather than a lift. Per Anuj's review.
     */
     --background-hover: var(--neutral-white);
     /* Added per Anuj's review for card surfaces that sit one subtle step
@@ -183,7 +183,7 @@
     --background-primary: var(--neutral-800);
     --background-secondary: var(--neutral-600);
     --background-alternate: var(--neutral-100);
-    --background-hover: var(--neutral-black);
+    --background-hover: var(--neutral-900);
     --background-elevated: var(--neutral-700);
     --border-primary: var(--neutral-500);
     --border-secondary: var(--neutral-500);
