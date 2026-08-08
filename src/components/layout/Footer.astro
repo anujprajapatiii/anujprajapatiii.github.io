@@ -12,7 +12,17 @@ const year = new Date().getFullYear();
       <p class="text-small text-muted-foreground">
         © {year} {siteConfig.name}
       </p>
-      <Cluster as="nav" gap="lg" class="text-small" aria-label="Social links">
+      <Cluster as="nav" gap="lg" class="text-small" aria-label="Footer links">
+        {/*
+          The style guide is an internal reference, not a social profile, so
+          it is not in siteConfig.social and it stays first — an internal link
+          before the ones that leave the site. It is `noindex`; the footer is
+          how it is found at all.
+        */}
+        <a
+          href="/style-guide"
+          class="text-muted-foreground transition-colors hover:text-accent"
+        >Style guide</a>
         {siteConfig.social.github && (
           <a
             href={siteConfig.social.github}
