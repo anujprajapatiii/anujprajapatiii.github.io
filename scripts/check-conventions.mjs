@@ -118,6 +118,23 @@ const RULES = [
     msg: "use DataTable.astro — a bare <table> ships without the site's table treatment",
   },
   {
+    /*
+      `class="btn"` with no variant is the button system's silent failure. The
+      base is deliberately a bare box — transparent border, inherited colour —
+      so a variant-less button renders as unstyled text with padding, which
+      reads as "a link that hasn't been styled yet" rather than as a bug. It
+      passes the build, passes review, and ships.
+
+      Matched on the markup, not on the CSS: the class list is where the
+      variant goes missing. `.btn--*` on its own line inside global.css never
+      matches, because the pattern needs a `btn` token first.
+    */
+    id: "button-variant",
+    test: /class(?::list)?=(?:"|'|\{")[^"']*(?<![\w-])btn(?![\w-])(?![^"']*(?<![\w-])btn--(?:primary|secondary|link)(?![\w-]))/,
+    only: (f) => f.endsWith(".astro"),
+    msg: "btn needs a variant — btn--primary, btn--secondary or btn--link (the base alone is an unstyled box)",
+  },
+  {
     id: "no-eyebrow",
     test: /(?<![\w-])eyebrow(?![\w-])/,
     msg: "eyebrows were removed from the design; section headings are real headings",

@@ -171,6 +171,48 @@ What that means in practice:
   - The hero info box is deliberately *not* a table — it has no headings and
     none were invented for it — but it takes the same border, padding and
     type so it reads as part of the same family.
+- **There are three buttons, and they are levels of emphasis, not shapes.**
+  Every actionable control is `class="btn btn--<variant>"`; nothing hand-rolls
+  a border, padding and hover triplet at a call site again.
+  - `.btn--primary` — the one action a page is *for*. Inverted surface
+    (`--background-alternate` on `--text-alternate`). **At most one per view:**
+    a second primary makes both mean less. Today that is "Try it live" on a
+    case study, and nothing else.
+  - `.btn--secondary` — the bordered default. Navigation and every action that
+    is an action but not *the* action: the back links on work and play, the
+    "All work" / "All play" links beside the homepage section headings. It
+    moves the same three properties an interactive table row moves — border,
+    surface, text — so it reads as one object lifting.
+  - `.btn--link` — an action inside, or beside, a run of text. No box.
+    `--text-primary`, underlined at `--spacing-3xs` offset, hovering to
+    `--accent`.
+  - **Always write both classes.** `btn` alone is a transparent box with
+    inherited colour, which renders as text with padding — it looks like plain
+    markup rather than a bug, so it ships. `pnpm check` fails on a missing or
+    unknown variant.
+  - The base carries `border: 1px solid transparent` so a filled button and an
+    outlined one are the same height. Without it the primary sits 2px shorter,
+    which is only visible once two variants stand side by side — by which time
+    the base is load-bearing everywhere.
+  - **`.btn--link` sets `display: inline`, and that is load-bearing.** The base
+    is `inline-flex`, which cannot break across lines; mid-sentence that pushes
+    the whole label onto one line and blows the paragraph sideways. It also
+    resets `font-size` to `inherit`, so a link in body copy doesn't shrink to
+    `--text-small`. It is the one variant that appears inside text.
+  - **Markdown links get the link variant through `.prose a`**, grouped into
+    the same rule rather than written twice — a case-study `<a>` cannot carry a
+    class, exactly as with `.prose table`. They join at the *variant*, never at
+    `.btn`: the base is a box and a prose link is not.
+  - `--background-alternate-hover` exists for the primary variant alone, and
+    follows `--background-hover`'s rule — step AWAY from the page (black on
+    light, white on dark), never toward the middle. `--text-interactive` cannot
+    serve: it is correct in light mode and collides exactly with
+    `--background-alternate` in dark, so the button would stop responding in
+    one theme only.
+  - The header nav and the footer are deliberately **not** buttons. They are
+    site furniture with their own quiet treatment (`--text-secondary`, no
+    underline); giving them `.btn--link` would make both louder than the
+    content they frame.
 - **Long-form text is capped to the reading measure**
   (`var(--container-narrow)`, ~70 characters). `.prose` applies this to
   `p`/`ul`/`ol`/`blockquote` only, so images and code blocks still run the
@@ -238,6 +280,10 @@ What that means in practice:
     13.26:1 dark — the rule above is satisfied, just from a quieter start.
     Resting muted is what makes the lift readable: if every row already sat at
     full contrast, hover would have nothing left to add.
+  - **Measured on the buttons**, light → dark: primary 16.90 → 19.58 and
+    16.90 → 18.13; secondary 14.35 → 19.17 and 12.55 → 17.87, with its rule
+    going 2.43 → 18.13 and 1.40 → 7.34; link 14.35 → 17.87 and 12.55 → 16.90.
+    Every variant gains contrast on hover in both themes.
   - **`--background-hover` steps AWAY from the page**, lighter on light and
     darker on dark, rather than toward the middle of the palette. It was
     `neutral-200`, which laid a heavy grey band under a hovered row; one step
@@ -251,8 +297,8 @@ What that means in practice:
   run in CI before the build). It covers raw spacing steps, raw type sizes,
   call-site tracking/leading, unlicensed font weights, non-zero
   letter-spacing, physical direction properties, alpha-diluted colours, raw
-  hex in components, inline layout, corner radius, bare tables, retired type
-  steps, and eyebrows.
+  hex in components, inline layout, corner radius, bare tables, variant-less
+  buttons, retired type steps, and eyebrows.
   Add a rule
   whenever a convention here gets broken in practice.
   - It runs **before** the build on purpose: every one of these produces

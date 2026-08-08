@@ -49,10 +49,10 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
       <Stack gap="lg">
         <Cluster justify="between" align="baseline">
           <h2 class="text-h3">Selected work</h2>
-          <a
-            href="/work"
-            class="text-small text-muted-foreground underline underline-offset-4 transition-colors hover:text-accent"
-          >All work</a>
+          <a href="/work" class="btn btn--secondary">
+            All work
+            <span aria-hidden="true">&rarr;</span>
+          </a>
         </Cluster>
         <Grid min="440px" gap="lg">
           {featured.map((project) => (
@@ -75,10 +75,10 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
       <Stack gap="lg">
         <Cluster justify="between" align="baseline">
           <h2 class="text-h3">Play</h2>
-          <a
-            href="/play"
-            class="text-small text-muted-foreground underline underline-offset-4 transition-colors hover:text-accent"
-          >All play</a>
+          <a href="/play" class="btn btn--secondary">
+            All play
+            <span aria-hidden="true">&rarr;</span>
+          </a>
         </Cluster>
         <DataTable label="Play experiments" interactive>
           <thead>
@@ -108,14 +108,10 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
       <Stack gap="md">
         <h2 class="text-h2">Let’s make something grow.</h2>
         <Cluster gap="lg" class="text-small">
-          <a
-            href={`mailto:${siteConfig.social.email}`}
-            class="underline underline-offset-4 transition-colors hover:text-accent"
-          >{siteConfig.social.email}</a>
-          <a
-            href={siteConfig.social.github}
-            class="text-muted-foreground underline underline-offset-4 transition-colors hover:text-accent"
-          >GitHub</a>
+          <a href={`mailto:${siteConfig.social.email}`} class="btn btn--link"
+            >{siteConfig.social.email}</a
+          >
+          <a href={siteConfig.social.github} class="btn btn--link">GitHub</a>
         </Cluster>
       </Stack>
     </Container>

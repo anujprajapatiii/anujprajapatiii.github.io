@@ -83,6 +83,7 @@ const semanticGroups = [
       { name: "background-secondary", light: "neutral-200", dark: "neutral-600" },
       { name: "background-tertiary", light: "yellow-500", dark: "yellow-500" },
       { name: "background-alternate", light: "neutral-800", dark: "neutral-100" },
+      { name: "background-alternate-hover", light: "black", dark: "white" },
       { name: "background-success", light: "green-100", dark: "green-100" },
       { name: "background-warning", light: "yellow-200", dark: "yellow-200" },
       { name: "background-error", light: "red-100", dark: "red-100" },
@@ -360,6 +361,63 @@ const aliases = [
           <p class="mt-3xs text-small text-muted-foreground">bg-muted, no border</p>
         </div>
       </div>
+    </Section>
+
+    <Section size="md" class="border-t border-border">
+      <h2 class="label mb-2xs">
+        Buttons
+      </h2>
+      <p class="mb-md max-w-measure text-small text-muted-foreground">
+        Three variants, one base. They are levels of emphasis, not shapes:
+        <code>.btn--primary</code> is the one action a page is for and there
+        should be at most one per view; <code>.btn--secondary</code> is the
+        bordered default for navigation and everything that is an action but
+        not <em>the</em> action; <code>.btn--link</code> is an action inside or
+        beside a run of text, with no box. Markdown links in a case study get
+        the link variant automatically through <code>.prose a</code>.
+      </p>
+      <p class="mb-md max-w-measure text-small text-muted-foreground">
+        Always write both classes — <code>btn</code> alone is a transparent
+        box with inherited text, which looks close enough to plain markup to
+        ship unnoticed. <code>pnpm check</code> fails on a missing variant.
+      </p>
+      <div class="mb-md flex flex-wrap items-center gap-sm">
+        <a href="/style-guide" class="btn btn--primary">
+          Primary
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+        <a href="/style-guide" class="btn btn--secondary">
+          Secondary
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+        <a href="/style-guide" class="btn btn--link">Hyperlink</a>
+      </div>
+      <DataTable label="Button variants">
+        <thead>
+          <tr>
+            <th scope="col">Variant</th>
+            <th scope="col">Rest</th>
+            <th scope="col">Hover</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>primary</td>
+            <td>background-alternate on text-alternate</td>
+            <td>background-alternate-hover</td>
+          </tr>
+          <tr>
+            <td>secondary</td>
+            <td>border-primary, text-primary, no fill</td>
+            <td>border-hover, background-hover, accent</td>
+          </tr>
+          <tr>
+            <td>link</td>
+            <td>text-primary, underlined, no box</td>
+            <td>accent</td>
+          </tr>
+        </tbody>
+      </DataTable>
     </Section>
 
     <Section size="md" class="border-t border-border">

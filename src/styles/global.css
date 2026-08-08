@@ -115,6 +115,17 @@
     --background-secondary: var(--neutral-200);
     --background-tertiary: var(--yellow-500);
     --background-alternate: var(--neutral-800);
+    /*
+      Hover for the inverted surface — the primary button, and anything else
+      that inverts. It follows the same rule as --background-hover: step AWAY
+      from the page, never toward the middle. The page is light, the button is
+      already dark, so its hover goes darker still (black); in dark mode the
+      button is light and its hover goes to white. --text-interactive cannot
+      serve here: it happens to be right in light mode and collides exactly
+      with --background-alternate in dark, which would make the primary button
+      stop responding in one theme only.
+    */
+    --background-alternate-hover: var(--neutral-black);
     --background-success: var(--green-100);
     --background-warning: var(--yellow-200);
     --background-error: var(--red-100);
@@ -183,6 +194,7 @@
     --background-primary: var(--neutral-800);
     --background-secondary: var(--neutral-600);
     --background-alternate: var(--neutral-100);
+    --background-alternate-hover: var(--neutral-white);
     --background-hover: var(--neutral-900);
     --background-elevated: var(--neutral-700);
     --border-primary: var(--neutral-500);
@@ -234,6 +246,7 @@
     --color-background-secondary: var(--background-secondary);
     --color-background-tertiary: var(--background-tertiary);
     --color-background-alternate: var(--background-alternate);
+    --color-background-alternate-hover: var(--background-alternate-hover);
     --color-background-success: var(--background-success);
     --color-background-warning: var(--background-warning);
     --color-background-error: var(--background-error);
@@ -603,6 +616,104 @@ a.label { transition: color 150ms; }
 a.label:hover { color: var(--accent); }
 
 /*
+  BUTTONS — three variants, one base, and that is the whole system.
+
+  The variants are levels of emphasis, not shapes, and a page should read them
+  as a hierarchy:
+    .btn--primary    the one action a page is FOR. Inverted surface. At most
+                     one per view — a second primary makes both mean less.
+    .btn--secondary  the bordered default. Navigation and everything that is
+                     an action but not THE action: the back links on a case
+                     study, "All work" beside a section heading.
+    .btn--link       an action inside, or beside, a run of text. No box.
+
+  Every value is a token. The box repeats the table's cell rhythm on the
+  vertical (8px) and takes a full step on the horizontal (16px), because a
+  button needs more room around its label than a cell does around a figure.
+
+  The base carries `border: 1px solid transparent` so the three share one
+  height: a filled button with no border would sit 2px shorter than the
+  outlined one beside it in a Cluster, and that gap is only visible once
+  someone puts two variants side by side — which is exactly when it is too
+  late to change the base.
+
+  Hover follows the site rule in every variant: contrast goes UP, and the
+  properties that move all move together, so the control reads as one object.
+*/
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  padding: var(--spacing-2xs) var(--spacing-sm);
+  border: 1px solid transparent;
+  font-size: var(--text-small);
+  line-height: var(--text-small--line-height);
+  text-decoration: none;
+  /* <button> does not get the hand cursor for free the way <a href> does. */
+  cursor: pointer;
+  transition: color 150ms, background-color 150ms, border-color 150ms;
+}
+
+.btn--primary {
+  background: var(--background-alternate);
+  border-color: var(--background-alternate);
+  color: var(--text-alternate);
+}
+/*
+  Surface and border move together. Colouring only the background would leave
+  the old border ringing the new fill for the length of the transition.
+*/
+.btn--primary:hover {
+  background: var(--background-alternate-hover);
+  border-color: var(--background-alternate-hover);
+}
+
+/*
+  The same three properties the interactive table row moves, for the same
+  reason: border, surface and text together read as one object lifting.
+*/
+.btn--secondary {
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+.btn--secondary:hover {
+  background: var(--background-hover);
+  border-color: var(--border-hover);
+  color: var(--accent);
+}
+
+/*
+  The link variant undoes the base's box. `display: inline` is load-bearing,
+  not tidying: an inline-flex link cannot break across lines, so inside a
+  sentence it would push its whole label onto one line and blow the paragraph
+  sideways. It is the one variant that appears mid-text.
+
+  Markdown links get the identical treatment through `.prose a`, grouped here
+  rather than written out again — a case-study `<a>` cannot carry a class, the
+  same problem `.prose table` has. They join at the variant and not at `.btn`
+  precisely because the base is a box and a prose link is not.
+*/
+.btn--link,
+.prose a {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: var(--spacing-3xs);
+  transition: color 150ms;
+}
+.btn--link {
+  display: inline;
+  padding: 0;
+  border-color: transparent;
+  /* The base pins --text-small, which is right for a box and wrong for text:
+     a link dropped into a body paragraph would shrink mid-sentence. */
+  font-size: inherit;
+}
+.btn--link:hover,
+.prose a:hover {
+  color: var(--accent);
+}
+
+/*
   TABLES — one treatment for the whole site.
 
   Full grid, by decision: every cell is ruled, outer border included. The
@@ -889,9 +1000,7 @@ a.label:hover { color: var(--accent); }
 .prose li + li {
   margin-top: 0.4em;
 }
-.prose a {
-  @apply text-foreground underline underline-offset-4 transition-colors hover:text-accent;
-}
+/* .prose a is styled with .btn--link — see the BUTTONS block above. */
 .prose strong {
   @apply font-semibold;
 }

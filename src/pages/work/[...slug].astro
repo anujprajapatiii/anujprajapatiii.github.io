@@ -32,10 +32,14 @@ const { Content, headings } = await render(project);
     <Container as="header">
       <Stack gap="lg">
         <Stack gap="md">
-          <a
-            href="/work"
-            class="text-small text-muted-foreground transition-colors hover:text-accent"
-          >&larr; Work</a>
+          {/* Cluster so the button shrink-wraps its label — a bare <a> in a
+              Stack is a flex item and would stretch to the full column. */}
+          <Cluster>
+            <a href="/work" class="btn btn--secondary">
+              <span aria-hidden="true">&larr;</span>
+              Work
+            </a>
+          </Cluster>
           <h1 class="text-h1">{project.data.title}</h1>
           <p class="max-w-measure text-body text-muted-foreground">
             {project.data.description}
@@ -65,7 +69,7 @@ const { Content, headings } = await render(project);
               href={project.data.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-2xs border border-border px-sm py-2xs text-small transition-colors hover:border-border-hover hover:text-accent"
+              class="btn btn--primary"
             >
               Try it live
               <span aria-hidden="true">&rarr;</span>
