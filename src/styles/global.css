@@ -504,7 +504,17 @@
 */
 .site-header { border-bottom: 1px solid var(--border); padding-block: var(--spacing-sm); }
 .site-footer { border-top: 1px solid var(--border); padding-block: var(--spacing-lg); }
-.wordmark { font-size: var(--text-body); font-weight: 600; }
+/*
+  The wordmark is body type, not a heading: same size and now the same weight,
+  both taken from the body step rather than written as literals. It read as
+  Halbfett 600 before, which made the one piece of furniture on every page the
+  boldest thing in the header — the nav sits at 400, so the name was competing
+  with the links instead of anchoring them.
+*/
+.wordmark {
+  font-size: var(--text-body);
+  font-weight: var(--text-body--font-weight);
+}
 
 /*
   Responsive header bar (component-internal layout). Mobile-first:
