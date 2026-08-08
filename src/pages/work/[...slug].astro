@@ -7,6 +7,7 @@ import Stack from "@/components/primitives/Stack.astro";
 import Cluster from "@/components/primitives/Cluster.astro";
 import Sidebar from "@/components/primitives/Sidebar.astro";
 import OnThisPage from "@/components/OnThisPage.astro";
+import DataTable from "@/components/DataTable.astro";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
@@ -41,26 +42,22 @@ const { Content, headings } = await render(project);
           </p>
         </Stack>
 
-        <Cluster as="dl" gap="lg" align="start" class="border-t border-border pt-md">
-          {project.data.role && (
-            <div>
-              <dt class="label">Role</dt>
-              <dd class="mt-3xs text-small">{project.data.role}</dd>
-            </div>
-          )}
-          {project.data.year && (
-            <div>
-              <dt class="label">Year</dt>
-              <dd class="mt-3xs text-small">{project.data.year}</dd>
-            </div>
-          )}
-          {project.data.skills.length > 0 && (
-            <div>
-              <dt class="label">Skills</dt>
-              <dd class="mt-3xs text-small">{project.data.skills.join(", ")}</dd>
-            </div>
-          )}
-        </Cluster>
+        <DataTable label="Project details">
+          <thead>
+            <tr>
+              {project.data.role && <th scope="col">Role</th>}
+              {project.data.year && <th scope="col">Year</th>}
+              {project.data.skills.length > 0 && <th scope="col">Skills</th>}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              {project.data.role && <td>{project.data.role}</td>}
+              {project.data.year && <td>{project.data.year}</td>}
+              {project.data.skills.length > 0 && <td>{project.data.skills.join(", ")}</td>}
+            </tr>
+          </tbody>
+        </DataTable>
 
         {project.data.liveUrl && (
           <Cluster>

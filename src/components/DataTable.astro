@@ -1,0 +1,26 @@
+---
+/*
+  The site's one table. Callers write the <thead>/<tbody> into the slot; this
+  supplies the class and, more importantly, the scroll container — a table is
+  the one element whose columns cannot be reflowed, so it has to be able to
+  scroll inside its own box rather than push the page sideways.
+
+  Markdown tables get the same treatment through `.prose table` in global.css
+  and do not go through this component; they have no wrapper element, so they
+  become their own scroll container. See the TABLES block there.
+*/
+interface Props {
+  /* Announced to screen readers in place of a visible caption. Give it when
+     the surrounding heading does not already name what the table holds. */
+  label?: string;
+  class?: string;
+}
+
+const { label, class: className } = Astro.props;
+---
+
+<div class:list={["table-scroll", className]}>
+  <table class="data-table" aria-label={label}>
+    <slot />
+  </table>
+</div>

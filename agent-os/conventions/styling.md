@@ -30,7 +30,8 @@ What that means in practice:
   embeds or code blocks. The edge is the edge; a border and the space around
   it do the containing, and nothing is softened to look friendlier.
 - **Space does the grouping.** Rules and separators are a last resort, used
-  only where a line genuinely beats space (the tabular Play list).
+  only where a line genuinely beats space. Tables are the standing exception:
+  there the rules *are* the structure, and they are drawn in full.
 - **Every value comes from a token.** No one-off sizes, spacing or tracking
   at a call site. If something needs to change, it changes in `global.css`
   and propagates.
@@ -82,8 +83,9 @@ What that means in practice:
   to body size that size alone cannot separate them, so they carry Halbfett
   600. Weight now lives inside the token — no component writes `font-*`.
 - **No decorative eyebrows or uppercase kickers.** Section headings are real
-  headings. `.label` is reserved for genuine metadata (definition-list terms,
-  card roles) and is the only place uppercase and 600 weight combine.
+  headings. `.label` is reserved for genuine metadata (table headers, the
+  on-this-page title, style-guide section names) and is the only place
+  uppercase and 600 weight combine.
 - **Type** uses the scale tokens
   (`text-display/h1/h2/h3/lead/body/small/label`) — never raw Tailwind sizes
   (`text-lg`, `text-4xl`, `text-[10px]`). Each token carries its own
@@ -107,6 +109,25 @@ What that means in practice:
     **comments and prose included**. Spelling a utility out verbatim while
     documenting it puts that exact rule back in the built CSS. Refer to them
     discursively (`rounded-<size>`) in any comment or doc.
+- **There is one table treatment, and it is a real table.** Full grid: every
+  cell ruled, outer border included, header cells in the `.label` style,
+  padding from the spacing scale, tabular figures. Never build a table out of
+  divs, a `<dl>`, or aligned spans — if the data has columns, it is a
+  `<table>` with `<th>` headers.
+  - Component tables go through `DataTable.astro`, which supplies the class
+    and the horizontal-scroll wrapper. `pnpm check` fails on a bare `<table>`.
+  - Markdown tables in a case study need nothing: `.prose table` carries the
+    same rules, written as a grouped selector alongside `.data-table` so the
+    two cannot drift. Header cells repeat `.label`'s declarations rather than
+    requiring `class="label"`, because a markdown `<th>` cannot carry one.
+  - **A table scrolls; it does not reflow.** Its columns are its meaning, so
+    it scrolls inside its own container and the page never scrolls sideways.
+  - Prose tables need `width: max-content; max-width: 100%` with their
+    `display: block`. Without it the border stretches to the container while
+    the cells shrink-wrap, leaving empty space inside the outer rule.
+  - The hero info box is deliberately *not* a table — it has no headings and
+    none were invented for it — but it takes the same border, padding and
+    type so it reads as part of the same family.
 - **Long-form text is capped to the reading measure**
   (`var(--container-narrow)`, ~70 characters). `.prose` applies this to
   `p`/`ul`/`ol`/`blockquote` only, so images and code blocks still run the
@@ -176,7 +197,8 @@ What that means in practice:
   run in CI before the build). It covers raw spacing steps, raw type sizes,
   call-site tracking/leading, unlicensed font weights, non-zero
   letter-spacing, physical direction properties, alpha-diluted colours, raw
-  hex in components, inline layout, corner radius, and eyebrows. Add a rule
+  hex in components, inline layout, corner radius, bare tables, and eyebrows.
+  Add a rule
   whenever a convention here gets broken in practice.
   - It runs **before** the build on purpose: every one of these produces
     valid CSS that renders wrongly, so a green build proves nothing.

@@ -34,6 +34,14 @@ Walk through how you worked. Images go in
 
 ## The outcome
 
-Lead with results. What changed for users, the team, or the metrics?
+Lead with results. What changed for users, the team, or the metrics? A
+markdown table needs no special handling — it picks up the site's table
+treatment on its own:
+
+| Measure           | Before | After |
+| ----------------- | ------ | ----- |
+| Time to first run | 14 min | 4 min |
+| Completion rate   | 38%    | 71%   |
+| Support tickets   | 120/wk | 44/wk |
 
 > A pull quote or testimonial works well here.

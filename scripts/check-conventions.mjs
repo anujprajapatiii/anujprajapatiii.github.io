@@ -94,6 +94,19 @@ const RULES = [
     msg: "layout comes from primitives — compose Section > Container > Stack | Grid | Cluster",
   },
   {
+    /*
+      A bare <table> renders — it just renders as the browser's default, with
+      no rules, no cell padding and no header treatment. That is the failure
+      this repo keeps hitting: valid output that silently ignores the system.
+      Markdown tables are fine and are not matched here; they are styled by
+      `.prose table` and never appear in a source file.
+    */
+    id: "table-standard",
+    test: /<table\b/,
+    only: (f) => !f.endsWith("DataTable.astro"),
+    msg: "use DataTable.astro — a bare <table> ships without the site's table treatment",
+  },
+  {
     id: "no-eyebrow",
     test: /(?<![\w-])eyebrow(?![\w-])/,
     msg: "eyebrows were removed from the design; section headings are real headings",

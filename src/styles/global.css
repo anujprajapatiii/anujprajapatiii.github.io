@@ -549,9 +549,92 @@
 a.label { transition: color 150ms; }
 a.label:hover { color: var(--accent); }
 
-/* Hero info box: bordered two-row list */
+/*
+  TABLES — one treatment for the whole site.
+
+  Full grid, by decision: every cell is ruled, outer border included. The
+  ruling is what makes a table read as a table instead of as a list that
+  happens to be aligned, and it is the reason the Berkeley Mono spec tables
+  were cited as the reference.
+
+  The same rules serve two kinds of table, and the selectors are grouped
+  rather than duplicated so the two cannot drift:
+    - `.data-table`, written by a component through DataTable.astro
+    - `.prose table`, emitted by markdown in a case study, which carries no
+      class of its own and so has to be matched by element
+
+  Header cells repeat `.label`'s declarations instead of asking for
+  `class="label"` for the same reason: a markdown `<th>` cannot carry one.
+*/
+.data-table,
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--border);
+  font-size: var(--text-small);
+  line-height: var(--text-small--line-height);
+  /* Digits in a column have to line up; this is the definition of a table. */
+  font-variant-numeric: tabular-nums;
+}
+.data-table th,
+.data-table td,
+.prose table th,
+.prose table td {
+  border: 1px solid var(--border);
+  padding: var(--spacing-2xs) var(--spacing-xs);
+  text-align: start;
+  vertical-align: top;
+}
+.data-table th,
+.prose table th {
+  font-size: var(--text-label);
+  line-height: var(--text-label--line-height);
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}
+/* A row that is a link: the whole row lifts to the hover colour. */
+.data-table tbody tr { transition: color 150ms; }
+.data-table tbody tr:hover:has(a) { color: var(--accent); }
+.data-table a { color: inherit; }
+
+/*
+  A table is the one thing here that legitimately cannot be made narrower —
+  its columns are its meaning. It scrolls inside its own container so the
+  page itself never scrolls sideways. `.table-scroll` wraps component tables;
+  markdown emits a bare <table> with nothing to wrap it, so prose tables
+  become the scroll container themselves via display: block.
+*/
+.table-scroll { overflow-x: auto; }
+.prose table {
+  display: block;
+  overflow-x: auto;
+  /*
+    `width: max-content` is load-bearing, not tidying. `display: block` splits
+    the element in two: the block box takes the border and would stretch to
+    the container, while the cells inside form an anonymous table box that
+    shrink-wraps its content. At width: 100% that draws the outer border out
+    to the container edge with empty space between it and the last column.
+    Sizing the block to its content makes the border hug the cells again, and
+    max-width caps it so a wide table still scrolls instead of pushing the
+    page sideways.
+  */
+  width: max-content;
+  max-width: 100%;
+}
+
+/*
+  Hero info box: the two-row box in the hero. Not a table — it has no headings
+  and none were invented for it — but it takes the table's border, padding and
+  type so it sits in the same family. Anuj's call: restyle only.
+*/
 .info-box { border: 1px solid var(--border); }
-.info-box__row { padding: var(--spacing-sm) var(--spacing-md); font-size: var(--text-body); }
+.info-box__row {
+  padding: var(--spacing-2xs) var(--spacing-xs);
+  font-size: var(--text-small);
+  line-height: var(--text-small--line-height);
+}
 .info-box__row + .info-box__row { border-top: 1px solid var(--border); }
 
 /*
@@ -620,20 +703,6 @@ a.label:hover { color: var(--accent); }
     color: var(--muted-foreground);
   }
 }
-
-/* Tabular list (homepage Play) — rows are block links; Cluster does the
-   horizontal split inside. Only borders/padding/colour live here. */
-.play-list { border-top: 1px solid var(--border); }
-.play-row {
-  display: block;
-  padding-block: var(--spacing-sm);
-  border-bottom: 1px solid var(--border);
-  color: var(--foreground);
-  transition: color 150ms, border-color 150ms;
-}
-.play-row:hover { color: var(--accent); border-color: var(--border-hover); }
-.play-row__title { font-size: var(--text-body); }
-.play-row__meta { font-size: var(--text-small); color: var(--muted-foreground); white-space: nowrap; }
 
 /*
   On-this-page rail. Hidden below the sidebar breakpoint — nothing is lost,

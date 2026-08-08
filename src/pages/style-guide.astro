@@ -2,6 +2,7 @@
 import PageLayout from "@/layouts/PageLayout.astro";
 import Section from "@/components/primitives/Section.astro";
 import Container from "@/components/primitives/Container.astro";
+import DataTable from "@/components/DataTable.astro";
 
 /* Keep these arrays in sync with the token block in src/styles/global.css
    (see agent-os/plans/design-token-session.md). */
@@ -354,6 +355,47 @@ const aliases = [
           <p class="mt-3xs text-small text-muted-foreground">bg-muted, no border</p>
         </div>
       </div>
+    </Section>
+
+    <Section size="md" class="border-t border-border">
+      <h2 class="label mb-2xs">
+        Tables
+      </h2>
+      <p class="mb-md max-w-measure text-small text-muted-foreground">
+        One treatment for every table: full grid, header cells in the
+        <code>.label</code> style, padding from the spacing scale, tabular
+        figures. Component tables use <code>DataTable.astro</code>, which adds
+        the horizontal-scroll container; markdown tables in a case study get
+        the same rules through <code>.prose table</code> and need nothing
+        added. A table's columns are its meaning, so it scrolls inside its own
+        box rather than reflowing.
+      </p>
+      <DataTable label="Table specimen">
+        <thead>
+          <tr>
+            <th scope="col">Token</th>
+            <th scope="col">Value</th>
+            <th scope="col">Applies to</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cell padding</td>
+            <td>8px 12px</td>
+            <td>th and td</td>
+          </tr>
+          <tr>
+            <td>Rule</td>
+            <td>1px border</td>
+            <td>Every cell, plus the outer edge</td>
+          </tr>
+          <tr>
+            <td>Header</td>
+            <td>12px, 600, uppercase</td>
+            <td>th only</td>
+          </tr>
+        </tbody>
+      </DataTable>
     </Section>
     </Container>
   </Section>

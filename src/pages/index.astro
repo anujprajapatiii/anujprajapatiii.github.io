@@ -1,6 +1,7 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
+import DataTable from "@/components/DataTable.astro";
 import Section from "@/components/primitives/Section.astro";
 import Container from "@/components/primitives/Container.astro";
 import Stack from "@/components/primitives/Stack.astro";
@@ -79,18 +80,24 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
             class="text-small text-muted-foreground underline underline-offset-4 transition-colors hover:text-accent"
           >All play</a>
         </Cluster>
-        <div class="play-list">
-          {play.map((item) => (
-            <a href={`/play/${item.id}`} class="play-row">
-              <Cluster justify="between" align="baseline" gap="md">
-                <span class="play-row__title">{item.data.title}</span>
-                <span class="play-row__meta">
-                  {[item.data.role, item.data.year].filter(Boolean).join(" · ")}
-                </span>
-              </Cluster>
-            </a>
-          ))}
-        </div>
+        <DataTable label="Play experiments">
+          <thead>
+            <tr>
+              <th scope="col">Title</th>
+              <th scope="col">Role</th>
+              <th scope="col">Year</th>
+            </tr>
+          </thead>
+          <tbody>
+            {play.map((item) => (
+              <tr>
+                <td><a href={`/play/${item.id}`}>{item.data.title}</a></td>
+                <td>{item.data.role}</td>
+                <td>{item.data.year}</td>
+              </tr>
+            ))}
+          </tbody>
+        </DataTable>
       </Stack>
     </Container>
   </Section>
