@@ -73,18 +73,8 @@ What that means in practice:
   - Both faces are preloaded in `BaseLayout.astro`; those URLs and the
     `src()` paths in `global.css` must resolve to the same hashed asset or
     the preload silently double-downloads. Check `dist/` after changing either.
-- **Second typeface: Berkeley Mono** (U.S. Graphics, LT-02 Developer Font
-  License, Personal, ID N541-MY3Q-LXPV-1M36), one weight, Regular 400. It is
-  `--font-mono`, and the division between the two faces is by what the text
-  **is**: Söhne for prose, Berkeley Mono for data — tables, inline `code` and
-  code blocks. It is not a decorative alternative to Söhne and never appears
-  on headings, labels, or the wordmark.
-  - **Never subset it.** The font's OS/2 `fsType` is 256: embedding permitted,
-    subsetting forbidden. All 645 glyphs ship (24KB WOFF2). If a build step
-    ever adds automatic subsetting, exempt this font.
-  - Preloaded in `BaseLayout.astro` like the Söhne faces. A mono face is
-    markedly wider, so arriving late re-lays-out table columns rather than
-    just repainting them.
+  `--font-mono` is a system fallback stack reserved for code only (inline
+  `code` + code blocks) — never for labels, wordmarks, or metadata.
 - **Spacing** uses the named scale (`p-md`, `gap-sm`, `py-xl`, …) or the
   semantic roles (`p-card`, `px-gutter`, …) — **never** raw Tailwind step
   numbers (`p-6`, `mt-1`, `gap-4`). The whole codebase was converted; zero
@@ -143,17 +133,10 @@ What that means in practice:
   Tailwind's value — a curve no file in this repo declares. `pnpm check`
   fails on both the utility and the raw property.
 - **There is one table treatment, and it is a real table.** Full grid: every
-  cell ruled and the outer border drawn, padding from the spacing scale.
-  Never build a table out of divs, a `<dl>`, or aligned spans — if the data
-  has columns, it is a `<table>` with `<th>` headers.
-  - **Set in Berkeley Mono, one size, all caps** — headers and cells alike.
-    Size, case and family are declared once on the table and nowhere else: a
-    header that set its own size could drift from the cells beneath it, and
-    the way to guarantee they match is to give them no chance to differ.
-    **Header and cell are told apart by weight and colour alone** (600 and
-    `--muted-foreground` against 400 and `--foreground`).
-  - `text-transform` does not change the DOM text, so real capitalisation is
-    still what is read aloud, copied and searched. Never uppercase the source.
+  cell ruled, outer border included, header cells in the `.label` style,
+  padding from the spacing scale, tabular figures. Never build a table out of
+  divs, a `<dl>`, or aligned spans — if the data has columns, it is a
+  `<table>` with `<th>` headers.
   - Component tables go through `DataTable.astro`, which supplies the class
     and the horizontal-scroll wrapper. `pnpm check` fails on a bare `<table>`.
   - Markdown tables in a case study need nothing: `.prose table` carries the

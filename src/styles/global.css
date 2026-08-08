@@ -50,24 +50,6 @@
   font-display: swap;
 }
 
-/*
-  Berkeley Mono — U.S. Graphics, LT-02 Developer Font License (Personal),
-  licence ID N541-MY3Q-LXPV-1M36. One weight: Regular 400.
-
-  The supplied OTF was converted to WOFF2 for the web. It was NOT subsetted:
-  the font's OS/2 fsType is 256, which permits embedding but sets the
-  "no subsetting" bit. All 645 glyphs ship — 24KB, which is why subsetting was
-  not worth arguing about anyway. If a future build step adds automatic
-  subsetting, this font has to be exempted from it.
-*/
-@font-face {
-  font-family: 'Berkeley Mono';
-  src: url('../assets/fonts/berkeley-mono-regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
 @custom-variant dark (&:is(.dark *));
 
 /*
@@ -209,13 +191,10 @@
 }
 
 @theme inline {
-    /* Two typefaces, each with a job. Söhne sets everything that is read as
-       prose. Berkeley Mono sets everything that is read as DATA — tables and
-       code — where the value of a fixed advance width is that figures and
-       identifiers line up in a column. It is not a decorative alternative to
-       Söhne and does not belong on headings, labels or the wordmark. */
+    /* One brand font. --font-mono is a system fallback stack reserved for
+       code only (inline code + code blocks), never for design/labels. */
     --font-sans: 'Söhne', ui-sans-serif, system-ui, sans-serif;
-    --font-mono: 'Berkeley Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+    --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
     --color-ring: var(--ring);
     --color-input: var(--input);
     --color-border: var(--border);
@@ -619,28 +598,9 @@ a.label:hover { color: var(--accent); }
   width: 100%;
   border-collapse: collapse;
   border: 1px solid var(--border);
-  /*
-    Tables are set in Berkeley Mono — every cell, headers included. A table is
-    read by scanning down a column, and a fixed advance width makes the values
-    in that column align on their own, which is the whole argument for a mono
-    face here. tabular-nums stays as the fallback's insurance: if the webfont
-    has not arrived, the substitute is proportional and its digits still need
-    to line up.
-  */
-  font-family: var(--font-mono);
-  /*
-    ONE SIZE AND ONE CASE FOR THE WHOLE TABLE. Both are declared here, on the
-    table, and nowhere else — a header that set its own size could drift from
-    the cells beneath it, so the way to guarantee they match is to give them
-    no opportunity to differ. Header and cell are told apart by weight and
-    colour alone.
-
-    text-transform does not touch the DOM text, so the real capitalisation is
-    still what gets read aloud, copied and searched.
-  */
   font-size: var(--text-small);
   line-height: var(--text-small--line-height);
-  text-transform: uppercase;
+  /* Digits in a column have to line up; this is the definition of a table. */
   font-variant-numeric: tabular-nums;
 }
 .data-table th,
@@ -654,6 +614,9 @@ a.label:hover { color: var(--accent); }
 }
 .data-table th,
 .prose table th {
+  font-size: var(--text-small);
+  line-height: var(--text-small--line-height);
+  text-transform: uppercase;
   font-weight: 600;
   color: var(--muted-foreground);
   white-space: nowrap;
