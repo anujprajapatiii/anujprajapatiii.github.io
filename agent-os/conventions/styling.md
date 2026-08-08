@@ -145,19 +145,26 @@ What that means in practice:
     requiring `class="label"`, because a markdown `<th>` cannot carry one.
   - **A table scrolls; it does not reflow.** Its columns are its meaning, so
     it scrolls inside its own container and the page never scrolls sideways.
-  - **Rows that are links hover as a whole row**: `--background-hover` behind
-    it, `--border-hover` on all four rules, text to `--text-primary`, and the
-    same treatment on `:focus-within` so keyboard users get it too. Rows
-    without a link never react — the effect is gated on `:has(a)`, which is
-    what keeps the style-guide and metadata tables inert.
-    - Collapsed borders are shared and the shared edge belongs to the cell
-      *above*, so the hovered row's top rule is painted by the row before it
-      and has to be styled through that row. Beware the shape of the
-      selector: `tr:has(+ tr:hover:has(a))` is invalid — `:has()` cannot nest
-      inside `:has()` — and an invalid selector is dropped in silence, which
-      is how an open-topped highlight shipped through a first build. Split
-      the conditions onto one element instead:
-      `tr:has(a):has(+ tr:hover)`.
+  - **A table whose rows are links opts in with `interactive` on
+    `DataTable`.** The whole row then takes `--background-hover`,
+    `--border-hover` on all four rules and `--text-primary`, with the same
+    treatment on `:focus-within` so keyboard users get it too, and its
+    resting cells drop to `--text-secondary`. A table without the prop is
+    inert and stays at full contrast — that is what keeps the style-guide and
+    metadata tables from reacting.
+    - It is a modifier class rather than an inferred `:has(a)` because the
+      border rules have to reach a **neighbour**, and "the next row is
+      hovered and contains a link" cannot be written: `:has()` cannot nest
+      inside `:has()`, and an invalid selector is dropped in silence. That is
+      how an open-topped highlight shipped through a first build.
+    - **Collapsed borders are shared, and the shared edge belongs to the cell
+      above**, so a hovered row's top rule is painted by whatever precedes it
+      and has to be styled through that element. Two cases, not one:
+      `tbody tr:has(+ tr:hover) > *` for rows with a row above them, and
+      `thead:has(+ tbody tr:first-child:hover) th` for the first row, whose
+      top edge belongs to the header. `thead > tr` is not a sibling of
+      `tbody > tr`, so the reach has to be thead-to-tbody — missing that is
+      why the first row alone stayed open at the top.
   - Prose tables need `width: max-content; max-width: 100%` with their
     `display: block`. Without it the border stretches to the container while
     the cells shrink-wrap, leaving empty space inside the outer rule.
@@ -225,12 +232,17 @@ What that means in practice:
   between text and the background of its container." Hover must read as text
   coming forward — the old accent was *lower* contrast than body text, so
   hovering made links recede. Never point a hover at a dimmer colour.
-  - **A table row is the one thing that hovers as a surface, not as text.**
-    Its cells rest at `--text-secondary` and move to `--text-primary`, so the
-    contrast still climbs (8.23:1 → 14.35:1 light, 6.95:1 → 12.55:1 dark) —
-    the rule above is satisfied, it is just measured from a quieter start.
+  - **An interactive table row is the one thing that hovers as a surface, not
+    as text.** Its cells rest at `--text-secondary` and move to
+    `--text-primary` on `--background-hover`, measuring 15.39:1 light and
+    13.26:1 dark — the rule above is satisfied, just from a quieter start.
     Resting muted is what makes the lift readable: if every row already sat at
     full contrast, hover would have nothing left to add.
+  - **`--background-hover` steps AWAY from the page**, lighter on light and
+    darker on dark, rather than toward the middle of the palette. It was
+    `neutral-200`, which laid a heavy grey band under a hovered row; one step
+    off the page background is enough when the rules and the text are moving
+    with it.
 - **Never dilute a text colour with an alpha** (`text-foreground/90`). It
   invents an undeclared colour outside the token system and quietly costs
   contrast — prose body was rendering at 10.66:1 instead of 14.35:1. If a

@@ -66,7 +66,7 @@
     --background-success: var(--green-100);
     --background-warning: var(--yellow-200);
     --background-error: var(--red-100);
-    --background-hover: var(--neutral-200);
+    --background-hover: var(--neutral-white);
     --background-elevated: var(--neutral-white);
     --border-primary: var(--neutral-300);
     --border-secondary: var(--brown-200);
@@ -88,7 +88,7 @@
     --background-primary: var(--neutral-800);
     --background-secondary: var(--neutral-600);
     --background-alternate: var(--neutral-100);
-    --background-hover: var(--neutral-600);
+    --background-hover: var(--neutral-900);
     --background-elevated: var(--neutral-700);
     --border-primary: var(--neutral-500);
     --border-secondary: var(--brown-400);
