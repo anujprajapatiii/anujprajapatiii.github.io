@@ -18,7 +18,27 @@
 @import "tailwindcss" source(none);
 @source "../../src";
 
-@import "tw-animate-css";
+/*
+  `tw-animate-css` was imported here and is gone. It resolved to a real 15KB
+  file and contributed zero rules to the output, because nothing in src/ uses an
+  animate utility — with `source(none)` above, an import costs only what you
+  reference. Verified against the build: no @keyframes and no enter/exit
+  utilities were lost. Re-add the package and the import together if animation
+  utilities are ever wanted.
+
+  `shadcn/tailwind.css` stays. It is real — resolved through the package's
+  `exports["./tailwind.css"]` subpath to dist/tailwind.css — and it backs a
+  configured tool path: components.json is set up, so `shadcn add` is a
+  supported move here. It supplies @custom-variant data-* definitions and a
+  no-scrollbar utility, none of which anything uses yet, so like the above it
+  currently emits nothing.
+
+  NOTE for whoever runs `shadcn add`: the shadcn colour ALIASES were removed
+  from the token block below (--primary, --secondary, --popover, --destructive,
+  --input, --card-foreground) because nothing referenced them. A generated
+  component will name them. Re-add the ones it needs, pointed at semantic
+  tokens, rather than letting it fall back to shadcn's defaults.
+*/
 @import "shadcn/tailwind.css";
 
 /*
@@ -80,40 +100,26 @@
     --neutral-200: #d3d7dd;
     --neutral-100: #f6f7f8;
     --neutral-white: #ffffff;
-    /* Amber */
-    --amber-400: #7c370e;
-    --amber-300: #e66c24;
-    --amber-200: #ee9a68;
-    --amber-100: #f5c2a3;
-    /* Blue */
-    --blue-600: #002c83;
-    --blue-500: #1841ac;
-    --blue-400: #1e50d3;
-    --blue-300: #99b6ff;
-    --blue-200: #dae5ff;
-    --blue-100: #f0f3ff;
-    /* Green */
-    --green-400: #1a4723;
-    --green-300: #37954a;
-    --green-200: #53c069;
-    --green-100: #b4e4be;
-    /* Red */
-    --red-400: #67090a;
-    --red-300: #ec2426;
-    --red-200: #f2696a;
-    --red-100: #f7a1a2;
-    /* Yellow */
-    --yellow-600: #853e0f;
-    --yellow-500: #d17600;
-    --yellow-400: #ffb700;
-    --yellow-300: #ffd293;
-    --yellow-200: #ffe9d0;
-    --yellow-100: #fff5f5;
+    /*
+      NEUTRAL IS THE WHOLE PALETTE, BY DECISION.
+
+      There were five more families here — Amber, Blue, Green, Red, Yellow, 26
+      values. Measured before removal: Amber and Blue were referenced by
+      NOTHING, not even a dead token. Green, Red and Yellow were reachable only
+      from --background-success/-warning/-error, --text-success/-warning/-error
+      and --background-tertiary, none of which any rule or component ever used.
+      Not one of the 26 could be reached from a rendered page.
+
+      The site's stated rule is that colour is a hierarchy of prominence, never
+      of hue. A palette carrying five hues nothing may use does not soften that
+      rule, it just makes the style guide advertise 26 colours the design
+      forbids. Adding a hue back should mean deciding to, not discovering that
+      one was already sitting there.
+    */
 
     /* ---- 2. SEMANTIC (role names) — light mode ---- */
     --background-primary: var(--neutral-100);
     --background-secondary: var(--neutral-200);
-    --background-tertiary: var(--yellow-500);
     --background-alternate: var(--neutral-800);
     /*
       Hover for the inverted surface — the primary button, and anything else
@@ -126,9 +132,6 @@
       stop responding in one theme only.
     */
     --background-alternate-hover: var(--neutral-black);
-    --background-success: var(--green-100);
-    --background-warning: var(--yellow-200);
-    --background-error: var(--red-100);
     /*
       Hover moves AWAY from the page, not toward the middle of the palette:
       white on light, neutral-900 on dark (see .dark below). It was
@@ -142,8 +145,6 @@
        off the page, not a full secondary step. */
     --background-elevated: var(--neutral-white);
     --border-primary: var(--neutral-300);
-    --border-secondary: var(--neutral-200);
-    --border-alternate: var(--neutral-500);
     --border-hover: var(--neutral-800);
     /*
       Text colour is a hierarchy of prominence, never of hue — the Apple
@@ -161,31 +162,34 @@
       or hover reads as text going away rather than coming forward. 17.87:1.
     */
     --text-interactive: var(--neutral-900);
-    --text-success: var(--green-400);
-    --text-warning: var(--yellow-600);
-    --text-error: var(--red-400);
-    --link-primary: var(--text-primary);
-    --link-secondary: var(--neutral-800);
-    --link-alternate: var(--neutral-100);
 
-    /* ---- 3. ALIASES (shadcn/Tailwind names used by components) ---- */
+    /*
+      ---- 3. ALIASES (the Tailwind names components actually use) ----
+
+      This list is now exactly the aliases something references. It used to
+      carry --popover, --popover-foreground, --primary, --primary-foreground,
+      --secondary, --secondary-foreground, --card-foreground, --input and
+      --destructive as well: a shadcn vocabulary imported wholesale for a site
+      that has no shadcn components in it. Every one had zero consumers.
+
+      A dead alias is worse than a dead primitive, because it reads like the
+      approved way to say something. --primary in particular pointed at
+      --background-alternate, which is exactly what .btn--primary needs — and
+      .btn--primary reaches past it to --background-alternate directly. Two
+      names for one role, one of them a decoy.
+
+      There was also a --link-primary/-secondary/-alternate family, semantic
+      rather than alias, with the same problem in sharper form: a complete
+      vocabulary for links, on a site made of links, that not one link used.
+    */
     --background: var(--background-primary);
     --foreground: var(--text-primary);
     --card: var(--background-elevated);
-    --card-foreground: var(--text-primary);
-    --popover: var(--background-primary);
-    --popover-foreground: var(--text-primary);
-    --primary: var(--background-alternate);
-    --primary-foreground: var(--text-alternate);
-    --secondary: var(--background-secondary);
-    --secondary-foreground: var(--text-primary);
     --muted: var(--background-secondary);
     --muted-foreground: var(--text-secondary);
     --accent: var(--text-interactive);
     --accent-foreground: var(--text-alternate);
-    --destructive: var(--text-error);
     --border: var(--border-primary);
-    --input: var(--border-primary);
     --ring: var(--border-hover);
 }
 
@@ -198,8 +202,6 @@
     --background-hover: var(--neutral-900);
     --background-elevated: var(--neutral-700);
     --border-primary: var(--neutral-500);
-    --border-secondary: var(--neutral-500);
-    --border-alternate: var(--neutral-300);
     /*
       Deliberately softer than light mode's equivalent. Light hovers to
       neutral-800, a dark line on a light ground; the mirror of that is
@@ -214,8 +216,6 @@
     --text-secondary: var(--neutral-300);
     --text-alternate: var(--neutral-800);
     --text-interactive: var(--neutral-100);
-    --link-secondary: var(--neutral-100);
-    --link-alternate: var(--neutral-800);
 }
 
 @theme inline {
@@ -223,49 +223,31 @@
        code only (inline code + code blocks), never for design/labels. */
     --font-sans: 'Söhne', ui-sans-serif, system-ui, sans-serif;
     --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+    /* One --color-* line per alias, and the alias list is now exactly what is
+       used. Every entry here generates utilities; a mapping for a token nothing
+       references is how `bg-popover` and friends became spellable. */
     --color-ring: var(--ring);
-    --color-input: var(--input);
     --color-border: var(--border);
-    --color-destructive: var(--destructive);
     --color-accent-foreground: var(--accent-foreground);
     --color-accent: var(--accent);
     --color-muted-foreground: var(--muted-foreground);
     --color-muted: var(--muted);
-    --color-secondary-foreground: var(--secondary-foreground);
-    --color-secondary: var(--secondary);
-    --color-primary-foreground: var(--primary-foreground);
-    --color-primary: var(--primary);
-    --color-popover-foreground: var(--popover-foreground);
-    --color-popover: var(--popover);
-    --color-card-foreground: var(--card-foreground);
     --color-card: var(--card);
     --color-foreground: var(--foreground);
     --color-background: var(--background);
     /* Semantic names as utilities (bg-background-primary, etc.) */
     --color-background-primary: var(--background-primary);
     --color-background-secondary: var(--background-secondary);
-    --color-background-tertiary: var(--background-tertiary);
     --color-background-alternate: var(--background-alternate);
     --color-background-alternate-hover: var(--background-alternate-hover);
-    --color-background-success: var(--background-success);
-    --color-background-warning: var(--background-warning);
-    --color-background-error: var(--background-error);
     --color-background-hover: var(--background-hover);
     --color-background-elevated: var(--background-elevated);
     --color-border-primary: var(--border-primary);
-    --color-border-secondary: var(--border-secondary);
-    --color-border-alternate: var(--border-alternate);
     --color-border-hover: var(--border-hover);
     --color-text-primary: var(--text-primary);
     --color-text-secondary: var(--text-secondary);
     --color-text-interactive: var(--text-interactive);
     --color-text-alternate: var(--text-alternate);
-    --color-text-success: var(--text-success);
-    --color-text-warning: var(--text-warning);
-    --color-text-error: var(--text-error);
-    --color-link-primary: var(--link-primary);
-    --color-link-secondary: var(--link-secondary);
-    --color-link-alternate: var(--link-alternate);
 
     /*
       CORNERS ARE SQUARE EVERYWHERE, BY DECISION. There is no --radius token
@@ -611,9 +593,12 @@
   font-weight: 600;         /* 12px caps need Halbfett to hold their colour */
   color: var(--muted-foreground);
 }
-/* Interactive labels (back links) get a foreground hover. */
-a.label { transition: color 150ms; }
-a.label:hover { color: var(--accent); }
+/*
+  There were `a.label` / `a.label:hover` rules here, for "interactive labels
+  (back links)". No anchor has carried `.label` since those back links became
+  .btn--secondary; every `.label` in src/ is a <p> or an <h2>. The rules
+  outlived their call sites and kept shipping.
+*/
 
 /*
   BUTTONS — three variants, one base, and that is the whole system.
@@ -986,6 +971,18 @@ a.label:hover { color: var(--accent); }
 .prose blockquote {
   max-width: var(--container-measure);
 }
+/*
+  The colour here looks redundant against `.prose { text-foreground }` above and
+  is not. `.prose blockquote` sets --muted-foreground, and a markdown blockquote
+  is almost always `<blockquote><p>`, so the paragraph inherits muted and this
+  rule is what pulls it back to full contrast. Removing it as dead code turned
+  every pull quote on the site secondary — caught by diffing computed styles,
+  not by the build.
+
+  Which means the blockquote's own muted colour currently applies to nothing.
+  That contradiction is real but it is a design decision, not a cleanup: left
+  alone here deliberately so this pass stays visually inert.
+*/
 .prose p,
 .prose ul,
 .prose ol {
