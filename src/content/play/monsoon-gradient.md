@@ -6,8 +6,6 @@ year: "2026"
 skills:
   - Colour
   - Motion
-thumbnail: /images/play/monsoon-gradient/thumbnail.svg
-heroImage: /images/play/monsoon-gradient/thumbnail.svg
 sortOrder: 2
 draft: false
 ---

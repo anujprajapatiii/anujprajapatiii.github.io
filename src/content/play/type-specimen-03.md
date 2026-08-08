@@ -6,8 +6,6 @@ year: "2026"
 skills:
   - Typography
   - Art direction
-thumbnail: /images/play/type-specimen-03/thumbnail.svg
-heroImage: /images/play/type-specimen-03/thumbnail.svg
 sortOrder: 1
 draft: false
 ---

@@ -6,8 +6,6 @@ year: "2025"
 skills:
   - Creative coding
   - Layout
-thumbnail: /images/play/generative-grid/thumbnail.svg
-heroImage: /images/play/generative-grid/thumbnail.svg
 sortOrder: 3
 draft: false
 ---

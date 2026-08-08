@@ -82,12 +82,21 @@ const { Content, headings } = await render(item);
 
     <Container>
       <Stack gap="lg">
-        {item.data.heroImage && (
+        {/*
+          An embed is its own hero. An item that opens with a live tool
+          (voxel) keeps its real imagery in the body and deliberately has no
+          hero image — a grey placeholder above a working embed would add a
+          picture of nothing to a page that already leads with something.
+          Everything else shows the placeholder until a real image lands.
+        */}
+        {item.data.heroImage ? (
           <img
             src={item.data.heroImage}
             alt=""
             class="w-full border border-border"
           />
+        ) : (
+          !item.data.embedUrl && <div class="media-placeholder"></div>
         )}
         {/* Rail beside the body only: the table of contents belongs to the
             prose it describes, and the header above wants its full width. */}

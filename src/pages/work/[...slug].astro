@@ -82,6 +82,12 @@ const { Content, headings } = await render(project);
 
     <Container>
       <Stack gap="lg">
+        {/*
+          Same rule as Play: an embed is its own hero, so a case study that
+          opens with a live tool gets no placeholder above it. No work item
+          uses embedUrl today — this keeps the two near-identical templates
+          from drifting apart the first time one does.
+        */}
         {project.data.heroImage ? (
           <img
             src={project.data.heroImage}
@@ -89,7 +95,7 @@ const { Content, headings } = await render(project);
             class="w-full border border-border"
           />
         ) : (
-          <div class="media-placeholder"></div>
+          !project.data.embedUrl && <div class="media-placeholder"></div>
         )}
         {/* Rail beside the body only: the table of contents belongs to the
             prose it describes, and the header above wants its full width. */}

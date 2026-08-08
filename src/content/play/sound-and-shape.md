@@ -6,8 +6,6 @@ year: "2025"
 skills:
   - Audio-visual
   - Motion
-thumbnail: /images/play/sound-and-shape/thumbnail.svg
-heroImage: /images/play/sound-and-shape/thumbnail.svg
 sortOrder: 4
 draft: false
 ---
