@@ -19,10 +19,19 @@ interface Props {
 const { id, title, description, year, thumbnail, base = "/work" } = Astro.props;
 ---
 
-<a
-  href={`${base}/${id}`}
-  class="group block border border-border bg-card p-card transition-colors hover:border-border-hover"
->
+{/*
+  `.project-card` is named in the INTERACTION block in global.css: surface,
+  rule and text all lift together from there, and the thumbnail's frame moves
+  with the card's. No group modifier, no hover utility and no colour-transition
+  utility here — the card used to move its border and its title while its
+  surface, its year and its description stood still, so it came forward in
+  pieces. (Class names are described rather than spelled: Tailwind scans
+  comments in src/, so writing one out would re-generate the rule.)
+
+  `.project-card__meta` marks the two elements that rest quiet and come up with
+  the card, so the whole thing reads as one object.
+*/}
+<a href={`${base}/${id}`} class="project-card block p-card">
   {thumbnail ? (
     <img
       src={thumbnail}
@@ -34,12 +43,12 @@ const { id, title, description, year, thumbnail, base = "/work" } = Astro.props;
     <div class="media-placeholder mb-sm"></div>
   )}
   <div class="flex items-baseline justify-between gap-sm">
-    <h3 class="text-h3 transition-colors group-hover:text-accent">
+    <h3 class="text-h3">
       {title}
     </h3>
     {year && (
-      <span class="shrink-0 text-small tabular-nums text-muted-foreground">{year}</span>
+      <span class="project-card__meta shrink-0 text-small tabular-nums">{year}</span>
     )}
   </div>
-  <p class="mt-xs text-small text-muted-foreground">{description}</p>
+  <p class="project-card__meta mt-xs text-small">{description}</p>
 </a>

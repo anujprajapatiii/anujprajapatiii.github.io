@@ -19,31 +19,22 @@ const year = new Date().getFullYear();
           before the ones that leave the site. It is `noindex`; the footer is
           how it is found at all.
         */}
-        <a
-          href="/style-guide"
-          class="text-muted-foreground transition-colors hover:text-accent"
-        >Style guide</a>
+        {/* Bare anchors: `.site-footer a` is named in the INTERACTION block,
+            so colour and hover come from there. These four used to carry a
+            muted-foreground / transition / accent-on-hover utility triplet,
+            written out identically on every one of them — and six times across
+            the site once the header and hero are counted. (Named discursively
+            on purpose: Tailwind scans this file's comments too, so spelling
+            the classes out would generate the rules this removes.) */}
+        <a href="/style-guide">Style guide</a>
         {siteConfig.social.github && (
-          <a
-            href={siteConfig.social.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-muted-foreground transition-colors hover:text-accent"
-          >GitHub</a>
+          <a href={siteConfig.social.github} target="_blank" rel="noopener noreferrer">GitHub</a>
         )}
         {siteConfig.social.linkedin && (
-          <a
-            href={siteConfig.social.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-muted-foreground transition-colors hover:text-accent"
-          >LinkedIn</a>
+          <a href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
         )}
         {siteConfig.social.email && (
-          <a
-            href={`mailto:${siteConfig.social.email}`}
-            class="text-muted-foreground transition-colors hover:text-accent"
-          >Email</a>
+          <a href={`mailto:${siteConfig.social.email}`}>Email</a>
         )}
       </Cluster>
     </Cluster>
