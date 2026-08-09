@@ -854,6 +854,28 @@
 }
 
 /*
+  Halftone band — the shader surface under the work cards. Designed in Paper;
+  see HalftoneBand.tsx for the two departures from that export.
+
+  The border is not in the Paper file. It is here because every other media
+  surface on the site carries one — the placeholder above, prose images, the
+  case-study embed — and a bare texture band sitting between four bordered
+  cards was the only unruled surface on the page.
+
+  The background is what shows before WebGL has a first frame, and what stays
+  if it never gets one: a plain elevated surface, the same value the shader
+  itself draws behind the dots. A failed context leaves a quiet blank band
+  rather than a hole in the page.
+*/
+.halftone-band {
+  width: 100%;
+  height: 140px;
+  background: var(--background-elevated);
+  border: 1px solid var(--border);
+}
+.halftone-band canvas { display: block; }
+
+/*
   Inline interactive embed (case-study `embedUrl`). The embedded tools are
   desktop-oriented, so the iframe only appears at tablet width and up; below
   that the fallback link is shown instead of an unusable miniature.

@@ -2,6 +2,7 @@
 import PageLayout from "@/layouts/PageLayout.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
 import DataTable from "@/components/DataTable.astro";
+import HalftoneBand from "@/components/HalftoneBand";
 import Section from "@/components/primitives/Section.astro";
 import Container from "@/components/primitives/Container.astro";
 import Stack from "@/components/primitives/Stack.astro";
@@ -65,6 +66,16 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
             />
           ))}
         </Grid>
+        {/*
+          Sibling of the Grid, not a child of it. In Paper it is the third item
+          inside the card grid; as a real grid child it would drop into the
+          next cell and take one column. Out here it spans the container, which
+          is the full-width band the design shows.
+
+          client:visible because it is below the fold and costs a WebGL
+          context — nothing loads until it is scrolled to.
+        */}
+        <HalftoneBand client:visible />
       </Stack>
     </Container>
   </Section>
