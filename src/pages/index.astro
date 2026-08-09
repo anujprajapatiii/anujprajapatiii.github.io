@@ -3,6 +3,7 @@ import PageLayout from "@/layouts/PageLayout.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
 import DataTable from "@/components/DataTable.astro";
 import HalftoneBand from "@/components/HalftoneBand";
+import HeroShader from "@/components/HeroShader";
 import Section from "@/components/primitives/Section.astro";
 import Container from "@/components/primitives/Container.astro";
 import Stack from "@/components/primitives/Stack.astro";
@@ -39,7 +40,13 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
             </a>
           </div>
         </Stack>
-        <div class="media-placeholder"></div>
+        {/*
+          client:load, not client:visible. This one is above the fold, so the
+          observer would fire immediately anyway — but the directive is a
+          promise about when the shape appears, and a hero that pops in a beat
+          late reads as a page still loading. The band below stays lazy.
+        */}
+        <HeroShader client:load />
       </Grid>
     </Container>
   </Section>

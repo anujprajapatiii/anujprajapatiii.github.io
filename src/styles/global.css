@@ -162,6 +162,20 @@
       or hover reads as text going away rather than coming forward. 17.87:1.
     */
     --text-interactive: var(--neutral-900);
+    /*
+      The tint the hero shader burns its metal through — the one decorative
+      role in the system, and the only semantic token that names no text,
+      surface or rule.
+
+      It exists because the value cannot be a literal. The Paper design picks
+      neutral-500, which is correct on the light page and would sink the shape
+      into the background on the dark one: `colorTint` is a per-channel colour
+      burn, so a DARK tint darkens the metal and a LIGHT tint brightens it.
+      Light therefore burns dark on a light ground and dark burns light on a
+      dark ground — the same "step away from the page" rule --background-hover
+      follows, applied to a shape instead of a surface.
+    */
+    --shader-tint: var(--neutral-500);
 
     /*
       ---- 3. ALIASES (the Tailwind names components actually use) ----
@@ -216,6 +230,8 @@
     --text-secondary: var(--neutral-300);
     --text-alternate: var(--neutral-800);
     --text-interactive: var(--neutral-100);
+    /* Burns light on the dark page — see the note in :root. */
+    --shader-tint: var(--neutral-300);
 }
 
 @theme inline {
@@ -874,6 +890,29 @@
   itself draws behind the dots. A failed context leaves a quiet blank band
   rather than a hole in the page.
 */
+/*
+  Hero shader — the metaball beside the headline, in place of the grey
+  placeholder that used to sit there.
+
+  No border and no background, unlike every other media surface here. That is
+  the design: `colorBack` is transparent, so the shape sits directly on the
+  page ground rather than inside a box, and a rule around it would put a frame
+  around empty space.
+
+  It keeps the placeholder's 16/10 aspect rather than the design file's fixed
+  300px height, so the hero column behaves at every width exactly as it does
+  today — at the 472px desktop column the two agree to within 5px.
+
+  The consequence of having no surface: with JS off or WebGL unavailable this
+  is blank rather than grey. That is a deliberate trade for the borderless
+  look — the box still occupies its space, so nothing reflows.
+*/
+.hero-shader {
+  aspect-ratio: 16 / 10;
+  width: 100%;
+}
+.hero-shader canvas { display: block; }
+
 .halftone-band {
   width: 100%;
   height: 140px;
