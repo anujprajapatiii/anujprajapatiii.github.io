@@ -17,16 +17,15 @@ function isActive(href: string) {
         to the right; below --bp-md the nav wraps to its own row and the
         toggle stays pinned to the right edge. See global.css .site-nav. */}
     <div class="site-nav">
-      <a href="/" class="wordmark transition-colors hover:text-accent">
+      {/* No colour, no hover, no transition here — the wordmark and the nav
+          links are both named in the INTERACTION block in global.css, which is
+          the only place on the site an interactive state is written. */}
+      <a href="/" class="wordmark">
         {siteConfig.name}
       </a>
       <nav class="site-nav__links" aria-label="Main navigation">
         {siteConfig.nav.map((item) => (
-          <a
-            href={item.href}
-            aria-current={isActive(item.href) ? "page" : undefined}
-            class="text-muted-foreground transition-colors hover:text-accent aria-[current=page]:text-foreground"
-          >
+          <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
             {item.label}
           </a>
         ))}

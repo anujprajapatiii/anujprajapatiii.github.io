@@ -625,46 +625,28 @@
   Hover follows the site rule in every variant: contrast goes UP, and the
   properties that move all move together, so the control reads as one object.
 */
+/*
+  SHAPE ONLY. Colour and motion for all three variants live in the INTERACTION
+  block at the end of this file — that is where a button says what its channels
+  rest at, and it is the only place a hover is written.
+
+  `border-width` / `border-style` as longhands, deliberately NOT `border: 1px
+  solid transparent`. The shorthand also sets border-color, so it would fight
+  the rule channel; it only worked before because the interaction block happens
+  to come later. Longhands make the split explicit and survive a reorder.
+*/
 .btn {
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-2xs);
   padding: var(--spacing-2xs) var(--spacing-sm);
-  border: 1px solid transparent;
+  border-width: 1px;
+  border-style: solid;
   font-size: var(--text-small);
   line-height: var(--text-small--line-height);
-  text-decoration: none;
+  text-decoration-line: none;
   /* <button> does not get the hand cursor for free the way <a href> does. */
   cursor: pointer;
-  transition: color 150ms, background-color 150ms, border-color 150ms;
-}
-
-.btn--primary {
-  background: var(--background-alternate);
-  border-color: var(--background-alternate);
-  color: var(--text-alternate);
-}
-/*
-  Surface and border move together. Colouring only the background would leave
-  the old border ringing the new fill for the length of the transition.
-*/
-.btn--primary:hover {
-  background: var(--background-alternate-hover);
-  border-color: var(--background-alternate-hover);
-}
-
-/*
-  The same three properties the interactive table row moves, for the same
-  reason: border, surface and text together read as one object lifting.
-*/
-.btn--secondary {
-  border-color: var(--border);
-  color: var(--text-primary);
-}
-.btn--secondary:hover {
-  background: var(--background-hover);
-  border-color: var(--border-hover);
-  color: var(--accent);
 }
 
 /*
@@ -677,25 +659,24 @@
   rather than written out again — a case-study `<a>` cannot carry a class, the
   same problem `.prose table` has. They join at the variant and not at `.btn`
   precisely because the base is a box and a prose link is not.
+
+  `text-decoration-line`, not the `text-decoration` shorthand: the shorthand
+  resets text-decoration-color, which is the underline channel. Written the old
+  way, adding these selectors to the interaction list made every underline on
+  the site vanish — valid CSS, green build, no underlines.
 */
 .btn--link,
 .prose a {
-  color: var(--text-primary);
-  text-decoration: underline;
+  text-decoration-line: underline;
   text-underline-offset: var(--spacing-3xs);
-  transition: color 150ms;
 }
 .btn--link {
   display: inline;
   padding: 0;
-  border-color: transparent;
+  border-width: 0;
   /* The base pins --text-small, which is right for a box and wrong for text:
      a link dropped into a body paragraph would shrink mid-sentence. */
   font-size: inherit;
-}
-.btn--link:hover,
-.prose a:hover {
-  color: var(--accent);
 }
 
 /*
@@ -821,7 +802,17 @@
   font-size: var(--text-small);
   line-height: var(--text-small--line-height);
 }
-.info-box__row + .info-box__row { border-top: 1px solid var(--border); }
+/*
+  Longhands, not `border-top: 1px solid var(--border)`. The shorthand sets
+  border-top-color, and at (0,2,0) it outranked the interaction list's (0,1,2)
+  at rest but LOST to the lift's (0,2,2) — so the divider sat correct until you
+  pointed at it and then vanished. Valid CSS, green build, invisible in review.
+  Width and style here; the colour is the row's rule channel.
+*/
+.info-box__row + .info-box__row {
+  border-top-width: 1px;
+  border-top-style: solid;
+}
 
 /*
   Theme toggle icons. The button shows the CURRENT appearance — sun in light,
@@ -834,6 +825,22 @@
 .theme-toggle__moon { display: none; }
 .dark .theme-toggle__sun { display: none; }
 .dark .theme-toggle__moon { display: block; }
+
+/*
+  Project card — shape only. Its surface, rule and text are channels declared
+  in the INTERACTION block; what lives here is the box.
+
+  Width and style as longhands with no colour, for the same reason as .btn:
+  the colour is the rule channel, and a `border: 1px solid <colour>` shorthand
+  here would set it from the wrong place. The card previously carried
+  `border border-border bg-card` as utilities, so removing them without
+  supplying the width would have left a card with no border at all — a
+  colour with nothing to paint.
+*/
+.project-card {
+  border-width: 1px;
+  border-style: solid;
+}
 
 /*
   Media placeholder — the neutral grey stand-in for any image that does not
@@ -932,23 +939,23 @@
 }
 .on-this-page__title { margin-bottom: var(--spacing-2xs); }
 .on-this-page ul { list-style: none; }
+/*
+  Shape only — colour, the rule and the active state live in the INTERACTION
+  block. Longhands, not `border-inline-start: 2px solid var(--border)`: that
+  shorthand sets border-color and would erase the rail's rule channel, leaving
+  the 2px rule invisible.
+*/
 .on-this-page a {
   display: block;
   padding-block: var(--spacing-3xs);
   padding-inline-start: var(--spacing-xs);
-  border-inline-start: 2px solid var(--border);
+  border-inline-start-width: 2px;
+  border-inline-start-style: solid;
   font-size: var(--text-small);
   line-height: var(--text-small--line-height);
-  color: var(--muted-foreground);
-  transition: color 150ms, border-color 150ms;
 }
 /* Nested headings sit one step further in. */
 .on-this-page a[data-depth="3"] { padding-inline-start: var(--spacing-md); }
-.on-this-page a:hover { color: var(--accent); border-color: var(--border-hover); }
-.on-this-page a[aria-current="true"] {
-  color: var(--foreground);
-  border-color: var(--foreground);
-}
 
 /* Markdown prose for case-study bodies (custom, not @tailwindcss/typography) */
 .prose {
@@ -1149,6 +1156,15 @@ html.theme-switching * {
   the same way. Adding a component here is one line, not four rules.
 */
 :is(
+  .btn,
+  .prose a,
+  .project-card,
+  .wordmark,
+  .site-nav__links a,
+  .site-footer a,
+  .theme-toggle,
+  .on-this-page a,
+  .info-box a,
   .data-table--interactive tbody tr
 ) {
   color:                 var(--lift-text,    currentColor);
@@ -1178,6 +1194,130 @@ html.theme-switching * {
 }
 
 /* ---- Per-element declarations: VALUES only, never mechanism ---- */
+
+/*
+  FURNITURE — the header nav, the footer, the theme toggle, the rail. It frames
+  the content, so it rests quiet and lifts to full contrast.
+
+  It owns two channels: text and underline. The underline is declared here and
+  painted transparent at rest, so hover reveals it. That is the point of having
+  a decoration CHANNEL rather than a decoration rule: text-decoration never
+  affects layout, so a link can grow one on hover without shifting a pixel of
+  the header. These links previously moved colour alone, which was the weakest
+  hover on the site — a nav item drifting from one grey to a slightly darker
+  grey. Per Anuj's review.
+*/
+:is(.site-nav__links, .site-footer, .on-this-page) a,
+.theme-toggle {
+  --lift-text: var(--text-secondary);
+  text-decoration-line: underline;
+  text-underline-offset: var(--spacing-3xs);
+}
+/* The site's name is not furniture: it rests at full contrast like a heading
+   and still lifts. Previously it had no resting colour at all and inherited
+   one — the loud level was never written down anywhere in this codebase. */
+.wordmark { --lift-text: var(--text-primary); }
+
+/*
+  ACTIVE STATE — "you are here", in both navigation systems.
+
+  Written as a change to the RESTING value, never to `color`. That is what
+  makes it composable: the lift reads --lift-*-on, which this never touches, so
+  the current item still responds to the pointer. Written the obvious way it
+  did not — `.hover:text-accent:hover` and `.aria-[current=page]:text-foreground`
+  were both specificity (0,2,0) with the aria rule emitted later, so hovering
+  the current page's nav link did nothing at all. The rail had the same
+  collision one line apart, and since scroll-spy always marks one item active,
+  there was always exactly one dead link in it.
+
+  Matched on the bare attribute because the two systems disagree on its value:
+  the nav writes aria-current="page", the rail writes "true".
+*/
+:is(.site-nav__links, .on-this-page) a[aria-current] {
+  --lift-text: var(--text-primary);
+}
+.on-this-page a[aria-current] { --lift-rule: var(--text-primary); }
+
+/* The rail's 2px rule is its own channel; the border longhands that draw it
+   are up in the .on-this-page block. */
+.on-this-page a {
+  --lift-rule: var(--border);
+  --lift-rule-on: var(--border-hover);
+}
+
+/*
+  LINKS IN RUNNING TEXT rest at full contrast — a link must never be dimmer
+  than the sentence around it — and their underline tracks the text at both
+  ends, which is exactly how they already looked. Anuj's call: leave prose
+  links alone.
+*/
+.btn--link,
+.prose a {
+  --lift-text: var(--text-primary);
+  --lift-line: currentColor;
+}
+
+/* BUTTONS. Secondary grows a surface out of nothing on hover — the same
+   pattern as the table row, which is why neither declares --lift-surface. */
+.btn--secondary {
+  --lift-text: var(--text-primary);
+  --lift-rule: var(--border);
+  --lift-rule-on: var(--border-hover);
+  --lift-surface-on: var(--background-hover);
+}
+/* Primary is the one control whose LABEL deliberately holds still: the surface
+   moves under it. Pinning --lift-text-on to the resting value says that, where
+   omitting it would silently inherit the shared destination. */
+.btn--primary {
+  --lift-text: var(--text-alternate);
+  --lift-text-on: var(--text-alternate);
+  --lift-surface: var(--background-alternate);
+  --lift-surface-on: var(--background-alternate-hover);
+  --lift-rule: var(--background-alternate);
+  --lift-rule-on: var(--background-alternate-hover);
+}
+
+/*
+  THE PROJECT CARD. It owns three channels and used to move one and a half: the
+  border changed, the title changed, the surface never did, and the year and
+  description sat still while the title lifted — so the card came forward in
+  pieces. Now the whole card is one object.
+*/
+.project-card {
+  --lift-text: var(--text-primary);
+  --lift-surface: var(--card);
+  --lift-surface-on: var(--background-hover);
+  --lift-rule: var(--border);
+  --lift-rule-on: var(--border-hover);
+}
+/*
+  The thumbnail's frame is part of the card's frame. It kept --border while the
+  card moved to --border-hover, so a hovered card showed two different border
+  colours a few pixels apart.
+*/
+.project-card :is(img, .media-placeholder) { transition: var(--lift-transition); }
+.project-card {
+  @variant lift-on {
+    & :is(img, .media-placeholder) { border-color: var(--border-hover); }
+    & .project-card__meta { color: var(--text-primary); }
+  }
+}
+.project-card__meta { color: var(--text-secondary); }
+
+/*
+  The hero info box takes the table's border, padding and type, so it takes the
+  table's lift too. It moved one property before, on a row that sits inside a
+  ruled box claiming to be "in the same family" as the table.
+*/
+.info-box a {
+  --lift-text: var(--text-secondary);
+  --lift-surface-on: var(--background-hover);
+  /* Its divider is a rule it owns, so it lifts like every other rule. Without
+     these two the channel painted it transparent on hover — see the longhand
+     note on .info-box__row above. */
+  --lift-rule: var(--border);
+  --lift-rule-on: var(--border-hover);
+}
 
 /*
   The interactive table row. Rests muted so the lift has somewhere to come
