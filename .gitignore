@@ -16,3 +16,6 @@ node_modules/
 
 # editor
 .idea/
+
+# personal Claude Code settings (e.g. output style picked with /style)
+.claude/settings.local.json
