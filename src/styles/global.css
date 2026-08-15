@@ -363,6 +363,18 @@
     --container-measure: 36rem;
     /* Width of the on-this-page rail. See .sidebar-layout. */
     --rail-width: 12rem;
+    /*
+      Height of the sticky header, measured rather than guessed — two things
+      have to clear it: the landing offset for in-page anchors, and the top of
+      the on-this-page rail.
+
+      It is a literal because CSS cannot ask an element how tall it is, and it
+      has two values because the header has two shapes: below --bp-md the nav
+      wraps onto its own row. Measured at 64px and 101px respectively, with
+      the border gone. If the header's padding or the nav's type ever changes,
+      re-measure — nothing here will tell you it drifted.
+    */
+    --header-height: 101px;
 
     /* ---- TYPE SCALE (one font) ----
        Each step carries its own line-height and weight, so `text-h1` alone
@@ -444,9 +456,13 @@
   @media (prefers-reduced-motion: no-preference) {
     html { scroll-behavior: smooth; }
   }
-  /* Landing offset for those jumps — a heading pinned to the very top edge
-     reads as though the section above it is missing. */
-  :is(h2, h3, h4)[id] { scroll-margin-top: var(--spacing-xl); }
+  /* Landing offset for those jumps. It used to be one flat step, on the
+     reasoning that a heading pinned to the very top edge reads as though the
+     section above it is missing. With the header sticky it has a second job:
+     land BELOW the floating bar, or the jump puts the heading underneath it. */
+  :is(h2, h3, h4)[id] {
+    scroll-margin-top: calc(var(--header-height) + var(--spacing-md));
+  }
   /* Wrapping defaults, set once. `balance` evens out short multi-line
      headings; `pretty` keeps a lone word off a paragraph's last line. */
   h1, h2, h3, h4, h5, h6 {
@@ -568,7 +584,72 @@
   ===== Homepage component styling =====
   Typography / colour / component-internal details only (no page layout).
 */
-.site-header { border-bottom: 1px solid var(--border); padding-block: var(--spacing-sm); }
+/*
+  STICKY HEADER, TRANSLUCENT, NO DIVIDER.
+
+  It is a floating layer that content passes under rather than a strip the
+  page reserves. The separation comes from the material — a blur plus a
+  partly-transparent ground — instead of a 1px rule, which is why the border
+  is gone rather than merely hidden: with the blur doing the work a line under
+  it reads as belt-and-braces.
+
+  The ground is mixed FROM the page token, not written as a literal rgba, so
+  it follows the theme like everything else: 72% of --background-primary over
+  nothing. The opaque declaration above it is the fallback for engines without
+  color-mix, which would otherwise land on `transparent` and leave the nav
+  floating over the page with nothing behind it.
+
+  saturate() is the part that makes this read as Apple's material rather than
+  frosted plastic: it enriches whatever shows through. On a palette this
+  neutral it does almost nothing to the page itself — greys have no chroma to
+  lift — and it earns its place only where the hero shader and the halftone
+  band pass underneath.
+
+  z-index because the on-this-page rail is also positioned and comes LATER in
+  the document; without one, paint order would put the rail over the header.
+  It is the only z-index in the codebase, which is worth keeping true.
+*/
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding-block: var(--spacing-sm);
+  background: var(--background-primary);
+  background: color-mix(in srgb, var(--background-primary) 72%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+}
+/*
+  Three ways this degrades, all to the same place: an opaque bar.
+
+  A blur that does not composite is worse than no blur — the header would be
+  72% transparent with content legible straight through the nav.
+*/
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header { background: var(--background-primary); }
+}
+/* The user has asked the OS for less see-through UI. Honour it literally. */
+@media (prefers-reduced-transparency: reduce) {
+  .site-header {
+    background: var(--background-primary);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+/*
+  The one case that gets its border back. Under prefers-contrast the material
+  is the wrong tool — a defined edge beats an implied one — so the divider
+  returns deliberately, for the users who asked for exactly that.
+*/
+@media (prefers-contrast: more) {
+  .site-header {
+    background: var(--background-primary);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border-bottom: 1px solid var(--border);
+  }
+}
+@media (min-width: 38rem) { :root { --header-height: 64px; } }
 .site-footer { border-top: 1px solid var(--border); padding-block: var(--spacing-lg); }
 /*
   The wordmark is body type, not a heading: same size and now the same weight,
@@ -1076,9 +1157,13 @@
   .on-this-page {
     display: block;
     position: sticky;
-    top: var(--spacing-xl);
+    /* Sticks below the header, not under it — the two are the only sticky
+       things on the site and they would otherwise occupy the same strip. */
+    top: calc(var(--header-height) + var(--spacing-md));
     align-self: start;
-    max-height: calc(100vh - var(--spacing-2xl));
+    /* The header now eats the top of the viewport, so the rail's usable
+       height is what is left after it. */
+    max-height: calc(100dvh - var(--header-height) - var(--spacing-2xl));
     overflow-y: auto;
   }
 }
