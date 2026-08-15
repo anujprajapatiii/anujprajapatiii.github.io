@@ -69,6 +69,7 @@ When an idea comes up that is out of scope for the current task, add it to
 | Path | Purpose |
 | --- | --- |
 | `agent-os/` | Strategy, system map, plans, conventions, learnings, parking lot |
+| `.claude/` | Claude Code config: output styles, `/style` command, dev launch config |
 | `.reference/` | User-provided briefs, screenshots, and design references |
 | `.github/workflows/deploy.yml` | GitHub Pages deployment |
 | `public/images/` | Static image assets |

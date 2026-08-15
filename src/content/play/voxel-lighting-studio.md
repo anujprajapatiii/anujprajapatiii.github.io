@@ -1,6 +1,6 @@
 ---
 title: Voxel Lighting Studio
-description: A browser tool for building voxel scenes in a 16×16×16 grid and studying how light changes them — sun angle, colour temperature, shadow softness and sky, all adjustable live.
+description: A browser tool for building voxel scenes in a 16×16×16 grid, then watching light change them. Sun angle, colour temperature, shadow softness and sky, all adjustable live.
 role: Experiment
 year: "2026"
 skills:
@@ -17,52 +17,64 @@ sortOrder: 0
 draft: false
 ---
 
-A small tool for placing blocks in a 16×16×16 grid — but the blocks are
-scaffolding. The point is the lighting rig sitting behind them.
+The lighting rig is the point. The blocks are only there to catch the light.
+
+Place voxels in a **16×16×16** grid, then move the sun and watch the scene
+change character.
 
 ## Same scene, different light
 
-Nothing changes between these two except the lighting. Golden Hour runs the sun
-warm at 2650K with tight, dark shadows:
+Nothing changes between these two images except the light.
+
+Golden Hour runs the sun warm at **2650K**, with tight, dark shadows:
 
 ![The voxel scene lit at golden hour, warm and low](/images/play/voxel-lighting-studio/golden-hour.jpg)
 
-Dusk drops the intensity, pushes the temperature to 8500K and softens the
+Dusk drops the intensity, pushes the temperature to **8500K** and softens the
 shadows until the whole model turns blue and quiet:
 
 ![The same voxel scene at dusk, cool and blue](/images/play/voxel-lighting-studio/dusk.jpg)
 
-That gap — same geometry, completely different mood — is the entire reason the
-tool exists.
+Same geometry, completely different mood. That gap is the reason the tool
+exists.
 
 ## The controls
 
-The sun is driven by time of day, azimuth and midday height, with its own colour
-temperature and intensity. Shadows have softness and darkness of their own. The
-sky contributes separately again — sky light, flat ambient, haze and blueness —
-alongside ambient occlusion, camera and stage panels.
+**Sun.** Time of day, compass direction and midday height, plus its own colour
+temperature and intensity.
 
-Four presets sit under the whole thing: **Honey**, **Golden Hour**, **Ember** and
-**Dusk**, plus a **Shuffle** for when you want to be surprised.
+**Shadows.** Softness and darkness, set separately from the sun.
+
+**Sky.** Sky light, flat ambient, haze and blueness, all contributing on their
+own.
+
+**Stage.** Ambient occlusion (shadow that gathers in crevices), camera and
+stage panels.
+
+Four presets sit under the whole thing: **Honey**, **Golden Hour**, **Ember**
+and **Dusk**, plus a **Shuffle** for when you want to be surprised.
 
 ## Under the hood
 
-Built with three.js. Every voxel in the grid renders as a single instanced
-mesh, so the whole scene costs one draw call no matter how full it gets. The
-cubes have rounded edges, which sounds cosmetic but does most of the work: the
-highlight running along each corner is what makes a stack of boxes read as
-solid objects rather than flat shapes.
+Built with three.js.
 
-Colour is handled with ACES filmic tone mapping against a physically-based sky,
-so moving the sun changes the atmosphere rather than just the brightness.
+Every voxel renders as a single instanced mesh (one batched GPU call), so the
+whole scene costs one draw call no matter how full it gets.
 
-There's no backend. The scene *and* every lighting value are encoded into the
-URL, so **Copy link** hands you a permalink that reopens exactly what you were
-looking at.
+The cubes have rounded edges. That sounds cosmetic, but it does most of the
+work: the highlight running along each corner is what makes a stack of boxes
+read as solid objects rather than flat shapes.
+
+Colour runs through ACES filmic tone mapping (film-style highlight rolloff)
+against a physically-based sky, so moving the sun changes the atmosphere, not
+just the brightness.
+
+There is no backend. The scene and every lighting value encode into the URL, so
+**Copy link** hands you a permalink that reopens exactly what you were looking
+at.
 
 ## Generators
 
-Building by hand gets old when what you actually want is something to light, so
-there are six generators — **Clusters**, **Caves**, **Terrain**, **Ruins**,
-**Isles** and **Crystals** — that fill the volume with something worth
-photographing.
+Building by hand gets old when what you want is simply something to light. Six
+generators fill the volume for you: **Clusters**, **Caves**, **Terrain**,
+**Ruins**, **Isles** and **Crystals**.
