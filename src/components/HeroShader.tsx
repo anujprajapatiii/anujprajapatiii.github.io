@@ -20,9 +20,15 @@ import { LiquidMetal } from "@paper-design/shaders-react";
 /*
   The frame Paper was parked on when the composition was approved. It is the
   still that reduced-motion users get, so it has to be a frame worth looking
-  at rather than frame 0 — which is an undifferentiated blob.
+  at rather than frame 0 — which is an undifferentiated blob. It also sets the
+  phase the animation starts from for everyone else.
+
+  Re-picked in Paper: the composition is now a large blob with a small one
+  breaking away below it, rather than the single mass frame 56584 sat on.
+  Every other parameter is untouched — this is a moment in the same shader,
+  not a different shader.
 */
-const APPROVED_FRAME = 56584;
+const APPROVED_FRAME = 637260.5;
 
 export default function HeroShader() {
   /*

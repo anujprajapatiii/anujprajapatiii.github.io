@@ -344,7 +344,10 @@
     --spacing-gutter: 1.5rem;
     --spacing-section: clamp(3rem, 8vw, 6rem);
     --spacing-stack: 1rem;
-    --spacing-card: 1.5rem;
+    /* Card interior padding. 16px since the media went full-bleed: the card
+       itself has no padding any more, so this describes the text block, which
+       is the only part of the card left with an interior. */
+    --spacing-card: 1rem;
     --spacing-grid: 1rem;
 
     /* ---- CONTAINERS ----
@@ -1062,6 +1065,13 @@
   aspect-ratio: 16 / 10; width: 100%;
   background: var(--muted); border: 1px solid var(--border);
 }
+/*
+  Inside a card the media is full-bleed, so the card's own border frames it and
+  its border would be a second line 1px inside the first. Scoped rather than
+  removed from the base rule: standing alone on a case-study hero the
+  placeholder still needs a frame of its own.
+*/
+.project-card .media-placeholder { border: 0; }
 
 /*
   Halftone band — the shader surface under the work cards. Designed in Paper;
@@ -1526,13 +1536,13 @@
   --lift-rule-on: var(--border-hover);
 }
 /*
-  The thumbnail's frame is part of the card's frame. It kept --border while the
-  card moved to --border-hover, so a hovered card showed two different border
-  colours a few pixels apart.
+  The thumbnail used to lift its own border with the card's, because a hovered
+  card otherwise showed two different border colours a few pixels apart. The
+  media is full-bleed now and has no border to lift — the card's frame is the
+  only one — so that reach is gone and the card's own rule does the work.
 */
 .project-card {
   @variant lift-on {
-    & :is(img, .media-placeholder) { border-color: var(--border-hover); }
     & .project-card__meta { color: var(--text-primary); }
   }
 }

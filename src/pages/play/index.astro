@@ -27,7 +27,6 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
               id={item.id}
               title={item.data.title}
               description={item.data.description}
-              year={item.data.year}
               thumbnail={item.data.thumbnail}
               base="/play"
             />

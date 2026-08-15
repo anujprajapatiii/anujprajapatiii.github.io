@@ -1,54 +1,57 @@
 ---
 /*
-  The card shows title, year and description only. Role lives on the case
-  study itself, in the Role/Year/Skills metadata — repeating it here as a
-  subtitle added a third text block to a card that only needs two.
+  The card shows title and description. Role lives on the case study itself,
+  in the Role/Year/Skills metadata.
 
-  Spacing comes from the named scale, never raw Tailwind steps: `p-card` is
-  the semantic role for card interior padding.
+  THE MEDIA BLEEDS TO THE CARD'S EDGES. The card has no padding of its own —
+  the image runs full-bleed to the border and only the text block is inset.
+  That is why `p-card` moved from the card to the body: it is still the
+  semantic role for card interior padding, it just now describes the one part
+  of the card that has an interior. The token moved from 24px to 16px with it.
+
+  The image also loses its own border. It used to carry one because it sat
+  inset on the card's surface and needed its own frame; flush to the edges the
+  CARD's border already frames it, and a second line 1px inside the first read
+  as a double rule.
+
+  The year is gone. It was a third piece of metadata on a card that carries
+  two, and the case study's own Role/Year/Skills table is where it belongs.
 */
 interface Props {
   id: string;
   title: string;
   description: string;
-  year?: string;
   thumbnail?: string;
   base?: string;
 }
 
-const { id, title, description, year, thumbnail, base = "/work" } = Astro.props;
+const { id, title, description, thumbnail, base = "/work" } = Astro.props;
 ---
 
 {/*
   `.project-card` is named in the INTERACTION block in global.css: surface,
-  rule and text all lift together from there, and the thumbnail's frame moves
-  with the card's. No group modifier, no hover utility and no colour-transition
+  rule and text all lift together from there. No group modifier, no hover
   utility here — the card used to move its border and its title while its
-  surface, its year and its description stood still, so it came forward in
-  pieces. (Class names are described rather than spelled: Tailwind scans
-  comments in src/, so writing one out would re-generate the rule.)
+  surface and its description stood still, so it came forward in pieces.
+  (Class names are described rather than spelled: Tailwind scans comments in
+  src/, so writing one out would re-generate the rule.)
 
-  `.project-card__meta` marks the two elements that rest quiet and come up with
+  `.project-card__meta` marks the element that rests quiet and comes up with
   the card, so the whole thing reads as one object.
 */}
-<a href={`${base}/${id}`} class="project-card block p-card">
+<a href={`${base}/${id}`} class="project-card block">
   {thumbnail ? (
     <img
       src={thumbnail}
       alt=""
       loading="lazy"
-      class="mb-sm aspect-[16/10] w-full border border-border object-cover"
+      class="aspect-[16/10] w-full object-cover"
     />
   ) : (
-    <div class="media-placeholder mb-sm"></div>
+    <div class="media-placeholder"></div>
   )}
-  <div class="flex items-baseline justify-between gap-sm">
-    <h3 class="text-h3">
-      {title}
-    </h3>
-    {year && (
-      <span class="project-card__meta shrink-0 text-small tabular-nums">{year}</span>
-    )}
+  <div class="p-card">
+    <h3 class="text-h3">{title}</h3>
+    <p class="project-card__meta mt-xs text-small">{description}</p>
   </div>
-  <p class="project-card__meta mt-xs text-small">{description}</p>
 </a>
