@@ -99,24 +99,22 @@
       .forEach((button) => button.setAttribute("aria-label", label));
   }
 
-  /* theme-switching suppresses element-level transitions (see global.css) so
-     the flip is atomic; the two rAFs keep it on until the new state has
-     painted. The View Transition then crossfades old/new snapshots. */
-  function applyTheme(theme: Theme) {
-    const root = document.documentElement;
-    root.classList.add("theme-switching");
-    render(theme);
-    requestAnimationFrame(() =>
-      requestAnimationFrame(() => root.classList.remove("theme-switching")),
-    );
-  }
-
+  /*
+    `render` is called directly. There used to be an applyTheme wrapper that
+    added a `theme-switching` class and held it across two rAFs, so that
+    element-level hover transitions could not chase the flipping colours
+    underneath the View Transition's snapshot. Nothing transitions any more —
+    the lift is instant, see the INTERACTION block in global.css — so the
+    class guarded nothing and the frame-juggling that held it on is gone with
+    it. The crossfade itself is unaffected: it works off snapshots, not off
+    element transitions.
+  */
   function withTransition(theme: Theme) {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!reduceMotion && document.startViewTransition) {
-      document.startViewTransition(() => applyTheme(theme));
+      document.startViewTransition(() => render(theme));
     } else {
-      applyTheme(theme);
+      render(theme);
     }
   }
 

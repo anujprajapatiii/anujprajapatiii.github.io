@@ -796,14 +796,12 @@
   be thead-to-tbody — missing it is why the first row alone once came out open
   at the top.
 
-  The transition on the cells is not decoration. `transition` does not inherit,
-  and these border rules live on the CELLS while the row carried the only
-  transition — so the fill and the text faded over 150ms while all four rules
-  snapped instantly. The row was advertised as "one object lifting" and was
-  visibly arriving in two parts.
+  The cells used to carry a fade of their own, because the CSS property does
+  not inherit: the border rules live on the CELLS while the row carried the
+  only one, so the fill and the text faded over 150ms while all four
+  rules snapped instantly and the row arrived in two parts. Nothing fades now,
+  so the whole problem is gone and the rule with it.
 */
-.data-table--interactive :is(th, td) { transition: var(--lift-transition); }
-
 .data-table--interactive tbody tr {
   @variant lift-on {
     & > * { border-color: var(--border-hover); }
@@ -863,14 +861,15 @@
   furniture links carry a decoration channel instead of a decoration rule. The
   underline is on the text span, not the anchor: the anchor is a flex
   container and would have underlined the arrow along with the title.
+
+  They appear instantly, like every other lift — see the INTERACTION block.
 */
 .row-link__text {
   text-decoration-line: underline;
   text-underline-offset: var(--spacing-3xs);
   text-decoration-color: transparent;
-  transition: var(--lift-transition);
 }
-.row-link__arrow { color: transparent; transition: var(--lift-transition); }
+.row-link__arrow { color: transparent; }
 /*
   Driven by the ROW's trigger, not the span's own — the same reach the project
   card uses for its thumbnail and meta. That matters: the row's lift-on covers
@@ -1181,15 +1180,16 @@
   @apply my-xl border-border;
 }
 
-/* Theme switching. ThemeToggle flips the theme inside a View Transition:
-   the browser crossfades a snapshot of the whole page, so every element
-   changes together. While the class is on, element-level transitions are
-   suppressed so hover transition-colors can't chase the flipping colors
-   underneath the snapshot. */
-html.theme-switching,
-html.theme-switching * {
-  transition: none !important;
-}
+/* Theme switching. ThemeToggle flips the theme inside a View Transition: the
+   browser crossfades a snapshot of the whole page, so every element changes
+   together.
+
+   A `.theme-switching` class used to be set across the flip, suppressing
+   element-level transitions so hover fades could not chase the flipping
+   colours underneath the snapshot. Nothing transitions any more, so it
+   guarded nothing; it and the two-rAF dance in ThemeToggle that held it on
+   are both gone. The crossfade below is a theme change rather than a hover,
+   and stays. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 300ms;
@@ -1202,15 +1202,24 @@ html.theme-switching * {
    UNDERLINE, its SURFACE and its RULE. It declares what each one is AT REST;
    where they move is a constant of this block. No call site gets to invent a
    hover, which is the whole point — there were twelve interactive-state
-   rules, four transition property-lists and two easing curves, and a hover
-   moved one, two or three properties depending on which element it was.
+   rules and a hover moved one, two or three properties depending on which
+   element it was.
 
-   Every interactive element transitions all four properties over one duration
-   on one curve. Where an element has no surface or no border, that channel
-   runs transparent to transparent and costs nothing. That is deliberate: the
-   property list is then IDENTICAL everywhere, so two controls side by side
-   can never again fade on different timings. A footer link and a .btn--link
-   next to each other used to run on `ease` and on cubic-bezier(.4,0,.2,1).
+   THE LIFT IS INSTANT, BY DECISION. There is no fade anywhere in this
+   system. A hover is a state, not an event: the pointer is either on the
+   object or it is not, and 150ms of fade only puts the answer behind an
+   animation. Anuj's call, and it removes a whole class of problem with it —
+   channels arriving on different timings, a fade chasing the colours during a
+   theme flip, a press needing its own duration override to feel immediate.
+
+   So do NOT reintroduce a fade here or at a call site. The tokens that
+   drove it (--lift-duration, --lift-ease, --lift-transition) are gone rather
+   than zeroed, because a duration token sitting at 0s is an invitation.
+
+   Where an element has no surface or no border, that channel still runs
+   transparent to transparent and costs nothing. That stays deliberate: the
+   declaration list is IDENTICAL everywhere, so an element's anatomy is the
+   only thing that varies.
 
    WHAT MOVES: an element lifts every channel it already owns, and the
    underline is the rule a bare link owns. Nothing grows a channel it did not
@@ -1219,8 +1228,8 @@ html.theme-switching * {
    object's anatomy, while the destinations stay shared.
 
    This block is LAST in the file on purpose: components own shape, this owns
-   colour and motion. `.btn`'s `border: 1px solid transparent` shorthand must
-   not land after the channel that colours it.
+   colour. `.btn`'s `border: 1px solid transparent` shorthand must not land
+   after the channel that colours it.
    ========================================================================== */
 
 /*
@@ -1242,21 +1251,13 @@ html.theme-switching * {
 @property --lift-rule-on    { syntax: "*"; inherits: false }
 
 /*
-  THE ONE TRANSITION. Every transition in this file is var(--lift-transition).
-  150ms on Tailwind's own curve, so the ten call sites already running that
-  curve do not change at all and the hand-written ones stop running on `ease`.
+  There is no timing token here any more — see "THE LIFT IS INSTANT"
+  above. The reduced-motion override that used to sit at this spot went with
+  it: it existed only to zero --lift-duration, and there is nothing left to
+  zero. The site's other three motion features keep their own gates —
+  scroll-behavior in @layer base, the theme crossfade and the hero shader's
+  speed both in JS — so none of them lost a guard here.
 */
-:root {
-  --lift-duration: 150ms;
-  --lift-ease: cubic-bezier(0.4, 0, 0.2, 1);
-  --lift-transition:
-    color var(--lift-duration) var(--lift-ease),
-    background-color var(--lift-duration) var(--lift-ease),
-    border-color var(--lift-duration) var(--lift-ease),
-    text-decoration-color var(--lift-duration) var(--lift-ease);
-}
-/* One token, one line, and motion is off for the whole system. */
-@media (prefers-reduced-motion: reduce) { :root { --lift-duration: 0s; } }
 
 /*
   The four triggers that produce a lift, and the ONE place the touch guard is
@@ -1312,7 +1313,6 @@ html.theme-switching * {
   background-color:      var(--lift-surface, transparent);
   border-color:          var(--lift-rule,    transparent);
   text-decoration-color: var(--lift-line,    transparent);
-  transition: var(--lift-transition);
 
   /*
     Written once; the variant compiles it into the keyboard/press branch and
@@ -1327,11 +1327,10 @@ html.theme-switching * {
     text-decoration-color: var(--lift-line-on,    currentColor);
   }
 
-  /* Press is the lift arriving instantly. One line, and it works for a bare
-     link and a boxed button alike — a surface step would have been invisible
-     on every text-only element and needed its own opt-in, i.e. a second
-     mechanism. */
-  &:active { transition-duration: 0s; }
+  /* `:active` needed a rule here once, to cancel the duration so a press felt
+     immediate while hover faded. With nothing to cancel it is redundant —
+     press is already instant because everything is. The trigger itself still
+     lives in the lift-on variant, so a press still lifts. */
 }
 
 /* ---- Per-element declarations: VALUES only, never mechanism ---- */
@@ -1441,7 +1440,6 @@ html.theme-switching * {
   card moved to --border-hover, so a hovered card showed two different border
   colours a few pixels apart.
 */
-.project-card :is(img, .media-placeholder) { transition: var(--lift-transition); }
 .project-card {
   @variant lift-on {
     & :is(img, .media-placeholder) { border-color: var(--border-hover); }
