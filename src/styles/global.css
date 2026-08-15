@@ -96,6 +96,17 @@
     --neutral-600: #21252b;
     --neutral-500: #2c323a;
     --neutral-400: #434b56;
+    /*
+      Added to close the scale's one real gap. Measured in L*, every adjacent
+      pair on this ramp is 19.9 apart or less except 300 → 400, which is 34.4 —
+      a hole wide enough that no gentle border hover was expressible in light
+      mode. This sits at L* 48.9, the midpoint.
+
+      It also turns out to be the one value that reads on BOTH grounds: 4.66:1
+      on a white card, 3.30:1 on a dark one. That is why --border-hover no
+      longer needs a dark re-map.
+    */
+    --neutral-350: #6d7580;
     --neutral-300: #99a1ac;
     --neutral-200: #d3d7dd;
     --neutral-100: #f6f7f8;
@@ -133,19 +144,39 @@
     */
     --background-alternate-hover: var(--neutral-black);
     /*
-      Hover moves AWAY from the page, not toward the middle of the palette:
-      white on light, neutral-900 on dark (see .dark below). It was
-      neutral-200, a step toward the centre, which put a heavy grey band under
-      a hovered row. Light goes all the way to white; dark stops one step
-      short of black, which sat too far under the page and read as a hole
-      rather than a lift. Per Anuj's review.
+      FORWARD IS LIGHTER, IN BOTH THEMES. A hovered surface always brightens:
+      white on the light page, neutral-700 on the dark one. This replaces
+      "move away from the page in either direction", which sounded symmetrical
+      and was not — it sent light hovers up and dark hovers down, so the same
+      gesture meant "coming toward you" in one theme and "sinking" in the
+      other. One direction sitewide is what makes a hover read as a lift.
+
+      For elements that rest ON the page: rows, secondary buttons, info-box
+      rows. Surfaces that already sit above the page use the token below.
     */
     --background-hover: var(--neutral-white);
     /* Added per Anuj's review for card surfaces that sit one subtle step
        off the page, not a full secondary step. */
     --background-elevated: var(--neutral-white);
+    /*
+      A HOVER NEVER CROSSES THE PAGE. An elevated surface continues in the
+      direction it already sits, so a card cannot flip from raised to sunken
+      under the pointer — which is exactly what it used to do in dark mode:
+      resting at neutral-700, 4.4 L* above the page, and hovering to
+      neutral-900, 2.9 L* below it. The card punched a hole in the page.
+
+      Light has no headroom left — the card already rests at white — so there
+      the surface holds and the border and text carry the lift.
+    */
+    --background-elevated-hover: var(--neutral-white);
     --border-primary: var(--neutral-300);
-    --border-hover: var(--neutral-800);
+    /*
+      One value, both themes, because neutral-350 is the only step that clears
+      3:1 against a white card AND a dark one. It replaces a pair that swung
+      58.8 L* in light and 45.4 in dark — the loudest channel in the system by
+      a factor of four, on an element whose text channel moves 10.
+    */
+    --border-hover: var(--neutral-350);
     /*
       Text colour is a hierarchy of prominence, never of hue — the Apple
       label model (label / secondary label), all neutral. Two readable
@@ -213,18 +244,25 @@
     --background-secondary: var(--neutral-600);
     --background-alternate: var(--neutral-100);
     --background-alternate-hover: var(--neutral-white);
-    --background-hover: var(--neutral-900);
+    /* Brightens, like light mode's — see "forward is lighter" in :root. A
+       hovered row now lands exactly where a resting card sits, so the two
+       kinds of raised surface agree on what one step up looks like. */
+    --background-hover: var(--neutral-700);
     --background-elevated: var(--neutral-700);
+    /* One step further up, and still 7.3 L* clear of the page. */
+    --background-elevated-hover: var(--neutral-600);
     --border-primary: var(--neutral-500);
     /*
-      Deliberately softer than light mode's equivalent. Light hovers to
-      neutral-800, a dark line on a light ground; the mirror of that is
-      neutral-100, which at near-white on near-black read as a hard outline
-      rather than a highlight. A dark ground needs less amplitude to register
-      a change, so dark stops two steps short at neutral-300 — 8.05:1 against
-      the hovered row, against 1.62:1 for a resting rule. Light is unchanged.
+      --border-hover is deliberately NOT re-mapped here. It used to be, and the
+      pair was the loudest thing in the system: neutral-800 in light, a
+      near-black line on a white card, and neutral-300 in dark. Each had been
+      tuned against the other theme's excess rather than against a target, so
+      the two never agreed on how much a hover is worth.
+
+      neutral-350 replaces both. It is the one step that clears 3:1 on a white
+      card and on a dark one, so the border says the same thing in both themes
+      and there is one number to change instead of two to keep in sync.
     */
-    --border-hover: var(--neutral-300);
     /* primary 12.55:1, secondary 6.95:1, interactive 16.90:1 on the dark bg */
     --text-primary: var(--neutral-200);
     --text-secondary: var(--neutral-300);
@@ -258,6 +296,7 @@
     --color-background-alternate-hover: var(--background-alternate-hover);
     --color-background-hover: var(--background-hover);
     --color-background-elevated: var(--background-elevated);
+    --color-background-elevated-hover: var(--background-elevated-hover);
     --color-border-primary: var(--border-primary);
     --color-border-hover: var(--border-hover);
     --color-text-primary: var(--text-primary);
@@ -1325,7 +1364,12 @@ html.theme-switching * {
 .project-card {
   --lift-text: var(--text-primary);
   --lift-surface: var(--card);
-  --lift-surface-on: var(--background-hover);
+  /*
+    The elevated hover, not the on-the-page one. A card already sits a step
+    above the page, so it lifts from where it is; --background-hover would
+    send it to where a ROW goes, which in dark mode is underneath the page.
+  */
+  --lift-surface-on: var(--background-elevated-hover);
   --lift-rule: var(--border);
   --lift-rule-on: var(--border-hover);
 }
