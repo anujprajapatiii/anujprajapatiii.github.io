@@ -822,6 +822,69 @@
 .data-table a { color: inherit; }
 
 /*
+  WHOLE-ROW LINK. One anchor in the first cell, stretched over the entire row
+  by a transparent ::after, so pointing anywhere in the row — Role, Year, the
+  gaps between — hits the same link.
+
+  `position: relative` on a <tr> is the load-bearing part, and it is the thing
+  that used to be unreliable. Verified here rather than assumed: with it, an
+  absolutely-positioned child of the cell measures exactly the row's box;
+  without it the child escapes to the nearest positioned ancestor and spans
+  the whole table. A row is a real containing block in current engines.
+
+  The alternative — an anchor inside all three cells — was rejected. Filling
+  every cell means three tab stops and three announcements for one
+  destination, and hiding the spares with aria-hidden would take the Role and
+  Year values away from screen readers entirely.
+
+  The trade: text in the covered cells can no longer be selected, because the
+  overlay is above it. For five short experiment titles that is worth the
+  whole row being a target.
+*/
+.data-table--interactive tbody tr { position: relative; }
+.row-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+.row-link::after { content: ""; position: absolute; inset: 0; }
+
+/*
+  The arrow sits at the Title column's right edge rather than trailing the
+  text, so it forms one vertical lane down the table instead of stepping in
+  and out with each title's length. Same reason the hero's Connect row pushes
+  its arrow to the far edge of the box.
+*/
+.row-link__arrow { margin-inline-start: auto; }
+
+/*
+  Both signals are painted transparent AT REST and revealed by the row's lift,
+  so neither one moves a pixel of layout when it appears — the same reason the
+  furniture links carry a decoration channel instead of a decoration rule. The
+  underline is on the text span, not the anchor: the anchor is a flex
+  container and would have underlined the arrow along with the title.
+*/
+.row-link__text {
+  text-decoration-line: underline;
+  text-underline-offset: var(--spacing-3xs);
+  text-decoration-color: transparent;
+  transition: var(--lift-transition);
+}
+.row-link__arrow { color: transparent; transition: var(--lift-transition); }
+/*
+  Driven by the ROW's trigger, not the span's own — the same reach the project
+  card uses for its thumbnail and meta. That matters: the row's lift-on covers
+  hover, focus-visible, focus-within, active and the touch guard in one place,
+  so tabbing to the link reveals both signals exactly as pointing at it does.
+*/
+.data-table--interactive tbody tr {
+  @variant lift-on {
+    & .row-link__text { text-decoration-color: currentColor; }
+    & .row-link__arrow { color: inherit; }
+  }
+}
+
+/*
   A table is the one thing here that legitimately cannot be made narrower —
   its columns are its meaning. It scrolls inside its own container so the
   page itself never scrolls sideways. `.table-scroll` wraps component tables;

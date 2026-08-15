@@ -109,7 +109,18 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
           <tbody>
             {play.map((item) => (
               <tr>
-                <td><a href={`/play/${item.id}`}>{item.data.title}</a></td>
+                <td>
+                  {/*
+                    One anchor per row, not three. It stretches over the whole
+                    row from CSS (see .row-link), so the Role and Year cells are
+                    clickable without existing as extra links — which would be
+                    three tab stops and three announcements for one destination.
+                  */}
+                  <a class="row-link" href={`/play/${item.id}`}>
+                    <span class="row-link__text">{item.data.title}</span>
+                    <span class="row-link__arrow" aria-hidden="true">&rarr;</span>
+                  </a>
+                </td>
                 <td>{item.data.role}</td>
                 <td>{item.data.year}</td>
               </tr>
