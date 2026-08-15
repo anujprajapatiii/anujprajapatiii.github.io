@@ -856,30 +856,35 @@
 .row-link__arrow { margin-inline-start: auto; }
 
 /*
-  Both signals are painted transparent AT REST and revealed by the row's lift,
-  so neither one moves a pixel of layout when it appears — the same reason the
-  furniture links carry a decoration channel instead of a decoration rule. The
-  underline is on the text span, not the anchor: the anchor is a flex
-  container and would have underlined the arrow along with the title.
+  The arrow declares no colour at all, which is what makes it ALWAYS VISIBLE.
+  It inherits the row's, so it rests at --text-secondary and brightens to
+  --text-interactive with the rest of the row — it is simply part of the row's
+  text, moving on the text channel like the title and the year. Anuj's call:
+  the affordance should not depend on a pointer, which a hover-only arrow did.
+  Touch has no hover, so on a phone it never appeared at all.
 
-  They appear instantly, like every other lift — see the INTERACTION block.
+  The UNDERLINE is still hover-only. It is the signal that says "this is the
+  thing you are about to follow", which is only meaningful once something is
+  pointed at; the arrow is the standing sign that the row is a link. Painted
+  transparent rather than removed, so revealing it moves no layout — the same
+  reason the furniture links carry a decoration channel instead of a
+  decoration rule. It is on the text span and not the anchor because the
+  anchor is a flex container and would have underlined the arrow too.
 */
 .row-link__text {
   text-decoration-line: underline;
   text-underline-offset: var(--spacing-3xs);
   text-decoration-color: transparent;
 }
-.row-link__arrow { color: transparent; }
 /*
   Driven by the ROW's trigger, not the span's own — the same reach the project
-  card uses for its thumbnail and meta. That matters: the row's lift-on covers
-  hover, focus-visible, focus-within, active and the touch guard in one place,
-  so tabbing to the link reveals both signals exactly as pointing at it does.
+  card uses for its thumbnail and meta. The row's lift-on covers hover,
+  focus-visible, focus-within, active and the touch guard in one place, so
+  tabbing to the link underlines the title exactly as pointing at it does.
 */
 .data-table--interactive tbody tr {
   @variant lift-on {
     & .row-link__text { text-decoration-color: currentColor; }
-    & .row-link__arrow { color: inherit; }
   }
 }
 
