@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 550 343" width="550" height="343" role="img" aria-label="Placeholder for a third preview">
+  <!--
+    Stand-in for a third voxel screenshot. Flat, in the site's neutrals, sized
+    to the frame it renders in.
+
+    The values are literal rather than tokens on purpose: an SVG loaded through
+    <img> is a separate document and cannot see the page's custom properties or
+    its .dark class. Every real preview will be a screenshot or a clip, which
+    does not adapt to the theme either, so a fixed neutral is what this slot
+    honestly represents.
+  -->
+  <rect width="550" height="343" fill="#d3d7dd"/>
+  <text x="275" y="171"
+        font-family="Inter, system-ui, sans-serif" font-size="16" font-weight="600"
+        letter-spacing="0.08em" fill="#6d7580"
+        text-anchor="middle" dominant-baseline="middle">PREVIEW 3</text>
+</svg>

@@ -8,6 +8,14 @@ skills:
   - Real-time 3D
   - Lighting
 thumbnail: /images/play/voxel-lighting-studio/golden-hour.jpg
+# Shown beside the homepage Play list while this row is pointed at. The first
+# two are the case study's own screenshots, resized to the frame they render
+# in (550w, ~22KB) rather than served at 1600w; the third is a stand-in until
+# there is a real one.
+previews:
+  - /images/play/voxel-lighting-studio/previews/preview-1.jpg
+  - /images/play/voxel-lighting-studio/previews/preview-2.jpg
+  - /images/play/voxel-lighting-studio/previews/preview-3.svg
 liveUrl: https://anujprajapatiii.github.io/voxel_lighting/
 # The tool now renders on first paint inside an iframe (verified against the
 # EmbedFrame requirement): it re-renders and re-bakes shadows when the canvas
