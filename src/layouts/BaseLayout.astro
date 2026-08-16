@@ -6,6 +6,12 @@ import { siteConfig } from "@/data/site-config";
    would change layout on first paint, not just colour. */
 import soehneBuch from "../assets/fonts/soehne-buch.woff2?url";
 import soehneHalbfett from "../assets/fonts/soehne-halbfett.woff2?url";
+/* Violet Sans (SIL OFL) carries the display step, which today is the homepage
+   hero alone. Preloaded from here rather than only on that page: it is the
+   largest text on the site, so a late swap reflows the biggest thing on the
+   screen, and 28KB is a cheap insurance against that on the pages that do not
+   use it yet. Move this behind a prop if the cost ever stops being worth it. */
+import violetSans from "../assets/fonts/violet-sans-regular.woff2?url";
 
 interface Props {
   title?: string;
@@ -32,9 +38,10 @@ const ogImage = image ? new URL(image, siteConfig.url).toString() : undefined;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
 
-    {/* Preload both faces so text never paints in a fallback and swaps (FOUT) */}
+    {/* Preload every face so text never paints in a fallback and swaps (FOUT) */}
     <link rel="preload" href={soehneBuch} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={soehneHalbfett} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={violetSans} as="font" type="font/woff2" crossorigin />
     <title>{pageTitle}</title>
 
     {/* Open Graph */}

@@ -13,11 +13,17 @@ What that means in practice:
 - **Restraint over decoration.** No eyebrows, kickers, or ornamental labels.
   If a piece of text is a section heading, make it a heading; don't dress it
   up as a 12px uppercase whisper.
-- **One font, two weights.** Söhne Buch and Halbfett. Hierarchy comes from
-  size, space and colour before it comes from weight, and weight is only
+- **One reading font, two weights.** Söhne Buch and Halbfett. Hierarchy comes
+  from size, space and colour before it comes from weight, and weight is only
   reached for when sizes get close enough that size alone can't separate them.
-- **Big type is set light.** Display and h1 in Buch 400 — this is the Klim
-  habit and it is why the hero reads as composed rather than shouted.
+- **One display font, one step.** Violet Sans on `text-display` and nowhere
+  else. It has a single weight, so it can only sit on a step already set in
+  400; extending it downward means dropping h2/h3 to 400 first.
+- **Big type is set light.** Display and h1 at 400 — this is the Klim habit
+  and it is why the hero reads as composed rather than shouted.
+- **Nothing is below 16px.** Small and body are the same size; small keeps a
+  tighter 1.5 leading for single lines of metadata. Making text smaller is not
+  how metadata is made quiet — `--text-secondary` is.
 - **Tracking is zero, everywhere.** One value for every size, in both
   directions. Söhne is drawn to be spaced correctly at each size; the system
   trusts it rather than second-guessing it per step.
@@ -73,6 +79,16 @@ What that means in practice:
   - Both faces are preloaded in `BaseLayout.astro`; those URLs and the
     `src()` paths in `global.css` must resolve to the same hashed asset or
     the preload silently double-downloads. Check `dist/` after changing either.
+- **One display font: Violet Sans** (SIL OFL, licence copy sits beside the
+  file), self-hosted from the same folder and preloaded the same way. It has
+  **one weight and one style — that is the whole family, not a licence limit.**
+  - It is bound to `.text-display` in `global.css` rather than to a token,
+    because Tailwind's `--text-*` steps carry size, leading and weight but
+    not family.
+  - `font-synthesis-weight: none` is set on that rule. Unlike the Söhne case
+    above, a fake bold here would be a smeared regular with no upside — and
+    note this switches off weight only, so `<em>` is unaffected.
+  - Do not extend it to h2/h3 without first dropping those steps to 400.
   `--font-mono` is a system fallback stack reserved for code only (inline
   `code` + code blocks) — never for labels, wordmarks, or metadata.
 - **Spacing** uses the named scale (`p-md`, `gap-sm`, `py-xl`, …) or the

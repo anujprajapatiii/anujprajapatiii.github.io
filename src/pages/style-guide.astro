@@ -60,13 +60,15 @@ const semanticGroups = [
   },
 ];
 
+/* `face` names the typeface as well as the weight, because the display step is
+   no longer in the same family as the rest of the scale. */
 const typeScale = [
-  { name: "display", class: "text-display", size: "clamp(40px → 72px)", weight: "Buch 400", sample: "Display" },
-  { name: "h1", class: "text-h1", size: "clamp(32px → 44px)", weight: "Buch 400", sample: "Heading 1" },
-  { name: "h2", class: "text-h2", size: "clamp(24px → 30px)", weight: "Halbfett 600", sample: "Heading 2" },
-  { name: "h3", class: "text-h3", size: "20px", weight: "Halbfett 600", sample: "Heading 3" },
-  { name: "body", class: "text-body", size: "16px", weight: "Buch 400", sample: "Body text. The quick brown fox jumps over the lazy dog." },
-  { name: "small", class: "text-small", size: "14px", weight: "Buch 400", sample: "Small / secondary text, captions, metadata" },
+  { name: "display", class: "text-display", size: "clamp(40px → 72px)", weight: "Violet Sans 400", sample: "Display" },
+  { name: "h1", class: "text-h1", size: "clamp(32px → 44px)", weight: "Söhne Buch 400", sample: "Heading 1" },
+  { name: "h2", class: "text-h2", size: "clamp(24px → 30px)", weight: "Söhne Halbfett 600", sample: "Heading 2" },
+  { name: "h3", class: "text-h3", size: "20px", weight: "Söhne Halbfett 600", sample: "Heading 3" },
+  { name: "body", class: "text-body", size: "16px", weight: "Söhne Buch 400", sample: "Body text. The quick brown fox jumps over the lazy dog." },
+  { name: "small", class: "text-small", size: "16px / 1.5", weight: "Söhne Buch 400", sample: "Small / secondary text, captions, metadata" },
 ];
 
 const spacingScale = [
@@ -199,20 +201,27 @@ const aliases = [
         Type scale
       </h2>
       <p class="mb-md max-w-measure text-small text-muted-foreground">
-        One font — Söhne, in two weights: Buch (400) and Halbfett (600). Size,
-        line-height and weight travel inside the token, and tracking is 0
-        on every step, so
+        Söhne for everything that is read, in two weights: Buch (400) and
+        Halbfett (600). Size, line-height and weight travel inside the token,
+        and tracking is 0 on every step, so
         <code>text-h2</code> alone produces finished type and nothing writes
         <code>tracking-*</code>, <code>leading-*</code> or <code>font-*</code>
         at a call site. Size carries the hierarchy at display scale; weight
         takes over once the sizes get close to body.
       </p>
       <p class="mb-md max-w-measure text-small text-muted-foreground">
-        Six steps, deliberately. An 18px lead and a 12px label were removed:
-        the lead sat one notch off body for intro paragraphs that already read
-        as introductions from their position and colour, and the 12px label
-        made metadata quiet — a job <code>--text-secondary</code> does without
-        a size of its own. Intros are body; metadata is small.
+        Display is the exception, and the only one — Violet Sans, a geometric
+        face with one weight. It sits on <code>text-display</code> alone.
+        Everything below it stays Söhne, because those steps ask for a 600 that
+        Violet Sans does not have and a faked bold is worse than no contrast.
+      </p>
+      <p class="mb-md max-w-measure text-small text-muted-foreground">
+        Nothing on the site is below 16px. Small used to be 14 and now matches
+        body, keeping a tighter 1.5 leading for single lines of metadata. An
+        18px lead and a 12px label were removed earlier: the lead sat one notch
+        off body for intro paragraphs that already read as introductions from
+        their position and colour, and the 12px label made metadata quiet — a
+        job <code>--text-secondary</code> does without a size of its own.
       </p>
       <div class="flex flex-col gap-md">
         {typeScale.map((t) => (

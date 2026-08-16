@@ -34,8 +34,9 @@ neutral, minimal, and content-first.
   `pnpm dlx shadcn@latest add <component>`
 - React: only for stateful, client-interactive UI; prefer `.astro` otherwise
 - Content: Astro content collections with Zod schemas in `src/content.config.ts`
-- Fonts: Geist Sans (body) and Geist Mono (labels/metadata) via Fontsource,
-  placeholder until the design token session
+- Fonts: Söhne (Buch 400, Halbfett 600) for everything that is read, plus
+  Violet Sans on the display step alone. Self-hosted from `src/assets/fonts/`.
+  See `agent-os/conventions/styling.md` for the rules that come with each
 - Package manager: pnpm 10+
 - Node: v20+
 - Deployment: GitHub Pages through GitHub Actions on pushes to `main`

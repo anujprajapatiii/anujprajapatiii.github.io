@@ -70,6 +70,30 @@
   font-display: swap;
 }
 
+/*
+  Violet Sans — Calvin Waterman, SIL Open Font License (licence copy sits
+  beside the file). A geometric display face with flattened curves and wide
+  counters; it carries the homepage hero and nothing else.
+
+  ONE WEIGHT, ONE STYLE — that is the whole family, not a licence limit. So it
+  is bound to the one step of the scale already set in 400, and `font-synthesis:
+  weight` is switched off on it: asked for a bold it does not have, the browser
+  would smear the regular and the hero would stop looking like this typeface.
+  Do not extend it to h2/h3 without first dropping those steps to 400.
+
+  Preloaded like the Söhne faces, and for a stronger reason — the hero is the
+  largest text on the homepage and almost certainly its LCP element, so a swap
+  would reflow the biggest thing on the page. Keep the URL in BaseLayout in
+  sync with the src() below or the preload silently double-downloads.
+*/
+@font-face {
+  font-family: 'Violet Sans';
+  src: url('../assets/fonts/violet-sans-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 /*
@@ -273,9 +297,12 @@
 }
 
 @theme inline {
-    /* One brand font. --font-mono is a system fallback stack reserved for
-       code only (inline code + code blocks), never for design/labels. */
+    /* One brand font for everything that is read, plus one display face for
+       the single largest thing on the site. --font-mono is a system fallback
+       stack reserved for code only (inline code + code blocks), never for
+       design/labels. */
     --font-sans: 'Söhne', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Violet Sans', 'Söhne', ui-sans-serif, system-ui, sans-serif;
     --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
     /* One --color-* line per alias, and the alias list is now exactly what is
        used. Every entry here generates utilities; a mapping for a token nothing
@@ -379,11 +406,13 @@
     */
     --header-height: 101px;
 
-    /* ---- TYPE SCALE (one font) ----
+    /* ---- TYPE SCALE ----
        Each step carries its own line-height and weight, so `text-h1` alone
        produces finished type. Nothing in the codebase should ever set
        font-*, tracking-* or leading-* by hand — if a step needs to change,
-       fix it here and every use updates.
+       fix it here and every use updates. Family is the one exception: it is
+       not part of a --text-* step in Tailwind, so the display step picks up
+       --font-display in a rule of its own further down.
 
        TRACKING IS ZERO EVERYWHERE, BY DECISION. No step sets
        letter-spacing, in either direction, and no call site may either.
@@ -393,26 +422,40 @@
        system exists to prevent.
 
        Sizes descend without collisions so a child heading can never outrank
-       its parent: 72 → 44 → 30 → 20 → 16 → 14.
+       its parent: 72 → 44 → 30 → 20 → 16 → 16.
 
-       SIX STEPS, BY DECISION. There was an 18px lead and a 12px label; both
-       are gone, because neither earned a place in the scale. The lead sat one
-       notch off body and was only ever used on intro paragraphs, which read
-       as introductions because of their position and their secondary colour,
-       not because of one extra pixel and a half. The 12px label was the only
-       size on the site below the body's floor, and it existed to make
-       metadata quiet — a job --text-secondary already does.
+       SIXTEEN IS THE FLOOR. Small used to be 14 and is now 16, Anuj's call:
+       the site has one reading size, and metadata is not a reason to make
+       text smaller than the text around it. Everything that used to be 14 —
+       table cells, captions, the on-this-page rail, the Play subtitle, the
+       embed note — grew to match body. Nothing on the site is now below 16.
+
+       That leaves --text-small the same SIZE as body and a different step
+       all the same: it keeps the tighter 1.5 leading, which is what single
+       lines of metadata want, and it keeps the name, so restoring a smaller
+       metadata size later is one value here rather than a hunt through call
+       sites. Do not "tidy up" by collapsing the two.
+
+       There was also an 18px lead and a 12px label; both are gone, because
+       neither earned a place in the scale. The lead sat one notch off body
+       and was only ever used on intro paragraphs, which read as introductions
+       because of their position and their secondary colour, not because of
+       one extra pixel and a half. The 12px label was the only size on the
+       site below the body's floor, and it existed to make metadata quiet — a
+       job --text-secondary already does.
 
        So: intros are body, and metadata is small. `.label` survives as the
        uppercase TREATMENT (table headers, the on-this-page title) but now
        draws its size from --text-small like everything else. Do not
        reintroduce a step to make one call site fit.
 
-       Weight is part of the token too. Only 400 and 600 exist in the
-       licence, and the rule is: SIZE creates hierarchy at large scale,
-       WEIGHT creates it at small scale. So display and h1 stay in Buch 400
-       and let their size do the work, while h2/h3 — too close to body size
-       for size alone to separate them — carry Halbfett 600. */
+       Weight is part of the token too. Söhne has only 400 and 600 in the
+       licence and Violet Sans has only 400 at all, and the rule is: SIZE
+       creates hierarchy at large scale, WEIGHT creates it at small scale. So
+       display and h1 stay at 400 and let their size do the work, while
+       h2/h3 — too close to body size for size alone to separate them — carry
+       Halbfett 600. That is also why display is the only step Violet Sans
+       can take: it is the one already asking for the only weight it has. */
     --text-display: clamp(2.5rem, 8vw, 4.5rem);
     --text-display--line-height: 1.02;
     --text-display--font-weight: 400;
@@ -428,9 +471,23 @@
     --text-body: 1rem;
     --text-body--line-height: 1.6;
     --text-body--font-weight: 400;
-    --text-small: 0.875rem;
+    --text-small: 1rem;
     --text-small--line-height: 1.5;
     --text-small--font-weight: 400;
+}
+
+/*
+  The display step is the one place a second typeface appears. Tailwind's
+  --text-* namespace carries size, leading and weight but not family, so the
+  binding is written here rather than in the scale above.
+
+  font-synthesis-weight is off because Violet Sans has exactly one weight: if
+  anything ever asks this step for a bold, a smeared fake is worse than the
+  hierarchy being wrong, and silently worse.
+*/
+.text-display {
+  font-family: var(--font-display);
+  font-synthesis-weight: none;
 }
 
 @layer base {
@@ -1639,14 +1696,37 @@
 
 /*
   The Play row, inheriting the interactive table row's values — it replaced
-  that row and does the same job. Rests muted so the lift has somewhere to
-  come from: if a row already sat at full contrast, pointing at it would have
-  nothing left to add. It owns a rule as well as a surface, because unlike the
-  table's collapsed edges this row is its own bordered box.
+  that row and does the same job. It owns a rule as well as a surface, because
+  unlike the table's collapsed edges this row is its own bordered box.
+
+  The row's --lift-text is now the SUBTITLE's colour, not the whole row's. The
+  title is named separately below, so the two lines no longer share one value.
+  The lift moves both, one step each, and the gap between them survives it:
+
+      rest    title --text-primary   subtitle --text-secondary
+      hover   title --text-interactive   subtitle --text-primary
+
+  --lift-text-on is pinned rather than left to default. Without it the
+  subtitle would default to --text-interactive and land on the title's hover
+  colour, flattening at exactly the moment the row is being read.
 */
 .play-item {
   --lift-text: var(--text-secondary);
+  --lift-text-on: var(--text-primary);
   --lift-surface-on: var(--background-hover);
   --lift-rule: var(--border);
   --lift-rule-on: var(--border-hover);
+}
+/*
+  The title rests at full contrast — Anuj's call, and the same level every
+  other heading on the site rests at. It needs its own hover value for the
+  same reason .project-card__meta does: an explicit colour on a child is not
+  reached by the parent's inherited one, so without the lift-on rule the title
+  would be the one part of the row that sits still.
+*/
+.play-item__title { color: var(--text-primary); }
+.play-item {
+  @variant lift-on {
+    & .play-item__title { color: var(--text-interactive); }
+  }
 }
