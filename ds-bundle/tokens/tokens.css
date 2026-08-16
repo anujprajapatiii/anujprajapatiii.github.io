@@ -1,59 +1,54 @@
 /*
-  Colour Tokens — Anuj Prajapati's palette.
-  Extracted verbatim from the portfolio's src/styles/global.css.
-  Two-tier system:
-    1. PRIMITIVES  — raw hex values. One value, theme-agnostic.
-    2. SEMANTIC    — role names referencing primitives via var(). Light in
-                     :root, dark overrides in .dark (only tokens that differ).
-
-  NEUTRAL IS THE WHOLE PALETTE, BY DECISION. Amber, Blue, Green, Red and Yellow
-  were removed along with the semantic tokens that were their only referrers
-  (--background-tertiary/-success/-warning/-error, --text-success/-warning/
-  -error). None of the 26 values could be reached from a rendered page. Colour
-  here is a hierarchy of prominence, never of hue.
+  Colour tokens mirrored from src/styles/global.css.
+  The portfolio stylesheet remains the source of truth.
 */
 :root {
-    /* ---- PRIMITIVES ---- */
-    /* Neutral */
-    --neutral-black: #000000;
-    --neutral-900: #0e0f12;
-    --neutral-800: #141619;
-    --neutral-700: #1c1f24;
-    --neutral-600: #21252b;
-    --neutral-500: #2c323a;
-    --neutral-400: #434b56;
-    --neutral-300: #99a1ac;
-    --neutral-200: #d3d7dd;
-    --neutral-100: #f6f7f8;
-    --neutral-white: #ffffff;
+  /* Primitives */
+  --neutral-black: #000000;
+  --neutral-900: #0e0f12;
+  --neutral-800: #141619;
+  --neutral-700: #1c1f24;
+  --neutral-600: #21252b;
+  --neutral-500: #2c323a;
+  --neutral-400: #434b56;
+  --neutral-350: #6d7580;
+  --neutral-300: #99a1ac;
+  --neutral-200: #d3d7dd;
+  --neutral-100: #f6f7f8;
+  --neutral-white: #ffffff;
+  --brown-300: #847b73;
 
-    /* ---- SEMANTIC (light mode) ---- */
-    --background-primary: var(--neutral-100);
-    --background-secondary: var(--neutral-200);
-    --background-alternate: var(--neutral-800);
-    --background-alternate-hover: var(--neutral-black);
-    --background-hover: var(--neutral-white);
-    --background-elevated: var(--neutral-white);
-    --border-primary: var(--neutral-300);
-    --border-hover: var(--neutral-800);
-    --text-primary: var(--neutral-600);
-    --text-secondary: var(--neutral-400);
-    --text-alternate: var(--neutral-100);
-    --text-interactive: var(--neutral-900);
+  /* Semantic tokens — light */
+  --background-primary: var(--neutral-100);
+  --background-secondary: var(--neutral-200);
+  --background-alternate: var(--neutral-800);
+  --background-alternate-hover: var(--neutral-black);
+  --background-hover: var(--neutral-white);
+  --background-elevated: var(--neutral-white);
+  --background-elevated-hover: var(--neutral-white);
+  --border-primary: var(--neutral-300);
+  --border-hover: var(--neutral-350);
+  --text-primary: var(--neutral-600);
+  --text-secondary: var(--neutral-400);
+  --text-alternate: var(--neutral-100);
+  --text-interactive: var(--neutral-900);
+  --shader-tint: var(--neutral-500);
+  --decorative-accent: var(--brown-300);
 }
 
 .dark {
-    /* Semantic re-maps only — primitives never change between themes. */
-    --background-primary: var(--neutral-800);
-    --background-secondary: var(--neutral-600);
-    --background-alternate: var(--neutral-100);
-    --background-alternate-hover: var(--neutral-white);
-    --background-hover: var(--neutral-900);
-    --background-elevated: var(--neutral-700);
-    --border-primary: var(--neutral-500);
-    --border-hover: var(--neutral-300);
-    --text-primary: var(--neutral-200);
-    --text-secondary: var(--neutral-300);
-    --text-alternate: var(--neutral-800);
-    --text-interactive: var(--neutral-100);
+  --background-primary: var(--neutral-800);
+  --background-secondary: var(--neutral-600);
+  --background-alternate: var(--neutral-100);
+  --background-alternate-hover: var(--neutral-white);
+  --background-hover: var(--neutral-700);
+  --background-elevated: var(--neutral-700);
+  --background-elevated-hover: var(--neutral-600);
+  --border-primary: var(--neutral-500);
+  --text-primary: var(--neutral-200);
+  --text-secondary: var(--neutral-300);
+  --text-alternate: var(--neutral-800);
+  --text-interactive: var(--neutral-100);
+  --shader-tint: var(--neutral-300);
+  --decorative-accent: var(--brown-300);
 }

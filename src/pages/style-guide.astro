@@ -8,11 +8,11 @@ import DataTable from "@/components/DataTable.astro";
    (see agent-os/plans/design-token-session.md). */
 
 /*
-  Neutral is the whole palette. Amber, Blue, Green, Red and Yellow used to be
-  listed here too — 26 values, none of which any rule or component could reach.
-  See the PRIMITIVES block in global.css for why they went.
+  Neutral remains the functional palette. Brown is the one deliberately narrow
+  exception: a decorative flourish for section markers and navigation dividers,
+  never a text, surface or status colour.
 
-  Only the NAMES live here; the swatch reads its colour from var(--neutral-<n>)
+  Only the NAMES live here; each swatch reads its colour from the CSS variable
   at render time, so this page cannot show a value the stylesheet does not have.
   It used to carry the hex literals as well, hand-copied, which made the file
   claiming to document the source of truth into a second source of truth. The
@@ -21,7 +21,13 @@ import DataTable from "@/components/DataTable.astro";
 const primitiveFamilies = [
   {
     name: "Neutral",
+    prefix: "neutral",
     swatches: ["black", "900", "800", "700", "600", "500", "400", "350", "300", "200", "100", "white"],
+  },
+  {
+    name: "Brown",
+    prefix: "brown",
+    swatches: ["300"],
   },
 ];
 
@@ -56,7 +62,10 @@ const semanticGroups = [
   },
   {
     name: "Decorative",
-    tokens: [{ name: "shader-tint", light: "neutral-500", dark: "neutral-300" }],
+    tokens: [
+      { name: "shader-tint", light: "neutral-500", dark: "neutral-300" },
+      { name: "decorative-accent", light: "brown-300", dark: "brown-300" },
+    ],
   },
 ];
 
@@ -64,11 +73,11 @@ const semanticGroups = [
    no longer in the same family as the rest of the scale. */
 const typeScale = [
   { name: "display", class: "text-display", size: "clamp(40px → 72px)", weight: "Violet Sans 400", sample: "Display" },
-  { name: "h1", class: "text-h1", size: "clamp(32px → 44px)", weight: "Söhne Buch 400", sample: "Heading 1" },
-  { name: "h2", class: "text-h2", size: "clamp(24px → 30px)", weight: "Söhne Halbfett 600", sample: "Heading 2" },
-  { name: "h3", class: "text-h3", size: "20px", weight: "Söhne Halbfett 600", sample: "Heading 3" },
-  { name: "body", class: "text-body", size: "16px", weight: "Söhne Buch 400", sample: "Body text. The quick brown fox jumps over the lazy dog." },
-  { name: "small", class: "text-small", size: "16px / 1.5", weight: "Söhne Buch 400", sample: "Small / secondary text, captions, metadata" },
+  { name: "h1", class: "text-h1", size: "clamp(32px → 44px)", weight: "TASA Orbiter Regular 400", sample: "Heading 1" },
+  { name: "h2", class: "text-h2", size: "clamp(24px → 30px)", weight: "TASA Orbiter Medium 500", sample: "Heading 2" },
+  { name: "h3", class: "text-h3", size: "20px", weight: "TASA Orbiter Medium 500", sample: "Heading 3" },
+  { name: "body", class: "text-body", size: "16px", weight: "TASA Orbiter Regular 400", sample: "Body text. The quick brown fox jumps over the lazy dog." },
+  { name: "small", class: "text-small", size: "14px / 1.5", weight: "TASA Orbiter Regular 400", sample: "Small / secondary text, captions, metadata" },
 ];
 
 const spacingScale = [
@@ -88,7 +97,7 @@ const semanticSpacing = [
   { name: "gutter", value: "24px — page side padding" },
   { name: "section", value: "clamp(48px → 96px) — section rhythm" },
   { name: "stack", value: "16px — gap between stacked elements" },
-  { name: "card", value: "24px — card interior padding" },
+  { name: "card", value: "16px — card interior padding" },
   { name: "grid", value: "16px — gap between cards" },
 ];
 
@@ -136,10 +145,10 @@ const aliases = [
                 <div class="w-16">
                   <div
                     class="h-10 border border-border"
-                    style={`background: var(--neutral-${swatch})`}
+                    style={`background: var(--${family.prefix}-${swatch})`}
                   ></div>
                   <p class="mt-3xs text-small tabular-nums text-muted-foreground">
-                    {swatch}<br /><span data-swatch-value={`--neutral-${swatch}`}>…</span>
+                    {swatch}<br /><span data-swatch-value={`--${family.prefix}-${swatch}`}>…</span>
                   </p>
                 </div>
               ))}
@@ -201,9 +210,10 @@ const aliases = [
         Type scale
       </h2>
       <p class="mb-md max-w-measure text-small text-muted-foreground">
-        Söhne for everything that is read, in two weights: Buch (400) and
-        Halbfett (600). Size, line-height and weight travel inside the token,
-        and tracking is 0 on every step, so
+        TASA Orbiter carries everything that is read: Regular (400), Medium
+        (500), and Semibold (600) for strong emphasis and genuine labels. Size,
+        line-height and weight travel inside the token, and tracking is 0 on
+        every step, so
         <code>text-h2</code> alone produces finished type and nothing writes
         <code>tracking-*</code>, <code>leading-*</code> or <code>font-*</code>
         at a call site. Size carries the hierarchy at display scale; weight
@@ -212,16 +222,14 @@ const aliases = [
       <p class="mb-md max-w-measure text-small text-muted-foreground">
         Display is the exception, and the only one — Violet Sans, a geometric
         face with one weight. It sits on <code>text-display</code> alone.
-        Everything below it stays Söhne, because those steps ask for a 600 that
-        Violet Sans does not have and a faked bold is worse than no contrast.
+        Everything below it stays TASA Orbiter, which supplies the complete
+        non-display hierarchy without synthesised weights.
       </p>
       <p class="mb-md max-w-measure text-small text-muted-foreground">
-        Nothing on the site is below 16px. Small used to be 14 and now matches
-        body, keeping a tighter 1.5 leading for single lines of metadata. An
-        18px lead and a 12px label were removed earlier: the lead sat one notch
-        off body for intro paragraphs that already read as introductions from
-        their position and colour, and the 12px label made metadata quiet — a
-        job <code>--text-secondary</code> does without a size of its own.
+        Small is restored to 14px with 1.5 leading for metadata, captions and
+        compact interface labels; body remains 16px for reading. The retired
+        18px lead and 12px label steps stay removed: position and colour already
+        separate introductions, while 12px is too small for readable metadata.
       </p>
       <div class="flex flex-col gap-md">
         {typeScale.map((t) => (
@@ -400,7 +408,7 @@ const aliases = [
           </tr>
           <tr>
             <td>Header</td>
-            <td>12px, 600, uppercase</td>
+            <td>14px, 600, uppercase</td>
             <td>th only</td>
           </tr>
         </tbody>
@@ -424,7 +432,7 @@ const aliases = [
   const root = getComputedStyle(document.documentElement);
   for (const el of document.querySelectorAll<HTMLElement>("[data-swatch-value]")) {
     const raw = root.getPropertyValue(el.dataset.swatchValue!).trim();
-    /* The build minifies #000000 to #000, so two of the eleven would arrive
+    /* The build minifies #000000 to #000, so some values can arrive
        three digits wide and the caption column would carry two formats. */
     el.textContent = raw.replace(/^#([\da-f])([\da-f])([\da-f])$/i, "#$1$1$2$2$3$3") || "—";
   }

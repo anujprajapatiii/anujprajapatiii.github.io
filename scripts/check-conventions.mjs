@@ -3,10 +3,10 @@
   Design-system guard.
 
   Every rule here was a real regression in this repo, not a hypothetical. They
-  share one property: breaking them is INVISIBLE. `font-medium` looks fine in
-  code and silently resolves to Buch 400 because no 500 exists in the licence;
-  a mistyped scale name emits no CSS at all, so spacing collapses to zero and
-  the build still passes. A reviewer cannot catch these by reading a diff.
+  share one property: breaking them is INVISIBLE. An unsupported font weight
+  is silently synthesised; a mistyped scale name emits no CSS at all, so
+  spacing collapses to zero and the build still passes. A reviewer cannot
+  catch these by reading a diff.
 
   What this cannot check: contrast ratios, reading measure, and anything
   visual. Those still need measuring in a browser — see agent-os/conventions.
@@ -50,14 +50,14 @@ const RULES = [
   },
   {
     /*
-      Only two faces are licensed: Buch 400 and Halbfett 600. Any other weight
-      is synthesised or silently snapped to one of those. `font-semibold` and
-      `font-normal` are allowed — they map to real faces and are how inline
-      emphasis (<strong>) is expressed, which no type step covers.
+      TASA Orbiter is variable, but this design deliberately uses only Regular
+      400, Medium 500 and Semibold 600. Restricting the checker to those three
+      keeps the hierarchy intentional instead of treating the whole axis as a
+      grab bag.
     */
-    id: "unlicensed-weight",
-    test: /(?<![\w-])font-(?:thin|extralight|light|medium|bold|extrabold|black)(?![\w-])|font-weight:\s*(?:100|200|300|500|700|800|900)\b/,
-    msg: "that weight does not exist in the Söhne licence — only Buch 400 and Halbfett 600 are loaded",
+    id: "unapproved-weight",
+    test: /(?<![\w-])font-(?:thin|extralight|light|bold|extrabold|black)(?![\w-])|font-weight:\s*(?:100|200|300|700|800|900)\b/,
+    msg: "that weight is outside the approved TASA Orbiter hierarchy — use Regular 400, Medium 500 or Semibold 600",
   },
   {
     /*

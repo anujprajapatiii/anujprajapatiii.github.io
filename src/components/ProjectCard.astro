@@ -45,13 +45,13 @@ const { id, title, description, thumbnail, base = "/work" } = Astro.props;
       src={thumbnail}
       alt=""
       loading="lazy"
-      class="aspect-[16/10] w-full object-cover"
+      class="project-card__media"
     />
   ) : (
-    <div class="media-placeholder"></div>
+    <div class="media-placeholder project-card__media"></div>
   )}
   <div class="p-card">
     <h3 class="text-h3">{title}</h3>
-    <p class="project-card__meta mt-xs text-small">{description}</p>
+    <p class="project-card__meta mt-2xs text-small">{description}</p>
   </div>
 </a>

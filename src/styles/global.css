@@ -42,30 +42,17 @@
 @import "shadcn/tailwind.css";
 
 /*
-  Söhne — Klim Type Foundry, web-licensed. Two faces, and only two:
-  Buch (400) for reading, Halbfett (600) for small headings and labels.
+  TASA Orbiter — Local Remote, SIL Open Font License. One variable face covers
+  the site's approved reading weights: Regular 400, Medium 500 and Semibold
+  600. The licence copy sits beside the font file.
 
-  There is no 500 and no italic in this licence. That has consequences:
-    - `font-medium` (500) would silently resolve to Buch 400 and flatten
-      the hierarchy. The codebase uses 400/600 only — see the weight
-      values baked into the type scale below.
-    - `<em>` is synthesised by the browser. Do NOT set `font-synthesis:
-      none` — with no italic face it would erase emphasis entirely.
-
-  The files are preloaded in BaseLayout; the URLs there must stay in sync
-  with the src() paths here or the preload silently double-downloads.
+  The file is preloaded in BaseLayout; that URL must stay in sync with the
+  src() path here or the preload silently double-downloads.
 */
 @font-face {
-  font-family: 'Söhne';
-  src: url('../assets/fonts/soehne-buch.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Söhne';
-  src: url('../assets/fonts/soehne-halbfett.woff2') format('woff2');
-  font-weight: 600;
+  font-family: 'TASA Orbiter';
+  src: url('../assets/fonts/tasa-orbiter-variable.woff2') format('woff2');
+  font-weight: 400 800;
   font-style: normal;
   font-display: swap;
 }
@@ -81,7 +68,7 @@
   would smear the regular and the hero would stop looking like this typeface.
   Do not extend it to h2/h3 without first dropping those steps to 400.
 
-  Preloaded like the Söhne faces, and for a stronger reason — the hero is the
+  Preloaded like TASA Orbiter, and for a stronger reason — the hero is the
   largest text on the homepage and almost certainly its LCP element, so a swap
   would reflow the biggest thing on the page. Keep the URL in BaseLayout in
   sync with the src() below or the preload silently double-downloads.
@@ -136,7 +123,7 @@
     --neutral-100: #f6f7f8;
     --neutral-white: #ffffff;
     /*
-      NEUTRAL IS THE WHOLE PALETTE, BY DECISION.
+      NEUTRAL IS THE FUNCTIONAL PALETTE, BY DECISION.
 
       There were five more families here — Amber, Blue, Green, Red, Yellow, 26
       values. Measured before removal: Amber and Blue were referenced by
@@ -149,8 +136,12 @@
       of hue. A palette carrying five hues nothing may use does not soften that
       rule, it just makes the style guide advertise 26 colours the design
       forbids. Adding a hue back should mean deciding to, not discovering that
-      one was already sitting there.
+      one was already sitting there. Brown is the single, intentionally narrow
+      exception below: a decorative flourish, not a text or status colour.
     */
+
+    /* Brown — Paper's restrained section-marker and divider flourish. */
+    --brown-300: #847b73;
 
     /* ---- 2. SEMANTIC (role names) — light mode ---- */
     --background-primary: var(--neutral-100);
@@ -231,6 +222,8 @@
       follows, applied to a shape instead of a surface.
     */
     --shader-tint: var(--neutral-500);
+    /* Decorative rules only; never use this for readable text. */
+    --decorative-accent: var(--brown-300);
 
     /*
       ---- 3. ALIASES (the Tailwind names components actually use) ----
@@ -294,6 +287,8 @@
     --text-interactive: var(--neutral-100);
     /* Burns light on the dark page — see the note in :root. */
     --shader-tint: var(--neutral-300);
+    /* Explicitly unchanged: the Paper flourish is restrained in both modes. */
+    --decorative-accent: var(--brown-300);
 }
 
 @theme inline {
@@ -301,8 +296,8 @@
        the single largest thing on the site. --font-mono is a system fallback
        stack reserved for code only (inline code + code blocks), never for
        design/labels. */
-    --font-sans: 'Söhne', ui-sans-serif, system-ui, sans-serif;
-    --font-display: 'Violet Sans', 'Söhne', ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'TASA Orbiter', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Violet Sans', 'TASA Orbiter', ui-sans-serif, system-ui, sans-serif;
     --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
     /* One --color-* line per alias, and the alias list is now exactly what is
        used. Every entry here generates utilities; a mapping for a token nothing
@@ -330,6 +325,7 @@
     --color-text-secondary: var(--text-secondary);
     --color-text-interactive: var(--text-interactive);
     --color-text-alternate: var(--text-alternate);
+    --color-decorative-accent: var(--decorative-accent);
 
     /*
       CORNERS ARE SQUARE EVERYWHERE, BY DECISION. There is no --radius token
@@ -416,25 +412,15 @@
 
        TRACKING IS ZERO EVERYWHERE, BY DECISION. No step sets
        letter-spacing, in either direction, and no call site may either.
-       Söhne is drawn to be spaced correctly at every size, so the scale
+       TASA Orbiter is drawn to be spaced correctly at every size, so the scale
        trusts the typeface instead of second-guessing it. Do not reintroduce
        per-size tracking "to tighten the hero" — that is the variation this
        system exists to prevent.
 
        Sizes descend without collisions so a child heading can never outrank
-       its parent: 72 → 44 → 30 → 20 → 16 → 16.
-
-       SIXTEEN IS THE FLOOR. Small used to be 14 and is now 16, Anuj's call:
-       the site has one reading size, and metadata is not a reason to make
-       text smaller than the text around it. Everything that used to be 14 —
-       table cells, captions, the on-this-page rail, the Play subtitle, the
-       embed note — grew to match body. Nothing on the site is now below 16.
-
-       That leaves --text-small the same SIZE as body and a different step
-       all the same: it keeps the tighter 1.5 leading, which is what single
-       lines of metadata want, and it keeps the name, so restoring a smaller
-       metadata size later is one value here rather than a hunt through call
-       sites. Do not "tidy up" by collapsing the two.
+       its parent: 72 → 44 → 30 → 20 → 16 → 14. Small is the dedicated
+       metadata and interface step restored from Paper; body remains the
+       comfortable reading size.
 
        There was also an 18px lead and a 12px label; both are gone, because
        neither earned a place in the scale. The lead sat one notch off body
@@ -449,13 +435,11 @@
        draws its size from --text-small like everything else. Do not
        reintroduce a step to make one call site fit.
 
-       Weight is part of the token too. Söhne has only 400 and 600 in the
-       licence and Violet Sans has only 400 at all, and the rule is: SIZE
-       creates hierarchy at large scale, WEIGHT creates it at small scale. So
-       display and h1 stay at 400 and let their size do the work, while
-       h2/h3 — too close to body size for size alone to separate them — carry
-       Halbfett 600. That is also why display is the only step Violet Sans
-       can take: it is the one already asking for the only weight it has. */
+       Weight is part of the token too. TASA Orbiter supplies the 400/500/600
+       hierarchy used below while Violet Sans has only 400. Display and h1
+       stay at 400 and let their size do the work; h2/h3 use Medium 500 for
+       quiet separation, and Semibold 600 remains available for emphasis and
+       genuine labels. */
     --text-display: clamp(2.5rem, 8vw, 4.5rem);
     --text-display--line-height: 1.02;
     --text-display--font-weight: 400;
@@ -463,15 +447,15 @@
     --text-h1--line-height: 1.08;
     --text-h1--font-weight: 400;
     --text-h2: clamp(1.5rem, 3vw, 1.875rem);
-    --text-h2--line-height: 1.15;
-    --text-h2--font-weight: 600;
+    --text-h2--line-height: 1.3;
+    --text-h2--font-weight: 500;
     --text-h3: 1.25rem;
     --text-h3--line-height: 1.3;
-    --text-h3--font-weight: 600;
+    --text-h3--font-weight: 500;
     --text-body: 1rem;
     --text-body--line-height: 1.6;
     --text-body--font-weight: 400;
-    --text-small: 1rem;
+    --text-small: 0.875rem;
     --text-small--line-height: 1.5;
     --text-small--font-weight: 400;
 }
@@ -609,6 +593,7 @@
 .grid-auto--min-280 { --grid-min: 280px; }
 .grid-auto--min-360 { --grid-min: 360px; }
 .grid-auto--min-440 { --grid-min: 440px; }   /* 2-up on desktop, 1-up ≤tablet */
+.grid-auto--gap-xs { gap: var(--spacing-xs); }
 .grid-auto--gap-md { gap: var(--spacing-sm); }
 .grid-auto--gap-lg { gap: var(--spacing-lg); }
 
@@ -644,6 +629,16 @@
   ===== Homepage component styling =====
   Typography / colour / component-internal details only (no page layout).
 */
+.section-heading {
+  display: inline-flex;
+  align-items: stretch;
+  gap: var(--spacing-xs);
+}
+.section-heading::before {
+  content: "";
+  flex: 0 0 var(--spacing-2xs);
+  background: var(--decorative-accent);
+}
 /*
   STICKY HEADER, TRANSLUCENT, NO DIVIDER.
 
@@ -711,15 +706,13 @@
 @media (min-width: 38rem) { :root { --header-height: 64px; } }
 .site-footer { border-top: 1px solid var(--border); padding-block: var(--spacing-lg); }
 /*
-  The wordmark is body type, not a heading: same size and now the same weight,
-  both taken from the body step rather than written as literals. It read as
-  Halbfett 600 before, which made the one piece of furniture on every page the
-  boldest thing in the header — the nav sits at 400, so the name was competing
-  with the links instead of anchoring them.
+  The wordmark is body-sized furniture, not a heading. TASA Medium gives it
+  one quiet step over the 400 navigation without making it compete with the
+  page hierarchy.
 */
 .wordmark {
   font-size: var(--text-body);
-  font-weight: var(--text-body--font-weight);
+  font-weight: 500;
 }
 
 /*
@@ -770,7 +763,7 @@
     width: 1px;
     height: 1rem;
     margin-inline-end: var(--spacing-md);
-    background: var(--border);
+    background: var(--decorative-accent);
   }
 }
 
@@ -785,7 +778,7 @@
   font-size: var(--text-small);
   line-height: var(--text-small--line-height);
   text-transform: uppercase;
-  font-weight: 600;         /* 12px caps need Halbfett to hold their colour */
+  font-weight: 600;         /* Small caps use TASA Semibold to hold their colour. */
   color: var(--muted-foreground);
 }
 /*
@@ -804,7 +797,7 @@
                      one per view — a second primary makes both mean less.
     .btn--secondary  the bordered default. Navigation and everything that is
                      an action but not THE action: the back links on a case
-                     study, "All work" beside a section heading.
+                     study, "View all" beside a section heading.
     .btn--link       an action inside, or beside, a run of text. No box.
 
   Every value is a token. The box repeats the table's cell rhythm on the
@@ -1002,6 +995,11 @@
   border-width: 1px;
   border-style: solid;
 }
+.project-card__media {
+  aspect-ratio: 5 / 3;
+  width: 100%;
+  object-fit: cover;
+}
 
 /*
   Media placeholder — the neutral grey stand-in for any image that does not
@@ -1026,7 +1024,10 @@
   removed from the base rule: standing alone on a case-study hero the
   placeholder still needs a frame of its own.
 */
-.project-card .media-placeholder { border: 0; }
+.project-card .media-placeholder {
+  aspect-ratio: 5 / 3;
+  border: 0;
+}
 
 /*
   Hero shader — the metaball beside the headline, in place of the grey

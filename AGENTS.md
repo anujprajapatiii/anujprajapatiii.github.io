@@ -34,9 +34,10 @@ neutral, minimal, and content-first.
   `pnpm dlx shadcn@latest add <component>`
 - React: only for stateful, client-interactive UI; prefer `.astro` otherwise
 - Content: Astro content collections with Zod schemas in `src/content.config.ts`
-- Fonts: Söhne (Buch 400, Halbfett 600) for everything that is read, plus
-  Violet Sans on the display step alone. Self-hosted from `src/assets/fonts/`.
-  See `agent-os/conventions/styling.md` for the rules that come with each
+- Fonts: TASA Orbiter (Regular 400, Medium 500, Semibold 600) for everything
+  that is read, plus Violet Sans on the display step alone. Self-hosted from
+  `src/assets/fonts/`. See `agent-os/conventions/styling.md` for the rules
+  that come with each.
 - Package manager: pnpm 10+
 - Node: v20+
 - Deployment: GitHub Pages through GitHub Actions on pushes to `main`

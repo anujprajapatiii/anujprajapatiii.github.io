@@ -2,6 +2,7 @@
 import PageLayout from "@/layouts/PageLayout.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
 import PlayPreviewList from "@/components/PlayPreviewList.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
 import HeroShader from "@/components/HeroShader";
 import Section from "@/components/primitives/Section.astro";
 import Container from "@/components/primitives/Container.astro";
@@ -26,7 +27,7 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
   {/* Hero */}
   <Section size="xl">
     <Container>
-      <Grid min="360px" gap="lg">
+      <Grid min="360px" gap="xs">
         <Stack gap="lg">
           <h1 class="text-display">
             Monsoon Projects 2026
@@ -53,18 +54,18 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
     </Container>
   </Section>
 
-  {/* Selected work */}
+  {/* Featured projects */}
   <Section size="lg">
     <Container>
       <Stack gap="lg">
-        <Cluster justify="between" align="baseline">
-          <h2 class="text-h3">Selected work</h2>
+        <Cluster justify="between" align="start">
+          <SectionHeading>Featured Projects</SectionHeading>
           <a href="/work" class="btn btn--secondary">
-            All work
+            View all
             <span aria-hidden="true">&rarr;</span>
           </a>
         </Cluster>
-        <Grid min="440px" gap="lg">
+        <Grid min="440px" gap="xs">
           {featured.map((project) => (
             <ProjectCard
               id={project.id}
@@ -78,14 +79,14 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
     </Container>
   </Section>
 
-  {/* Play — tabular list */}
+  {/* Experiments — preview list */}
   <Section size="lg">
     <Container>
       <Stack gap="lg">
-        <Cluster justify="between" align="baseline">
-          <h2 class="text-h3">Play</h2>
+        <Cluster justify="between" align="start">
+          <SectionHeading>Experiments</SectionHeading>
           <a href="/play" class="btn btn--secondary">
-            All play
+            View all
             <span aria-hidden="true">&rarr;</span>
           </a>
         </Cluster>
@@ -98,7 +99,7 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
   <Section size="lg" id="connect">
     <Container>
       <Stack gap="md">
-        <h2 class="text-h2">Let’s make something grow.</h2>
+        <SectionHeading>Get in touch</SectionHeading>
         <Cluster gap="lg" class="text-small">
           <a href={`mailto:${siteConfig.social.email}`} class="btn btn--link"
             >{siteConfig.social.email}</a

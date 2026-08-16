@@ -1,11 +1,10 @@
 ---
 import "../styles/global.css";
 import { siteConfig } from "@/data/site-config";
-/* Söhne (Klim Type Foundry), web-licensed. Both weights are preloaded: the
-   site uses 400 for reading and 600 for small headings, so a missing 600
-   would change layout on first paint, not just colour. */
-import soehneBuch from "../assets/fonts/soehne-buch.woff2?url";
-import soehneHalbfett from "../assets/fonts/soehne-halbfett.woff2?url";
+/* TASA Orbiter (SIL OFL) is one variable face for all readable type below the
+   display step. One preload covers the 400/500/600 hierarchy without fetching
+   separate files. */
+import tasaOrbiter from "../assets/fonts/tasa-orbiter-variable.woff2?url";
 /* Violet Sans (SIL OFL) carries the display step, which today is the homepage
    hero alone. Preloaded from here rather than only on that page: it is the
    largest text on the site, so a late swap reflows the biggest thing on the
@@ -38,9 +37,8 @@ const ogImage = image ? new URL(image, siteConfig.url).toString() : undefined;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
 
-    {/* Preload every face so text never paints in a fallback and swaps (FOUT) */}
-    <link rel="preload" href={soehneBuch} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={soehneHalbfett} as="font" type="font/woff2" crossorigin />
+    {/* Preload both families so text never paints in a fallback and swaps (FOUT) */}
+    <link rel="preload" href={tasaOrbiter} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={violetSans} as="font" type="font/woff2" crossorigin />
     <title>{pageTitle}</title>
 

@@ -3,6 +3,9 @@
 ## Public Terminology
 
 - "Work" is the public name for the portfolio/case-study section.
+- "Experiments" is the public name for the existing Play collection and
+  `/play` route. Keep the internal collection and URL stable; only the visible
+  label uses Experiments.
 - TODO(Anuj): add terminology as sections are added (Writing, Lab, etc.).
 
 ## Frontmatter Rules

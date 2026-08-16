@@ -13,25 +13,28 @@ What that means in practice:
 - **Restraint over decoration.** No eyebrows, kickers, or ornamental labels.
   If a piece of text is a section heading, make it a heading; don't dress it
   up as a 12px uppercase whisper.
-- **One reading font, two weights.** Söhne Buch and Halbfett. Hierarchy comes
-  from size, space and colour before it comes from weight, and weight is only
-  reached for when sizes get close enough that size alone can't separate them.
+- **One reading font, three approved weights.** TASA Orbiter Regular 400,
+  Medium 500 and Semibold 600. Hierarchy comes from size, space and colour
+  before it comes from weight; 600 is reserved for emphasis and real labels.
 - **One display font, one step.** Violet Sans on `text-display` and nowhere
   else. It has a single weight, so it can only sit on a step already set in
   400; extending it downward means dropping h2/h3 to 400 first.
 - **Big type is set light.** Display and h1 at 400 — this is the Klim habit
   and it is why the hero reads as composed rather than shouted.
-- **Nothing is below 16px.** Small and body are the same size; small keeps a
-  tighter 1.5 leading for single lines of metadata. Making text smaller is not
-  how metadata is made quiet — `--text-secondary` is.
+- **14px is the small step.** It carries metadata, captions and compact
+  interface labels at 1.5 leading; body remains 16px for reading.
 - **Tracking is zero, everywhere.** One value for every size, in both
-  directions. Söhne is drawn to be spaced correctly at each size; the system
+  directions. TASA Orbiter is drawn to be spaced correctly at each size; the system
   trusts it rather than second-guessing it per step.
 - **Text colour is a hierarchy of prominence, never of hue.** All neutral,
   after Apple's label model: primary label and secondary label, and nothing
   else. Apple's tertiary/quaternary levels are for watermarks and disabled
   states — every piece of text here is meant to be read, so there is no
-  third level.
+  third level. Brown is a decorative rule colour only, never readable text.
+- **One decorative accent.** `brown-300` is exposed through the semantic
+  `--decorative-accent` token for homepage section markers and wide-screen
+  navigation dividers. It stays the same in both themes and never enters text,
+  surfaces, borders with structural meaning, or status colour.
 - **Corners are square, everywhere.** No radius on cards, images, buttons,
   embeds or code blocks. The edge is the edge; a border and the space around
   it do the containing, and nothing is softened to look friendlier.
@@ -69,14 +72,14 @@ What that means in practice:
   raw hex values, named colors, or palette classes like `bg-zinc-100`.
 - Dark mode is class-based with `.dark` on `<html>`; both modes must be
   checked for any visual change.
-- **One brand font: Söhne** (Klim Type Foundry, web-licensed), self-hosted
-  from `src/assets/fonts/`. Exactly **two weights exist: Buch 400 and
-  Halbfett 600.** There is no 500 and no italic:
-  - Never write `font-medium` — 500 resolves to Buch 400 and silently
-    flattens the hierarchy. Verified: 400 and 500 measure identically.
-  - Never set `font-synthesis: none` — with no italic face it would erase
-    `<em>` emphasis entirely. Synthetic oblique is the correct trade here.
-  - Both faces are preloaded in `BaseLayout.astro`; those URLs and the
+- **One reading font: TASA Orbiter** (SIL OFL), self-hosted as a variable
+  WOFF2 from `src/assets/fonts/`. The font axis covers 400–800; this design
+  intentionally uses **Regular 400, Medium 500 and Semibold 600** only.
+  - Regular carries body/small/h1, Medium carries h2/h3 and the wordmark, and
+    Semibold is reserved for strong emphasis and genuine labels.
+  - The convention checker rejects weights outside that approved hierarchy,
+    even when the font file could technically render them.
+  - The variable face is preloaded in `BaseLayout.astro`; that URL and the
     `src()` paths in `global.css` must resolve to the same hashed asset or
     the preload silently double-downloads. Check `dist/` after changing either.
 - **One display font: Violet Sans** (SIL OFL, licence copy sits beside the
@@ -85,8 +88,8 @@ What that means in practice:
   - It is bound to `.text-display` in `global.css` rather than to a token,
     because Tailwind's `--text-*` steps carry size, leading and weight but
     not family.
-  - `font-synthesis-weight: none` is set on that rule. Unlike the Söhne case
-    above, a fake bold here would be a smeared regular with no upside — and
+  - `font-synthesis-weight: none` is set on that rule. A fake bold here would
+    be a smeared regular with no upside — and
     note this switches off weight only, so `<em>` is unaffected.
   - Do not extend it to h2/h3 without first dropping those steps to 400.
   `--font-mono` is a system fallback stack reserved for code only (inline
@@ -108,9 +111,9 @@ What that means in practice:
     to zero. After any conversion, measure the computed values — don't just
     check that the build passed.
 - **Hierarchy rule: size at large scale, weight at small scale.** Display
-  and h1 stay in Buch 400 and let size do the work; h2/h3 sit close enough
-  to body size that size alone cannot separate them, so they carry Halbfett
-  600. Weight now lives inside the token — no component writes `font-*`.
+  and h1 stay at 400 and let size do the work; h2/h3 sit close enough to body
+  size that size alone cannot separate them, so they carry TASA Medium 500.
+  Weight lives inside the token — no component writes `font-*`.
 - **No decorative eyebrows or uppercase kickers.** Section headings are real
   headings. `.label` is reserved for genuine metadata (table headers, the
   on-this-page title, style-guide section names) and is the only place
@@ -196,7 +199,7 @@ What that means in practice:
     case study, and nothing else.
   - `.btn--secondary` — the bordered default. Navigation and every action that
     is an action but not *the* action: the back links on work and play, the
-    "All work" / "All play" links beside the homepage section headings. It
+    "View all" links beside the homepage section headings. It
     moves the same three properties an interactive table row moves — border,
     surface, text — so it reads as one object lifting.
   - `.btn--link` — an action inside, or beside, a run of text. No box.
@@ -311,7 +314,7 @@ What that means in practice:
   softer colour is wanted, that is `--text-secondary`.
 - **`pnpm check` enforces the mechanical rules** (`scripts/check-conventions.mjs`,
   run in CI before the build). It covers raw spacing steps, raw type sizes,
-  call-site tracking/leading, unlicensed font weights, non-zero
+  call-site tracking/leading, unapproved font weights, non-zero
   letter-spacing, physical direction properties, alpha-diluted colours, raw
   hex in components, inline layout, corner radius, bare tables, variant-less
   buttons, retired type steps, and eyebrows.
