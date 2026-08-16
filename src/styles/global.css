@@ -1077,25 +1077,41 @@
   }
 
   /*
-    THE SWITCH. One rule for the resting state and one per row, which is why
-    the homepage list is capped at five — the cap and this block have to agree.
-    Written with :has() on the wrapper rather than a sibling combinator so the
-    pane can sit after the list in the DOM without the selector caring.
+    THE SWITCH, WITHOUT JAVASCRIPT. One rule for the resting state and one per
+    row, which is why the homepage list is capped at five — the cap and this
+    block have to agree. Written with :has() on the wrapper rather than a
+    sibling combinator so the pane can sit after the list in the DOM without
+    the selector caring.
 
     The trigger list mirrors the lift-on variant's rather than inventing a
     shorter one, so tabbing the list drives the pane exactly as pointing at it
     does. :focus-within earns its place next to :focus-visible: the row is an
     anchor wrapping spans, and it is the one of the two that a programmatic
     focus also matches — which is what makes this testable without a pointer.
+
+    This is the FALLBACK. It cannot retain the last-pointed-at row, because
+    CSS has no memory of a state that has ended: the moment the pointer leaves,
+    nothing is hovered and the resting rule takes over. So it is switched off
+    wholesale the moment the script marks the wrapper, and the rule below runs
+    instead. Both are kept rather than one, so the pane still answers the
+    pointer with JavaScript unavailable.
   */
-  .play-preview:not(:has(.play-item:is(:hover, :focus-visible, :focus-within))) .play-preview__set:first-child,
-  .play-preview:has(.play-item:nth-child(1):is(:hover, :focus-visible, :focus-within)) .play-preview__set:nth-child(1),
-  .play-preview:has(.play-item:nth-child(2):is(:hover, :focus-visible, :focus-within)) .play-preview__set:nth-child(2),
-  .play-preview:has(.play-item:nth-child(3):is(:hover, :focus-visible, :focus-within)) .play-preview__set:nth-child(3),
-  .play-preview:has(.play-item:nth-child(4):is(:hover, :focus-visible, :focus-within)) .play-preview__set:nth-child(4),
-  .play-preview:has(.play-item:nth-child(5):is(:hover, :focus-visible, :focus-within)) .play-preview__set:nth-child(5) {
+  .play-preview:not([data-enhanced]):not(:has(.play-item:is(:hover, :focus-visible, :focus-within))) .play-preview__set:first-child,
+  .play-preview:not([data-enhanced]):has(.play-item:nth-child(1):is(:hover, :focus-visible, :focus-within)) .play-preview__set:nth-child(1),
+  .play-preview:not([data-enhanced]):has(.play-item:nth-child(2):is(:hover, :focus-visible, :focus-within)) .play-preview__set:nth-child(2),
+  .play-preview:not([data-enhanced]):has(.play-item:nth-child(3):is(:hover, :focus-visible, :focus-within)) .play-preview__set:nth-child(3),
+  .play-preview:not([data-enhanced]):has(.play-item:nth-child(4):is(:hover, :focus-visible, :focus-within)) .play-preview__set:nth-child(4),
+  .play-preview:not([data-enhanced]):has(.play-item:nth-child(5):is(:hover, :focus-visible, :focus-within)) .play-preview__set:nth-child(5) {
     display: flex;
   }
+
+  /*
+    THE SWITCH, WITH IT. The script marks one set and never unmarks it on the
+    way out, which is the whole difference: the pane holds the last row you
+    pointed at instead of snapping back to the first. One rule, no per-row
+    selectors, because the script can name the element directly.
+  */
+  .play-preview[data-enhanced] .play-preview__set--active { display: flex; }
 }
 
 /*
