@@ -9,43 +9,81 @@ import Container from "@/components/primitives/Container.astro";
   first paint inside an iframe. Some WebGL tools only draw in response to a
   resize event and will show an empty canvas when framed — check the embed
   actually renders before setting `embedUrl` on an entry.
+
+  `onPhone` (frontmatter `embedOnPhone`) says the embedded tool reflows for a
+  narrow frame. That one fact has two consequences, and both live here:
+
+  1. The iframe stays below tablet width instead of being swapped for a link.
+  2. The frame gets a much taller shape when it is narrow, because a tool that
+     reflows puts its controls *under* its canvas and then needs the room. The
+     heights in global.css are measured against the embedded page rather than
+     guessed; a frame that is too short does not clip, it gives the embed its
+     own scrollbar, which is worse.
+
+  The tap guard is separate, and it is about touch rather than width. Canvas
+  tools set `touch-action: none` so they can read drags, which means a swipe
+  that starts on the canvas scrolls nothing and the page feels frozen. The
+  guard is a transparent layer that takes that first touch, so the embed only
+  starts receiving input once someone has asked for it. It is shown wherever
+  the pointer cannot hover, so an embed on a tablet is covered too.
 */
 
 interface Props {
   url: string;
   title: string;
+  onPhone?: boolean;
 }
 
-const { url, title } = Astro.props;
+const { url, title, onPhone = false } = Astro.props;
 ---
 
 <Section size="sm">
   <Container>
-    <div class="embed-frame">
-      <iframe
-        src={url}
-        title={`${title} — live demo`}
-        loading="lazy"
-        allow="fullscreen"
-      ></iframe>
+    <div class:list={["embed", onPhone && "embed--phone"]}>
+      <div class="embed-frame">
+        <iframe
+          src={url}
+          title={`${title} — live demo`}
+          loading="lazy"
+          allow="fullscreen"
+        ></iframe>
+        <button class="embed-guard" type="button">
+          <span class="embed-guard__label">Tap to use it here</span>
+        </button>
+      </div>
+      <p class="embed-fallback">
+        This one needs a bigger screen than a phone —
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn--link"
+        >open it in a new tab</a>.
+      </p>
+      <p class="embed-note">
+        Runs live in the page.
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn--link"
+        >Open full screen</a>.
+      </p>
     </div>
-    <p class="embed-fallback">
-      This one needs a bigger screen than a phone —
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="btn btn--link"
-      >open it in a new tab</a>.
-    </p>
-    <p class="embed-note">
-      Runs live in the page.
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="btn btn--link"
-      >Open full screen</a>.
-    </p>
   </Container>
 </Section>
+
+<script>
+  /*
+    One tap hands the embed over, and it stays handed over. That is the same
+    bargain an embedded map makes: the page keeps scrolling until you say you
+    want the thing, and after that it is yours.
+
+    Nothing here runs on a hovering pointer — CSS keeps the guard hidden, so
+    on a desktop the embed is live from the start and this listener never
+    fires.
+  */
+  for (const guard of document.querySelectorAll<HTMLElement>(".embed-guard")) {
+    guard.addEventListener("click", () => guard.remove());
+  }
+</script>

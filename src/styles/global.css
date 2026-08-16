@@ -1115,10 +1115,19 @@
 }
 
 /*
-  Inline interactive embed (case-study `embedUrl`). The embedded tools are
-  desktop-oriented, so the iframe only appears at tablet width and up; below
-  that the fallback link is shown instead of an unusable miniature.
+  Inline interactive embed (case-study `embedUrl`). Most embedded tools are
+  desktop-oriented, so by default the iframe only appears at tablet width and
+  up; below that the fallback link is shown instead of an unusable miniature.
+  `.embed--phone` is the opt-in for a tool that genuinely reflows — see
+  EmbedFrame.astro for what that flag means and why the guard exists.
+
+  The wrapper is a size container so the frame can be shaped by its own width
+  rather than the viewport's. Those are not the same number: the frame is the
+  page container minus its gutter, and the embedded page lays itself out
+  against the frame.
 */
+.embed { container-type: inline-size; }
+
 .embed-frame { display: none; }
 .embed-fallback {
   display: block;
@@ -1128,27 +1137,99 @@
   color: var(--muted-foreground);
 }
 @media (min-width: 48rem) {
-  .embed-frame {
-    display: block;
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    border: 1px solid var(--border);
-    overflow: hidden;
-    background: var(--muted);
-  }
+  .embed-frame { display: block; }
   .embed-fallback { display: none; }
 }
+.embed--phone .embed-frame { display: block; }
+.embed--phone .embed-fallback { display: none; }
+
+/* Shape and chrome, wherever the frame is shown. */
+.embed-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background: var(--muted);
+}
 .embed-frame iframe { display: block; width: 100%; height: 100%; border: 0; }
-/* The note describes the iframe, so it hides with the iframe — otherwise it
+
+/*
+  A reflowing tool needs height, not a ratio. Above its own stacking point it
+  puts a fixed-width control panel beside the canvas and wants a near-constant
+  height; below it, the panel drops underneath and wants a lot more. Both
+  numbers are measured against the embedded page at the frame widths this
+  container actually produces (rounded up from 750px and 1011px), because a
+  frame that is too short does not crop the tool — it gives it a scrollbar
+  inside the page, which is the one outcome worth avoiding.
+*/
+@container (min-width: 53.125rem) {
+  .embed--phone .embed-frame { aspect-ratio: auto; height: 48rem; }
+}
+@container (max-width: 53.125rem) {
+  .embed--phone .embed-frame { aspect-ratio: auto; height: 64rem; }
+}
+
+/*
+  Edge to edge on a phone, which is the one place the site's shared vertical
+  edges cost more than they are worth. The gutter takes 48px off the frame,
+  and a tool laid out for a 320px floor spends the last of its room on the
+  controls: at a 375px screen the framed tool is 327px wide and clips the
+  right edge of its own buttons. Full width hands those 48px back.
+
+  `width: auto` matters — a box at `width: 100%` would keep the container's
+  width and simply move left.
+*/
+@media (max-width: 47.9375rem) {
+  .embed--phone .embed-frame {
+    width: auto;
+    margin-inline-start: calc(-1 * max(var(--spacing-gutter), env(safe-area-inset-left)));
+    margin-inline-end: calc(-1 * max(var(--spacing-gutter), env(safe-area-inset-right)));
+    border-inline-start-width: 0;
+    border-inline-end-width: 0;
+  }
+}
+
+/*
+  Tap guard. Canvas tools set `touch-action: none` to read drags, so a swipe
+  starting on the embed scrolls nothing at all. This layer takes that first
+  touch and then removes itself. Shown only where the pointer cannot hover, so
+  a mouse never meets it and a tablet is covered as well as a phone.
+*/
+.embed-guard { display: none; }
+@media (hover: none) {
+  .embed-guard {
+    display: flex;
+    position: absolute;
+    inset: 0;
+    align-items: flex-end;
+    justify-content: center;
+    padding: var(--spacing-md);
+    border: 0;
+    /* Transparent on purpose: the tool is already running behind it, and the
+       point is to let it be watched before it is touched. */
+    background: transparent;
+  }
+  .embed-guard__label {
+    border: 1px solid var(--border);
+    padding: var(--spacing-2xs) var(--spacing-sm);
+    font-size: var(--text-small);
+    color: var(--foreground);
+    background: var(--background-elevated);
+  }
+}
+
+/* The note describes the iframe, so it appears with the iframe — otherwise it
    contradicts the fallback link that replaces it on phones. */
 .embed-note { display: none; }
+.embed--phone .embed-note { display: block; }
 @media (min-width: 48rem) {
-  .embed-note {
-    display: block;
-    margin-top: var(--spacing-2xs);
-    font-size: var(--text-small);
-    color: var(--muted-foreground);
-  }
+  .embed-note { display: block; }
+}
+.embed-note {
+  margin-top: var(--spacing-2xs);
+  font-size: var(--text-small);
+  color: var(--muted-foreground);
 }
 
 /*

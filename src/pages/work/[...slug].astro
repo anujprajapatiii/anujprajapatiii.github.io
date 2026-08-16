@@ -81,7 +81,11 @@ const { Content, headings } = await render(project);
 
     {/* Breaks out of the reading column to full width — see EmbedFrame. */}
     {project.data.embedUrl && (
-      <EmbedFrame url={project.data.embedUrl} title={project.data.title} />
+      <EmbedFrame
+        url={project.data.embedUrl}
+        title={project.data.title}
+        onPhone={project.data.embedOnPhone}
+      />
     )}
 
     <Container>

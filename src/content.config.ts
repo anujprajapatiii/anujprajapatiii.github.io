@@ -17,6 +17,11 @@ const caseStudySchema = z.object({
   // at tablet width and up; below that a link is shown instead (see
   // .embed-frame in global.css). Usually the same as liveUrl.
   embedUrl: z.string().url().optional(),
+  // Set this only when the embedded tool genuinely reflows for a phone. It
+  // keeps the iframe below tablet width instead of swapping in the link, and
+  // turns on the tap guard that stops the embed from swallowing page scroll.
+  // Default off: most tools lay out for a mouse and a wide canvas.
+  embedOnPhone: z.boolean().default(false),
   // Up to three stills or clips shown beside the Play list on the homepage
   // while a row is pointed at. The file extension decides which element
   // renders: .mp4/.webm/.mov become <video>, anything else an <img>. Leave it
