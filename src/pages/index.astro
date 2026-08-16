@@ -1,7 +1,7 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
-import DataTable from "@/components/DataTable.astro";
+import PlayPreviewList from "@/components/PlayPreviewList.astro";
 import HeroShader from "@/components/HeroShader";
 import Section from "@/components/primitives/Section.astro";
 import Container from "@/components/primitives/Container.astro";
@@ -15,8 +15,11 @@ const featured = (await getCollection("projects", ({ data }) => !data.draft))
   .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
   .slice(0, 4);
 
+/* Five, to match the preview pane: the switch in global.css has one rule per
+   row, so the cap and that block have to agree. */
 const play = (await getCollection("play", ({ data }) => !data.draft))
-  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .slice(0, 5);
 ---
 
 <PageLayout>
@@ -86,35 +89,7 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
             <span aria-hidden="true">&rarr;</span>
           </a>
         </Cluster>
-        <DataTable label="Play experiments" interactive>
-          <thead>
-            <tr>
-              <th scope="col">Title</th>
-              <th scope="col">Role</th>
-              <th scope="col">Year</th>
-            </tr>
-          </thead>
-          <tbody>
-            {play.map((item) => (
-              <tr>
-                <td>
-                  {/*
-                    One anchor per row, not three. It stretches over the whole
-                    row from CSS (see .row-link), so the Role and Year cells are
-                    clickable without existing as extra links — which would be
-                    three tab stops and three announcements for one destination.
-                  */}
-                  <a class="row-link" href={`/play/${item.id}`}>
-                    <span class="row-link__text">{item.data.title}</span>
-                    <span class="row-link__arrow" aria-hidden="true">&rarr;</span>
-                  </a>
-                </td>
-                <td>{item.data.role}</td>
-                <td>{item.data.year}</td>
-              </tr>
-            ))}
-          </tbody>
-        </DataTable>
+        <PlayPreviewList items={play} />
       </Stack>
     </Container>
   </Section>

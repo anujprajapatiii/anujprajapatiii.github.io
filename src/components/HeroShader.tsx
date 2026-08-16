@@ -2,13 +2,16 @@
   The hero shader — the metaball that replaced the grey placeholder beside the
   homepage headline. Designed in Paper as a LiquidMetal node.
 
-  This one animates the easy way, and the difference from HalftoneBand is
-  worth stating: LiquidMetal's fragment shader actually READS u_time
-  (`float t = .3 * (u_time + firstFrameOffset)`), so `speed` drives it and
-  ShaderMount's own rAF handles pausing when the tab is hidden or the element
-  leaves the viewport. HalftoneBand needed a hand-written loop because its
-  shader declares u_time and never uses it. Check the shader source before
-  trusting `speed` on any other one of these.
+  This one animates the easy way: LiquidMetal's fragment shader actually READS
+  u_time (`float t = .3 * (u_time + firstFrameOffset)`), so `speed` drives it
+  and ShaderMount's own rAF handles pausing when the tab is hidden or the
+  element leaves the viewport.
+
+  Do not assume that of the others. Several shaders in this package declare
+  u_time and never use it, so `speed` type-checks, ships, and animates
+  nothing — grep the fragment source for an actual read before trusting it.
+  (A halftone band on this page hit exactly that and needed a hand-written
+  rAF loop; the band is gone, the trap is not.)
 
   Colour comes from --shader-tint, which exists for this component. See the
   note in global.css: the tint is a colour burn, so the value has to invert

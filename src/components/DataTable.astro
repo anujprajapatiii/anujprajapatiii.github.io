@@ -13,20 +13,23 @@ interface Props {
   /* Announced to screen readers in place of a visible caption. Give it when
      the surrounding heading does not already name what the table holds. */
   label?: string;
-  /* Every row is a link. Turns on the whole-row hover and focus treatment,
-     and with it the muted resting colour that makes the lift readable. Leave
-     it off for tables that only present data — they stay at full contrast
-     and do not react to the pointer. */
-  interactive?: boolean;
   class?: string;
 }
 
-const { label, interactive = false, class: className } = Astro.props;
+/*
+  There used to be an `interactive` prop here, turning on a whole-row hover for
+  tables whose rows are links. Only the homepage Play list ever set it, and
+  that list is `.play-preview` now — a set of bordered rows with a preview
+  pane, not a table. Every remaining table on the site presents data and does
+  not react to the pointer, so the variant went with its one caller.
+*/
+
+const { label, class: className } = Astro.props;
 ---
 
 <div class:list={["table-scroll", className]}>
   <table
-    class:list={["data-table", interactive && "data-table--interactive"]}
+    class:list={["data-table"]}
     aria-label={label}
   >
     <slot />

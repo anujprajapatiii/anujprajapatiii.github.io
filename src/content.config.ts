@@ -17,6 +17,11 @@ const caseStudySchema = z.object({
   // at tablet width and up; below that a link is shown instead (see
   // .embed-frame in global.css). Usually the same as liveUrl.
   embedUrl: z.string().url().optional(),
+  // Up to three stills or clips shown beside the Play list on the homepage
+  // while a row is pointed at. The file extension decides which element
+  // renders: .mp4/.webm/.mov become <video>, anything else an <img>. Leave it
+  // empty and the row shows three empty frames — the design's placeholder.
+  previews: z.array(z.string()).max(3).default([]),
   sortOrder: z.number().default(0),
   draft: z.boolean().default(false),
 });

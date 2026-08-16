@@ -1,0 +1,145 @@
+---
+/*
+  The homepage Play list: five rows on the left, a preview pane on the right
+  that shows the pointed-at row's three previews.
+
+  THE SWITCHING IS CSS, NOT JAVASCRIPT. Every row's set is rendered, and
+  `:has()` on the wrapper reveals the one whose row is hovered or focused —
+  see `.play-preview` in global.css. That buys three things: it works before
+  (and without) JS, it responds to keyboard focus for free because the same
+  selector lists `:focus-visible`, and there is no state to get out of sync
+  with the DOM.
+
+  THE PERFORMANCE COMES FROM THE SAME PLACE. Hidden sets are `display: none`,
+  so their images have no box, never intersect the viewport, and a lazy image
+  in one is never fetched. Five items x three previews is fifteen assets, and
+  a visitor who hovers two rows pays for six. Only the first set — the one
+  shown at rest — is fetched on load.
+
+  The cost of that is a beat of empty frame the first time a row is pointed
+  at, so the script at the bottom warms the rest when the pointer first
+  enters the section: by the time it reaches a row, they are in cache. A
+  visitor who never points at Play never pays for them.
+*/
+import { getEntry } from "astro:content";
+
+type PlayItem = {
+  id: string;
+  data: {
+    title: string;
+    description: string;
+    thumbnail?: string;
+    previews: string[];
+  };
+};
+
+interface Props {
+  items: PlayItem[];
+}
+
+const { items } = Astro.props;
+
+const VIDEO = /\.(mp4|webm|mov)$/i;
+/* Three frames per row, always — an item with one preview still gets three
+   slots, so the pane's height never changes as the pointer moves down the
+   list. Missing ones render as the empty frame the design shows. */
+const framesFor = (previews: string[]) =>
+  [0, 1, 2].map((i) => previews[i] ?? null);
+---
+
+<div class="play-preview">
+  <div class="play-preview__list">
+    {items.map((item) => (
+      <a class="play-item" href={`/play/${item.id}`}>
+        {item.data.thumbnail ? (
+          <img
+            class="play-item__thumb"
+            src={item.data.thumbnail}
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          <span class="play-item__thumb"></span>
+        )}
+        <span class="play-item__body">
+          <span class="play-item__title">{item.data.title}</span>
+          <span class="play-item__subtitle">{item.data.description}</span>
+        </span>
+      </a>
+    ))}
+  </div>
+
+  {/*
+    Decorative by construction. The pane repeats what the row already says, so
+    announcing it again would read the list twice; the links carry the meaning.
+  */}
+  <div class="play-preview__pane" aria-hidden="true">
+    {items.map((item) => (
+      <div class="play-preview__set">
+        {framesFor(item.data.previews).map((src) => (
+          <div class="play-preview__frame">
+            {src && (VIDEO.test(src) ? (
+              <video src={src} muted loop playsinline preload="none" autoplay></video>
+            ) : (
+              <img src={src} alt="" loading="lazy" decoding="async" />
+            ))}
+          </div>
+        ))}
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  /*
+    Two small jobs, both progressive enhancement — the list works with this
+    script removed.
+
+    1. Warm the hidden previews once, when the pointer first enters the
+       section. `display: none` means they are not fetched until revealed, so
+       without this the first hover on each row shows an empty frame while the
+       image arrives. Entering the section happens a beat before reaching a
+       row, which is the lead time this needs. Images only: videos carry
+       preload="none" deliberately and start when they are revealed.
+
+    2. Stop the videos for anyone who asked for less motion. A muted looping
+       clip is exactly the "slow looping oscillation" reduced-motion is meant
+       to suppress, and `autoplay` has no media query.
+  */
+  const root = document.querySelector<HTMLElement>(".play-preview");
+
+  if (root) {
+    let warmed = false;
+    root.addEventListener(
+      "pointerenter",
+      () => {
+        if (warmed) return;
+        warmed = true;
+        const sources = [...root.querySelectorAll<HTMLImageElement>(".play-preview__frame img")]
+          .map((img) => img.currentSrc || img.src)
+          .filter(Boolean);
+        /* At idle so it never competes with what is already on screen. */
+        const warm = () => sources.forEach((src) => { new Image().src = src; });
+        "requestIdleCallback" in window
+          ? requestIdleCallback(warm, { timeout: 2000 })
+          : setTimeout(warm, 200);
+      },
+      { once: false },
+    );
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const syncMotion = () => {
+      for (const video of root.querySelectorAll("video")) {
+        if (reduceMotion.matches) {
+          video.autoplay = false;
+          video.pause();
+        } else {
+          video.autoplay = true;
+        }
+      }
+    };
+    syncMotion();
+    reduceMotion.addEventListener("change", syncMotion);
+  }
+</script>

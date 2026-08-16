@@ -605,8 +605,7 @@
   saturate() is the part that makes this read as Apple's material rather than
   frosted plastic: it enriches whatever shows through. On a palette this
   neutral it does almost nothing to the page itself — greys have no chroma to
-  lift — and it earns its place only where the hero shader and the halftone
-  band pass underneath.
+  lift — and it earns its place only where the hero shader passes underneath.
 
   z-index because the on-this-page rail is also positioned and comes LATER in
   the document; without one, paint order would put the rail over the header.
@@ -864,113 +863,12 @@
   white-space: nowrap;
 }
 /*
-  Row hover, for tables whose rows are links (the Play list). The row's own
-  colours are declared in the INTERACTION block at the end of this file; what
-  stays here is the part that is about tables specifically — the shared edges.
-
-  Opted into with `interactive` on DataTable, not inferred from :has(a).
-  Inferring it worked for the row itself but not for its shared edges: the
-  border rules have to reach a NEIGHBOUR, and "the next row is hovered and
-  contains a link" cannot be expressed — :has() cannot nest inside :has().
-
-  Collapsed borders are shared, and the shared edge belongs to the cell above,
-  so a hovered row's TOP rule is painted by whatever precedes it. Two cases:
-  a row with a row above it, and the first row, whose top edge belongs to the
-  header. `thead > tr` is not a sibling of `tbody > tr`, so that reach has to
-  be thead-to-tbody — missing it is why the first row alone once came out open
-  at the top.
-
-  The cells used to carry a fade of their own, because the CSS property does
-  not inherit: the border rules live on the CELLS while the row carried the
-  only one, so the fill and the text faded over 150ms while all four
-  rules snapped instantly and the row arrived in two parts. Nothing fades now,
-  so the whole problem is gone and the rule with it.
+  `color: inherit` so a link inside a cell takes the cell's colour rather than
+  the browser's blue. The rest of this block is gone: the interactive row
+  variant and the whole-row `.row-link` lived only on the homepage Play list,
+  which is now `.play-preview` instead of a table. Nothing else ever opted in.
 */
-.data-table--interactive tbody tr {
-  @variant lift-on {
-    & > * { border-color: var(--border-hover); }
-  }
-}
-.data-table--interactive tbody tr {
-  @variant lift-on-next {
-    & > * { border-bottom-color: var(--border-hover); }
-  }
-}
-.data-table--interactive thead {
-  @variant lift-on-below {
-    & th { border-bottom-color: var(--border-hover); }
-  }
-}
 .data-table a { color: inherit; }
-
-/*
-  WHOLE-ROW LINK. One anchor in the first cell, stretched over the entire row
-  by a transparent ::after, so pointing anywhere in the row — Role, Year, the
-  gaps between — hits the same link.
-
-  `position: relative` on a <tr> is the load-bearing part, and it is the thing
-  that used to be unreliable. Verified here rather than assumed: with it, an
-  absolutely-positioned child of the cell measures exactly the row's box;
-  without it the child escapes to the nearest positioned ancestor and spans
-  the whole table. A row is a real containing block in current engines.
-
-  The alternative — an anchor inside all three cells — was rejected. Filling
-  every cell means three tab stops and three announcements for one
-  destination, and hiding the spares with aria-hidden would take the Role and
-  Year values away from screen readers entirely.
-
-  The trade: text in the covered cells can no longer be selected, because the
-  overlay is above it. For five short experiment titles that is worth the
-  whole row being a target.
-*/
-.data-table--interactive tbody tr { position: relative; }
-.row-link {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-}
-.row-link::after { content: ""; position: absolute; inset: 0; }
-
-/*
-  The arrow sits at the Title column's right edge rather than trailing the
-  text, so it forms one vertical lane down the table instead of stepping in
-  and out with each title's length. Same reason the hero's Connect row pushes
-  its arrow to the far edge of the box.
-*/
-.row-link__arrow { margin-inline-start: auto; }
-
-/*
-  The arrow declares no colour at all, which is what makes it ALWAYS VISIBLE.
-  It inherits the row's, so it rests at --text-secondary and brightens to
-  --text-interactive with the rest of the row — it is simply part of the row's
-  text, moving on the text channel like the title and the year. Anuj's call:
-  the affordance should not depend on a pointer, which a hover-only arrow did.
-  Touch has no hover, so on a phone it never appeared at all.
-
-  The UNDERLINE is still hover-only. It is the signal that says "this is the
-  thing you are about to follow", which is only meaningful once something is
-  pointed at; the arrow is the standing sign that the row is a link. Painted
-  transparent rather than removed, so revealing it moves no layout — the same
-  reason the furniture links carry a decoration channel instead of a
-  decoration rule. It is on the text span and not the anchor because the
-  anchor is a flex container and would have underlined the arrow too.
-*/
-.row-link__text {
-  text-decoration-line: underline;
-  text-underline-offset: var(--spacing-3xs);
-  text-decoration-color: transparent;
-}
-/*
-  Driven by the ROW's trigger, not the span's own — the same reach the project
-  card uses for its thumbnail and meta. The row's lift-on covers hover,
-  focus-visible, focus-within, active and the touch guard in one place, so
-  tabbing to the link underlines the title exactly as pointing at it does.
-*/
-.data-table--interactive tbody tr {
-  @variant lift-on {
-    & .row-link__text { text-decoration-color: currentColor; }
-  }
-}
 
 /*
   A table is the one thing here that legitimately cannot be made narrower —
@@ -1074,20 +972,6 @@
 .project-card .media-placeholder { border: 0; }
 
 /*
-  Halftone band — the shader surface under the work cards. Designed in Paper;
-  see HalftoneBand.tsx for the two departures from that export.
-
-  The border is not in the Paper file. It is here because every other media
-  surface on the site carries one — the placeholder above, prose images, the
-  case-study embed — and a bare texture band sitting between four bordered
-  cards was the only unruled surface on the page.
-
-  The background is what shows before WebGL has a first frame, and what stays
-  if it never gets one: a plain elevated surface, the same value the shader
-  itself draws behind the dots. A failed context leaves a quiet blank band
-  rather than a hole in the page.
-*/
-/*
   Hero shader — the metaball beside the headline, in place of the grey
   placeholder that used to sit there.
 
@@ -1110,13 +994,109 @@
 }
 .hero-shader canvas { display: block; }
 
-.halftone-band {
-  width: 100%;
-  height: 140px;
-  background: var(--background-elevated);
-  border: 1px solid var(--border);
+/*
+  ===== Play preview list =====
+  Five rows and a pane that shows the pointed-at row's previews.
+
+  MOBILE FIRST, AND THE PANE IS DESKTOP-ONLY. It is driven by hover, and touch
+  has none — so below the breakpoint it is not hidden so much as absent, and
+  the rows take the full width with a smaller thumbnail. Nothing is lost: each
+  row is a link to the same place the preview was advertising.
+
+  The breakpoint is the sidebar's 56rem, reused rather than invented. The
+  arithmetic happens to be the same shape: at 30% for the pane, the row keeps
+  250px of thumbnail plus a readable run of text only while the container is
+  near its 1024px cap.
+*/
+.play-preview { display: flex; align-items: flex-start; gap: var(--spacing-xs); }
+.play-preview__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  flex: 1;
+  /* Flex items refuse to shrink below their content; without this a long
+     subtitle pushes the row past the pane and the section scrolls sideways. */
+  min-width: 0;
 }
-.halftone-band canvas { display: block; }
+.play-item { display: flex; width: 100%; border: 1px solid var(--border); }
+.play-item__thumb {
+  width: 120px;
+  align-self: stretch;
+  flex-shrink: 0;
+  object-fit: cover;
+  background: var(--muted);
+  border-inline-end: 1px solid var(--border);
+}
+.play-item__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-3xs);
+  padding: var(--spacing-2xs) var(--spacing-xs);
+  flex: 1;
+  min-width: 0;
+}
+.play-item__title { font-size: var(--text-body); line-height: var(--text-body--line-height); }
+/*
+  ONE LINE, ALWAYS. The design's subtitle is a short written line; the field it
+  is fed from is the item's full description, which runs to two or three. Left
+  to wrap, every row is a different height and the rows stop reading as a list.
+  Clamped rather than shortened at the source because the same description is
+  the card's paragraph elsewhere, where it should run in full.
+*/
+.play-item__subtitle {
+  font-size: var(--text-small);
+  line-height: var(--text-small--line-height);
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.play-preview__pane { display: none; }
+
+@media (min-width: 56rem) {
+  .play-item__thumb { width: 250px; height: 80px; align-self: auto; }
+  .play-preview__pane {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xs);
+    width: 30%;
+    flex-shrink: 0;
+    /* Matches the list's height rather than its own content, so the pane is
+       one steady rectangle while the pointer moves down the rows. */
+    align-self: stretch;
+    padding: var(--spacing-2xs);
+    background: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .play-preview__set { display: none; flex-direction: column; gap: var(--spacing-2xs); flex: 1; }
+  .play-preview__frame { flex: 1; overflow: clip; background: var(--background); }
+  .play-preview__frame :is(img, video) {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+
+  /*
+    THE SWITCH. One rule for the resting state and one per row, which is why
+    the homepage list is capped at five — the cap and this block have to agree.
+    Written with :has() on the wrapper rather than a sibling combinator so the
+    pane can sit after the list in the DOM without the selector caring.
+
+    The trigger list mirrors the lift-on variant's rather than inventing a
+    shorter one, so tabbing the list drives the pane exactly as pointing at it
+    does. :focus-within earns its place next to :focus-visible: the row is an
+    anchor wrapping spans, and it is the one of the two that a programmatic
+    focus also matches — which is what makes this testable without a pointer.
+  */
+  .play-preview:not(:has(.play-item:is(:hover, :focus-visible, :focus-within))) .play-preview__set:first-child,
+  .play-preview:has(.play-item:nth-child(1):is(:hover, :focus-visible, :focus-within)) .play-preview__set:nth-child(1),
+  .play-preview:has(.play-item:nth-child(2):is(:hover, :focus-visible, :focus-within)) .play-preview__set:nth-child(2),
+  .play-preview:has(.play-item:nth-child(3):is(:hover, :focus-visible, :focus-within)) .play-preview__set:nth-child(3),
+  .play-preview:has(.play-item:nth-child(4):is(:hover, :focus-visible, :focus-within)) .play-preview__set:nth-child(4),
+  .play-preview:has(.play-item:nth-child(5):is(:hover, :focus-visible, :focus-within)) .play-preview__set:nth-child(5) {
+    display: flex;
+  }
+}
 
 /*
   Inline interactive embed (case-study `embedUrl`). The embedded tools are
@@ -1379,16 +1359,13 @@
   &:is(:focus-visible, :focus-within, :active) { @slot; }
   @media (hover: hover) { &:hover { @slot; } }
 }
-/* Same triggers, reaching a NEIGHBOUR — for collapsed table borders, where
-   the edge belongs to the element before the one being pointed at. */
-@custom-variant lift-on-next {
-  &:has(+ *:is(:focus-within, :active)) { @slot; }
-  @media (hover: hover) { &:has(+ *:hover) { @slot; } }
-}
-@custom-variant lift-on-below {
-  &:has(+ tbody tr:first-child:is(:focus-within, :active)) { @slot; }
-  @media (hover: hover) { &:has(+ tbody tr:first-child:hover) { @slot; } }
-}
+/*
+  Two neighbour-reaching variants lived here, for collapsed table borders,
+  where a hovered row's top edge is painted by the element ABOVE it. They went
+  with the interactive table: the Play list is `.play-preview` now, and its
+  rows are separate bordered boxes with a gap, so no edge is shared and no
+  rule has to reach past its own element.
+*/
 
 /*
   THE LIST. Every interactive element on the site, named once.
@@ -1407,7 +1384,7 @@
   .theme-toggle,
   .on-this-page a,
   .info-box a,
-  .data-table--interactive tbody tr
+  .play-item
 ) {
   color:                 var(--lift-text,    currentColor);
   background-color:      var(--lift-surface, transparent);
@@ -1564,13 +1541,15 @@
 }
 
 /*
-  The interactive table row. Rests muted so the lift has somewhere to come
-  from — if every row already sat at full contrast, hover would have nothing
-  left to add — and lifts to --text-interactive like everything else on the
-  site. It used to stop at --text-primary, the one documented exception to the
-  hover rule; that exception is gone and the lift is stronger for it.
+  The Play row, inheriting the interactive table row's values — it replaced
+  that row and does the same job. Rests muted so the lift has somewhere to
+  come from: if a row already sat at full contrast, pointing at it would have
+  nothing left to add. It owns a rule as well as a surface, because unlike the
+  table's collapsed edges this row is its own bordered box.
 */
-.data-table--interactive tbody tr {
+.play-item {
   --lift-text: var(--text-secondary);
   --lift-surface-on: var(--background-hover);
+  --lift-rule: var(--border);
+  --lift-rule-on: var(--border-hover);
 }
