@@ -6,7 +6,7 @@ year: "2025"
 skills:
   - Audio-visual
   - Motion
-sortOrder: 4
+sortOrder: 5
 draft: false
 ---
 

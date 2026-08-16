@@ -6,7 +6,7 @@ year: "2026"
 skills:
   - Colour
   - Motion
-sortOrder: 2
+sortOrder: 3
 draft: false
 ---
 

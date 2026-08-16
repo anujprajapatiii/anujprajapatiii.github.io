@@ -6,7 +6,7 @@ year: "2025"
 skills:
   - Creative coding
   - Layout
-sortOrder: 3
+sortOrder: 4
 draft: false
 ---
 

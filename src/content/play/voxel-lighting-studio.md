@@ -21,7 +21,7 @@ liveUrl: https://anujprajapatiii.github.io/voxel_lighting/
 # EmbedFrame requirement): it re-renders and re-bakes shadows when the canvas
 # gains real dimensions, so a hidden/zero-size mount no longer stays blank.
 embedUrl: https://anujprajapatiii.github.io/voxel_lighting/
-sortOrder: 0
+sortOrder: 1
 draft: false
 ---
 
