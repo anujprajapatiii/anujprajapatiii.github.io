@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { siteConfig } from "@/data/site-config";
+import { defaultPagePalette, type PagePalette } from "@/data/page-palettes";
 /* TASA Orbiter (SIL OFL) is one variable face for all readable type below the
    display step. One preload covers the 400/500/600 hierarchy without fetching
    separate files. */
@@ -17,9 +18,16 @@ interface Props {
   description?: string;
   image?: string;
   noindex?: boolean;
+  palette?: PagePalette;
 }
 
-const { title, description, image, noindex = false } = Astro.props;
+const {
+  title,
+  description,
+  image,
+  noindex = false,
+  palette = defaultPagePalette,
+} = Astro.props;
 
 const pageTitle = title ?? siteConfig.title;
 const pageDescription = description ?? siteConfig.description;
@@ -28,7 +36,7 @@ const ogImage = image ? new URL(image, siteConfig.url).toString() : undefined;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-palette={palette}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

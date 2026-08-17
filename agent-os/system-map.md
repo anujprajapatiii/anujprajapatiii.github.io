@@ -11,7 +11,8 @@ workflows change.
 | --- | --- | --- |
 | Public site shell | Shared layout, navigation, footer, theme, metadata | `src/layouts/`, `src/components/layout/`, `src/data/site-config.ts` |
 | Work | Portfolio/case-study section at `/work` | `src/content/projects/`, rendered through `/work` routes |
-| Design tokens | Color, type, spacing, container tokens (light + dark); no radius token — corners are square | `src/styles/global.css` |
+| Design tokens | Base color, type, spacing, and container tokens; light/dark appearance modes | `src/styles/global.css` |
+| Page palettes | Authored per-page semantic colour remaps, independent of light/dark mode | `src/data/page-palettes.ts`, `src/styles/themes/`, layout palette props |
 | Layout primitives | Section/Container/Stack/Cluster/Grid composition system | `src/components/primitives/`, CSS in `src/styles/global.css` |
 | Deployment | Static build published to GitHub Pages | `.github/workflows/deploy.yml` |
 | Work orchestration | Strategy, plans, conventions, learnings | `agent-os/` |
@@ -29,7 +30,9 @@ workflows change.
 ## Content Model
 
 Content collections are defined in `src/content.config.ts`. Drafts must be
-filtered before public rendering.
+filtered before public rendering. Work and Play case studies can opt into a
+validated authored colour palette with the `palette` frontmatter field; the
+default keeps the site palette.
 
 | Collection | Public route | Source |
 | --- | --- | --- |

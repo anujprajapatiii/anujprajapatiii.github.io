@@ -26,15 +26,16 @@ What that means in practice:
 - **Tracking is zero, everywhere.** One value for every size, in both
   directions. TASA Orbiter is drawn to be spaced correctly at each size; the system
   trusts it rather than second-guessing it per step.
-- **Text colour is a hierarchy of prominence, never of hue.** All neutral,
-  after Apple's label model: primary label and secondary label, and nothing
-  else. Apple's tertiary/quaternary levels are for watermarks and disabled
-  states — every piece of text here is meant to be read, so there is no
-  third level. Brown is a decorative rule colour only, never readable text.
-- **One decorative accent.** `brown-300` is exposed through the semantic
-  `--decorative-accent` token for homepage section markers and wide-screen
-  navigation dividers. It stays the same in both themes and never enters text,
-  surfaces, borders with structural meaning, or status colour.
+- **Portfolio reading text stays neutral.** Public content currently uses the
+  primary and secondary neutral roles after Apple's label model. The canonical
+  system also contains tertiary, disabled, accent and status roles so the
+  vocabulary is complete; their existence is not permission to add hue to
+  ordinary body copy without a real semantic reason.
+- **Brown is the portfolio accent family.** The complete brown ramp supports
+  canonical accent surfaces, text, icons and borders. The live site still uses
+  `brown-300` through `--decorative-accent` for homepage section markers and
+  wide-screen navigation dividers; that specialised role stays identical in
+  both themes.
 - **Corners are square, everywhere.** No radius on cards, images, buttons,
   embeds or code blocks. The edge is the edge; a border and the space around
   it do the containing, and nothing is softened to look friendlier.
@@ -61,12 +62,52 @@ What that means in practice:
     discursively *there* (`rounded-<size>`), not in documentation.
   - If markup ever lives outside `src/`, add an `@source` line for it — with
     automatic detection off, an unlisted directory is silently unstyled.
-- `src/styles/global.css` is the **source of truth** for the colour system.
-  Figma has been dropped — never treat an external design file as canonical,
-  and there is no "mirror back to Figma" step.
-- Colours are a two-tier token system in `src/styles/global.css`: primitives
-  (raw hex, `:root` only) and semantic role tokens that reference them via
-  `var()`, defined for light mode in `:root` and re-mapped for dark in `.dark`.
+- `src/styles/global.css` is the **base implementation source of truth** for
+  the colour system. Authored page-palette remaps live in
+  `src/styles/themes/` and are imported by that file. The Figma variables are
+  the canonical base palette's design-documentation mirror; a base
+  colour-system change is complete only when the primitive values, semantic
+  mappings and names agree in both places.
+- Colours are a two-tier token system in `src/styles/global.css`: 46 primitives
+  (raw hex, `:root` only) and 106 canonical semantic roles across background,
+  text, icon and border groups. Semantic roles reference primitives via
+  `var()`, with light values in `:root` and a complete dark remap in `.dark`.
+  Portfolio-specific compatibility roles sit above those two tiers and keep
+  established components stable.
+- **Appearance mode and page palette are separate axes.** `.dark` is the
+  visitor-controlled light/dark preference. `data-palette` on `<html>` is an
+  authored page identity such as `default` or `blue`; changing one must never
+  overwrite or persist the other.
+  - Content pages opt in with validated `palette` frontmatter. Ordinary Astro
+    pages pass the same value to `PageLayout`; components never inspect the
+    palette name.
+  - Each non-default palette gets one isolated file in `src/styles/themes/`
+    with both its light selector and its combined dark selector. It remaps
+    semantic roles to existing primitives; it never adds literal colours or
+    component selectors.
+  - Page palettes remap structural background, text, icon, border,
+    interaction and decorative roles. Error, success, warning and info retain
+    their canonical families so state meaning is not erased for the sake of a
+    monochrome treatment.
+  - `--text-reading` is the long-form body-copy role. It aliases primary text
+    by default, while a page palette can make reading text quieter than titles
+    without weakening headings, navigation states, or controls. Prose headings
+    stay on `--text-primary`; prose paragraphs and lists use
+    `--text-reading`.
+  - Valid names live in `src/data/page-palettes.ts`. Adding a palette means
+    registering the name, adding its mapping file, importing it in
+    `global.css`, and documenting it on `/style-guide`.
+  - The blue primitive family runs from 100–900. Its 700–900 stops exist to
+    give blue-authored dark pages real canvas and surface depth; the default
+    portfolio palette does not consume those stops.
+  - Blue dark mode is deliberately low-glare and fully monochrome: 200 carries
+    titles and primary controls, 300 carries reading and secondary text, and
+    700–800 carry rules and quiet surfaces against the 900 canvas. Do not use
+    neutral white inside this palette.
+  - Shiki is the one cascade exception: it injects GitHub-dark colours inline
+    on rendered code blocks. The scoped blue-dark override in `global.css`
+    uses semantic surface/reading roles with `!important` and makes token spans
+    inherit, because otherwise one Markdown fence reintroduces a grey palette.
 - Components use semantic Tailwind tokens (`bg-background`, `text-foreground`,
   `text-muted-foreground`, `bg-card`, `border-border`, `text-accent`) — never
   raw hex values, named colors, or palette classes like `bg-zinc-100`.
@@ -282,11 +323,11 @@ What that means in practice:
 - **Gutters take the safe area**: `max(var(--spacing-gutter),
   env(safe-area-inset-*))` on `.container` / `.page-wrapper`, so content
   never slides under a notch in landscape.
-- **Two text colours, both measured.** `--text-primary` (14.35:1 light,
+- **Two reading-text colours, both measured.** `--text-primary` (14.35:1 light,
   12.55:1 dark) and `--text-secondary` (8.23:1 / 6.95:1), checked against
-  both the page background and the card surface. No hue: the Neutral family
-  is a cool grey and the backgrounds share its cast, so text never reads
-  warm against a cool surface.
+  both the page background and the card surface. These are the roles used by
+  ordinary portfolio copy; the wider canonical text vocabulary is reserved for
+  the semantic situations named by each token.
 - **Hover always increases contrast.** One rule, one token: interactive text
   moves to `--accent` (= `--text-interactive`, 17.87:1 / 16.90:1), which
   out-contrasts `--text-primary` by design. Apple: "Maximize the contrast
@@ -303,8 +344,8 @@ What that means in practice:
     16.90 → 18.13; secondary 14.35 → 19.17 and 12.55 → 17.87, with its rule
     going 2.43 → 18.13 and 1.40 → 7.34; link 14.35 → 17.87 and 12.55 → 16.90.
     Every variant gains contrast on hover in both themes.
-  - **`--background-hover` steps AWAY from the page**, lighter on light and
-    darker on dark, rather than toward the middle of the palette. It was
+  - **`--background-hover` brightens in both themes**, to white on light and
+    neutral-700 on dark, rather than changing direction between modes. It was
     `neutral-200`, which laid a heavy grey band under a hovered row; one step
     off the page background is enough when the rules and the text are moving
     with it.

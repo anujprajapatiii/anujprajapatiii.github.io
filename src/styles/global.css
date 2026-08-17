@@ -40,6 +40,7 @@
   tokens, rather than letting it fall back to shadcn's defaults.
 */
 @import "shadcn/tailwind.css";
+@import "./themes/blue.css";
 
 /*
   TASA Orbiter — Local Remote, SIL Open Font License. One variable face covers
@@ -84,18 +85,19 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
-  Design tokens — Anuj's palette. THIS FILE IS THE SOURCE OF TRUTH for the
-  colour system: edit tokens here. Figma has been dropped — do not treat any
-  external design file as canonical. (Originally imported from Figma, 2026-06.)
-  Two-tier system (see agent-os/system-map.md and /style-guide):
+  Design tokens — Anuj's canonical palette. THIS FILE IS THE implementation
+  source of truth; the matching Figma variables document the same decisions.
+  Keep the two in sync when the system changes.
 
-  1. PRIMITIVES — raw hex values. One value, period.
-     Never re-mapped by themes, never referenced by components directly.
-  2. SEMANTIC — kebab-cased role names. Reference primitives
-     via var() only. Light values in :root, dark re-maps in .dark
-     (only the tokens that differ).
-  3. ALIASES — the shadcn/Tailwind names components already use, pointed at
-     semantic tokens so the palette swaps without touching components.
+  1. PRIMITIVES are literal colours, declared once in :root.
+  2. CANONICAL SEMANTICS are the Figma hierarchy: bg, text, icon and border.
+     Every value references a primitive; .dark remaps the complete set.
+  3. PORTFOLIO ALIASES preserve the established component vocabulary and the
+     few site-specific roles that do not belong in the shared semantic schema.
+
+  Authored page palettes are isolated semantic remaps in src/styles/themes/.
+  They never redefine primitives and are independent of the .dark appearance
+  mode; their selectors combine data-palette with .dark when needed.
 */
 :root {
     /* ---- 1. PRIMITIVES ---- */
@@ -107,143 +109,189 @@
     --neutral-600: #21252b;
     --neutral-500: #2c323a;
     --neutral-400: #434b56;
-    /*
-      Added to close the scale's one real gap. Measured in L*, every adjacent
-      pair on this ramp is 19.9 apart or less except 300 → 400, which is 34.4 —
-      a hole wide enough that no gentle border hover was expressible in light
-      mode. This sits at L* 48.9, the midpoint.
-
-      It also turns out to be the one value that reads on BOTH grounds: 4.66:1
-      on a white card, 3.30:1 on a dark one. That is why --border-hover no
-      longer needs a dark re-map.
-    */
     --neutral-350: #6d7580;
     --neutral-300: #99a1ac;
     --neutral-200: #d3d7dd;
     --neutral-100: #f6f7f8;
     --neutral-white: #ffffff;
-    /*
-      NEUTRAL IS THE FUNCTIONAL PALETTE, BY DECISION.
 
-      There were five more families here — Amber, Blue, Green, Red, Yellow, 26
-      values. Measured before removal: Amber and Blue were referenced by
-      NOTHING, not even a dead token. Green, Red and Yellow were reachable only
-      from --background-success/-warning/-error, --text-success/-warning/-error
-      and --background-tertiary, none of which any rule or component ever used.
-      Not one of the 26 could be reached from a rendered page.
-
-      The site's stated rule is that colour is a hierarchy of prominence, never
-      of hue. A palette carrying five hues nothing may use does not soften that
-      rule, it just makes the style guide advertise 26 colours the design
-      forbids. Adding a hue back should mean deciding to, not discovering that
-      one was already sitting there. Brown is the single, intentionally narrow
-      exception below: a decorative flourish, not a text or status colour.
-    */
-
-    /* Brown — Paper's restrained section-marker and divider flourish. */
+    /* Brown */
+    --brown-600: #2e2d2c;
+    --brown-500: #302f2e;
+    --brown-400: #595551;
     --brown-300: #847b73;
+    --brown-200: #aba199;
+    --brown-100: #cfc7c1;
+    --brown-50: #f1eeec;
 
-    /* ---- 2. SEMANTIC (role names) — light mode ---- */
-    --background-primary: var(--neutral-100);
-    --background-secondary: var(--neutral-200);
-    --background-alternate: var(--neutral-800);
-    /*
-      Hover for the inverted surface — the primary button, and anything else
-      that inverts. It follows the same rule as --background-hover: step AWAY
-      from the page, never toward the middle. The page is light, the button is
-      already dark, so its hover goes darker still (black); in dark mode the
-      button is light and its hover goes to white. --text-interactive cannot
-      serve here: it happens to be right in light mode and collides exactly
-      with --background-alternate in dark, which would make the primary button
-      stop responding in one theme only.
-    */
-    --background-alternate-hover: var(--neutral-black);
-    /*
-      FORWARD IS LIGHTER, IN BOTH THEMES. A hovered surface always brightens:
-      white on the light page, neutral-700 on the dark one. This replaces
-      "move away from the page in either direction", which sounded symmetrical
-      and was not — it sent light hovers up and dark hovers down, so the same
-      gesture meant "coming toward you" in one theme and "sinking" in the
-      other. One direction sitewide is what makes a hover read as a lift.
+    /* Amber */
+    --amber-400: #7c370e;
+    --amber-300: #e66c24;
+    --amber-200: #ee9a68;
+    --amber-100: #f5c2a3;
 
-      For elements that rest ON the page: rows, secondary buttons, info-box
-      rows. Surfaces that already sit above the page use the token below.
-    */
-    --background-hover: var(--neutral-white);
-    /* Added per Anuj's review for card surfaces that sit one subtle step
-       off the page, not a full secondary step. */
-    --background-elevated: var(--neutral-white);
-    /*
-      A HOVER NEVER CROSSES THE PAGE. An elevated surface continues in the
-      direction it already sits, so a card cannot flip from raised to sunken
-      under the pointer — which is exactly what it used to do in dark mode:
-      resting at neutral-700, 4.4 L* above the page, and hovering to
-      neutral-900, 2.9 L* below it. The card punched a hole in the page.
+    /* Blue */
+    --blue-900: #00062a;
+    --blue-800: #001147;
+    --blue-700: #001d64;
+    --blue-600: #002c83;
+    --blue-500: #1841ac;
+    --blue-400: #1e50d3;
+    --blue-300: #99b6ff;
+    --blue-200: #dae5ff;
+    --blue-100: #f0f3ff;
 
-      Light has no headroom left — the card already rests at white — so there
-      the surface holds and the border and text carry the lift.
-    */
-    --background-elevated-hover: var(--neutral-white);
-    --border-primary: var(--neutral-300);
-    /*
-      One value, both themes, because neutral-350 is the only step that clears
-      3:1 against a white card AND a dark one. It replaces a pair that swung
-      58.8 L* in light and 45.4 in dark — the loudest channel in the system by
-      a factor of four, on an element whose text channel moves 10.
-    */
-    --border-hover: var(--neutral-350);
-    /*
-      Text colour is a hierarchy of prominence, never of hue — the Apple
-      label model (label / secondary label), all neutral. Two readable
-      levels only: Apple's tertiary and quaternary labels are for watermarks
-      and disabled states, and every piece of text on this site is meant to
-      be read. Measured on the page background:
-        primary   14.35:1   secondary 8.23:1   (both well past AA body)
-    */
+    /* Green */
+    --green-400: #1a4723;
+    --green-300: #37954a;
+    --green-200: #53c069;
+    --green-100: #b4e4be;
+
+    /* Red */
+    --red-400: #67090a;
+    --red-300: #ec2426;
+    --red-200: #f2696a;
+    --red-100: #f7a1a2;
+
+    /* Yellow */
+    --yellow-600: #853e0f;
+    --yellow-500: #d17600;
+    --yellow-400: #ffb700;
+    --yellow-300: #ffd293;
+    --yellow-200: #ffe9d0;
+    --yellow-100: #fff5f5;
+
+    /* ---- 2. CANONICAL SEMANTICS — LIGHT ---- */
+    /* Background */
+    --bg-primary: var(--neutral-100);
+    --bg-secondary: var(--neutral-200);
+    --bg-tertiary: var(--yellow-500);
+    --bg-quaternary: var(--neutral-white);
+    --bg-primary-hover: var(--neutral-white);
+    --bg-secondary-hover: var(--neutral-100);
+    --bg-tertiary-hover: var(--yellow-600);
+    --bg-quaternary-hover: var(--neutral-white);
+    --bg-black-solid: var(--neutral-800);
+    --bg-black-solid-hover: var(--neutral-black);
+    --bg-disabled: var(--neutral-200);
+    --bg-disabled-alt: var(--neutral-100);
+    --bg-accent-primary: var(--brown-50);
+    --bg-accent-primary-hover: var(--brown-100);
+    --bg-accent-solid: var(--brown-400);
+    --bg-accent-solid-hover: var(--brown-500);
+    --bg-error-primary: var(--red-100);
+    --bg-error-primary-hover: var(--red-200);
+    --bg-error-secondary: var(--red-300);
+    --bg-error-secondary-hover: var(--red-400);
+    --bg-success-primary: var(--green-100);
+    --bg-success-primary-hover: var(--green-200);
+    --bg-success-secondary: var(--green-300);
+    --bg-success-secondary-hover: var(--green-400);
+    --bg-warning-primary: var(--yellow-200);
+    --bg-warning-primary-hover: var(--yellow-300);
+    --bg-warning-secondary: var(--yellow-400);
+    --bg-warning-secondary-hover: var(--yellow-500);
+    --bg-info-primary: var(--blue-100);
+    --bg-info-primary-hover: var(--blue-200);
+    --bg-info-secondary: var(--blue-400);
+    --bg-info-secondary-hover: var(--blue-500);
+
+    /* Text */
     --text-primary: var(--neutral-600);
     --text-secondary: var(--neutral-400);
-    --text-alternate: var(--neutral-100);
-    /*
-      The colour text moves TO on hover. It must out-contrast --text-primary,
-      or hover reads as text going away rather than coming forward. 17.87:1.
-    */
-    --text-interactive: var(--neutral-900);
-    /*
-      The tint the hero shader burns its metal through — the one decorative
-      role in the system, and the only semantic token that names no text,
-      surface or rule.
+    --text-tertiary: var(--neutral-350);
+    --text-primary-hover: var(--neutral-900);
+    --text-secondary-hover: var(--neutral-600);
+    --text-tertiary-hover: var(--neutral-400);
+    --text-disabled: var(--neutral-300);
+    --text-disabled-alt: var(--neutral-200);
+    --text-placeholder: var(--neutral-350);
+    --text-accent-primary: var(--brown-400);
+    --text-accent-secondary: var(--brown-300);
+    --text-accent-primary-hover: var(--brown-500);
+    --text-accent-secondary-hover: var(--brown-400);
+    --text-error-primary: var(--red-400);
+    --text-error-secondary: var(--red-300);
+    --text-error-primary-hover: var(--red-400);
+    --text-error-secondary-hover: var(--red-400);
+    --text-success-primary: var(--green-400);
+    --text-success-secondary: var(--green-300);
+    --text-success-primary-hover: var(--green-400);
+    --text-success-secondary-hover: var(--green-400);
+    --text-warning-primary: var(--yellow-600);
+    --text-warning-secondary: var(--yellow-500);
+    --text-warning-primary-hover: var(--yellow-600);
+    --text-warning-secondary-hover: var(--yellow-600);
+    --text-info-primary: var(--blue-600);
+    --text-info-secondary: var(--blue-500);
+    --text-info-primary-hover: var(--blue-600);
+    --text-info-secondary-hover: var(--blue-600);
 
-      It exists because the value cannot be a literal. The Paper design picks
-      neutral-500, which is correct on the light page and would sink the shape
-      into the background on the dark one: `colorTint` is a per-channel colour
-      burn, so a DARK tint darkens the metal and a LIGHT tint brightens it.
-      Light therefore burns dark on a light ground and dark burns light on a
-      dark ground — the same "step away from the page" rule --background-hover
-      follows, applied to a shape instead of a surface.
-    */
+    /* Icon — deliberately parallels text so paired labels and icons agree. */
+    --icon-primary: var(--neutral-600);
+    --icon-secondary: var(--neutral-400);
+    --icon-tertiary: var(--neutral-350);
+    --icon-primary-hover: var(--neutral-900);
+    --icon-secondary-hover: var(--neutral-600);
+    --icon-tertiary-hover: var(--neutral-400);
+    --icon-disabled: var(--neutral-300);
+    --icon-disabled-alt: var(--neutral-200);
+    --icon-placeholder: var(--neutral-350);
+    --icon-accent-primary: var(--brown-400);
+    --icon-accent-secondary: var(--brown-300);
+    --icon-accent-primary-hover: var(--brown-500);
+    --icon-accent-secondary-hover: var(--brown-400);
+    --icon-error-primary: var(--red-400);
+    --icon-error-secondary: var(--red-300);
+    --icon-error-primary-hover: var(--red-400);
+    --icon-error-secondary-hover: var(--red-400);
+    --icon-success-primary: var(--green-400);
+    --icon-success-secondary: var(--green-300);
+    --icon-success-primary-hover: var(--green-400);
+    --icon-success-secondary-hover: var(--green-400);
+    --icon-warning-primary: var(--yellow-600);
+    --icon-warning-secondary: var(--yellow-500);
+    --icon-warning-primary-hover: var(--yellow-600);
+    --icon-warning-secondary-hover: var(--yellow-600);
+    --icon-info-primary: var(--blue-600);
+    --icon-info-secondary: var(--blue-500);
+    --icon-info-primary-hover: var(--blue-600);
+    --icon-info-secondary-hover: var(--blue-600);
+
+    /* Border */
+    --border-primary: var(--neutral-300);
+    --border-secondary: var(--brown-200);
+    --border-tertiary: var(--neutral-200);
+    --border-primary-solid: var(--neutral-800);
+    --border-disabled: var(--neutral-200);
+    --border-disabled-alt: var(--neutral-100);
+    --border-accent-primary: var(--brown-300);
+    --border-accent-secondary: var(--brown-100);
+    --border-error-primary: var(--red-300);
+    --border-error-secondary: var(--red-100);
+    --border-success-primary: var(--green-300);
+    --border-success-secondary: var(--green-100);
+    --border-warning-primary: var(--yellow-500);
+    --border-warning-secondary: var(--yellow-300);
+    --border-info-primary: var(--blue-400);
+    --border-info-secondary: var(--blue-200);
+
+    /* ---- 3. PORTFOLIO-SPECIFIC ROLES AND COMPATIBILITY ALIASES ---- */
+    --background-primary: var(--bg-primary);
+    --background-secondary: var(--bg-secondary);
+    --background-alternate: var(--bg-black-solid);
+    --background-alternate-hover: var(--bg-black-solid-hover);
+    --background-hover: var(--bg-primary-hover);
+    --background-elevated: var(--bg-quaternary);
+    --background-elevated-hover: var(--bg-quaternary-hover);
+    --text-interactive: var(--text-primary-hover);
+    --text-reading: var(--text-primary);
+    --text-alternate: var(--neutral-100);
+    --border-hover: var(--neutral-350);
     --shader-tint: var(--neutral-500);
-    /* Decorative rules only; never use this for readable text. */
     --decorative-accent: var(--brown-300);
 
-    /*
-      ---- 3. ALIASES (the Tailwind names components actually use) ----
-
-      This list is now exactly the aliases something references. It used to
-      carry --popover, --popover-foreground, --primary, --primary-foreground,
-      --secondary, --secondary-foreground, --card-foreground, --input and
-      --destructive as well: a shadcn vocabulary imported wholesale for a site
-      that has no shadcn components in it. Every one had zero consumers.
-
-      A dead alias is worse than a dead primitive, because it reads like the
-      approved way to say something. --primary in particular pointed at
-      --background-alternate, which is exactly what .btn--primary needs — and
-      .btn--primary reaches past it to --background-alternate directly. Two
-      names for one role, one of them a decoy.
-
-      There was also a --link-primary/-secondary/-alternate family, semantic
-      rather than alias, with the same problem in sharper form: a complete
-      vocabulary for links, on a site made of links, that not one link used.
-    */
+    /* Tailwind/shadcn aliases currently consumed by components. */
     --background: var(--background-primary);
     --foreground: var(--text-primary);
     --card: var(--background-elevated);
@@ -256,38 +304,124 @@
 }
 
 .dark {
-    /* Semantic re-maps only — primitives and aliases never appear here. */
-    --background-primary: var(--neutral-800);
-    --background-secondary: var(--neutral-600);
-    --background-alternate: var(--neutral-100);
-    --background-alternate-hover: var(--neutral-white);
-    /* Brightens, like light mode's — see "forward is lighter" in :root. A
-       hovered row now lands exactly where a resting card sits, so the two
-       kinds of raised surface agree on what one step up looks like. */
-    --background-hover: var(--neutral-700);
-    --background-elevated: var(--neutral-700);
-    /* One step further up, and still 7.3 L* clear of the page. */
-    --background-elevated-hover: var(--neutral-600);
-    --border-primary: var(--neutral-500);
-    /*
-      --border-hover is deliberately NOT re-mapped here. It used to be, and the
-      pair was the loudest thing in the system: neutral-800 in light, a
-      near-black line on a white card, and neutral-300 in dark. Each had been
-      tuned against the other theme's excess rather than against a target, so
-      the two never agreed on how much a hover is worth.
+    /* Complete canonical dark-mode remap. Primitives and aliases stay put. */
+    /* Background */
+    --bg-primary: var(--neutral-800);
+    --bg-secondary: var(--neutral-600);
+    --bg-tertiary: var(--yellow-500);
+    --bg-quaternary: var(--neutral-700);
+    --bg-primary-hover: var(--neutral-700);
+    --bg-secondary-hover: var(--neutral-500);
+    --bg-tertiary-hover: var(--yellow-400);
+    --bg-quaternary-hover: var(--neutral-600);
+    --bg-black-solid: var(--neutral-100);
+    --bg-black-solid-hover: var(--neutral-white);
+    --bg-disabled: var(--neutral-600);
+    --bg-disabled-alt: var(--neutral-700);
+    --bg-accent-primary: var(--brown-600);
+    --bg-accent-primary-hover: var(--brown-500);
+    --bg-accent-solid: var(--brown-200);
+    --bg-accent-solid-hover: var(--brown-100);
+    --bg-error-primary: var(--red-100);
+    --bg-error-primary-hover: var(--red-200);
+    --bg-error-secondary: var(--red-300);
+    --bg-error-secondary-hover: var(--red-400);
+    --bg-success-primary: var(--green-100);
+    --bg-success-primary-hover: var(--green-200);
+    --bg-success-secondary: var(--green-300);
+    --bg-success-secondary-hover: var(--green-400);
+    --bg-warning-primary: var(--yellow-200);
+    --bg-warning-primary-hover: var(--yellow-300);
+    --bg-warning-secondary: var(--yellow-400);
+    --bg-warning-secondary-hover: var(--yellow-500);
+    --bg-info-primary: var(--blue-100);
+    --bg-info-primary-hover: var(--blue-200);
+    --bg-info-secondary: var(--blue-400);
+    --bg-info-secondary-hover: var(--blue-500);
 
-      neutral-350 replaces both. It is the one step that clears 3:1 on a white
-      card and on a dark one, so the border says the same thing in both themes
-      and there is one number to change instead of two to keep in sync.
-    */
-    /* primary 12.55:1, secondary 6.95:1, interactive 16.90:1 on the dark bg */
+    /* Text */
     --text-primary: var(--neutral-200);
     --text-secondary: var(--neutral-300);
+    --text-tertiary: var(--neutral-350);
+    --text-primary-hover: var(--neutral-100);
+    --text-secondary-hover: var(--neutral-200);
+    --text-tertiary-hover: var(--neutral-300);
+    --text-disabled: var(--neutral-500);
+    --text-disabled-alt: var(--neutral-400);
+    --text-placeholder: var(--neutral-350);
+    --text-accent-primary: var(--brown-100);
+    --text-accent-secondary: var(--brown-200);
+    --text-accent-primary-hover: var(--brown-50);
+    --text-accent-secondary-hover: var(--brown-100);
+    --text-error-primary: var(--red-100);
+    --text-error-secondary: var(--red-200);
+    --text-error-primary-hover: var(--red-100);
+    --text-error-secondary-hover: var(--red-100);
+    --text-success-primary: var(--green-100);
+    --text-success-secondary: var(--green-200);
+    --text-success-primary-hover: var(--green-100);
+    --text-success-secondary-hover: var(--green-100);
+    --text-warning-primary: var(--yellow-200);
+    --text-warning-secondary: var(--yellow-300);
+    --text-warning-primary-hover: var(--yellow-100);
+    --text-warning-secondary-hover: var(--yellow-200);
+    --text-info-primary: var(--blue-200);
+    --text-info-secondary: var(--blue-300);
+    --text-info-primary-hover: var(--blue-100);
+    --text-info-secondary-hover: var(--blue-200);
+
+    /* Icon */
+    --icon-primary: var(--neutral-200);
+    --icon-secondary: var(--neutral-300);
+    --icon-tertiary: var(--neutral-350);
+    --icon-primary-hover: var(--neutral-100);
+    --icon-secondary-hover: var(--neutral-200);
+    --icon-tertiary-hover: var(--neutral-300);
+    --icon-disabled: var(--neutral-500);
+    --icon-disabled-alt: var(--neutral-400);
+    --icon-placeholder: var(--neutral-350);
+    --icon-accent-primary: var(--brown-100);
+    --icon-accent-secondary: var(--brown-200);
+    --icon-accent-primary-hover: var(--brown-50);
+    --icon-accent-secondary-hover: var(--brown-100);
+    --icon-error-primary: var(--red-100);
+    --icon-error-secondary: var(--red-200);
+    --icon-error-primary-hover: var(--red-100);
+    --icon-error-secondary-hover: var(--red-100);
+    --icon-success-primary: var(--green-100);
+    --icon-success-secondary: var(--green-200);
+    --icon-success-primary-hover: var(--green-100);
+    --icon-success-secondary-hover: var(--green-100);
+    --icon-warning-primary: var(--yellow-200);
+    --icon-warning-secondary: var(--yellow-300);
+    --icon-warning-primary-hover: var(--yellow-100);
+    --icon-warning-secondary-hover: var(--yellow-200);
+    --icon-info-primary: var(--blue-200);
+    --icon-info-secondary: var(--blue-300);
+    --icon-info-primary-hover: var(--blue-100);
+    --icon-info-secondary-hover: var(--blue-200);
+
+    /* Border */
+    --border-primary: var(--neutral-500);
+    --border-secondary: var(--brown-400);
+    --border-tertiary: var(--neutral-600);
+    --border-primary-solid: var(--neutral-100);
+    --border-disabled: var(--neutral-600);
+    --border-disabled-alt: var(--neutral-700);
+    --border-accent-primary: var(--brown-200);
+    --border-accent-secondary: var(--brown-400);
+    --border-error-primary: var(--red-200);
+    --border-error-secondary: var(--red-400);
+    --border-success-primary: var(--green-200);
+    --border-success-secondary: var(--green-400);
+    --border-warning-primary: var(--yellow-300);
+    --border-warning-secondary: var(--yellow-600);
+    --border-info-primary: var(--blue-300);
+    --border-info-secondary: var(--blue-600);
+
+    /* Portfolio-specific semantic remaps. */
     --text-alternate: var(--neutral-800);
-    --text-interactive: var(--neutral-100);
-    /* Burns light on the dark page — see the note in :root. */
     --shader-tint: var(--neutral-300);
-    /* Explicitly unchanged: the Paper flourish is restrained in both modes. */
     --decorative-accent: var(--brown-300);
 }
 
@@ -299,9 +433,7 @@
     --font-sans: 'TASA Orbiter', ui-sans-serif, system-ui, sans-serif;
     --font-display: 'Violet Sans', 'TASA Orbiter', ui-sans-serif, system-ui, sans-serif;
     --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
-    /* One --color-* line per alias, and the alias list is now exactly what is
-       used. Every entry here generates utilities; a mapping for a token nothing
-       references is how `bg-popover` and friends became spellable. */
+    /* Component aliases already in use. */
     --color-ring: var(--ring);
     --color-border: var(--border);
     --color-accent-foreground: var(--accent-foreground);
@@ -311,19 +443,129 @@
     --color-card: var(--card);
     --color-foreground: var(--foreground);
     --color-background: var(--background);
-    /* Semantic names as utilities (bg-background-primary, etc.) */
-    --color-background-primary: var(--background-primary);
-    --color-background-secondary: var(--background-secondary);
+    /* Canonical background roles use readable `background-*` utility names. */
+    --color-background-primary: var(--bg-primary);
+    --color-background-secondary: var(--bg-secondary);
+    --color-background-tertiary: var(--bg-tertiary);
+    --color-background-quaternary: var(--bg-quaternary);
+    --color-background-primary-hover: var(--bg-primary-hover);
+    --color-background-secondary-hover: var(--bg-secondary-hover);
+    --color-background-tertiary-hover: var(--bg-tertiary-hover);
+    --color-background-quaternary-hover: var(--bg-quaternary-hover);
+    --color-background-black-solid: var(--bg-black-solid);
+    --color-background-black-solid-hover: var(--bg-black-solid-hover);
+    --color-background-disabled: var(--bg-disabled);
+    --color-background-disabled-alt: var(--bg-disabled-alt);
+    --color-background-accent-primary: var(--bg-accent-primary);
+    --color-background-accent-primary-hover: var(--bg-accent-primary-hover);
+    --color-background-accent-solid: var(--bg-accent-solid);
+    --color-background-accent-solid-hover: var(--bg-accent-solid-hover);
+    --color-background-error-primary: var(--bg-error-primary);
+    --color-background-error-primary-hover: var(--bg-error-primary-hover);
+    --color-background-error-secondary: var(--bg-error-secondary);
+    --color-background-error-secondary-hover: var(--bg-error-secondary-hover);
+    --color-background-success-primary: var(--bg-success-primary);
+    --color-background-success-primary-hover: var(--bg-success-primary-hover);
+    --color-background-success-secondary: var(--bg-success-secondary);
+    --color-background-success-secondary-hover: var(--bg-success-secondary-hover);
+    --color-background-warning-primary: var(--bg-warning-primary);
+    --color-background-warning-primary-hover: var(--bg-warning-primary-hover);
+    --color-background-warning-secondary: var(--bg-warning-secondary);
+    --color-background-warning-secondary-hover: var(--bg-warning-secondary-hover);
+    --color-background-info-primary: var(--bg-info-primary);
+    --color-background-info-primary-hover: var(--bg-info-primary-hover);
+    --color-background-info-secondary: var(--bg-info-secondary);
+    --color-background-info-secondary-hover: var(--bg-info-secondary-hover);
+
+    /* Canonical text roles. */
+    --color-text-primary: var(--text-primary);
+    --color-text-secondary: var(--text-secondary);
+    --color-text-tertiary: var(--text-tertiary);
+    --color-text-primary-hover: var(--text-primary-hover);
+    --color-text-secondary-hover: var(--text-secondary-hover);
+    --color-text-tertiary-hover: var(--text-tertiary-hover);
+    --color-text-disabled: var(--text-disabled);
+    --color-text-disabled-alt: var(--text-disabled-alt);
+    --color-text-placeholder: var(--text-placeholder);
+    --color-text-accent-primary: var(--text-accent-primary);
+    --color-text-accent-secondary: var(--text-accent-secondary);
+    --color-text-accent-primary-hover: var(--text-accent-primary-hover);
+    --color-text-accent-secondary-hover: var(--text-accent-secondary-hover);
+    --color-text-error-primary: var(--text-error-primary);
+    --color-text-error-secondary: var(--text-error-secondary);
+    --color-text-error-primary-hover: var(--text-error-primary-hover);
+    --color-text-error-secondary-hover: var(--text-error-secondary-hover);
+    --color-text-success-primary: var(--text-success-primary);
+    --color-text-success-secondary: var(--text-success-secondary);
+    --color-text-success-primary-hover: var(--text-success-primary-hover);
+    --color-text-success-secondary-hover: var(--text-success-secondary-hover);
+    --color-text-warning-primary: var(--text-warning-primary);
+    --color-text-warning-secondary: var(--text-warning-secondary);
+    --color-text-warning-primary-hover: var(--text-warning-primary-hover);
+    --color-text-warning-secondary-hover: var(--text-warning-secondary-hover);
+    --color-text-info-primary: var(--text-info-primary);
+    --color-text-info-secondary: var(--text-info-secondary);
+    --color-text-info-primary-hover: var(--text-info-primary-hover);
+    --color-text-info-secondary-hover: var(--text-info-secondary-hover);
+
+    /* Canonical icon roles. */
+    --color-icon-primary: var(--icon-primary);
+    --color-icon-secondary: var(--icon-secondary);
+    --color-icon-tertiary: var(--icon-tertiary);
+    --color-icon-primary-hover: var(--icon-primary-hover);
+    --color-icon-secondary-hover: var(--icon-secondary-hover);
+    --color-icon-tertiary-hover: var(--icon-tertiary-hover);
+    --color-icon-disabled: var(--icon-disabled);
+    --color-icon-disabled-alt: var(--icon-disabled-alt);
+    --color-icon-placeholder: var(--icon-placeholder);
+    --color-icon-accent-primary: var(--icon-accent-primary);
+    --color-icon-accent-secondary: var(--icon-accent-secondary);
+    --color-icon-accent-primary-hover: var(--icon-accent-primary-hover);
+    --color-icon-accent-secondary-hover: var(--icon-accent-secondary-hover);
+    --color-icon-error-primary: var(--icon-error-primary);
+    --color-icon-error-secondary: var(--icon-error-secondary);
+    --color-icon-error-primary-hover: var(--icon-error-primary-hover);
+    --color-icon-error-secondary-hover: var(--icon-error-secondary-hover);
+    --color-icon-success-primary: var(--icon-success-primary);
+    --color-icon-success-secondary: var(--icon-success-secondary);
+    --color-icon-success-primary-hover: var(--icon-success-primary-hover);
+    --color-icon-success-secondary-hover: var(--icon-success-secondary-hover);
+    --color-icon-warning-primary: var(--icon-warning-primary);
+    --color-icon-warning-secondary: var(--icon-warning-secondary);
+    --color-icon-warning-primary-hover: var(--icon-warning-primary-hover);
+    --color-icon-warning-secondary-hover: var(--icon-warning-secondary-hover);
+    --color-icon-info-primary: var(--icon-info-primary);
+    --color-icon-info-secondary: var(--icon-info-secondary);
+    --color-icon-info-primary-hover: var(--icon-info-primary-hover);
+    --color-icon-info-secondary-hover: var(--icon-info-secondary-hover);
+
+    /* Canonical border roles. */
+    --color-border-primary: var(--border-primary);
+    --color-border-secondary: var(--border-secondary);
+    --color-border-tertiary: var(--border-tertiary);
+    --color-border-primary-solid: var(--border-primary-solid);
+    --color-border-disabled: var(--border-disabled);
+    --color-border-disabled-alt: var(--border-disabled-alt);
+    --color-border-accent-primary: var(--border-accent-primary);
+    --color-border-accent-secondary: var(--border-accent-secondary);
+    --color-border-error-primary: var(--border-error-primary);
+    --color-border-error-secondary: var(--border-error-secondary);
+    --color-border-success-primary: var(--border-success-primary);
+    --color-border-success-secondary: var(--border-success-secondary);
+    --color-border-warning-primary: var(--border-warning-primary);
+    --color-border-warning-secondary: var(--border-warning-secondary);
+    --color-border-info-primary: var(--border-info-primary);
+    --color-border-info-secondary: var(--border-info-secondary);
+
+    /* Established portfolio-only utility names. */
     --color-background-alternate: var(--background-alternate);
     --color-background-alternate-hover: var(--background-alternate-hover);
     --color-background-hover: var(--background-hover);
     --color-background-elevated: var(--background-elevated);
     --color-background-elevated-hover: var(--background-elevated-hover);
-    --color-border-primary: var(--border-primary);
     --color-border-hover: var(--border-hover);
-    --color-text-primary: var(--text-primary);
-    --color-text-secondary: var(--text-secondary);
     --color-text-interactive: var(--text-interactive);
+    --color-text-reading: var(--text-reading);
     --color-text-alternate: var(--text-alternate);
     --color-decorative-accent: var(--decorative-accent);
 
@@ -1334,16 +1576,18 @@
 
 /* Markdown prose for case-study bodies (custom, not @tailwindcss/typography) */
 .prose {
-  @apply text-foreground;
+  color: var(--text-reading);
 }
 .prose > * + * {
   margin-top: 1.25em;
 }
 .prose h2 {
   @apply mt-xl text-h2;
+  color: var(--text-primary);
 }
 .prose h3 {
   @apply mt-lg text-h3;
+  color: var(--text-primary);
 }
 /*
   Text is capped to the reading measure (~70 characters) while the wrapper
@@ -1358,12 +1602,12 @@
   max-width: var(--container-measure);
 }
 /*
-  The colour here looks redundant against `.prose { text-foreground }` above and
+  Repeating the reading colour here looks redundant against `.prose` above and
   is not. `.prose blockquote` sets --muted-foreground, and a markdown blockquote
   is almost always `<blockquote><p>`, so the paragraph inherits muted and this
-  rule is what pulls it back to full contrast. Removing it as dead code turned
-  every pull quote on the site secondary — caught by diffing computed styles,
-  not by the build.
+  rule is what pulls it back to the reading role. Removing it as dead code
+  turned every pull quote into a different hierarchy — caught by diffing
+  computed styles, not by the build.
 
   Which means the blockquote's own muted colour currently applies to nothing.
   That contradiction is real but it is a design decision, not a cleanup: left
@@ -1372,7 +1616,8 @@
 .prose p,
 .prose ul,
 .prose ol {
-  @apply text-body text-foreground;
+  @apply text-body;
+  color: var(--text-reading);
 }
 .prose ul {
   @apply list-disc ps-md;
@@ -1410,6 +1655,21 @@
 }
 .prose pre {
   @apply my-md overflow-x-auto border border-border p-sm text-small;
+}
+/*
+  Astro's Shiki renderer writes its GitHub-dark background and foreground as
+  inline literal colours. The blue page palette is intentionally monochrome,
+  so its code blocks must outrank those inline values and return to semantic
+  surface and reading roles. Token spans inherit on purpose: syntax hue would
+  reintroduce a second palette inside the page.
+*/
+.dark[data-palette="blue"] .prose pre.astro-code {
+  color: var(--text-reading) !important;
+  background-color: var(--background-secondary) !important;
+  scrollbar-color: var(--border-hover) var(--background-secondary);
+}
+.dark[data-palette="blue"] .prose pre.astro-code span {
+  color: inherit !important;
 }
 .prose hr {
   @apply my-xl border-border;

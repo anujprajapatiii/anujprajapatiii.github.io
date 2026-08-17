@@ -2,18 +2,26 @@
 import BaseLayout from "./BaseLayout.astro";
 import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
+import type { PagePalette } from "@/data/page-palettes";
 
 interface Props {
   title?: string;
   description?: string;
   image?: string;
   noindex?: boolean;
+  palette?: PagePalette;
 }
 
-const { title, description, image, noindex } = Astro.props;
+const { title, description, image, noindex, palette } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description} image={image} noindex={noindex}>
+<BaseLayout
+  title={title}
+  description={description}
+  image={image}
+  noindex={noindex}
+  palette={palette}
+>
   <div class="flex min-h-dvh flex-col">
     <Header />
     <main class="flex-1">

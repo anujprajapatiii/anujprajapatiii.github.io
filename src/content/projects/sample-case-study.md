@@ -6,6 +6,7 @@ year: "2026"
 skills:
   - Product design
   - Prototyping
+palette: blue
 # Both optional. Leave them out and the card and hero show a plain grey
 # placeholder; add them and the real image takes over, no other change needed.
 # thumbnail: /images/work/sample-case-study/cover.png

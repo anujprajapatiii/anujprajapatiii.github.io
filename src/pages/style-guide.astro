@@ -7,17 +7,8 @@ import DataTable from "@/components/DataTable.astro";
 /* Keep these arrays in sync with the token block in src/styles/global.css
    (see agent-os/plans/design-token-session.md). */
 
-/*
-  Neutral remains the functional palette. Brown is the one deliberately narrow
-  exception: a decorative flourish for section markers and navigation dividers,
-  never a text, surface or status colour.
-
-  Only the NAMES live here; each swatch reads its colour from the CSS variable
-  at render time, so this page cannot show a value the stylesheet does not have.
-  It used to carry the hex literals as well, hand-copied, which made the file
-  claiming to document the source of truth into a second source of truth. The
-  semantic swatches below already worked this way.
-*/
+/* Only names and mappings live here. Swatches read computed CSS variables, so
+   global.css remains the implementation source of truth for actual values. */
 const primitiveFamilies = [
   {
     name: "Neutral",
@@ -27,42 +18,152 @@ const primitiveFamilies = [
   {
     name: "Brown",
     prefix: "brown",
-    swatches: ["300"],
+    swatches: ["600", "500", "400", "300", "200", "100", "50"],
   },
+  {
+    name: "Amber",
+    prefix: "amber",
+    swatches: ["400", "300", "200", "100"],
+  },
+  {
+    name: "Blue",
+    prefix: "blue",
+    swatches: ["900", "800", "700", "600", "500", "400", "300", "200", "100"],
+  },
+  {
+    name: "Green",
+    prefix: "green",
+    swatches: ["400", "300", "200", "100"],
+  },
+  {
+    name: "Red",
+    prefix: "red",
+    swatches: ["400", "300", "200", "100"],
+  },
+  {
+    name: "Yellow",
+    prefix: "yellow",
+    swatches: ["600", "500", "400", "300", "200", "100"],
+  },
+];
+
+const backgroundTokens = [
+  { name: "primary", light: "neutral-100", dark: "neutral-800" },
+  { name: "secondary", light: "neutral-200", dark: "neutral-600" },
+  { name: "tertiary", light: "yellow-500", dark: "yellow-500" },
+  { name: "quaternary", light: "white", dark: "neutral-700" },
+  { name: "primary-hover", light: "white", dark: "neutral-700" },
+  { name: "secondary-hover", light: "neutral-100", dark: "neutral-500" },
+  { name: "tertiary-hover", light: "yellow-600", dark: "yellow-400" },
+  { name: "quaternary-hover", light: "white", dark: "neutral-600" },
+  { name: "black-solid", light: "neutral-800", dark: "neutral-100" },
+  { name: "black-solid-hover", light: "black", dark: "white" },
+  { name: "disabled", light: "neutral-200", dark: "neutral-600" },
+  { name: "disabled-alt", light: "neutral-100", dark: "neutral-700" },
+  { name: "accent-primary", light: "brown-50", dark: "brown-600" },
+  { name: "accent-primary-hover", light: "brown-100", dark: "brown-500" },
+  { name: "accent-solid", light: "brown-400", dark: "brown-200" },
+  { name: "accent-solid-hover", light: "brown-500", dark: "brown-100" },
+  { name: "error-primary", light: "red-100", dark: "red-100" },
+  { name: "error-primary-hover", light: "red-200", dark: "red-200" },
+  { name: "error-secondary", light: "red-300", dark: "red-300" },
+  { name: "error-secondary-hover", light: "red-400", dark: "red-400" },
+  { name: "success-primary", light: "green-100", dark: "green-100" },
+  { name: "success-primary-hover", light: "green-200", dark: "green-200" },
+  { name: "success-secondary", light: "green-300", dark: "green-300" },
+  { name: "success-secondary-hover", light: "green-400", dark: "green-400" },
+  { name: "warning-primary", light: "yellow-200", dark: "yellow-200" },
+  { name: "warning-primary-hover", light: "yellow-300", dark: "yellow-300" },
+  { name: "warning-secondary", light: "yellow-400", dark: "yellow-400" },
+  { name: "warning-secondary-hover", light: "yellow-500", dark: "yellow-500" },
+  { name: "info-primary", light: "blue-100", dark: "blue-100" },
+  { name: "info-primary-hover", light: "blue-200", dark: "blue-200" },
+  { name: "info-secondary", light: "blue-400", dark: "blue-400" },
+  { name: "info-secondary-hover", light: "blue-500", dark: "blue-500" },
+];
+
+const textTokens = [
+  { name: "primary", light: "neutral-600", dark: "neutral-200" },
+  { name: "secondary", light: "neutral-400", dark: "neutral-300" },
+  { name: "tertiary", light: "neutral-350", dark: "neutral-350" },
+  { name: "primary-hover", light: "neutral-900", dark: "neutral-100" },
+  { name: "secondary-hover", light: "neutral-600", dark: "neutral-200" },
+  { name: "tertiary-hover", light: "neutral-400", dark: "neutral-300" },
+  { name: "disabled", light: "neutral-300", dark: "neutral-500" },
+  { name: "disabled-alt", light: "neutral-200", dark: "neutral-400" },
+  { name: "placeholder", light: "neutral-350", dark: "neutral-350" },
+  { name: "accent-primary", light: "brown-400", dark: "brown-100" },
+  { name: "accent-secondary", light: "brown-300", dark: "brown-200" },
+  { name: "accent-primary-hover", light: "brown-500", dark: "brown-50" },
+  { name: "accent-secondary-hover", light: "brown-400", dark: "brown-100" },
+  { name: "error-primary", light: "red-400", dark: "red-100" },
+  { name: "error-secondary", light: "red-300", dark: "red-200" },
+  { name: "error-primary-hover", light: "red-400", dark: "red-100" },
+  { name: "error-secondary-hover", light: "red-400", dark: "red-100" },
+  { name: "success-primary", light: "green-400", dark: "green-100" },
+  { name: "success-secondary", light: "green-300", dark: "green-200" },
+  { name: "success-primary-hover", light: "green-400", dark: "green-100" },
+  { name: "success-secondary-hover", light: "green-400", dark: "green-100" },
+  { name: "warning-primary", light: "yellow-600", dark: "yellow-200" },
+  { name: "warning-secondary", light: "yellow-500", dark: "yellow-300" },
+  { name: "warning-primary-hover", light: "yellow-600", dark: "yellow-100" },
+  { name: "warning-secondary-hover", light: "yellow-600", dark: "yellow-200" },
+  { name: "info-primary", light: "blue-600", dark: "blue-200" },
+  { name: "info-secondary", light: "blue-500", dark: "blue-300" },
+  { name: "info-primary-hover", light: "blue-600", dark: "blue-100" },
+  { name: "info-secondary-hover", light: "blue-600", dark: "blue-200" },
+];
+
+const borderTokens = [
+  { name: "primary", light: "neutral-300", dark: "neutral-500" },
+  { name: "secondary", light: "brown-200", dark: "brown-400" },
+  { name: "tertiary", light: "neutral-200", dark: "neutral-600" },
+  { name: "primary-solid", light: "neutral-800", dark: "neutral-100" },
+  { name: "disabled", light: "neutral-200", dark: "neutral-600" },
+  { name: "disabled-alt", light: "neutral-100", dark: "neutral-700" },
+  { name: "accent-primary", light: "brown-300", dark: "brown-200" },
+  { name: "accent-secondary", light: "brown-100", dark: "brown-400" },
+  { name: "error-primary", light: "red-300", dark: "red-200" },
+  { name: "error-secondary", light: "red-100", dark: "red-400" },
+  { name: "success-primary", light: "green-300", dark: "green-200" },
+  { name: "success-secondary", light: "green-100", dark: "green-400" },
+  { name: "warning-primary", light: "yellow-500", dark: "yellow-300" },
+  { name: "warning-secondary", light: "yellow-300", dark: "yellow-600" },
+  { name: "info-primary", light: "blue-400", dark: "blue-300" },
+  { name: "info-secondary", light: "blue-200", dark: "blue-600" },
 ];
 
 const semanticGroups = [
   {
     name: "Background",
-    tokens: [
-      { name: "background-primary", light: "neutral-100", dark: "neutral-800" },
-      { name: "background-secondary", light: "neutral-200", dark: "neutral-600" },
-      { name: "background-alternate", light: "neutral-800", dark: "neutral-100" },
-      { name: "background-alternate-hover", light: "black", dark: "white" },
-      { name: "background-hover", light: "white", dark: "neutral-700" },
-      { name: "background-elevated", light: "white", dark: "neutral-700" },
-      { name: "background-elevated-hover", light: "white", dark: "neutral-600" },
-    ],
-  },
-  {
-    name: "Border",
-    tokens: [
-      { name: "border-primary", light: "neutral-300", dark: "neutral-500" },
-      { name: "border-hover", light: "neutral-350", dark: "neutral-350" },
-    ],
+    tokens: backgroundTokens.map((token) => ({ ...token, name: `bg-${token.name}` })),
   },
   {
     name: "Text",
-    tokens: [
-      { name: "text-primary", light: "neutral-600", dark: "neutral-200" },
-      { name: "text-secondary", light: "neutral-400", dark: "neutral-300" },
-      { name: "text-interactive", light: "neutral-900", dark: "neutral-100" },
-      { name: "text-alternate", light: "neutral-100", dark: "neutral-800" },
-    ],
+    tokens: textTokens.map((token) => ({ ...token, name: `text-${token.name}` })),
   },
   {
-    name: "Decorative",
+    name: "Icon",
+    tokens: textTokens.map((token) => ({ ...token, name: `icon-${token.name}` })),
+  },
+  {
+    name: "Border",
+    tokens: borderTokens.map((token) => ({ ...token, name: `border-${token.name}` })),
+  },
+  {
+    name: "Portfolio-specific",
     tokens: [
+      { name: "background-primary", light: "bg-primary", dark: "bg-primary" },
+      { name: "background-secondary", light: "bg-secondary", dark: "bg-secondary" },
+      { name: "background-alternate", light: "bg-black-solid", dark: "bg-black-solid" },
+      { name: "background-alternate-hover", light: "bg-black-solid-hover", dark: "bg-black-solid-hover" },
+      { name: "background-hover", light: "bg-primary-hover", dark: "bg-primary-hover" },
+      { name: "background-elevated", light: "bg-quaternary", dark: "bg-quaternary" },
+      { name: "background-elevated-hover", light: "bg-quaternary-hover", dark: "bg-quaternary-hover" },
+      { name: "text-interactive", light: "text-primary-hover", dark: "text-primary-hover" },
+      { name: "text-reading", light: "text-primary", dark: "text-primary" },
+      { name: "text-alternate", light: "neutral-100", dark: "neutral-800" },
+      { name: "border-hover", light: "neutral-350", dark: "neutral-350" },
       { name: "shader-tint", light: "neutral-500", dark: "neutral-300" },
       { name: "decorative-accent", light: "brown-300", dark: "brown-300" },
     ],
@@ -117,6 +218,23 @@ const aliases = [
   { name: "border", to: "border-primary" },
   { name: "ring", to: "border-hover" },
 ];
+
+const pagePaletteRows = [
+  {
+    name: "Default",
+    id: "default",
+    light: "neutral-100 / neutral-600 / neutral-600",
+    dark: "neutral-800 / neutral-200 / neutral-200",
+    use: "Site default",
+  },
+  {
+    name: "Blue",
+    id: "blue",
+    light: "blue-100 / blue-600 / blue-600",
+    dark: "blue-900 / blue-200 / blue-300",
+    use: "Sample Case Study",
+  },
+];
 ---
 
 <PageLayout title="Style Guide — Anuj Prajapati" description="Internal design-system reference." noindex>
@@ -124,9 +242,10 @@ const aliases = [
     <Container>
     <h1 class="mb-2xs text-h1">Style guide</h1>
     <p class="mb-xl text-muted-foreground">
-      Internal reference for the token system — the source of truth is
-      <code>src/styles/global.css</code>. Toggle dark mode in the header to
-      check both themes. Update this page whenever tokens change.
+      Internal reference for the token system — base tokens live in
+      <code>src/styles/global.css</code> and authored page palettes live in
+      <code>src/styles/themes/</code>. Toggle dark mode in the header to check
+      both appearance modes. Update this page whenever tokens change.
     </p>
 
     <Section size="md" class="border-t border-border">
@@ -203,6 +322,40 @@ const aliases = [
           </p>
         ))}
       </div>
+    </Section>
+
+    <Section size="md" class="border-t border-border">
+      <h2 class="label mb-2xs">
+        Page palettes
+      </h2>
+      <p class="mb-md max-w-measure text-small text-muted-foreground">
+        A page palette is authored content identity; light/dark is the
+        visitor's appearance preference. Components keep using the semantic
+        roles above, while a palette remaps their structural colours for both
+        modes. Status roles retain their semantic families.
+      </p>
+      <DataTable label="Available page palettes">
+        <thead>
+          <tr>
+            <th scope="col">Palette</th>
+            <th scope="col">Frontmatter</th>
+            <th scope="col">Light canvas / title / body</th>
+            <th scope="col">Dark canvas / title / body</th>
+            <th scope="col">Current use</th>
+          </tr>
+        </thead>
+        <tbody>
+          {pagePaletteRows.map((palette) => (
+            <tr>
+              <td>{palette.name}</td>
+              <td><code>palette: {palette.id}</code></td>
+              <td class="tabular-nums">{palette.light}</td>
+              <td class="tabular-nums">{palette.dark}</td>
+              <td>{palette.use}</td>
+            </tr>
+          ))}
+        </tbody>
+      </DataTable>
     </Section>
 
     <Section size="md" class="border-t border-border">

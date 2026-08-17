@@ -1,0 +1,139 @@
+/*
+  Blue page palette.
+
+  A page palette is authored content identity; light/dark remains the visitor's
+  appearance preference. This file remaps structural semantic roles only.
+  Status roles keep their canonical families so meaning survives the palette.
+*/
+:root[data-palette="blue"] {
+  /* Background */
+  --bg-primary: var(--blue-100);
+  --bg-secondary: var(--blue-200);
+  --bg-tertiary: var(--blue-400);
+  --bg-quaternary: var(--neutral-white);
+  --bg-primary-hover: var(--neutral-white);
+  --bg-secondary-hover: var(--blue-100);
+  --bg-tertiary-hover: var(--blue-500);
+  --bg-quaternary-hover: var(--blue-100);
+  --bg-black-solid: var(--blue-700);
+  --bg-black-solid-hover: var(--blue-800);
+  --bg-disabled: var(--blue-200);
+  --bg-disabled-alt: var(--blue-100);
+  --bg-accent-primary: var(--blue-200);
+  --bg-accent-primary-hover: var(--blue-300);
+  --bg-accent-solid: var(--blue-400);
+  --bg-accent-solid-hover: var(--blue-500);
+
+  /* Text */
+  --text-primary: var(--blue-600);
+  --text-secondary: var(--blue-500);
+  --text-tertiary: var(--blue-400);
+  --text-primary-hover: var(--blue-700);
+  --text-secondary-hover: var(--blue-600);
+  --text-tertiary-hover: var(--blue-500);
+  --text-disabled: var(--blue-300);
+  --text-disabled-alt: var(--blue-200);
+  --text-placeholder: var(--blue-400);
+  --text-accent-primary: var(--blue-600);
+  --text-accent-secondary: var(--blue-500);
+  --text-accent-primary-hover: var(--blue-700);
+  --text-accent-secondary-hover: var(--blue-700);
+
+  /* Icon */
+  --icon-primary: var(--blue-600);
+  --icon-secondary: var(--blue-500);
+  --icon-tertiary: var(--blue-400);
+  --icon-primary-hover: var(--blue-700);
+  --icon-secondary-hover: var(--blue-600);
+  --icon-tertiary-hover: var(--blue-500);
+  --icon-disabled: var(--blue-300);
+  --icon-disabled-alt: var(--blue-200);
+  --icon-placeholder: var(--blue-400);
+  --icon-accent-primary: var(--blue-600);
+  --icon-accent-secondary: var(--blue-500);
+  --icon-accent-primary-hover: var(--blue-700);
+  --icon-accent-secondary-hover: var(--blue-700);
+
+  /* Border */
+  --border-primary: var(--blue-300);
+  --border-secondary: var(--blue-300);
+  --border-tertiary: var(--blue-200);
+  --border-primary-solid: var(--blue-700);
+  --border-disabled: var(--blue-200);
+  --border-disabled-alt: var(--blue-100);
+  --border-accent-primary: var(--blue-400);
+  --border-accent-secondary: var(--blue-200);
+
+  /* Portfolio-specific roles that do not alias the canonical set. */
+  --text-alternate: var(--blue-100);
+  --border-hover: var(--blue-400);
+  --shader-tint: var(--blue-500);
+  --decorative-accent: var(--blue-400);
+}
+
+.dark[data-palette="blue"] {
+  /* Background */
+  --bg-primary: var(--blue-900);
+  --bg-secondary: var(--blue-800);
+  --bg-tertiary: var(--blue-200);
+  --bg-quaternary: var(--blue-800);
+  --bg-primary-hover: var(--blue-800);
+  --bg-secondary-hover: var(--blue-700);
+  --bg-tertiary-hover: var(--blue-100);
+  --bg-quaternary-hover: var(--blue-700);
+  --bg-black-solid: var(--blue-200);
+  --bg-black-solid-hover: var(--blue-100);
+  --bg-disabled: var(--blue-800);
+  --bg-disabled-alt: var(--blue-900);
+  --bg-accent-primary: var(--blue-800);
+  --bg-accent-primary-hover: var(--blue-700);
+  --bg-accent-solid: var(--blue-200);
+  --bg-accent-solid-hover: var(--blue-100);
+
+  /* Text */
+  --text-primary: var(--blue-200);
+  --text-secondary: var(--blue-300);
+  --text-tertiary: var(--blue-300);
+  --text-primary-hover: var(--blue-200);
+  --text-secondary-hover: var(--blue-200);
+  --text-tertiary-hover: var(--blue-200);
+  --text-disabled: var(--blue-500);
+  --text-disabled-alt: var(--blue-600);
+  --text-placeholder: var(--blue-400);
+  --text-accent-primary: var(--blue-200);
+  --text-accent-secondary: var(--blue-300);
+  --text-accent-primary-hover: var(--blue-200);
+  --text-accent-secondary-hover: var(--blue-200);
+
+  /* Icon */
+  --icon-primary: var(--blue-200);
+  --icon-secondary: var(--blue-300);
+  --icon-tertiary: var(--blue-300);
+  --icon-primary-hover: var(--blue-200);
+  --icon-secondary-hover: var(--blue-200);
+  --icon-tertiary-hover: var(--blue-200);
+  --icon-disabled: var(--blue-500);
+  --icon-disabled-alt: var(--blue-600);
+  --icon-placeholder: var(--blue-400);
+  --icon-accent-primary: var(--blue-200);
+  --icon-accent-secondary: var(--blue-300);
+  --icon-accent-primary-hover: var(--blue-200);
+  --icon-accent-secondary-hover: var(--blue-200);
+
+  /* Border */
+  --border-primary: var(--blue-700);
+  --border-secondary: var(--blue-600);
+  --border-tertiary: var(--blue-800);
+  --border-primary-solid: var(--blue-200);
+  --border-disabled: var(--blue-800);
+  --border-disabled-alt: var(--blue-900);
+  --border-accent-primary: var(--blue-600);
+  --border-accent-secondary: var(--blue-800);
+
+  /* Portfolio-specific roles that do not alias the canonical set. */
+  --text-reading: var(--text-secondary);
+  --text-alternate: var(--blue-900);
+  --border-hover: var(--blue-600);
+  --shader-tint: var(--blue-200);
+  --decorative-accent: var(--blue-300);
+}

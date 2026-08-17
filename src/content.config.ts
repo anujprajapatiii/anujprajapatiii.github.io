@@ -1,5 +1,6 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
+import { pagePalettes } from "@/data/page-palettes";
 
 // Shared schema — Work ("projects") and Play use the same case-study shape.
 const caseStudySchema = z.object({
@@ -10,6 +11,8 @@ const caseStudySchema = z.object({
   skills: z.array(z.string()).default([]),
   thumbnail: z.string().optional(),
   heroImage: z.string().optional(),
+  // Authored page identity, independent of the visitor's light/dark mode.
+  palette: z.enum(pagePalettes).default("default"),
   // Optional link to a live/deployed version (e.g. an interactive experiment
   // hosted in its own repo). Rendered as a "Try it live" link.
   liveUrl: z.string().url().optional(),

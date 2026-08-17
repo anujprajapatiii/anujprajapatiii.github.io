@@ -26,6 +26,7 @@ const { Content, headings } = await render(item);
   title={`${item.data.title} — Anuj Prajapati`}
   description={item.data.description}
   image={item.data.heroImage ?? item.data.thumbnail}
+  palette={item.data.palette}
 >
   <Section as="article" size="page">
     <Stack gap="xl">
