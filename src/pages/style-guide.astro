@@ -161,9 +161,9 @@ const semanticGroups = [
       { name: "background-elevated", light: "bg-quaternary", dark: "bg-quaternary" },
       { name: "background-elevated-hover", light: "bg-quaternary-hover", dark: "bg-quaternary-hover" },
       { name: "text-interactive", light: "text-primary-hover", dark: "text-primary-hover" },
-      { name: "text-reading", light: "text-primary", dark: "text-primary" },
+      { name: "text-reading", light: "text-secondary", dark: "text-secondary" },
       { name: "text-alternate", light: "neutral-100", dark: "neutral-800" },
-      { name: "border-hover", light: "neutral-350", dark: "neutral-350" },
+      { name: "border-hover", light: "neutral-350", dark: "neutral-400" },
       { name: "shader-tint", light: "neutral-500", dark: "neutral-300" },
       { name: "decorative-accent", light: "brown-300", dark: "brown-300" },
     ],
@@ -383,6 +383,8 @@ const pagePaletteRows = [
         compact interface labels; body remains 16px for reading. The retired
         18px lead and 12px label steps stay removed: position and colour already
         separate introductions, while 12px is too small for readable metadata.
+        Work and Experiments prose uses the same 16px body step with secondary
+        text colour and a contextual 1.4 line-height.
       </p>
       <div class="flex flex-col gap-md">
         {typeScale.map((t) => (
