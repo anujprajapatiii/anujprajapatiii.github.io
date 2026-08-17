@@ -285,7 +285,7 @@
     --background-elevated: var(--bg-quaternary);
     --background-elevated-hover: var(--bg-quaternary-hover);
     --text-interactive: var(--text-primary-hover);
-    --text-reading: var(--text-primary);
+    --text-reading: var(--text-secondary);
     --text-alternate: var(--neutral-100);
     --border-hover: var(--neutral-350);
     --shader-tint: var(--neutral-500);
@@ -421,6 +421,7 @@
 
     /* Portfolio-specific semantic remaps. */
     --text-alternate: var(--neutral-800);
+    --border-hover: var(--neutral-400);
     --shader-tint: var(--neutral-300);
     --decorative-accent: var(--brown-300);
 }
@@ -1574,15 +1575,26 @@
 /* Nested headings sit one step further in. */
 .on-this-page a[data-depth="3"] { padding-inline-start: var(--spacing-md); }
 
+/*
+  Work and Experiments use the body step at a tighter reading rhythm than the
+  rest of the site. Scoping the token at the article keeps the shared 16px size
+  and 400 weight intact while applying 140% leading to both the introduction
+  and the rendered Markdown body.
+*/
+.case-study {
+  --text-body--line-height: 1.4;
+}
+
 /* Markdown prose for case-study bodies (custom, not @tailwindcss/typography) */
 .prose {
   color: var(--text-reading);
 }
 .prose > * + * {
-  margin-top: 1.25em;
+  margin-top: var(--spacing-stack);
 }
 .prose h2 {
-  @apply mt-xl text-h2;
+  @apply text-h2;
+  margin-top: var(--spacing-2xl);
   color: var(--text-primary);
 }
 .prose h3 {
@@ -1601,18 +1613,7 @@
 .prose blockquote {
   max-width: var(--container-measure);
 }
-/*
-  Repeating the reading colour here looks redundant against `.prose` above and
-  is not. `.prose blockquote` sets --muted-foreground, and a markdown blockquote
-  is almost always `<blockquote><p>`, so the paragraph inherits muted and this
-  rule is what pulls it back to the reading role. Removing it as dead code
-  turned every pull quote into a different hierarchy — caught by diffing
-  computed styles, not by the build.
-
-  Which means the blockquote's own muted colour currently applies to nothing.
-  That contradiction is real but it is a design decision, not a cleanup: left
-  alone here deliberately so this pass stays visually inert.
-*/
+/* Keep the long-form reading role explicit on every body-text shape. */
 .prose p,
 .prose ul,
 .prose ol {

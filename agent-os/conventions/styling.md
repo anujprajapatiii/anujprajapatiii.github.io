@@ -139,6 +139,9 @@ What that means in practice:
   semantic roles (`p-card`, `px-gutter`, …) — **never** raw Tailwind step
   numbers (`p-6`, `mt-1`, `gap-4`). The whole codebase was converted; zero
   raw steps ship in any page. 4px base; see `/style-guide`.
+  - Major Work and Experiments prose groups use the existing `2xl` spacing
+    token (64px), applied before each body `h2`. Within each group, paragraphs
+    and title-to-body transitions use `--spacing-stack` (16px).
   - Tailwind's 5 / 10 / 20 steps (20px / 40px / 80px) have no equivalent on
     this scale. That is the point: when a value doesn't map, pick the
     neighbour that suits the context and say why — don't round blindly and
@@ -171,6 +174,10 @@ What that means in practice:
   introductions from their position and their secondary colour. The 12px
   label existed to make metadata quiet, which `--text-secondary` already
   does. **Intros are `text-body`; metadata is `text-small`.**
+  - Work and Experiments detail pages scope the existing body step through
+    `.case-study`: body copy uses `--text-reading` (mapped to
+    `--text-secondary`) and 1.4 line-height. This is a contextual reading
+    treatment, not a seventh type size; headings keep their primary roles.
   - `text-lead` and `text-label` now match no token, so Tailwind emits
     nothing and the element silently inherits its parent's size — the class
     looks right in the diff and does nothing on the page. `pnpm check` fails
