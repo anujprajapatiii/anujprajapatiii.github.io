@@ -13,7 +13,7 @@ workflows change.
 | Work | Portfolio/case-study section at `/work` | `src/content/projects/`, rendered through `/work` routes |
 | Design tokens | Base color, type, spacing, and container tokens; light/dark appearance modes | `src/styles/global.css` |
 | Page palettes | Authored per-page semantic colour remaps, independent of light/dark mode | `src/data/page-palettes.ts`, `src/styles/themes/`, layout palette props |
-| Layout primitives | Section/Container/Stack/Cluster/Grid composition system | `src/components/primitives/`, CSS in `src/styles/global.css` |
+| Layout primitives | One 1300px page container plus Section/Stack/Cluster and a typed 24-track Grid/GridItem system | `src/components/primitives/`, CSS in `src/styles/global.css` |
 | Deployment | Static build published to GitHub Pages | `.github/workflows/deploy.yml` |
 | Work orchestration | Strategy, plans, conventions, learnings | `agent-os/` |
 
@@ -25,6 +25,8 @@ workflows change.
 | `/about` | Personal narrative and context |
 | `/work` | Work index listing case studies |
 | `/work/<slug>` | Case-study detail pages |
+| `/play` | Experiments index |
+| `/play/<slug>` | Experiment detail pages and live embeds |
 | `/style-guide` | Internal design-system reference page |
 
 ## Content Model
@@ -37,6 +39,7 @@ default keeps the site palette.
 | Collection | Public route | Source |
 | --- | --- | --- |
 | Projects | `/work/<slug>` | `src/content/projects/*.{md,mdx}` |
+| Play | `/play/<slug>` | `src/content/play/*.{md,mdx}` |
 
 ## Commands
 

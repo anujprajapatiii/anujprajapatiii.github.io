@@ -5,6 +5,7 @@ import Section from "@/components/primitives/Section.astro";
 import Container from "@/components/primitives/Container.astro";
 import Stack from "@/components/primitives/Stack.astro";
 import Grid from "@/components/primitives/Grid.astro";
+import GridItem from "@/components/primitives/GridItem.astro";
 import { getCollection } from "astro:content";
 
 const projects = (await getCollection("projects", ({ data }) => !data.draft))
@@ -15,20 +16,22 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft))
   <Section size="page">
     <Container>
       <Stack gap="lg">
-        <Stack gap="md">
+        <Stack gap="sm">
           <h1 class="text-h1">Work</h1>
           <p class="max-w-measure text-body text-muted-foreground">
             Selected projects and case studies.
           </p>
         </Stack>
-        <Grid min="280px" gap="md">
+        <Grid>
           {projects.map((project) => (
-            <ProjectCard
-              id={project.id}
-              title={project.data.title}
-              description={project.data.description}
-              thumbnail={project.data.thumbnail}
-            />
+            <GridItem spanMd={12} spanLg={8}>
+              <ProjectCard
+                id={project.id}
+                title={project.data.title}
+                description={project.data.description}
+                thumbnail={project.data.thumbnail}
+              />
+            </GridItem>
           ))}
         </Grid>
       </Stack>

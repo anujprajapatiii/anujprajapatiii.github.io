@@ -1,21 +1,22 @@
 ---
 /*
-  The page container: 1024px, centred, with the gutter. One width for the
-  whole site — header, footer and every page — so everything sits on the same
-  two vertical edges. There is no size prop by design; a second container
-  width is how a layout starts drifting.
+  The page container: a 1300px content box, centred, with a 20px safe inset.
+  One width for the whole site — header, footer and every page — so everything
+  sits on the same two vertical edges. There is no size prop by design; a
+  second container width is how a layout starts drifting.
 
   For capping long-form text, use `max-w-measure` (~70 characters). That is a
   reading measure, not a container. See global.css.
 */
 interface Props {
+  [key: string]: unknown;
   as?: string;
   class?: string;
 }
-const { as = "div", class: className } = Astro.props;
+const { as = "div", class: className, ...attrs } = Astro.props;
 const Tag = as as any;
 ---
 
-<Tag class:list={["container", className]}>
+<Tag {...attrs} class:list={["container", className]}>
   <slot />
 </Tag>

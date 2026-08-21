@@ -607,31 +607,32 @@
     --spacing-3xl: 6rem;
     --spacing-4xl: 8rem;
     /* Semantic spacing — the roles a design brief names. */
-    --spacing-gutter: 1.5rem;
+    /* Structural spacing. These govern page geometry rather than content
+       rhythm, so they are named roles rather than ordinal scale steps. */
+    --spacing-gutter: 1.25rem;
     --spacing-section: clamp(3rem, 8vw, 6rem);
     --spacing-stack: 1rem;
     /* Card interior padding. 16px since the media went full-bleed: the card
        itself has no padding any more, so this describes the text block, which
        is the only part of the card left with an interior. */
     --spacing-card: 1rem;
-    --spacing-grid: 1rem;
+    --spacing-grid: 0.625rem;
 
     /* ---- CONTAINERS ----
-       ONE page container, 1024px. Header, footer and every page share it, so
-       the wordmark, the nav, the hero and the footer all sit on the same two
-       vertical edges at every width. There is no `wide` or `content` variant
-       — a second container width is how a layout starts drifting.
+       ONE 1300px content box. Header, footer and every page share it, so the
+       wordmark, the nav, the hero and the footer all sit on the same two
+       vertical edges at every width. Container adds the 20px safe inset
+       outside this content width. There is no `wide` or `content` variant — a
+       second container width is how a layout starts drifting.
 
        --container-measure is NOT a layout container. It is the reading
        measure: 36rem lands at ~70 characters at --text-body, inside the
        comfortable 60-75 range. It is deliberately in this namespace so it
        generates `max-w-measure`, and deliberately named so that a future
        "standardise the containers" pass cannot collapse it into the page
-       width. Body text at 1024px would run to ~127 characters. */
-    --container-page: 64rem;
+       width. */
+    --container-page: 81.25rem;
     --container-measure: 36rem;
-    /* Width of the on-this-page rail. See .sidebar-layout. */
-    --rail-width: 12rem;
     /*
       Height of the sticky header, measured rather than guessed — two things
       have to clear it: the landing offset for in-page anchors, and the top of
@@ -768,10 +769,10 @@
   from the spacing + container tokens above. See the portfolio-layout-
   primitives conventions and agent-os/plans/homepage-rebuild.md.
 
-  Adapted to this repo's tokens: Container sizes are narrow/content/wide
-  (matching --container-*); Container also carries the horizontal gutter so
-  it is self-sufficient (no separate global PageWrapper needed for normal
-  content — PageWrapper is only for full-bleed-then-pad exceptions).
+  Container carries the single page width and the horizontal inset, so it is
+  self-sufficient (no separate PageWrapper for normal content). Grid and
+  GridItem own the reusable 24-track fractions inside it; reading measure is a
+  separate text concern, not another container variant.
 */
 
 /*
@@ -783,7 +784,7 @@
 .container {
   margin-inline: auto;
   width: 100%;
-  max-width: var(--container-page);
+  max-width: calc(var(--container-page) + (2 * var(--spacing-gutter)));
   padding-inline-start: max(var(--spacing-gutter), env(safe-area-inset-left));
   padding-inline-end: max(var(--spacing-gutter), env(safe-area-inset-right));
 }
@@ -802,70 +803,141 @@
   page used to hand-roll; the clamp reproduces it exactly (48px → 64px).
 */
 .section--page { padding-block: clamp(3rem, 6vw, 4rem) var(--spacing-3xl); }
-.section--sm { padding-block: var(--spacing-lg); }              /* 32 */
-.section--md { padding-block: var(--spacing-xl); }              /* 48 */
-.section--lg { padding-block: var(--spacing-3xl); }             /* 96 */
-.section--xl { padding-block: clamp(4rem, 10vw, 8rem); }        /* 64–128, hero */
+.section--compact { padding-block: var(--spacing-lg); }          /* 32 */
+.section--standard { padding-block: var(--spacing-xl); }         /* 48 */
+.section--large { padding-block: var(--spacing-3xl); }           /* 96 */
+.section--hero { padding-block: clamp(4rem, 10vw, 8rem); }       /* 64–128 */
 
 /* Stack — vertical flex with consistent gap */
 .stack { display: flex; flex-direction: column; }
-.stack--sm { gap: var(--spacing-2xs); }                         /* 8 */
-.stack--md { gap: var(--spacing-sm); }                          /* 16 */
-.stack--lg { gap: var(--spacing-lg); }                          /* 32 */
-.stack--xl { gap: var(--spacing-xl); }                          /* 48 — major blocks within a page */
+.stack--2xs { gap: var(--spacing-2xs); }
+.stack--xs { gap: var(--spacing-xs); }
+.stack--sm { gap: var(--spacing-sm); }
+.stack--md { gap: var(--spacing-md); }
+.stack--lg { gap: var(--spacing-lg); }
+.stack--xl { gap: var(--spacing-xl); }
+.stack--2xl { gap: var(--spacing-2xl); }
 
 /* Cluster — horizontal flex with wrap */
 .cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-sm); }
-.cluster--gap-sm { gap: var(--spacing-2xs); }
-.cluster--gap-md { gap: var(--spacing-sm); }
+.cluster--gap-2xs { gap: var(--spacing-2xs); }
+.cluster--gap-xs { gap: var(--spacing-xs); }
+.cluster--gap-sm { gap: var(--spacing-sm); }
+.cluster--gap-md { gap: var(--spacing-md); }
 .cluster--gap-lg { gap: var(--spacing-lg); }
+.cluster--gap-xl { gap: var(--spacing-xl); }
+.cluster--gap-2xl { gap: var(--spacing-2xl); }
 .cluster--align-start    { align-items: flex-start; }
 .cluster--align-baseline { align-items: baseline; }
 .cluster--justify-between { justify-content: space-between; }
 
 /*
-  Grid — auto-fit responsive columns, no media query. The min(<min>, 100%)
-  guard stops a wide min from causing horizontal scroll on narrow screens.
+  Grid — one 24-track alignment model for the entire site. Items are full
+  width by default, then opt into tablet and desktop spans through GridItem.
+  The minmax(0, 1fr) tracks and item guard stop long code/media from widening
+  the page.
 */
-.grid-auto {
+.layout-grid {
   display: grid;
-  gap: var(--spacing-lg);
-  grid-template-columns: repeat(auto-fit, minmax(min(var(--grid-min, 280px), 100%), 1fr));
+  grid-template-columns: repeat(24, minmax(0, 1fr));
+  gap: var(--spacing-grid);
 }
-.grid-auto--min-220 { --grid-min: 220px; }
-.grid-auto--min-280 { --grid-min: 280px; }
-.grid-auto--min-360 { --grid-min: 360px; }
-.grid-auto--min-440 { --grid-min: 440px; }   /* 2-up on desktop, 1-up ≤tablet */
-.grid-auto--gap-xs { gap: var(--spacing-xs); }
-.grid-auto--gap-md { gap: var(--spacing-sm); }
-.grid-auto--gap-lg { gap: var(--spacing-lg); }
+.layout-grid > *,
+.grid-item { min-width: 0; }
+.grid-item {
+  --grid-span: 24;
+  grid-column: var(--grid-start, auto) / span var(--grid-span);
+}
+.grid-item--span-6 { --grid-span: 6; }
+.grid-item--span-8 { --grid-span: 8; }
+.grid-item--span-12 { --grid-span: 12; }
+.grid-item--span-16 { --grid-span: 16; }
+.grid-item--span-18 { --grid-span: 18; }
+.grid-item--span-24 { --grid-span: 24; }
+.grid-item--start-1 { --grid-start: 1; }
+.grid-item--start-5 { --grid-start: 5; }
+.grid-item--start-7 { --grid-start: 7; }
+.grid-item--start-9 { --grid-start: 9; }
+.grid-item--start-13 { --grid-start: 13; }
+.grid-item--start-17 { --grid-start: 17; }
+.grid-item--start-19 { --grid-start: 19; }
+
+@media (min-width: 48rem) {
+  .grid-item--md-span-6 { --grid-span: 6; }
+  .grid-item--md-span-8 { --grid-span: 8; }
+  .grid-item--md-span-12 { --grid-span: 12; }
+  .grid-item--md-span-16 { --grid-span: 16; }
+  .grid-item--md-span-18 { --grid-span: 18; }
+  .grid-item--md-span-24 { --grid-span: 24; }
+  .grid-item--md-start-1 { --grid-start: 1; }
+  .grid-item--md-start-5 { --grid-start: 5; }
+  .grid-item--md-start-7 { --grid-start: 7; }
+  .grid-item--md-start-9 { --grid-start: 9; }
+  .grid-item--md-start-13 { --grid-start: 13; }
+  .grid-item--md-start-17 { --grid-start: 17; }
+  .grid-item--md-start-19 { --grid-start: 19; }
+}
+
+@media (min-width: 64rem) {
+  .grid-item--lg-span-6 { --grid-span: 6; }
+  .grid-item--lg-span-8 { --grid-span: 8; }
+  .grid-item--lg-span-12 { --grid-span: 12; }
+  .grid-item--lg-span-16 { --grid-span: 16; }
+  .grid-item--lg-span-18 { --grid-span: 18; }
+  .grid-item--lg-span-24 { --grid-span: 24; }
+  .grid-item--lg-start-1 { --grid-start: 1; }
+  .grid-item--lg-start-5 { --grid-start: 5; }
+  .grid-item--lg-start-7 { --grid-start: 7; }
+  .grid-item--lg-start-9 { --grid-start: 9; }
+  .grid-item--lg-start-13 { --grid-start: 13; }
+  .grid-item--lg-start-17 { --grid-start: 17; }
+  .grid-item--lg-start-19 { --grid-start: 19; }
+}
+
+/* Style-guide-only view of the real structural grid. */
+.grid-specimen__track {
+  min-height: var(--spacing-xl);
+  background: var(--background-secondary);
+  border: 1px solid var(--border);
+}
+.grid-specimen__item {
+  min-height: var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-2xs);
+  background: var(--background-secondary);
+  border: 1px solid var(--border);
+  font-size: var(--text-small);
+  line-height: var(--text-small--line-height);
+  color: var(--text-secondary);
+}
 
 /*
-  Sidebar — fixed-width rail beside a flexible content column.
+  Sidebar — four grid tracks beside twenty content tracks.
 
-  Content-driven breakpoint, measured not guessed: the content column is
-  min(vw, 1024) - 48 gutter - 192 rail - 48 gap. That hits the 576px reading
-  measure at exactly 864px, so the rail turns on at 56rem (896px), where the
-  content column still has 608px rather than sitting on the boundary.
+  At the 56rem breakpoint the new container leaves 856px of content. Four
+  tracks produce a 134px rail and twenty leave 712px for content, safely over
+  the 576px reading measure. Below that, both regions are full width.
 
   `:has()` keeps the grid single-column when the rail renders nothing (a case
   study with fewer than two headings), so there is no empty gutter. Browsers
   without :has() fall back to a full-width content column, which is the same
   result.
 */
-.sidebar-layout { display: grid; gap: var(--spacing-xl); }
+.sidebar-layout {
+  display: grid;
+  grid-template-columns: repeat(24, minmax(0, 1fr));
+  gap: var(--spacing-grid);
+}
 /*
   Grid items default to min-width:auto, so a track refuses to shrink below its
-  content's intrinsic width — a code block or a long token in the prose blew
-  the column out to 776px inside a 327px container and scrolled the page
-  sideways. The flex Stack this replaced had no such behaviour. Same guard as
-  the min() in .grid-auto.
+  content's intrinsic width — a code block or a long token in the prose can
+  otherwise push the page sideways. Keep the same guard as GridItem.
 */
-.sidebar-layout > * { min-width: 0; }
+.sidebar-layout > * { grid-column: 1 / -1; min-width: 0; }
 @media (min-width: 56rem) {
-  .sidebar-layout:has(> .on-this-page) {
-    grid-template-columns: var(--rail-width) 1fr;
-  }
+  .sidebar-layout:has(> .on-this-page) > .on-this-page { grid-column: span 4; }
+  .sidebar-layout:has(> .on-this-page) > :not(.on-this-page) { grid-column: span 20; }
 }
 
 /*
@@ -1304,17 +1376,21 @@
   the rows take the full width with a smaller thumbnail. Nothing is lost: each
   row is a link to the same place the preview was advertising.
 
-  The breakpoint is the sidebar's 56rem, reused rather than invented. The
-  arithmetic happens to be the same shape: at 30% for the pane, the row keeps
-  250px of thumbnail plus a readable run of text only while the container is
-  near its 1024px cap.
+  The breakpoint is the sidebar's 56rem, reused rather than invented. At that
+  width a 16 / 8 split leaves the list roughly 564px: enough for the 250px
+  thumbnail, padding, and a useful single-line title/description run.
 */
-.play-preview { display: flex; align-items: flex-start; gap: var(--spacing-xs); }
+.play-preview {
+  display: grid;
+  grid-template-columns: repeat(24, minmax(0, 1fr));
+  align-items: flex-start;
+  gap: var(--spacing-grid);
+}
 .play-preview__list {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
-  flex: 1;
+  grid-column: 1 / -1;
   /* Flex items refuse to shrink below their content; without this a long
      subtitle pushes the row past the pane and the section scrolls sideways. */
   min-width: 0;
@@ -1357,13 +1433,13 @@
 .play-preview__pane { display: none; }
 
 @media (min-width: 56rem) {
+  .play-preview__list { grid-column: span 16; }
   .play-item__thumb { width: 250px; height: 80px; align-self: auto; }
   .play-preview__pane {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-2xs);
-    width: 30%;
-    flex-shrink: 0;
+    grid-column: span 8;
     /* Matches the list's height rather than its own content, so the pane is
        one steady rectangle while the pointer moves down the rows. */
     align-self: stretch;
@@ -1473,9 +1549,9 @@
 
 /*
   Edge to edge on a phone, which is the one place the site's shared vertical
-  edges cost more than they are worth. The gutter takes 48px off the frame,
+  edges cost more than they are worth. The inset takes 40px off the frame,
   and a tool laid out for a 320px floor spends the last of its room on the
-  controls: at a 375px screen the framed tool is 327px wide and clips the
+  controls: at a 375px screen the framed tool is 335px wide and still clips the
   right edge of its own buttons. Full width hands those 48px back.
 
   `width: auto` matters — a box at `width: 100%` would keep the container's
@@ -1583,6 +1659,10 @@
 */
 .case-study {
   --text-body--line-height: 1.4;
+}
+.case-study-header-grid { row-gap: var(--spacing-lg); }
+@media (min-width: 64rem) {
+  .case-study-header-grid { row-gap: var(--spacing-grid); }
 }
 
 /* Markdown prose for case-study bodies (custom, not @tailwindcss/typography) */

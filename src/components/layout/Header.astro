@@ -2,6 +2,8 @@
 import { siteConfig } from "@/data/site-config";
 import ThemeToggle from "./ThemeToggle.astro";
 import Container from "@/components/primitives/Container.astro";
+import Grid from "@/components/primitives/Grid.astro";
+import GridItem from "@/components/primitives/GridItem.astro";
 
 const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 function isActive(href: string) {
@@ -13,24 +15,28 @@ function isActive(href: string) {
 
 <header class="site-header">
   <Container>
-    {/* Custom responsive header bar: on wide screens the nav + toggle group
-        to the right; below --bp-md the nav wraps to its own row and the
-        toggle stays pinned to the right edge. See global.css .site-nav. */}
-    <div class="site-nav">
-      {/* No colour, no hover, no fade here — the wordmark and the nav
-          links are both named in the INTERACTION block in global.css, which is
-          the only place on the site an interactive state is written. */}
-      <a href="/" class="wordmark">
-        {siteConfig.name}
-      </a>
-      <nav class="site-nav__links" aria-label="Main navigation">
-        {siteConfig.nav.map((item) => (
-          <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
-            {item.label}
+    <Grid>
+      <GridItem>
+        {/* Custom responsive header bar: on wide screens the nav + toggle group
+            to the right; below --bp-md the nav wraps to its own row and the
+            toggle stays pinned to the right edge. See global.css .site-nav. */}
+        <div class="site-nav">
+          {/* No colour, no hover, no fade here — the wordmark and the nav
+              links are both named in the INTERACTION block in global.css, which is
+              the only place on the site an interactive state is written. */}
+          <a href="/" class="wordmark">
+            {siteConfig.name}
           </a>
-        ))}
-      </nav>
-      <div class="site-nav__toggle"><ThemeToggle /></div>
-    </div>
+          <nav class="site-nav__links" aria-label="Main navigation">
+            {siteConfig.nav.map((item) => (
+              <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
+                {item.label}
+              </a>
+            ))}
+          </nav>
+          <div class="site-nav__toggle"><ThemeToggle /></div>
+        </div>
+      </GridItem>
+    </Grid>
   </Container>
 </header>

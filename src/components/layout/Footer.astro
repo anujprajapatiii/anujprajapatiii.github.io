@@ -2,41 +2,48 @@
 import { siteConfig } from "@/data/site-config";
 import Container from "@/components/primitives/Container.astro";
 import Cluster from "@/components/primitives/Cluster.astro";
+import Grid from "@/components/primitives/Grid.astro";
+import GridItem from "@/components/primitives/GridItem.astro";
 
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
   <Container>
-    <Cluster justify="between" gap="md">
-      <p class="text-small text-muted-foreground">
-        © {year} {siteConfig.name}
-      </p>
-      <Cluster as="nav" gap="lg" class="text-small" aria-label="Footer links">
-        {/*
-          The style guide is an internal reference, not a social profile, so
-          it is not in siteConfig.social and it stays first — an internal link
-          before the ones that leave the site. It is `noindex`; the footer is
-          how it is found at all.
-        */}
-        {/* Bare anchors: `.site-footer a` is named in the INTERACTION block,
-            so colour and hover come from there. These four used to carry a
-            muted-foreground / fade / accent-on-hover utility triplet,
-            written out identically on every one of them — and six times across
-            the site once the header and hero are counted. (Named discursively
-            on purpose: Tailwind scans this file's comments too, so spelling
-            the classes out would generate the rules this removes.) */}
-        <a href="/style-guide">Style guide</a>
-        {siteConfig.social.github && (
-          <a href={siteConfig.social.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-        )}
-        {siteConfig.social.linkedin && (
-          <a href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        )}
-        {siteConfig.social.email && (
-          <a href={`mailto:${siteConfig.social.email}`}>Email</a>
-        )}
-      </Cluster>
-    </Cluster>
+    <Grid>
+      <GridItem>
+        <Cluster justify="between" gap="sm">
+          <p class="text-small text-muted-foreground">
+            © {year} {siteConfig.name}
+          </p>
+          <Cluster as="nav" gap="lg" class="text-small" aria-label="Footer links">
+            {/*
+              The style guide is an internal reference, not a social profile,
+              so it is not in siteConfig.social and it stays first — an
+              internal link before the ones that leave the site. It is
+              `noindex`; the footer is how it is found at all.
+            */}
+            {/* Bare anchors: `.site-footer a` is named in the INTERACTION block,
+                so colour and hover come from there. These four used to carry a
+                muted-foreground / fade / accent-on-hover utility triplet,
+                written out identically on every one of them — and six times
+                across the site once the header and hero are counted. (Named
+                discursively on purpose: Tailwind scans this file's comments
+                too, so spelling the classes out would generate the rules this
+                removes.) */}
+            <a href="/style-guide">Style guide</a>
+            {siteConfig.social.github && (
+              <a href={siteConfig.social.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+            )}
+            {siteConfig.social.linkedin && (
+              <a href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            )}
+            {siteConfig.social.email && (
+              <a href={`mailto:${siteConfig.social.email}`}>Email</a>
+            )}
+          </Cluster>
+        </Cluster>
+      </GridItem>
+    </Grid>
   </Container>
 </footer>

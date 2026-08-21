@@ -1,14 +1,15 @@
 ---
 /* Vertical flex with consistent gap. See global.css "Layout primitives". */
 interface Props {
-  gap?: "sm" | "md" | "lg" | "xl";
+  [key: string]: unknown;
+  gap?: "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
   as?: string;
   class?: string;
 }
-const { gap = "md", as = "div", class: className } = Astro.props;
+const { gap = "sm", as = "div", class: className, ...attrs } = Astro.props;
 const Tag = as as any;
 ---
 
-<Tag class:list={["stack", `stack--${gap}`, className]}>
+<Tag {...attrs} class:list={["stack", `stack--${gap}`, className]}>
   <slot />
 </Tag>

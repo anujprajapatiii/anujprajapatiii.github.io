@@ -139,12 +139,21 @@ What that means in practice:
   semantic roles (`p-card`, `px-gutter`, …) — **never** raw Tailwind step
   numbers (`p-6`, `mt-1`, `gap-4`). The whole codebase was converted; zero
   raw steps ship in any page. 4px base; see `/style-guide`.
+  - Content rhythm stays on the 4px scale: 4, 8, 12, 16, 24, 32, 48, 64,
+    96 and 128px. Structural geometry has two named roles outside that ordinal
+    scale: `--spacing-gutter` is the 20px page inset and
+    `--spacing-grid` is the 10px gutter between the 24 layout tracks. Do not
+    use either as general-purpose component spacing.
+  - `Stack` and `Cluster` gap props map literally: `gap="md"` means
+    `--spacing-md` (24px), never a remapped neighbouring value. Their allowed
+    names are `2xs`, `xs`, `sm`, `md`, `lg`, `xl`, and `2xl`.
   - Major Work and Experiments prose groups use the existing `2xl` spacing
     token (64px), applied before each body `h2`. Within each group, paragraphs
     and title-to-body transitions use `--spacing-stack` (16px).
-  - Tailwind's 5 / 10 / 20 steps (20px / 40px / 80px) have no equivalent on
-    this scale. That is the point: when a value doesn't map, pick the
-    neighbour that suits the context and say why — don't round blindly and
+  - Tailwind's 5 / 10 / 20 steps (20px / 40px / 80px) have no general-purpose
+    equivalent on this content scale. The 20px page inset is a named structural
+    role, not permission to use `p-5`. When a content value doesn't map, pick
+    the neighbour that suits the context and say why — don't round blindly and
     don't add a scale step to accommodate one call site.
   - Prefer the semantic role over the raw step when one exists: page side
     padding is `px-gutter`, card interior padding is `p-card`.
@@ -281,22 +290,25 @@ What that means in practice:
     underline); giving them `.btn--link` would make both louder than the
     content they frame.
 - **Long-form text is capped to the reading measure**
-  (`var(--container-narrow)`, ~70 characters). `.prose` applies this to
+  (`var(--container-measure)`, ~70 characters). `.prose` applies this to
   `p`/`ul`/`ol`/`blockquote` only, so images and code blocks still run the
   full width of their wrapper. Body text ran to ~89 characters before this.
 - **Wrapping is set once in the base layer**: `text-wrap: balance` on
   headings, `pretty` on paragraphs. Don't repeat either at a call site.
 - Numbers that sit in a column or change at runtime get `tabular-nums`.
-- **One container: 1024px** (`--container-page`, 64rem). The header, the
-  footer and every page use it, so everything sits on the same two vertical
-  edges at every width. `Container` has **no size prop** — a second container
+- **One page container: 1300px of content** (`--container-page`, 81.25rem),
+  plus the 20px safe inset carried by `Container`. At a 1440px viewport the
+  inner content runs from x=70 to x=1370; below the cap it keeps 20px at each
+  side. Header, footer and every page use it, so everything sits on the same
+  two vertical edges. `Container` has **no size prop** — a second container
   width is how a layout starts drifting.
 - **`max-w-measure` is not a container.** It is the reading measure (36rem,
   ~70 characters) for long-form text and lead paragraphs. It lives in the
   `--container-*` namespace only so Tailwind generates the utility; it is
   named `measure` precisely so a future "standardise the containers" pass
-  cannot collapse it into the page width. Body text at 1024px runs to ~127
-  characters — worse than the ~89 that made this a problem in the first place.
+  cannot collapse it into the page width. The wider 1300px canvas makes this
+  separation more important: page width creates compositional room; measure
+  controls readable line length.
   Page width and reading width are different concerns and must stay separate
   tokens.
   NOTE: never name a custom container `prose` or reuse Tailwind's own scale
@@ -305,11 +317,22 @@ What that means in practice:
   plain `@theme {}` block (they add), never `@theme inline {}` (which
   replaces the built-in scale — this broke `max-w-3xl`).
 - **Layout comes from primitives, never inline.** Compose pages as
-  `Section > Container > Stack | Grid | Cluster` using the components in
+  `Section > Container > Stack | Grid + GridItem | Cluster` using the components in
   `src/components/primitives/`. Never inline `max-width`, `padding-block/
   inline`, `margin`, `display:flex/grid` for layout in a page or component —
   all layout CSS lives in global.css's "Layout primitives" section, driven by
-  the spacing/container tokens. There is one container width.
+  the spacing/container tokens. There is one container width and one 24-track
+  grid with a 10px gutter.
+  - `Grid` always exposes 24 equal `minmax(0, 1fr)` tracks. `GridItem` owns the
+    supported spans (6, 8, 12, 16, 18 and 24) and responsive starts. Pages do
+    not write raw column arithmetic or Tailwind `grid-cols-*` / `col-span-*`
+    classes.
+  - Items are 24 columns by default. Tablet overrides begin at 48rem and
+    desktop overrides at 64rem: halves are 12/12, thirds 8/8/8, quarters
+    6/6/6/6, and feature splits 8/16 or 16/8. A different breakpoint needs a
+    measured content failure documented beside it.
+  - Every grid child has `min-width: 0`. Without it, code, tables, or long
+    tokens can force a track wider than the page.
   Component CSS is for typography, colour, and component-internal details only.
 - **Direction-dependent CSS is always logical**, never physical:
   `padding-inline-start` / `margin-inline-end` / `border-inline-start`, and
@@ -364,8 +387,9 @@ What that means in practice:
   run in CI before the build). It covers raw spacing steps, raw type sizes,
   call-site tracking/leading, unapproved font weights, non-zero
   letter-spacing, physical direction properties, alpha-diluted colours, raw
-  hex in components, inline layout, corner radius, bare tables, variant-less
-  buttons, retired type steps, and eyebrows.
+  hex in components, inline layout, raw public-page grid columns, the retired
+  auto-fit Grid API, unsupported primitive gaps, corner radius, bare tables,
+  variant-less buttons, retired type steps, and eyebrows.
   Add a rule
   whenever a convention here gets broken in practice.
   - It runs **before** the build on purpose: every one of these produces
@@ -374,10 +398,10 @@ What that means in practice:
     still need measuring in a browser.
   - When adding a rule, prove it fires — write the violation, watch it fail,
     then delete it. A silently-passing rule is worse than no rule.
-- **`Sidebar` is the two-column primitive**: a fixed `--rail-width` column
-  beside a flexible one, collapsing to one column below 56rem (measured: the
-  content column hits the 576px reading measure at exactly 864px, so the rail
-  turns on at 896px with headroom rather than on the boundary).
+- **`Sidebar` is the case-study 4/20 composition on the same 24-track grid**,
+  collapsing to one column below 56rem. At 896px the 20px page insets leave
+  856px: the rail receives roughly 134px and content roughly 712px, safely
+  above the 576px reading measure.
   - Grid items default to `min-width: auto`, so a track will not shrink below
     its content's intrinsic width — a code block blew the column out to 776px
     inside a 327px container and scrolled the page sideways. `.sidebar-layout
@@ -392,9 +416,11 @@ What that means in practice:
   programmatic jump can move the page without firing a scroll event — but let
   geometry decide.
 - **Layout is composed, never inlined.** Every page is
-  `Section > Container > Stack | Grid | Cluster`. `Section size="page"` is
+  `Section > Container > Stack | Grid + GridItem | Cluster`. `Section size="page"` is
   the asymmetric opener for the first section under the header (48→64px top,
   96px bottom) — the header supplies weight above, so the top needs less air.
+  Other semantic sizes are `compact`, `standard`, `large`, and `hero`; their
+  names describe page rhythm rather than pretending to be raw scale aliases.
 - The `/style-guide` page must stay in sync with the token system — update it
   when tokens change.
 

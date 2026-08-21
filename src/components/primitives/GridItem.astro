@@ -1,0 +1,50 @@
+---
+/*
+  A typed item for the 24-track Grid. Mobile spans are the base; tablet and
+  desktop spans override them at the shared breakpoints. Starts are limited to
+  the useful fraction edges so pages cannot invent one-off grid arithmetic.
+*/
+type Span = 6 | 8 | 12 | 16 | 18 | 24;
+type Start = 1 | 5 | 7 | 9 | 13 | 17 | 19;
+
+interface Props {
+  [key: string]: unknown;
+  span?: Span;
+  spanMd?: Span;
+  spanLg?: Span;
+  start?: Start;
+  startMd?: Start;
+  startLg?: Start;
+  as?: string;
+  class?: string;
+}
+
+const {
+  span = 24,
+  spanMd,
+  spanLg,
+  start,
+  startMd,
+  startLg,
+  as = "div",
+  class: className,
+  ...attrs
+} = Astro.props;
+const Tag = as as any;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "grid-item",
+    `grid-item--span-${span}`,
+    spanMd && `grid-item--md-span-${spanMd}`,
+    spanLg && `grid-item--lg-span-${spanLg}`,
+    start && `grid-item--start-${start}`,
+    startMd && `grid-item--md-start-${startMd}`,
+    startLg && `grid-item--lg-start-${startLg}`,
+    className,
+  ]}
+>
+  <slot />
+</Tag>

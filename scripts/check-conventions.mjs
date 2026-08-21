@@ -100,9 +100,27 @@ const RULES = [
   },
   {
     id: "no-inline-layout",
-    test: /(?<![\w-])mx-auto(?![\w-])/,
-    only: (f) => f.startsWith("src/pages") || f.startsWith("src/components"),
+    test: /(?<![\w-])mx-auto(?![\w-])|style=(?:"[^"]*(?:display\s*:\s*(?:grid|flex)|grid-(?:template-columns|column)\s*:|max-width\s*:|(?:padding|margin)-(?:block|inline)\s*:)[^"]*"|'[^']*(?:display\s*:\s*(?:grid|flex)|grid-(?:template-columns|column)\s*:|max-width\s*:|(?:padding|margin)-(?:block|inline)\s*:)[^']*')/,
+    only: (f) => (f.startsWith("src/pages") || f.startsWith("src/components")) && !f.endsWith("style-guide.astro"),
     msg: "layout comes from primitives — compose Section > Container > Stack | Grid | Cluster",
+  },
+  {
+    id: "grid-primitive",
+    test: /(?<![\w-])(?:grid-cols-[\w.[\]-]+|col-span-[\w.[\]-]+|col-start-[\w.[\]-]+)(?![\w-])/,
+    only: (f) => f.startsWith("src/pages/"),
+    msg: "public-page columns belong to GridItem — use its typed span/start props instead of raw grid utilities",
+  },
+  {
+    id: "retired-grid-api",
+    test: /<Grid\b[^>]*\b(?:min|gap)=/,
+    only: (f) => f.endsWith(".astro"),
+    msg: "Grid is the 24-track structural grid — replace the retired auto-fit min/gap props with GridItem spans",
+  },
+  {
+    id: "primitive-gap-name",
+    test: /<(?:Stack|Cluster)\b[^>]*\bgap="(?!(?:2xs|xs|sm|md|lg|xl|2xl)")[^"]+"/,
+    only: (f) => f.endsWith(".astro"),
+    msg: "Stack/Cluster gaps map literally to spacing tokens — use 2xs, xs, sm, md, lg, xl or 2xl",
   },
   {
     /*

@@ -1,16 +1,17 @@
 ---
 /* Vertical rhythm (padding-block). See global.css "Layout primitives". */
 interface Props {
+  [key: string]: unknown;
   /* `page` is the asymmetric opener for the first section under the header. */
-  size?: "page" | "sm" | "md" | "lg" | "xl";
+  size?: "page" | "compact" | "standard" | "large" | "hero";
   as?: string;
   id?: string;
   class?: string;
 }
-const { size = "md", as = "section", id, class: className } = Astro.props;
+const { size = "standard", as = "section", id, class: className, ...attrs } = Astro.props;
 const Tag = as as any;
 ---
 
-<Tag id={id} class:list={[`section--${size}`, className]}>
+<Tag {...attrs} id={id} class:list={[`section--${size}`, className]}>
   <slot />
 </Tag>

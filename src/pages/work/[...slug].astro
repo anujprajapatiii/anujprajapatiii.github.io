@@ -6,6 +6,8 @@ import Container from "@/components/primitives/Container.astro";
 import Stack from "@/components/primitives/Stack.astro";
 import Cluster from "@/components/primitives/Cluster.astro";
 import Sidebar from "@/components/primitives/Sidebar.astro";
+import Grid from "@/components/primitives/Grid.astro";
+import GridItem from "@/components/primitives/GridItem.astro";
 import OnThisPage from "@/components/OnThisPage.astro";
 import DataTable from "@/components/DataTable.astro";
 import { getCollection, render } from "astro:content";
@@ -31,53 +33,59 @@ const { Content, headings } = await render(project);
   <Section as="article" size="page" class="case-study">
     <Stack gap="xl">
     <Container as="header">
-      <Stack gap="lg">
-        <Stack gap="md">
-          {/* Cluster so the button shrink-wraps its label — a bare <a> in a
-              Stack is a flex item and would stretch to the full column. */}
-          <Cluster>
-            <a href="/work" class="btn btn--secondary">
-              <span aria-hidden="true">&larr;</span>
-              Work
-            </a>
-          </Cluster>
-          <h1 class="text-h1">{project.data.title}</h1>
-          <p class="max-w-measure text-body text-muted-foreground">
-            {project.data.description}
-          </p>
-        </Stack>
+      <Grid class="case-study-header-grid">
+        <GridItem spanLg={12}>
+          <Stack gap="sm">
+            {/* Cluster so the button shrink-wraps its label — a bare <a> in a
+                Stack is a flex item and would stretch to the full column. */}
+            <Cluster>
+              <a href="/work" class="btn btn--secondary">
+                <span aria-hidden="true">&larr;</span>
+                Work
+              </a>
+            </Cluster>
+            <h1 class="text-h1">{project.data.title}</h1>
+            <p class="max-w-measure text-body text-muted-foreground">
+              {project.data.description}
+            </p>
+          </Stack>
+        </GridItem>
 
-        <DataTable label="Project details">
-          <thead>
-            <tr>
-              {project.data.role && <th scope="col">Role</th>}
-              {project.data.year && <th scope="col">Year</th>}
-              {project.data.skills.length > 0 && <th scope="col">Skills</th>}
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              {project.data.role && <td>{project.data.role}</td>}
-              {project.data.year && <td>{project.data.year}</td>}
-              {project.data.skills.length > 0 && <td>{project.data.skills.join(", ")}</td>}
-            </tr>
-          </tbody>
-        </DataTable>
+        <GridItem spanLg={12}>
+          <Stack gap="sm">
+            <DataTable label="Project details">
+              <thead>
+                <tr>
+                  {project.data.role && <th scope="col">Role</th>}
+                  {project.data.year && <th scope="col">Year</th>}
+                  {project.data.skills.length > 0 && <th scope="col">Skills</th>}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {project.data.role && <td>{project.data.role}</td>}
+                  {project.data.year && <td>{project.data.year}</td>}
+                  {project.data.skills.length > 0 && <td>{project.data.skills.join(", ")}</td>}
+                </tr>
+              </tbody>
+            </DataTable>
 
-        {project.data.liveUrl && (
-          <Cluster>
-            <a
-              href={project.data.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn--primary"
-            >
-              Try it live
-              <span aria-hidden="true">&rarr;</span>
-            </a>
-          </Cluster>
-        )}
-      </Stack>
+            {project.data.liveUrl && (
+              <Cluster>
+                <a
+                  href={project.data.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn btn--primary"
+                >
+                  Try it live
+                  <span aria-hidden="true">&rarr;</span>
+                </a>
+              </Cluster>
+            )}
+          </Stack>
+        </GridItem>
+      </Grid>
     </Container>
 
     {/* Breaks out of the reading column to full width — see EmbedFrame. */}

@@ -3,21 +3,27 @@ import PageLayout from "@/layouts/PageLayout.astro";
 import Section from "@/components/primitives/Section.astro";
 import Container from "@/components/primitives/Container.astro";
 import Stack from "@/components/primitives/Stack.astro";
+import Grid from "@/components/primitives/Grid.astro";
+import GridItem from "@/components/primitives/GridItem.astro";
 ---
 
 <PageLayout title="About — Anuj Prajapati" description="About Anuj Prajapati.">
   <Section size="page">
     <Container>
-      <Stack gap="lg">
-        <h1 class="text-h1">About</h1>
-        <div class="prose max-w-measure">
-          <p>
-            TODO(Anuj): your story goes here — who you are, what you design, what
-            you care about. Bring the narrative from your current portfolio or
-            write it fresh in <code>.reference/brief.md</code> and migrate it in.
-          </p>
-        </div>
-      </Stack>
+      <Grid>
+        <GridItem spanLg={12}>
+          <Stack gap="lg">
+            <h1 class="text-h1">About</h1>
+            <div class="prose max-w-measure">
+              <p>
+                TODO(Anuj): your story goes here — who you are, what you design, what
+                you care about. Bring the narrative from your current portfolio or
+                write it fresh in <code>.reference/brief.md</code> and migrate it in.
+              </p>
+            </div>
+          </Stack>
+        </GridItem>
+      </Grid>
     </Container>
   </Section>
 </PageLayout>

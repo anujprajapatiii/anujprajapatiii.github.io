@@ -2,13 +2,14 @@
 /* Horizontal gutter only, no width cap — for full-bleed-then-pad exceptions.
    Normal content uses Container (which already includes the gutter). */
 interface Props {
+  [key: string]: unknown;
   as?: string;
   class?: string;
 }
-const { as = "div", class: className } = Astro.props;
+const { as = "div", class: className, ...attrs } = Astro.props;
 const Tag = as as any;
 ---
 
-<Tag class:list={["page-wrapper", className]}>
+<Tag {...attrs} class:list={["page-wrapper", className]}>
   <slot />
 </Tag>

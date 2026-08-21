@@ -9,6 +9,7 @@ import Container from "@/components/primitives/Container.astro";
 import Stack from "@/components/primitives/Stack.astro";
 import Cluster from "@/components/primitives/Cluster.astro";
 import Grid from "@/components/primitives/Grid.astro";
+import GridItem from "@/components/primitives/GridItem.astro";
 import { siteConfig } from "@/data/site-config";
 import { getCollection } from "astro:content";
 
@@ -25,37 +26,41 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
 
 <PageLayout>
   {/* Hero */}
-  <Section size="xl">
+  <Section size="hero">
     <Container>
-      <Grid min="360px" gap="xs">
-        <Stack gap="lg">
-          <h1 class="text-display">
-            Monsoon Projects 2026
-          </h1>
-          <div class="info-box">
-            <div class="info-box__row">Brand &amp; Growth Designer</div>
-            <a
-              class="info-box__row flex items-center justify-between"
-              href="#connect"
-            >
-              <span>Connect</span>
-              <span aria-hidden="true">→</span>
-            </a>
-          </div>
-        </Stack>
+      <Grid>
+        <GridItem spanLg={8}>
+          <Stack gap="lg">
+            <h1 class="text-display">
+              Monsoon Projects 2026
+            </h1>
+            <div class="info-box">
+              <div class="info-box__row">Brand &amp; Growth Designer</div>
+              <a
+                class="info-box__row flex items-center justify-between"
+                href="#connect"
+              >
+                <span>Connect</span>
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </Stack>
+        </GridItem>
         {/*
           client:load, not client:visible. This one is above the fold, so the
           observer would fire immediately anyway — but the directive is a
           promise about when the shape appears, and a hero that pops in a beat
           late reads as a page still loading. The band below stays lazy.
         */}
-        <HeroShader client:load />
+        <GridItem spanLg={16}>
+          <HeroShader client:load />
+        </GridItem>
       </Grid>
     </Container>
   </Section>
 
   {/* Featured projects */}
-  <Section size="lg">
+  <Section size="large">
     <Container>
       <Stack gap="lg">
         <Cluster justify="between" align="start">
@@ -65,14 +70,16 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
             <span aria-hidden="true">&rarr;</span>
           </a>
         </Cluster>
-        <Grid min="440px" gap="xs">
+        <Grid>
           {featured.map((project) => (
-            <ProjectCard
-              id={project.id}
-              title={project.data.title}
-              description={project.data.description}
-              thumbnail={project.data.thumbnail}
-            />
+            <GridItem spanMd={12}>
+              <ProjectCard
+                id={project.id}
+                title={project.data.title}
+                description={project.data.description}
+                thumbnail={project.data.thumbnail}
+              />
+            </GridItem>
           ))}
         </Grid>
       </Stack>
@@ -80,7 +87,7 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
   </Section>
 
   {/* Experiments — preview list */}
-  <Section size="lg">
+  <Section size="large">
     <Container>
       <Stack gap="lg">
         <Cluster justify="between" align="start">
@@ -96,9 +103,9 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
   </Section>
 
   {/* Connect */}
-  <Section size="lg" id="connect">
+  <Section size="large" id="connect">
     <Container>
-      <Stack gap="md">
+      <Stack gap="sm">
         <SectionHeading>Get in touch</SectionHeading>
         <Cluster gap="lg" class="text-small">
           <a href={`mailto:${siteConfig.social.email}`} class="btn btn--link"

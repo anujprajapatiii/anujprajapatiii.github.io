@@ -1,23 +1,26 @@
 ---
 /* Horizontal flex with wrap. See global.css "Layout primitives". */
 interface Props {
-  gap?: "sm" | "md" | "lg";
+  [key: string]: unknown;
+  gap?: "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
   align?: "start" | "center" | "baseline";
   justify?: "start" | "between";
   as?: string;
   class?: string;
 }
 const {
-  gap = "md",
+  gap = "sm",
   align = "center",
   justify = "start",
   as = "div",
   class: className,
+  ...attrs
 } = Astro.props;
 const Tag = as as any;
 ---
 
 <Tag
+  {...attrs}
   class:list={[
     "cluster",
     `cluster--gap-${gap}`,

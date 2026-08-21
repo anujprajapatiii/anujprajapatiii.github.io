@@ -2,6 +2,10 @@
 import PageLayout from "@/layouts/PageLayout.astro";
 import Section from "@/components/primitives/Section.astro";
 import Container from "@/components/primitives/Container.astro";
+import Grid from "@/components/primitives/Grid.astro";
+import GridItem from "@/components/primitives/GridItem.astro";
+import Stack from "@/components/primitives/Stack.astro";
+import Cluster from "@/components/primitives/Cluster.astro";
 import DataTable from "@/components/DataTable.astro";
 
 /* Keep these arrays in sync with the token block in src/styles/global.css
@@ -195,15 +199,15 @@ const spacingScale = [
 ];
 
 const semanticSpacing = [
-  { name: "gutter", value: "24px — page side padding" },
+  { name: "gutter", value: "20px — page inset and safe-area floor" },
   { name: "section", value: "clamp(48px → 96px) — section rhythm" },
   { name: "stack", value: "16px — gap between stacked elements" },
   { name: "card", value: "16px — card interior padding" },
-  { name: "grid", value: "16px — gap between cards" },
+  { name: "grid", value: "10px — structural grid gutter" },
 ];
 
 const containers = [
-  { name: "page", value: "64rem", px: "1024px" },
+  { name: "page", value: "81.25rem", px: "1300px content + 20px insets" },
   { name: "measure", value: "36rem", px: "576px" },
 ];
 
@@ -248,18 +252,18 @@ const pagePaletteRows = [
       both appearance modes. Update this page whenever tokens change.
     </p>
 
-    <Section size="md" class="border-t border-border">
+    <Section size="standard" class="border-t border-border">
       <h2 class="label mb-2xs">
         Primitives
       </h2>
       <p class="mb-md text-small text-muted-foreground">
         Raw palette. Same values in both themes; components never use these directly.
       </p>
-      <div class="flex flex-col gap-md">
+      <Stack gap="md">
         {primitiveFamilies.map((family) => (
           <div>
             <p class="mb-2xs text-small font-semibold">{family.name}</p>
-            <div class="flex flex-wrap gap-2xs">
+            <Cluster gap="2xs" align="start">
               {family.swatches.map((swatch) => (
                 <div class="w-16">
                   <div
@@ -271,13 +275,13 @@ const pagePaletteRows = [
                   </p>
                 </div>
               ))}
-            </div>
+            </Cluster>
           </div>
         ))}
-      </div>
+      </Stack>
     </Section>
 
-    <Section size="md" class="border-t border-border">
+    <Section size="standard" class="border-t border-border">
       <h2 class="label mb-2xs">
         Semantic tokens
       </h2>
@@ -285,46 +289,50 @@ const pagePaletteRows = [
         Semantic role names. The swatch shows the token in the theme you're
         viewing; the caption lists its light → dark primitive mapping.
       </p>
-      <div class="flex flex-col gap-lg">
+      <Stack gap="lg">
         {semanticGroups.map((group) => (
           <div>
             <p class="mb-2xs text-small font-semibold">{group.name}</p>
-            <div class="grid grid-cols-2 gap-sm sm:grid-cols-3">
+            <Grid>
               {group.tokens.map((token) => (
-                <div class="border border-border p-xs">
-                  <div
-                    class="h-12 border border-border"
-                    style={`background: var(--${token.name})`}
-                  ></div>
-                  <p class="mt-2xs text-small">--{token.name}</p>
-                  <p class="text-small tabular-nums text-muted-foreground">
-                    {token.light} → {token.dark}
-                  </p>
-                </div>
+                <GridItem span={12} spanMd={8}>
+                  <div class="border border-border p-xs">
+                    <div
+                      class="h-12 border border-border"
+                      style={`background: var(--${token.name})`}
+                    ></div>
+                    <p class="mt-2xs text-small">--{token.name}</p>
+                    <p class="text-small tabular-nums text-muted-foreground">
+                      {token.light} → {token.dark}
+                    </p>
+                  </div>
+                </GridItem>
               ))}
-            </div>
+            </Grid>
           </div>
         ))}
-      </div>
+      </Stack>
     </Section>
 
-    <Section size="md" class="border-t border-border">
+    <Section size="standard" class="border-t border-border">
       <h2 class="label mb-2xs">
         Aliases
       </h2>
       <p class="mb-md text-small text-muted-foreground">
         Internal names the components use, pointed at the semantic tokens above.
       </p>
-      <div class="grid grid-cols-1 gap-x-lg gap-y-3xs sm:grid-cols-2">
+      <Grid>
         {aliases.map((alias) => (
-          <p class="text-small text-muted-foreground">
-            --{alias.name} → {alias.to}
-          </p>
+          <GridItem spanMd={12}>
+            <p class="text-small text-muted-foreground">
+              --{alias.name} → {alias.to}
+            </p>
+          </GridItem>
         ))}
-      </div>
+      </Grid>
     </Section>
 
-    <Section size="md" class="border-t border-border">
+    <Section size="standard" class="border-t border-border">
       <h2 class="label mb-2xs">
         Page palettes
       </h2>
@@ -358,7 +366,7 @@ const pagePaletteRows = [
       </DataTable>
     </Section>
 
-    <Section size="md" class="border-t border-border">
+    <Section size="standard" class="border-t border-border">
       <h2 class="label mb-2xs">
         Type scale
       </h2>
@@ -386,7 +394,7 @@ const pagePaletteRows = [
         Work and Experiments prose uses the same 16px body step with secondary
         text colour and a contextual 1.4 line-height.
       </p>
-      <div class="flex flex-col gap-md">
+      <Stack gap="md">
         {typeScale.map((t) => (
           <div>
             <p class={t.class}>{t.sample}</p>
@@ -395,47 +403,83 @@ const pagePaletteRows = [
             </p>
           </div>
         ))}
-      </div>
+      </Stack>
     </Section>
 
-    <Section size="md" class="border-t border-border">
+    <Section size="standard" class="border-t border-border">
       <h2 class="label mb-2xs">
         Spacing
       </h2>
       <p class="mb-md text-small text-muted-foreground">
         4px base scale, plus semantic roles a brief can name directly.
       </p>
-      <div class="flex flex-col gap-2xs">
+      <Stack gap="2xs">
         {spacingScale.map((s) => (
-          <div class="flex items-center gap-sm">
+          <Cluster gap="sm">
             <span class="w-20 shrink-0 text-small tabular-nums text-muted-foreground">{s.name}</span>
             <span class="h-4 bg-accent" style={`width: ${s.value}`}></span>
             <span class="text-small tabular-nums text-muted-foreground">{s.px}</span>
-          </div>
+          </Cluster>
         ))}
-      </div>
-      <div class="mt-md grid grid-cols-1 gap-x-lg gap-y-3xs sm:grid-cols-2">
+      </Stack>
+      <Grid class="mt-md">
         {semanticSpacing.map((s) => (
-          <p class="text-small text-muted-foreground">--spacing-{s.name} → {s.value}</p>
+          <GridItem spanMd={12}>
+            <p class="text-small text-muted-foreground">--spacing-{s.name} → {s.value}</p>
+          </GridItem>
         ))}
-      </div>
+      </Grid>
     </Section>
 
-    <Section size="md" class="border-t border-border">
+    <Section size="standard" class="border-t border-border">
       <h2 class="label mb-2xs">
         Layout primitives
       </h2>
       <p class="mb-md max-w-measure text-small text-muted-foreground">
-        Pages compose <code>Section &gt; Container &gt; Stack | Grid | Cluster</code>
-        and never inline layout. <code>Sidebar</code> adds a two-column variant:
-        a fixed <code>--rail-width</code> (12rem) column beside a flexible one,
-        used for the on-this-page rail on case studies. It collapses to a single
-        column below 56rem, where the content column would otherwise drop under
-        the reading measure.
+        Pages compose <code>Section &gt; Container &gt; Stack | Grid + GridItem | Cluster</code>
+        and never inline layout. The structural grid has 24 tracks and one 10px
+        gutter. Items are full-width on phones, then opt into named tablet and
+        desktop fractions. <code>Sidebar</code> uses the same math for a 4 / 20
+        case-study split and collapses below its measured 56rem boundary.
       </p>
+      <Stack gap="md">
+        <div>
+          <p class="mb-2xs text-small text-muted-foreground">24 tracks</p>
+          <Grid class="grid-specimen" aria-hidden="true">
+            {Array.from({ length: 24 }).map(() => <span class="grid-specimen__track"></span>)}
+          </Grid>
+        </div>
+
+        <Grid class="grid-specimen">
+          <GridItem spanLg={8} class="grid-specimen__item">8 columns</GridItem>
+          <GridItem spanLg={16} class="grid-specimen__item">16 columns</GridItem>
+        </Grid>
+
+        <Grid class="grid-specimen">
+          <GridItem spanMd={12} class="grid-specimen__item">12 columns</GridItem>
+          <GridItem spanMd={12} class="grid-specimen__item">12 columns</GridItem>
+        </Grid>
+
+        <Grid class="grid-specimen">
+          <GridItem spanMd={12} spanLg={8} class="grid-specimen__item">8 columns</GridItem>
+          <GridItem spanMd={12} spanLg={8} class="grid-specimen__item">8 columns</GridItem>
+          <GridItem spanMd={12} spanLg={8} class="grid-specimen__item">8 columns</GridItem>
+        </Grid>
+
+        <Grid class="grid-specimen">
+          <GridItem spanMd={12} spanLg={6} class="grid-specimen__item">6 columns</GridItem>
+          <GridItem spanMd={12} spanLg={6} class="grid-specimen__item">6 columns</GridItem>
+          <GridItem spanMd={12} spanLg={6} class="grid-specimen__item">6 columns</GridItem>
+          <GridItem spanMd={12} spanLg={6} class="grid-specimen__item">6 columns</GridItem>
+        </Grid>
+
+        <Grid class="grid-specimen">
+          <GridItem class="grid-specimen__item">24 columns</GridItem>
+        </Grid>
+      </Stack>
     </Section>
 
-    <Section size="md" class="border-t border-border">
+    <Section size="standard" class="border-t border-border">
       <h2 class="label mb-2xs">
         Containers
       </h2>
@@ -446,33 +490,37 @@ const pagePaletteRows = [
         is the reading measure (~70 characters) for long-form text and lead
         paragraphs, and it must never be collapsed into the page width.
       </p>
-      <div class="flex flex-col gap-2xs">
+      <Stack gap="2xs">
         {containers.map((c) => (
           <div>
             <div class="h-3 bg-muted" style={`max-width: ${c.value}; width: 100%`}></div>
             <p class="mt-3xs text-small tabular-nums text-muted-foreground">max-w-{c.name} · {c.value} ({c.px})</p>
           </div>
         ))}
-      </div>
+      </Stack>
     </Section>
 
-    <Section size="md" class="border-t border-border">
+    <Section size="standard" class="border-t border-border">
       <h2 class="label mb-md">
         Surfaces
       </h2>
-      <div class="grid gap-sm sm:grid-cols-2">
-        <div class="border border-border bg-card p-md">
-          <p class="font-semibold">Card surface</p>
-          <p class="mt-3xs text-small text-muted-foreground">bg-card with border-border</p>
-        </div>
-        <div class="bg-muted p-md">
-          <p class="font-semibold">Muted surface</p>
-          <p class="mt-3xs text-small text-muted-foreground">bg-muted, no border</p>
-        </div>
-      </div>
+      <Grid>
+        <GridItem spanMd={12}>
+          <div class="border border-border bg-card p-md">
+            <p class="font-semibold">Card surface</p>
+            <p class="mt-3xs text-small text-muted-foreground">bg-card with border-border</p>
+          </div>
+        </GridItem>
+        <GridItem spanMd={12}>
+          <div class="bg-muted p-md">
+            <p class="font-semibold">Muted surface</p>
+            <p class="mt-3xs text-small text-muted-foreground">bg-muted, no border</p>
+          </div>
+        </GridItem>
+      </Grid>
     </Section>
 
-    <Section size="md" class="border-t border-border">
+    <Section size="standard" class="border-t border-border">
       <h2 class="label mb-2xs">
         Buttons
       </h2>
@@ -490,7 +538,7 @@ const pagePaletteRows = [
         box with inherited text, which looks close enough to plain markup to
         ship unnoticed. <code>pnpm check</code> fails on a missing variant.
       </p>
-      <div class="mb-md flex flex-wrap items-center gap-sm">
+      <Cluster gap="sm" class="mb-md">
         <a href="/style-guide" class="btn btn--primary">
           Primary
           <span aria-hidden="true">&rarr;</span>
@@ -500,7 +548,7 @@ const pagePaletteRows = [
           <span aria-hidden="true">&rarr;</span>
         </a>
         <a href="/style-guide" class="btn btn--link">Hyperlink</a>
-      </div>
+      </Cluster>
       <DataTable label="Button variants">
         <thead>
           <tr>
@@ -529,7 +577,7 @@ const pagePaletteRows = [
       </DataTable>
     </Section>
 
-    <Section size="md" class="border-t border-border">
+    <Section size="standard" class="border-t border-border">
       <h2 class="label mb-2xs">
         Tables
       </h2>

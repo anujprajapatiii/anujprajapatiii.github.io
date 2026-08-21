@@ -1,21 +1,21 @@
 ---
 /*
-  Two-column layout: a fixed-width rail and a flexible content column.
-  Collapses to a single column when the content column would drop below the
-  reading measure. See global.css "Layout primitives" for the widths and the
-  measured breakpoint.
+  Two-region layout on the shared 24-track grid: a four-track rail and a
+  twenty-track content region. It collapses to one full-width region before
+  the rail would squeeze the reading measure. See global.css.
 
   The rail is the first child; content is the second. If the rail renders
   nothing, the grid stays single-column rather than leaving an empty gutter.
 */
 interface Props {
+  [key: string]: unknown;
   as?: string;
   class?: string;
 }
-const { as = "div", class: className } = Astro.props;
+const { as = "div", class: className, ...attrs } = Astro.props;
 const Tag = as as any;
 ---
 
-<Tag class:list={["sidebar-layout", className]}>
+<Tag {...attrs} class:list={["sidebar-layout", className]}>
   <slot />
 </Tag>
