@@ -1,22 +1,4 @@
 ---
-/*
-  The card shows title and description. Role lives on the case study itself,
-  in the Role/Year/Skills metadata.
-
-  THE MEDIA BLEEDS TO THE CARD'S EDGES. The card has no padding of its own —
-  the image runs full-bleed to the border and only the text block is inset.
-  That is why `p-card` moved from the card to the body: it is still the
-  semantic role for card interior padding, it just now describes the one part
-  of the card that has an interior. The token moved from 24px to 16px with it.
-
-  The image also loses its own border. It used to carry one because it sat
-  inset on the card's surface and needed its own frame; flush to the edges the
-  CARD's border already frames it, and a second line 1px inside the first read
-  as a double rule.
-
-  The year is gone. It was a third piece of metadata on a card that carries
-  two, and the case study's own Role/Year/Skills table is where it belongs.
-*/
 interface Props {
   id: string;
   title: string;
@@ -26,20 +8,25 @@ interface Props {
 }
 
 const { id, title, description, thumbnail, base = "/work" } = Astro.props;
+const isExperiment = base === "/play";
+const ctaLabel = isExperiment ? "View experiment" : "View case study";
 ---
 
-{/*
-  `.project-card` is named in the INTERACTION block in global.css: surface,
-  rule and text all lift together from there. No group modifier, no hover
-  utility here — the card used to move its border and its title while its
-  surface and its description stood still, so it came forward in pieces.
-  (Class names are described rather than spelled: Tailwind scans comments in
-  src/, so writing one out would re-generate the rule.)
-
-  `.project-card__meta` marks the element that rests quiet and comes up with
-  the card, so the whole thing reads as one object.
-*/}
-<a href={`${base}/${id}`} class="project-card block">
+<article class="project-card">
+  <div class="project-card__content">
+    <div>
+      <h3 class="text-body">{title}</h3>
+      <p class="project-card__meta mt-2xs text-body">{description}</p>
+    </div>
+    <a
+      href={`${base}/${id}`}
+      class="project-card__link text-body"
+      aria-label={`${ctaLabel}: ${title}`}
+    >
+      {ctaLabel}
+      <span aria-hidden="true">&rarr;</span>
+    </a>
+  </div>
   {thumbnail ? (
     <img
       src={thumbnail}
@@ -50,8 +37,4 @@ const { id, title, description, thumbnail, base = "/work" } = Astro.props;
   ) : (
     <div class="media-placeholder project-card__media"></div>
   )}
-  <div class="p-card">
-    <h3 class="text-heading">{title}</h3>
-    <p class="project-card__meta mt-2xs text-body">{description}</p>
-  </div>
-</a>
+</article>

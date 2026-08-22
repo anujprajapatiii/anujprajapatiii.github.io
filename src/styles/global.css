@@ -641,9 +641,8 @@
     --spacing-gutter: 1.25rem;
     --spacing-section: clamp(3rem, 8vw, 6rem);
     --spacing-stack: 1rem;
-    /* Card interior padding. 16px since the media went full-bleed: the card
-       itself has no padding any more, so this describes the text block, which
-       is the only part of the card left with an interior. */
+    /* Card interior padding. The shared card uses this once around its copy,
+       CTA and inset media so every internal edge stays aligned. */
     --spacing-card: 1rem;
     --spacing-grid: 0.625rem;
 
@@ -1325,24 +1324,36 @@
 .dark .theme-toggle__moon { display: block; }
 
 /*
-  Project card — shape only. Its surface, rule and text are channels declared
-  in the INTERACTION block; what lives here is the box.
-
-  Width and style as longhands with no colour, for the same reason as .btn:
-  the colour is the rule channel, and a `border: 1px solid <colour>` shorthand
-  here would set it from the wrong place. The card previously carried
-  `border border-border bg-card` as utilities, so removing them without
-  supplying the width would have left a card with no border at all — a
-  colour with nothing to paint.
+  Project card. The surface is deliberately quiet and never interactive: the
+  dedicated text link below is the card's only target. A flex column keeps
+  media and CTA edges aligned when neighbouring descriptions differ in length.
 */
 .project-card {
-  border-width: 1px;
-  border-style: solid;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  padding: var(--spacing-card);
+  background: var(--card);
+}
+.project-card__content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.project-card__link {
+  align-self: flex-start;
+  margin-top: auto;
+  padding-top: var(--spacing-md);
+  text-decoration-line: none;
 }
 .project-card__media {
   aspect-ratio: 5 / 3;
   width: 100%;
+  margin-top: var(--spacing-sm);
   object-fit: cover;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--border);
 }
 
 /*
@@ -1362,15 +1373,8 @@
   aspect-ratio: 16 / 10; width: 100%;
   background: var(--muted); border: 1px solid var(--border);
 }
-/*
-  Inside a card the media is full-bleed, so the card's own border frames it and
-  its border would be a second line 1px inside the first. Scoped rather than
-  removed from the base rule: standing alone on a case-study hero the
-  placeholder still needs a frame of its own.
-*/
 .project-card .media-placeholder {
   aspect-ratio: 5 / 3;
-  border: 0;
 }
 
 /*
@@ -1901,7 +1905,7 @@
 :is(
   .btn,
   .prose a,
-  .project-card,
+  .project-card__link,
   .wordmark,
   .site-nav__links a,
   .site-footer a,
@@ -2018,34 +2022,11 @@
   --lift-rule-on: var(--background-alternate-hover);
 }
 
-/*
-  THE PROJECT CARD. It owns three channels and used to move one and a half: the
-  border changed, the title changed, the surface never did, and the year and
-  description sat still while the title lifted — so the card came forward in
-  pieces. Now the whole card is one object.
-*/
-.project-card {
-  --lift-text: var(--text-primary);
-  --lift-surface: var(--card);
-  /*
-    The elevated hover, not the on-the-page one. A card already sits a step
-    above the page, so it lifts from where it is; --background-hover would
-    send it to where a ROW goes, which in dark mode is underneath the page.
-  */
-  --lift-surface-on: var(--background-elevated-hover);
-  --lift-rule: var(--border);
-  --lift-rule-on: var(--border-hover);
-}
-/*
-  The thumbnail used to lift its own border with the card's, because a hovered
-  card otherwise showed two different border colours a few pixels apart. The
-  media is full-bleed now and has no border to lift — the card's frame is the
-  only one — so that reach is gone and the card's own rule does the work.
-*/
-.project-card {
-  @variant lift-on {
-    & .project-card__meta { color: var(--text-primary); }
-  }
+/* The card itself does not lift. Its dedicated CTA is the only interactive
+   element and uses the existing brown accent channel at both ends. */
+.project-card__link {
+  --lift-text: var(--text-accent-primary);
+  --lift-text-on: var(--text-accent-primary-hover);
 }
 .project-card__meta { color: var(--text-secondary); }
 

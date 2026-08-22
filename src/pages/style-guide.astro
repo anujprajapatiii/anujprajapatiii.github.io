@@ -527,10 +527,18 @@ const pagePaletteRows = [
       </h2>
       <Grid>
         <GridItem spanMd={12}>
-          <div class="border border-border bg-card p-md">
-            <p class="label">Card surface</p>
-            <p class="mt-3xs text-meta text-muted-foreground">bg-card with border-border</p>
-          </div>
+          <article class="project-card">
+            <div class="project-card__content">
+              <div>
+                <h3 class="text-body">Project card</h3>
+                <p class="project-card__meta mt-2xs text-body">Borderless surface, inset media, and a dedicated link.</p>
+              </div>
+              <a href="/work" class="project-card__link text-body" aria-label="View project card examples">
+                View examples <span aria-hidden="true">&rarr;</span>
+              </a>
+            </div>
+            <div class="media-placeholder project-card__media"></div>
+          </article>
         </GridItem>
         <GridItem spanMd={12}>
           <div class="bg-muted p-md">

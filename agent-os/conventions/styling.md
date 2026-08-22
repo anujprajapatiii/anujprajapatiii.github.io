@@ -189,9 +189,14 @@ What that means in practice:
   h2 and h3 steps share `text-heading` in prose and cards: semantic document
   structure and space distinguish their level instead of a second size.
   Homepage section h2s use `text-title` (44px desktop) to carry the same major
-  rhythm as page titles. Card and homepage experiment-row titles use
-  `text-heading`; their descriptions use `text-body`. Body is 16px / 1.5;
-  meta is 14px / 1.5.
+  rhythm as page titles. Homepage experiment-row titles use `text-heading`.
+  Project-card titles and descriptions both use `text-body`; primary versus
+  secondary colour creates their hierarchy without adding a local type size
+  or weight. Body is 16px / 1.5; meta is 14px / 1.5.
+  - A project card is a quiet, borderless surface, not one large anchor. Copy
+    comes first, inset media comes last, and a dedicated `View case study` or
+    `View experiment` CTA is its only link and hover target. Never lift the
+    card surface, title, description, or media when that link changes state.
   - `.type-reading` layers secondary reading colour and
     `--leading-reading` (1.4) on the 16px body role. Rendered prose shares the
     same declarations. This is a treatment, not a sixth size, and it never
