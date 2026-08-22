@@ -186,9 +186,12 @@ What that means in practice:
   global.css and every use follows.
 - **Five sizes, by decision: 64 → 44 → 20 → 16 → 14.** Display is fluid
   from 40–64px; title is fluid from 32–44px; heading is a fixed 20px. The old
-  h2 and h3 steps share `text-heading`: semantic document structure and space
-  distinguish a section heading from a nested or card heading instead of a
-  second size. Body is 16px / 1.5; meta is 14px / 1.5.
+  h2 and h3 steps share `text-heading` in prose and cards: semantic document
+  structure and space distinguish their level instead of a second size.
+  Homepage section h2s use `text-title` (44px desktop) to carry the same major
+  rhythm as page titles. Card and homepage experiment-row titles use
+  `text-heading`; their descriptions use `text-body`. Body is 16px / 1.5;
+  meta is 14px / 1.5.
   - `.type-reading` layers secondary reading colour and
     `--leading-reading` (1.4) on the 16px body role. Rendered prose shares the
     same declarations. This is a treatment, not a sixth size, and it never

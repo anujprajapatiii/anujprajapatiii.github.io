@@ -691,8 +691,9 @@
        system exists to prevent.
 
        Five unique sizes, named by intent rather than HTML tags:
-       64 → 44 → 20 → 16 → 14. Section h2s and card/prose h3s share one
-       heading role; semantic structure and spacing distinguish their level.
+       64 → 44 → 20 → 16 → 14. Prose h2s and card/prose h3s share one heading
+       role; semantic structure and spacing distinguish their level. Homepage
+       section h2s deliberately use title to carry the landing-page rhythm.
        Meta is the dedicated metadata and interface step restored from Paper;
        body remains the comfortable reading size.
 
@@ -1441,7 +1442,7 @@
   flex: 1;
   min-width: 0;
 }
-.play-item__title { font-size: var(--text-body); line-height: var(--text-body--line-height); }
+.play-item__title { @apply text-heading; }
 /*
   ONE LINE, ALWAYS. The design's subtitle is a short written line; the field it
   is fed from is the item's full description, which runs to two or three. Left
@@ -1450,8 +1451,7 @@
   the card's paragraph elsewhere, where it should run in full.
 */
 .play-item__subtitle {
-  font-size: var(--text-meta);
-  line-height: var(--text-meta--line-height);
+  @apply text-body;
   max-width: 100%;
   white-space: nowrap;
   overflow: hidden;
