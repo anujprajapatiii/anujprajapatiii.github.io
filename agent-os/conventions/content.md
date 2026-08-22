@@ -18,8 +18,14 @@
   date; do not add a separate `year` field.
 - Slugs come from the filename: `src/content/projects/my-project.md` becomes
   `/work/my-project`. Use short, kebab-case filenames.
-- Images for a project live in `public/images/work/<slug>/`.
-- Image references live under `media.thumbnail` and `media.hero`.
+- Images for Work live in `public/images/work/<slug>/`; Experiment images live
+  in `public/images/play/<slug>/`.
+- Image references live under `media.thumbnail` and `media.hero`. When a hero
+  has an authored dark-mode counterpart, place it under `media.heroDark`; the
+  shared detail templates handle the theme swap.
+- Experiments may name an approved coded hero treatment under `heroOverlay`.
+  Keep the allow-list in the content schema and render the component in the
+  shared Play route; never bake reusable interface UI into the image asset.
 
 ## Work Types
 

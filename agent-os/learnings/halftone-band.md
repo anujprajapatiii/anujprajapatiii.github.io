@@ -2,9 +2,8 @@
 
 > **Removed 2026-08-15.** The band is gone from the homepage and its component,
 > CSS and vendored image are deleted. Kept because the `u_time` finding below
-> generalises to every shader in this package, and because the reasoning about
-> visibility gating and theme-reactive shader colour applies to the hero
-> shader, which is still there.
+> generalises to any future shader added to this package. The homepage hero
+> shader was later removed in favour of the neutral media placeholder.
 
 The shader surface under the homepage work cards. Designed in Paper as a
 `HalftoneDots` node and brought over as `src/components/HalftoneBand.tsx` —

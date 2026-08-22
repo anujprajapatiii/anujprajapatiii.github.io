@@ -1,0 +1,114 @@
+---
+import Grid from "@/components/primitives/Grid.astro";
+import GridItem from "@/components/primitives/GridItem.astro";
+
+interface Props {
+  lightSrc: string;
+  darkSrc?: string;
+  alt?: string;
+  class?: string;
+}
+
+const {
+  lightSrc,
+  darkSrc,
+  alt = "",
+  class: className,
+} = Astro.props;
+const hasOverlay = Astro.slots.has("overlay");
+---
+
+<div
+  class:list={[
+    "theme-image",
+    darkSrc && "theme-image--switchable",
+    hasOverlay && "theme-image--with-overlay",
+    className,
+  ]}
+>
+  <img
+    src={lightSrc}
+    alt={alt}
+    class="theme-image__light"
+    decoding="async"
+  />
+  {darkSrc && (
+    <img
+      src={darkSrc}
+      alt={alt}
+      class="theme-image__dark"
+      decoding="async"
+    />
+  )}
+  {hasOverlay && (
+    <div class="theme-image__overlay">
+      <Grid>
+        <GridItem spanMd={12} spanLg={8} startMd={7} startLg={9}>
+          <slot name="overlay" />
+        </GridItem>
+      </Grid>
+    </div>
+  )}
+</div>
+
+<style>
+  .theme-image {
+    display: block;
+    width: 100%;
+  }
+
+  .theme-image > img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .theme-image--cover {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  .theme-image--cover > img {
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .theme-image--with-overlay {
+    position: relative;
+    min-height: calc(4 * var(--spacing-4xl));
+    aspect-ratio: 2 / 1;
+    overflow: hidden;
+  }
+
+  .theme-image--with-overlay > img {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .theme-image__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    padding-inline: var(--spacing-gutter);
+  }
+
+  .theme-image__overlay > :global(.layout-grid) {
+    width: 100%;
+  }
+
+  .theme-image > .theme-image__dark {
+    display: none;
+  }
+
+  :global(.dark) .theme-image--switchable > .theme-image__light {
+    display: none;
+  }
+
+  :global(.dark) .theme-image--switchable > .theme-image__dark {
+    display: block;
+  }
+</style>

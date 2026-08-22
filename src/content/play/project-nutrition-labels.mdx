@@ -1,0 +1,58 @@
+---
+title: Project Nutrition Labels
+description: A compact system for giving portfolio projects useful, comparable context without turning every case study into a dashboard.
+status: published
+publishedAt: 2026-08-22
+featured: true
+featuredOrder: 5
+heroOverlay: nutrition-label
+role: Design system experiment
+skills:
+  - Information design
+  - Interaction design
+  - Front-end development
+media:
+  hero: /images/play/project-nutrition-labels/hero-day.webp
+  heroDark: /images/play/project-nutrition-labels/hero-night.webp
+previews: []
+---
+
+import ProjectNutritionLabels from "@/components/ProjectNutritionLabels";
+import Grid from "@/components/primitives/Grid.astro";
+import GridItem from "@/components/primitives/GridItem.astro";
+
+<Grid>
+  <GridItem spanMd={12} spanLg={8}>
+    <ProjectNutritionLabels client:load />
+  </GridItem>
+</Grid>
+
+## A small information layer
+
+Case studies often bury useful facts in paragraphs or spread them across
+screenshots. This experiment borrows the clarity of nutrition labels and turns
+it into a compact summary that can sit inside any project.
+
+The format is deliberately flexible. A label can report measurable outcomes,
+technical performance, or qualitative lessons without changing its structure.
+
+## Three useful views
+
+**Performance** keeps technical constraints legible. File size, interaction
+time, main-thread work, dependencies, and the testing profile stay together.
+
+**Impact** gives outcomes the same treatment. The numbers remain comparable
+without becoming the whole story.
+
+**Learnings** uses the structure without forcing metrics. It works as a short
+record of the decisions worth carrying into the next project.
+
+## Built for reuse
+
+The label is a small React island inside an otherwise static Astro page. Its
+content is typed data, its icons come from the site's existing Lucide package,
+and every visual decision references the portfolio's semantic tokens.
+
+That means the same component follows light and dark mode automatically, uses
+the existing type and spacing scales, and can move between future project
+themes without carrying a second design system with it.

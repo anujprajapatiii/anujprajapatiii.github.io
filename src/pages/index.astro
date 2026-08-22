@@ -3,13 +3,13 @@ import PageLayout from "@/layouts/PageLayout.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
 import PlayPreviewList from "@/components/PlayPreviewList.astro";
 import SectionHeading from "@/components/SectionHeading.astro";
-import HeroShader from "@/components/HeroShader";
 import Section from "@/components/primitives/Section.astro";
 import Container from "@/components/primitives/Container.astro";
 import Stack from "@/components/primitives/Stack.astro";
 import Cluster from "@/components/primitives/Cluster.astro";
 import Grid from "@/components/primitives/Grid.astro";
 import GridItem from "@/components/primitives/GridItem.astro";
+import ThemeImage from "@/components/ThemeImage.astro";
 import { siteConfig } from "@/data/site-config";
 import {
   getFeaturedExperiments,
@@ -27,7 +27,7 @@ const play = await getFeaturedExperiments(5);
   {/* Hero */}
   <Section size="hero">
     <Container>
-      <Grid>
+      <Grid class="hero-grid">
         <GridItem spanLg={8}>
           <Stack gap="lg">
             <h1 class="text-display">
@@ -45,14 +45,13 @@ const play = await getFeaturedExperiments(5);
             </div>
           </Stack>
         </GridItem>
-        {/*
-          client:load, not client:visible. This one is above the fold, so the
-          observer would fire immediately anyway — but the directive is a
-          promise about when the shape appears, and a hero that pops in a beat
-          late reads as a page still loading. The band below stays lazy.
-        */}
         <GridItem spanLg={16}>
-          <HeroShader client:load />
+          <ThemeImage
+            lightSrc="/images/hero-placeholder-day.webp"
+            darkSrc="/images/hero-placeholder-night.webp"
+            alt=""
+            class="theme-image--cover"
+          />
         </GridItem>
       </Grid>
     </Container>

@@ -10,6 +10,8 @@ import Grid from "@/components/primitives/Grid.astro";
 import GridItem from "@/components/primitives/GridItem.astro";
 import OnThisPage from "@/components/OnThisPage.astro";
 import DataTable from "@/components/DataTable.astro";
+import ThemeImage from "@/components/ThemeImage.astro";
+import ProjectNutritionLabels from "@/components/ProjectNutritionLabels";
 import { getPublishedExperiments } from "@/lib/content/queries";
 import { render } from "astro:content";
 
@@ -35,59 +37,62 @@ const publishedYear = item.data.publishedAt.getUTCFullYear();
   <Section as="article" size="page" class="case-study">
     <Stack gap="xl">
     <Container as="header">
-      <Grid class="case-study-header-grid">
-        <GridItem spanLg={12}>
-          <Stack gap="sm">
-            {/* Cluster so the button shrink-wraps its label — a bare <a> in a
-                Stack is a flex item and would stretch to the full column. */}
-            <Cluster>
-              <a href="/play" class="btn btn--secondary">
-                <span aria-hidden="true">&larr;</span>
-                Experiments
-              </a>
-            </Cluster>
-            <h1 class="text-title">{item.data.title}</h1>
-            <p class="type-reading max-w-measure">
-              {item.data.description}
-            </p>
-          </Stack>
-        </GridItem>
+      <Stack gap="sm">
+        {/* The back action owns the first row. The title and details table
+            then share one grid row and align along the same top edge. */}
+        <Cluster>
+          <a href="/play" class="btn btn--secondary">
+            <span aria-hidden="true">&larr;</span>
+            Experiments
+          </a>
+        </Cluster>
 
-        <GridItem spanLg={12}>
-          <Stack gap="sm">
-            <DataTable label="Experiment details">
-              <thead>
-                <tr>
-                  {item.data.role && <th scope="col">Role</th>}
-                  <th scope="col">Year</th>
-                  {item.data.skills.length > 0 && <th scope="col">Skills</th>}
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  {item.data.role && <td>{item.data.role}</td>}
-                  <td>{publishedYear}</td>
-                  {item.data.skills.length > 0 && <td>{item.data.skills.join(", ")}</td>}
-                </tr>
-              </tbody>
-            </DataTable>
+        <Grid class="case-study-header-grid">
+          <GridItem spanLg={12}>
+            <Stack gap="sm">
+              <h1 class="text-title">{item.data.title}</h1>
+              <p class="type-reading max-w-measure">
+                {item.data.description}
+              </p>
+            </Stack>
+          </GridItem>
 
-            {item.data.liveUrl && (
-              <Cluster>
-                <a
-                  href={item.data.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="btn btn--primary"
-                >
-                  Try it live
-                  <span aria-hidden="true">&rarr;</span>
-                </a>
-              </Cluster>
-            )}
-          </Stack>
-        </GridItem>
-      </Grid>
+          <GridItem spanLg={12}>
+            <Stack gap="sm">
+              <DataTable label="Experiment details">
+                <thead>
+                  <tr>
+                    {item.data.role && <th scope="col">Role</th>}
+                    <th scope="col">Year</th>
+                    {item.data.skills.length > 0 && <th scope="col">Skills</th>}
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    {item.data.role && <td>{item.data.role}</td>}
+                    <td>{publishedYear}</td>
+                    {item.data.skills.length > 0 && <td>{item.data.skills.join(", ")}</td>}
+                  </tr>
+                </tbody>
+              </DataTable>
+
+              {item.data.liveUrl && (
+                <Cluster>
+                  <a
+                    href={item.data.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn btn--primary"
+                  >
+                    Try it live
+                    <span aria-hidden="true">&rarr;</span>
+                  </a>
+                </Cluster>
+              )}
+            </Stack>
+          </GridItem>
+        </Grid>
+      </Stack>
     </Container>
 
     {/* Breaks out of the reading column to full width — see EmbedFrame. */}
@@ -109,11 +114,17 @@ const publishedYear = item.data.publishedAt.getUTCFullYear();
           Everything else shows the placeholder until a real image lands.
         */}
         {item.data.media.hero ? (
-          <img
-            src={item.data.media.hero}
+          <ThemeImage
+            lightSrc={item.data.media.hero}
+            darkSrc={item.data.media.heroDark}
             alt=""
-            class="w-full"
-          />
+          >
+            {item.data.heroOverlay === "nutrition-label" && (
+              <div slot="overlay">
+                <ProjectNutritionLabels showSwitcher={false} />
+              </div>
+            )}
+          </ThemeImage>
         ) : (
           !item.data.embedUrl && <div class="media-placeholder"></div>
         )}

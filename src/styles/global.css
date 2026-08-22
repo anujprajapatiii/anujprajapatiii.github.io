@@ -317,7 +317,6 @@
     --text-reading: var(--text-secondary);
     --text-alternate: var(--neutral-100);
     --border-hover: var(--neutral-350);
-    --shader-tint: var(--neutral-500);
     --decorative-accent: var(--brown-300);
 
     /* Tailwind/shadcn aliases currently consumed by components. */
@@ -451,7 +450,6 @@
     /* Portfolio-specific semantic remaps. */
     --text-alternate: var(--neutral-800);
     --border-hover: var(--neutral-400);
-    --shader-tint: var(--neutral-300);
     --decorative-accent: var(--brown-300);
 }
 
@@ -870,6 +868,7 @@
   grid-template-columns: repeat(24, minmax(0, 1fr));
   gap: var(--spacing-grid);
 }
+.hero-grid { column-gap: var(--spacing-md); }
 .layout-grid > *,
 .grid-item { min-width: 0; }
 .grid-item {
@@ -979,7 +978,7 @@
 }
 .section-heading::before {
   content: "";
-  flex: 0 0 var(--spacing-2xs);
+  flex: 0 0 var(--spacing-3xs);
   background: var(--decorative-accent);
 }
 /*
@@ -1000,7 +999,7 @@
   saturate() is the part that makes this read as Apple's material rather than
   frosted plastic: it enriches whatever shows through. On a palette this
   neutral it does almost nothing to the page itself — greys have no chroma to
-  lift — and it earns its place only where the hero shader passes underneath.
+  lift — but keeps the sticky header legible over page content.
 
   z-index because the on-this-page rail is also positioned and comes LATER in
   the document; without one, paint order would put the rail over the header.
@@ -1375,27 +1374,6 @@
 }
 
 /*
-  Hero shader — the metaball beside the headline, in place of the grey
-  placeholder that used to sit there.
-
-  No background, unlike the neutral media placeholders. `colorBack` is
-  transparent, so the shape sits directly on the page ground.
-
-  It keeps the placeholder's 16/10 aspect rather than the design file's fixed
-  300px height, so the hero column behaves at every width exactly as it does
-  today — at the 472px desktop column the two agree to within 5px.
-
-  The consequence of having no surface: with JS off or WebGL unavailable this
-  is blank rather than grey. That is a deliberate trade for the borderless
-  look — the box still occupies its space, so nothing reflows.
-*/
-.hero-shader {
-  aspect-ratio: 16 / 10;
-  width: 100%;
-}
-.hero-shader canvas { display: block; }
-
-/*
   ===== Play preview list =====
   A linked experiment index beside one main preview and a three-frame
   filmstrip. Mobile remains the complete linked list; the media controls are a
@@ -1474,7 +1452,7 @@
     position: absolute;
     inset-block: -1px;
     inset-inline-start: -1px;
-    width: var(--spacing-2xs);
+    width: var(--spacing-3xs);
     background: transparent;
     pointer-events: none;
   }
@@ -1948,8 +1926,8 @@
   above. The reduced-motion override that used to sit at this spot went with
   it: it existed only to zero --lift-duration, and there is nothing left to
   zero. The site's other three motion features keep their own gates —
-  scroll-behavior in @layer base, the theme crossfade and the hero shader's
-  speed both in JS — so none of them lost a guard here.
+  scroll-behavior in @layer base and the theme crossfade — so none of them
+  lost a guard here.
 */
 
 /*

@@ -16,6 +16,7 @@ const baseCaseStudyShape = {
     .object({
       thumbnail: z.string().optional(),
       hero: z.string().optional(),
+      heroDark: z.string().optional(),
     })
     .default({}),
   // Authored page identity, independent of the visitor's light/dark mode.
@@ -52,6 +53,9 @@ const projectSchema = z
 const experimentSchema = z
   .object({
     ...baseCaseStudyShape,
+  // Optional coded UI placed over the hero backdrop. Kept explicit so content
+  // cannot inject arbitrary components through frontmatter.
+  heroOverlay: z.enum(["nutrition-label"]).optional(),
   // Optional link to a live/deployed version (e.g. an interactive experiment
   // hosted in its own repo). Rendered as a "Try it live" link.
   liveUrl: z.string().url().optional(),

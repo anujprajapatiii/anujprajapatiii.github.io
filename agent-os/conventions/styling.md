@@ -36,12 +36,13 @@ What that means in practice:
   `brown-300` through `--decorative-accent` for homepage section markers and
   wide-screen navigation dividers; that specialised role stays identical in
   both themes.
-  - A selection strip that belongs to a homepage section reuses the section
-    marker's exact `--spacing-2xs` width and `--decorative-accent` colour. Do
-    not approximate either at the component. Autonomous progress may use the
-    same colour at a thinner, component-local 2px rule when it needs to read as
-    time rather than selection; the Experiments preview loader is the standing
-    example.
+  - Accent bars use the 4px `--spacing-3xs` width and
+    `--decorative-accent` colour, including homepage section markers and
+    Experiments selection strips. Do not approximate either at the component.
+    Wide-screen navigation dividers remain 1px because they separate labels
+    rather than mark section state. Autonomous progress may use the same colour
+    at a thinner, component-local 2px rule when it needs to read as time rather
+    than selection; the Experiments preview loader is the standing example.
 - **Corners are square, everywhere.** No radius on cards, images, buttons,
   embeds or code blocks. The edge is the edge; a border and the space around
   it do the containing, and nothing is softened to look friendlier.
@@ -160,6 +161,9 @@ What that means in practice:
   - `Stack` and `Cluster` gap props map literally: `gap="md"` means
     `--spacing-md` (24px), never a remapped neighbouring value. Their allowed
     names are `2xs`, `xs`, `sm`, `md`, `lg`, `xl`, and `2xl`.
+  - The homepage hero split uses the existing `--spacing-md` (24px) as its
+    column gap so the copy and media breathe without changing the global grid
+    gutter.
   - Major Work and Experiments prose groups use the existing `2xl` spacing
     token (64px), applied before each body `h2`. Within each group, paragraphs
     and title-to-body transitions use `--spacing-stack` (16px).

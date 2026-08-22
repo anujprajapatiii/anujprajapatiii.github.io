@@ -12,6 +12,7 @@ workflows change.
 | Public site shell | Shared layout, navigation, footer, theme, metadata | `src/layouts/`, `src/components/layout/`, `src/data/site-config.ts` |
 | Work | Portfolio/case-study section at `/work` | `src/content/projects/`, rendered through `/work` routes |
 | Content queries | Published filtering, recency, type filtering, and homepage curation | `src/lib/content/queries.ts`, `src/lib/content/project-types.ts` |
+| Native experiments | Interactive Play content authored as MDX with small React islands that inherit site tokens | `src/content/play/*.mdx`, experiment components in `src/components/` |
 | Design tokens | Base color, type, spacing, and container tokens; light/dark appearance modes | `src/styles/global.css` |
 | Page palettes | Authored per-page semantic colour remaps, independent of light/dark mode | `src/data/page-palettes.ts`, `src/styles/themes/`, layout palette props |
 | Layout primitives | One 1300px page container plus Section/Stack/Cluster and a typed 24-track Grid/GridItem system | `src/components/primitives/`, CSS in `src/styles/global.css` |

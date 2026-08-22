@@ -4,7 +4,7 @@ description: A tiny code sketch that grows a poster grid from a single seed numb
 status: published
 publishedAt: 2025-01-01
 featured: true
-featuredOrder: 5
+featuredOrder: 6
 role: Experiment
 skills:
   - Creative coding

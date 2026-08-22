@@ -67,7 +67,6 @@
   /* Portfolio-specific roles that do not alias the canonical set. */
   --text-alternate: var(--blue-100);
   --border-hover: var(--blue-400);
-  --shader-tint: var(--blue-500);
   --decorative-accent: var(--blue-400);
 }
 
@@ -134,6 +133,5 @@
   --text-reading: var(--text-secondary);
   --text-alternate: var(--blue-900);
   --border-hover: var(--blue-600);
-  --shader-tint: var(--blue-200);
   --decorative-accent: var(--blue-300);
 }
