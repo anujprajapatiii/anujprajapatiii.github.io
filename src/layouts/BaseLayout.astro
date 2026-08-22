@@ -6,11 +6,9 @@ import { defaultPagePalette, type PagePalette } from "@/data/page-palettes";
    display step. One preload covers the 400/500/600 hierarchy without fetching
    separate files. */
 import tasaOrbiter from "../assets/fonts/tasa-orbiter-variable.woff2?url";
-/* Violet Sans (SIL OFL) carries the display step, which today is the homepage
-   hero alone. Preloaded from here rather than only on that page: it is the
-   largest text on the site, so a late swap reflows the biggest thing on the
-   screen, and 28KB is a cheap insurance against that on the pages that do not
-   use it yet. Move this behind a prop if the cost ever stops being worth it. */
+/* Violet Sans (SIL OFL) carries the display step. Its preload is opt-in below:
+   CSS still loads the face wherever it is used, while routes without display
+   type avoid eagerly fetching a font they never render. */
 import violetSans from "../assets/fonts/violet-sans-regular.woff2?url";
 
 interface Props {
@@ -19,6 +17,7 @@ interface Props {
   image?: string;
   noindex?: boolean;
   palette?: PagePalette;
+  preloadDisplayFont?: boolean;
 }
 
 const {
@@ -27,6 +26,7 @@ const {
   image,
   noindex = false,
   palette = defaultPagePalette,
+  preloadDisplayFont = false,
 } = Astro.props;
 
 const pageTitle = title ?? siteConfig.title;
@@ -45,9 +45,11 @@ const ogImage = image ? new URL(image, siteConfig.url).toString() : undefined;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
 
-    {/* Preload both families so text never paints in a fallback and swaps (FOUT) */}
+    {/* TASA is universal. Violet is preloaded only on routes that render display type. */}
     <link rel="preload" href={tasaOrbiter} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={violetSans} as="font" type="font/woff2" crossorigin />
+    {preloadDisplayFont && (
+      <link rel="preload" href={violetSans} as="font" type="font/woff2" crossorigin />
+    )}
     <title>{pageTitle}</title>
 
     {/* Open Graph */}

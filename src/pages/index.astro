@@ -24,7 +24,7 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
   .slice(0, 5);
 ---
 
-<PageLayout>
+<PageLayout preloadDisplayFont>
   {/* Hero */}
   <Section size="hero">
     <Container>
@@ -107,7 +107,7 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
     <Container>
       <Stack gap="sm">
         <SectionHeading>Get in touch</SectionHeading>
-        <Cluster gap="lg" class="text-small">
+        <Cluster gap="lg" class="text-meta">
           <a href={`mailto:${siteConfig.social.email}`} class="btn btn--link"
             >{siteConfig.social.email}</a
           >

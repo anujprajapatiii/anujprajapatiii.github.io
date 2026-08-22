@@ -18,10 +18,10 @@ What that means in practice:
   before it comes from weight; 600 is reserved for emphasis and real labels.
 - **One display font, one step.** Violet Sans on `text-display` and nowhere
   else. It has a single weight, so it can only sit on a step already set in
-  400; extending it downward means dropping h2/h3 to 400 first.
-- **Big type is set light.** Display and h1 at 400 — this is the Klim habit
+  400; extending it downward means dropping the heading role to 400 first.
+- **Big type is set light.** Display and title at 400 — this is the Klim habit
   and it is why the hero reads as composed rather than shouted.
-- **14px is the small step.** It carries metadata, captions and compact
+- **14px is the meta step.** It carries metadata, captions and compact
   interface labels at 1.5 leading; body remains 16px for reading.
 - **Tracking is zero, everywhere.** One value for every size, in both
   directions. TASA Orbiter is drawn to be spaced correctly at each size; the system
@@ -116,15 +116,19 @@ What that means in practice:
 - **One reading font: TASA Orbiter** (SIL OFL), self-hosted as a variable
   WOFF2 from `src/assets/fonts/`. The font axis covers 400–800; this design
   intentionally uses **Regular 400, Medium 500 and Semibold 600** only.
-  - Regular carries body/small/h1, Medium carries h2/h3 and the wordmark, and
+  - Regular carries body/meta/title, Medium carries heading and the wordmark, and
     Semibold is reserved for strong emphasis and genuine labels.
   - The convention checker rejects weights outside that approved hierarchy,
-    even when the font file could technically render them.
+    even when the font file could technically render them, and rejects weight
+    utilities at component call sites.
   - The variable face is preloaded in `BaseLayout.astro`; that URL and the
     `src()` paths in `global.css` must resolve to the same hashed asset or
     the preload silently double-downloads. Check `dist/` after changing either.
+  - `TASA Orbiter Fallback` is Arial calibrated from the real x-height,
+    ascent, descent and line gap in the local font files. Do not copy metric
+    overrides from another typeface.
 - **One display font: Violet Sans** (SIL OFL, licence copy sits beside the
-  file), self-hosted from the same folder and preloaded the same way. It has
+  file), self-hosted from the same folder. It has
   **one weight and one style — that is the whole family, not a licence limit.**
   - It is bound to `.text-display` in `global.css` rather than to a token,
     because Tailwind's `--text-*` steps carry size, leading and weight but
@@ -132,7 +136,10 @@ What that means in practice:
   - `font-synthesis-weight: none` is set on that rule. A fake bold here would
     be a smeared regular with no upside — and
     note this switches off weight only, so `<em>` is unaffected.
-  - Do not extend it to h2/h3 without first dropping those steps to 400.
+  - Violet is conditionally preloaded through `preloadDisplayFont` only on
+    routes that render display type; CSS loads it normally everywhere else.
+    Its Arial fallback is calibrated separately from TASA's.
+  - Do not extend it to heading without first dropping that role to 400.
   `--font-mono` is a system fallback stack reserved for code only (inline
   `code` + code blocks) — never for labels, wordmarks, or metadata.
 - **Spacing** uses the named scale (`p-md`, `gap-sm`, `py-xl`, …) or the
@@ -164,43 +171,41 @@ What that means in practice:
     to zero. After any conversion, measure the computed values — don't just
     check that the build passed.
 - **Hierarchy rule: size at large scale, weight at small scale.** Display
-  and h1 stay at 400 and let size do the work; h2/h3 sit close enough to body
-  size that size alone cannot separate them, so they carry TASA Medium 500.
+  and title stay at 400 and let size do the work; heading sits close enough to
+  body that size alone cannot separate it, so it carries TASA Medium 500.
   Weight lives inside the token — no component writes `font-*`.
 - **No decorative eyebrows or uppercase kickers.** Section headings are real
   headings. `.label` is reserved for genuine metadata (table headers, the
   on-this-page title, style-guide section names) and is the only place
   uppercase and 600 weight combine.
-- **Type** uses the scale tokens
-  (`text-display/h1/h2/h3/body/small`) — never raw Tailwind sizes
+- **Type** uses five role tokens
+  (`text-display/title/heading/body/meta`) — never raw Tailwind sizes
   (`text-lg`, `text-4xl`, `text-[10px]`). Each token carries its own
   line-height and weight, so **never write `tracking-*`, `leading-*` or
   `font-*` at a call site**: if a step needs to change, change the token in
   global.css and every use follows.
-- **Six steps, by decision: 72 → 44 → 30 → 20 → 16 → 14.** An 18px lead and a
-  12px label were removed because neither earned a place. The lead sat one
-  notch off body and only ever dressed intro paragraphs, which read as
-  introductions from their position and their secondary colour. The 12px
-  label existed to make metadata quiet, which `--text-secondary` already
-  does. **Intros are `text-body`; metadata is `text-small`.**
-  - Work and Experiments detail pages scope the existing body step through
-    `.case-study`: body copy uses `--text-reading` (mapped to
-    `--text-secondary`) and 1.4 line-height. This is a contextual reading
-    treatment, not a seventh type size; headings keep their primary roles.
-  - `text-lead` and `text-label` now match no token, so Tailwind emits
-    nothing and the element silently inherits its parent's size — the class
-    looks right in the diff and does nothing on the page. `pnpm check` fails
-    on both names.
+- **Five sizes, by decision: 64 → 44 → 20 → 16 → 14.** Display is fluid
+  from 40–64px; title is fluid from 32–44px; heading is a fixed 20px. The old
+  h2 and h3 steps share `text-heading`: semantic document structure and space
+  distinguish a section heading from a nested or card heading instead of a
+  second size. Body is 16px / 1.5; meta is 14px / 1.5.
+  - `.type-reading` layers secondary reading colour and
+    `--leading-reading` (1.4) on the 16px body role. Rendered prose shares the
+    same declarations. This is a treatment, not a sixth size, and it never
+    mutates the body token through a local scope.
+  - The retired `text-h1`, `text-h2`, `text-h3`, `text-small`, `text-lead` and
+    `text-label` names match no token, so Tailwind emits nothing and the
+    element silently inherits. `pnpm check` fails on all six.
   - Do not add a step back to make one call site fit. If something needs to
     sit between two steps, it needs different space or colour, not a
-    seventh size.
+    sixth size.
 - **Tracking is 0 on every step and every class.** No negative tracking on
   display type, no positive tracking on uppercase labels, no exceptions.
   Do not reintroduce per-size tracking "to tighten the hero" — uniformity is
   the point, and this is the variation the system exists to prevent.
 - **Uppercase micro-text uses `.label`**, not a pile of utilities. It is a
   treatment, not a size: uppercase and 600 weight carry it, it draws its size
-  from `--text-small` like everything else, and tracking stays at 0.
+  from `--text-meta` like everything else, and tracking stays at 0.
 - **Corners are square on every element, by decision.** There is no
   `--radius` token and no `--radius-*` scale; never write `rounded-*` or
   `border-radius`. The tokens are *absent* rather than set to 0 on purpose:
@@ -274,7 +279,7 @@ What that means in practice:
     is `inline-flex`, which cannot break across lines; mid-sentence that pushes
     the whole label onto one line and blows the paragraph sideways. It also
     resets `font-size` to `inherit`, so a link in body copy doesn't shrink to
-    `--text-small`. It is the one variant that appears inside text.
+    `--text-meta`. It is the one variant that appears inside text.
   - **Markdown links get the link variant through `.prose a`**, grouped into
     the same rule rather than written twice — a case-study `<a>` cannot carry a
     class, exactly as with `.prose table`. They join at the *variant*, never at
@@ -385,7 +390,7 @@ What that means in practice:
   softer colour is wanted, that is `--text-secondary`.
 - **`pnpm check` enforces the mechanical rules** (`scripts/check-conventions.mjs`,
   run in CI before the build). It covers raw spacing steps, raw type sizes,
-  call-site tracking/leading, unapproved font weights, non-zero
+  call-site tracking/leading/weight, unapproved font weights, non-zero
   letter-spacing, physical direction properties, alpha-diluted colours, raw
   hex in components, inline layout, raw public-page grid columns, the retired
   auto-fit Grid API, unsupported primitive gaps, corner radius, bare tables,

@@ -59,6 +59,23 @@
 }
 
 /*
+  Arial is calibrated to TASA's real x-height and vertical metrics so the
+  first paint keeps nearly the same line boxes while the webfont arrives.
+  These values are derived from the local font files, not copied from another
+  type system: TASA x-height 500/1000; Arial x-height 1062/2048.
+*/
+@font-face {
+  font-family: 'TASA Orbiter Fallback';
+  src: local('Arial');
+  size-adjust: 96.4218%;
+  ascent-override: 97.4883%;
+  descent-override: 26.9648%;
+  line-gap-override: 0%;
+  font-weight: 400 800;
+  font-style: normal;
+}
+
+/*
   Violet Sans — Calvin Waterman, SIL Open Font License (licence copy sits
   beside the file). A geometric display face with flattened curves and wide
   counters; it carries the homepage hero and nothing else.
@@ -80,6 +97,18 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
+}
+
+/* Violet Sans x-height 480/1000, calibrated against the same Arial fallback. */
+@font-face {
+  font-family: 'Violet Sans Fallback';
+  src: local('Arial');
+  size-adjust: 92.5650%;
+  ascent-override: 87.5061%;
+  descent-override: 20.5261%;
+  line-gap-override: 0%;
+  font-weight: 400;
+  font-style: normal;
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -431,8 +460,8 @@
        the single largest thing on the site. --font-mono is a system fallback
        stack reserved for code only (inline code + code blocks), never for
        design/labels. */
-    --font-sans: 'TASA Orbiter', ui-sans-serif, system-ui, sans-serif;
-    --font-display: 'Violet Sans', 'TASA Orbiter', ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'TASA Orbiter', 'TASA Orbiter Fallback', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Violet Sans', 'Violet Sans Fallback', 'TASA Orbiter', 'TASA Orbiter Fallback', ui-sans-serif, system-ui, sans-serif;
     --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
     /* Component aliases already in use. */
     --color-ring: var(--ring);
@@ -647,7 +676,7 @@
     --header-height: 101px;
 
     /* ---- TYPE SCALE ----
-       Each step carries its own line-height and weight, so `text-h1` alone
+       Each role carries its own line-height and weight, so `text-title` alone
        produces finished type. Nothing in the codebase should ever set
        font-*, tracking-* or leading-* by hand — if a step needs to change,
        fix it here and every use updates. Family is the one exception: it is
@@ -661,10 +690,11 @@
        per-size tracking "to tighten the hero" — that is the variation this
        system exists to prevent.
 
-       Sizes descend without collisions so a child heading can never outrank
-       its parent: 72 → 44 → 30 → 20 → 16 → 14. Small is the dedicated
-       metadata and interface step restored from Paper; body remains the
-       comfortable reading size.
+       Five unique sizes, named by intent rather than HTML tags:
+       64 → 44 → 20 → 16 → 14. Section h2s and card/prose h3s share one
+       heading role; semantic structure and spacing distinguish their level.
+       Meta is the dedicated metadata and interface step restored from Paper;
+       body remains the comfortable reading size.
 
        There was also an 18px lead and a 12px label; both are gone, because
        neither earned a place in the scale. The lead sat one notch off body
@@ -674,34 +704,32 @@
        site below the body's floor, and it existed to make metadata quiet — a
        job --text-secondary already does.
 
-       So: intros are body, and metadata is small. `.label` survives as the
+       So: intros are body, and metadata is meta. `.label` survives as the
        uppercase TREATMENT (table headers, the on-this-page title) but now
-       draws its size from --text-small like everything else. Do not
+       draws its size from --text-meta like everything else. Do not
        reintroduce a step to make one call site fit.
 
        Weight is part of the token too. TASA Orbiter supplies the 400/500/600
-       hierarchy used below while Violet Sans has only 400. Display and h1
-       stay at 400 and let their size do the work; h2/h3 use Medium 500 for
+       hierarchy used below while Violet Sans has only 400. Display and title
+       stay at 400 and let their size do the work; heading uses Medium 500 for
        quiet separation, and Semibold 600 remains available for emphasis and
        genuine labels. */
-    --text-display: clamp(2.5rem, 8vw, 4.5rem);
+    --text-display: clamp(2.5rem, 7vw, 4rem);
     --text-display--line-height: 1.02;
     --text-display--font-weight: 400;
-    --text-h1: clamp(2rem, 5vw, 2.75rem);
-    --text-h1--line-height: 1.08;
-    --text-h1--font-weight: 400;
-    --text-h2: clamp(1.5rem, 3vw, 1.875rem);
-    --text-h2--line-height: 1.3;
-    --text-h2--font-weight: 500;
-    --text-h3: 1.25rem;
-    --text-h3--line-height: 1.3;
-    --text-h3--font-weight: 500;
+    --text-title: clamp(2rem, 5vw, 2.75rem);
+    --text-title--line-height: 1.08;
+    --text-title--font-weight: 400;
+    --text-heading: 1.25rem;
+    --text-heading--line-height: 1.3;
+    --text-heading--font-weight: 500;
     --text-body: 1rem;
-    --text-body--line-height: 1.6;
+    --text-body--line-height: 1.5;
     --text-body--font-weight: 400;
-    --text-small: 0.875rem;
-    --text-small--line-height: 1.5;
-    --text-small--font-weight: 400;
+    --leading-reading: 1.4;
+    --text-meta: 0.875rem;
+    --text-meta--line-height: 1.5;
+    --text-meta--font-weight: 400;
 }
 
 /*
@@ -723,7 +751,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-body text-foreground antialiased;
   }
   html {
     @apply font-sans;
@@ -907,8 +935,8 @@
   padding: var(--spacing-2xs);
   background: var(--background-secondary);
   border: 1px solid var(--border);
-  font-size: var(--text-small);
-  line-height: var(--text-small--line-height);
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
   color: var(--text-secondary);
 }
 
@@ -1050,7 +1078,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--spacing-md);
-  font-size: var(--text-small);
+  font-size: var(--text-meta);
 }
 .site-nav__links a { display: inline-flex; align-items: center; }
 .site-nav__toggle { margin-inline-start: auto; }   /* pin toggle to right edge */
@@ -1090,8 +1118,8 @@
   600 weight carry it.
 */
 .label {
-  font-size: var(--text-small);
-  line-height: var(--text-small--line-height);
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
   text-transform: uppercase;
   font-weight: 600;         /* Small caps use TASA Semibold to hold their colour. */
   color: var(--muted-foreground);
@@ -1145,8 +1173,8 @@
   padding: var(--spacing-2xs) var(--spacing-sm);
   border-width: 1px;
   border-style: solid;
-  font-size: var(--text-small);
-  line-height: var(--text-small--line-height);
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
   text-decoration-line: none;
   /* <button> does not get the hand cursor for free the way <a href> does. */
   cursor: pointer;
@@ -1177,7 +1205,7 @@
   display: inline;
   padding: 0;
   border-width: 0;
-  /* The base pins --text-small, which is right for a box and wrong for text:
+  /* The base pins --text-meta, which is right for a box and wrong for text:
      a link dropped into a body paragraph would shrink mid-sentence. */
   font-size: inherit;
 }
@@ -1204,8 +1232,8 @@
   width: 100%;
   border-collapse: collapse;
   border: 1px solid var(--border);
-  font-size: var(--text-small);
-  line-height: var(--text-small--line-height);
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
   /* Digits in a column have to line up; this is the definition of a table. */
   font-variant-numeric: tabular-nums;
 }
@@ -1220,8 +1248,8 @@
 }
 .data-table th,
 .prose table th {
-  font-size: var(--text-small);
-  line-height: var(--text-small--line-height);
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
   text-transform: uppercase;
   font-weight: 600;
   color: var(--muted-foreground);
@@ -1268,8 +1296,8 @@
 .info-box { border: 1px solid var(--border); }
 .info-box__row {
   padding: var(--spacing-2xs) var(--spacing-xs);
-  font-size: var(--text-small);
-  line-height: var(--text-small--line-height);
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
 }
 /*
   Longhands, not `border-top: 1px solid var(--border)`. The shorthand sets
@@ -1422,8 +1450,8 @@
   the card's paragraph elsewhere, where it should run in full.
 */
 .play-item__subtitle {
-  font-size: var(--text-small);
-  line-height: var(--text-small--line-height);
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
   max-width: 100%;
   white-space: nowrap;
   overflow: hidden;
@@ -1510,7 +1538,7 @@
   display: block;
   border: 1px solid var(--border);
   padding: var(--spacing-md);
-  font-size: var(--text-small);
+  font-size: var(--text-meta);
   color: var(--muted-foreground);
 }
 @media (min-width: 48rem) {
@@ -1590,7 +1618,7 @@
   .embed-guard__label {
     border: 1px solid var(--border);
     padding: var(--spacing-2xs) var(--spacing-sm);
-    font-size: var(--text-small);
+    font-size: var(--text-meta);
     color: var(--foreground);
     background: var(--background-elevated);
   }
@@ -1605,7 +1633,7 @@
 }
 .embed-note {
   margin-top: var(--spacing-2xs);
-  font-size: var(--text-small);
+  font-size: var(--text-meta);
   color: var(--muted-foreground);
 }
 
@@ -1645,20 +1673,26 @@
   padding-inline-start: var(--spacing-xs);
   border-inline-start-width: 2px;
   border-inline-start-style: solid;
-  font-size: var(--text-small);
-  line-height: var(--text-small--line-height);
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
 }
 /* Nested headings sit one step further in. */
 .on-this-page a[data-depth="3"] { padding-inline-start: var(--spacing-md); }
 
 /*
-  Work and Experiments use the body step at a tighter reading rhythm than the
-  rest of the site. Scoping the token at the article keeps the shared 16px size
-  and 400 weight intact while applying 140% leading to both the introduction
-  and the rendered Markdown body.
+  Reading is a treatment layered on the 16px body role, not another size.
+  Work and Experiments introductions opt in with `.type-reading`; Markdown
+  body shapes share the same declarations below. This keeps 140% long-form
+  leading explicit without mutating the general body token inside an article.
 */
-.case-study {
-  --text-body--line-height: 1.4;
+.type-reading,
+.prose p,
+.prose ul,
+.prose ol {
+  font-size: var(--text-body);
+  line-height: var(--leading-reading);
+  font-weight: var(--text-body--font-weight);
+  color: var(--text-reading);
 }
 .case-study-header-grid { row-gap: var(--spacing-lg); }
 @media (min-width: 64rem) {
@@ -1673,12 +1707,12 @@
   margin-top: var(--spacing-stack);
 }
 .prose h2 {
-  @apply text-h2;
+  @apply text-heading;
   margin-top: var(--spacing-2xl);
   color: var(--text-primary);
 }
 .prose h3 {
-  @apply mt-lg text-h3;
+  @apply mt-lg text-heading;
   color: var(--text-primary);
 }
 /*
@@ -1693,13 +1727,7 @@
 .prose blockquote {
   max-width: var(--container-measure);
 }
-/* Keep the long-form reading role explicit on every body-text shape. */
-.prose p,
-.prose ul,
-.prose ol {
-  @apply text-body;
-  color: var(--text-reading);
-}
+/* The long-form reading treatment is grouped with `.type-reading` above. */
 .prose ul {
   @apply list-disc ps-md;
 }
@@ -1720,7 +1748,7 @@
   @apply my-lg;
 }
 .prose figcaption {
-  @apply mt-2xs text-small text-muted-foreground;
+  @apply mt-2xs text-meta text-muted-foreground;
 }
 .prose blockquote {
   @apply border-s-2 border-border ps-sm text-muted-foreground;
@@ -1732,10 +1760,10 @@
   push inline code taller than its line and disturb the paragraph's rhythm.
 */
 .prose :not(pre) > code {
-  @apply bg-muted px-1.5 py-0.5 font-mono text-small;
+  @apply bg-muted px-1.5 py-0.5 font-mono text-meta;
 }
 .prose pre {
-  @apply my-md overflow-x-auto border border-border p-sm text-small;
+  @apply my-md overflow-x-auto border border-border p-sm text-meta;
 }
 /*
   Astro's Shiki renderer writes its GitHub-dark background and foreground as

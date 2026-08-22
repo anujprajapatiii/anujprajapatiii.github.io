@@ -30,23 +30,34 @@ const RULES = [
   {
     id: "type-scale",
     test: /(?<![\w-])text-(?:xs|sm|base|lg|xl|[2-9]xl|\[[^\]]+\])(?![\w-])/,
-    msg: "raw Tailwind text size — use the scale (text-display/h1/h2/h3/body/small)",
+    msg: "raw Tailwind text size — use a role (text-display/title/heading/body/meta)",
   },
   {
     /*
-      The scale went from eight steps to six. These two names now match no
-      token, so Tailwind emits nothing for them and the element silently
-      inherits its parent's size — the class looks right in the diff and does
-      nothing on the page. Exactly the failure mode this file exists for.
+      The scale is five role-based sizes. Old tag-shaped and retired names now
+      match no token, so Tailwind emits nothing and the element silently
+      inherits its parent's size — exactly the failure mode this file exists
+      for.
     */
     id: "retired-type-step",
-    test: /(?<![\w-])text-(?:lead|label)(?![\w-])/,
-    msg: "that step was removed — intros are text-body, metadata is text-small (.label is still the uppercase treatment)",
+    test: /(?<![\w-])text-(?:h1|h2|h3|small|lead|label)(?![\w-])/,
+    msg: "that type name was retired — use display, title, heading, body or meta (.label and .type-reading are treatments)",
   },
   {
     id: "no-call-site-type",
     test: /(?<![\w-])(?:tracking-[a-z]+|leading-[a-z0-9]+)(?![\w-])/,
     msg: "size, line-height and tracking live in the type token — never set them at a call site",
+  },
+  {
+    /*
+      The approved weights belong to roles and treatments in global.css. Even
+      an allowed weight is still a local override when written in component
+      markup, so keep it out of call sites.
+    */
+    id: "no-call-site-weight",
+    test: /(?<![\w-])font-(?:normal|medium|semibold)(?![\w-])/,
+    only: (f) => !f.endsWith(".css"),
+    msg: "font weight belongs to a type role or named treatment in global.css — do not set it at a call site",
   },
   {
     /*
