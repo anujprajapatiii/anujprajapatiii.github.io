@@ -1,13 +1,17 @@
 ---
 title: Weathering
 description: A procedural rain study. Pick the terrain and the weather, then watch water run off the ledges, fall through the gaps, and pool wherever it can.
+status: published
+publishedAt: 2026-01-01
+featured: true
+featuredOrder: 1
 role: Experiment
-year: "2026"
 skills:
   - Creative coding
   - Simulation
   - WebGL
-thumbnail: /images/play/weathering/gale.jpg
+media:
+  thumbnail: /images/play/weathering/gale.jpg
 # Shown beside the homepage Play list while this row is pointed at. All three
 # are this case study's own screenshots, resized to the frame they render in
 # (550w, ~20KB) rather than served at 1600w.
@@ -23,8 +27,6 @@ embedUrl: https://anujprajapatiii.github.io/procedural-rain-sandbox/
 # small screens, so the embed runs at every width rather than turning into a
 # link. See EmbedFrame for what that costs and how the tap guard works.
 embedOnPhone: true
-sortOrder: 0
-draft: false
 ---
 
 Rain is the only input. Everything else in the scene is just something for it

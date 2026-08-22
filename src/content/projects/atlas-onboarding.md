@@ -1,14 +1,16 @@
 ---
 title: Atlas Onboarding
 description: Placeholder case study — rebuilding the first-run experience of a fictional B2B analytics tool to get teams to their first insight faster.
+status: published
+publishedAt: 2025-01-01
+type: product
+featured: true
+featuredOrder: 3
 role: Growth Designer
-year: "2025"
 skills:
   - Growth design
   - Experimentation
   - Prototyping
-sortOrder: 3
-draft: false
 ---
 
 Placeholder content. Atlas is a made-up product — this file exists to fill out

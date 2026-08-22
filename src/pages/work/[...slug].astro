@@ -10,10 +10,11 @@ import Grid from "@/components/primitives/Grid.astro";
 import GridItem from "@/components/primitives/GridItem.astro";
 import OnThisPage from "@/components/OnThisPage.astro";
 import DataTable from "@/components/DataTable.astro";
-import { getCollection, render } from "astro:content";
+import { getPublishedProjects } from "@/lib/content/queries";
+import { render } from "astro:content";
 
 export async function getStaticPaths() {
-  const projects = await getCollection("projects", ({ data }) => !data.draft);
+  const projects = await getPublishedProjects();
   return projects.map((project) => ({
     params: { slug: project.id },
     props: { project },
@@ -22,12 +23,13 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content, headings } = await render(project);
+const publishedYear = project.data.publishedAt.getUTCFullYear();
 ---
 
 <PageLayout
   title={`${project.data.title} — Anuj Prajapati`}
   description={project.data.description}
-  image={project.data.heroImage ?? project.data.thumbnail}
+  image={project.data.media.hero ?? project.data.media.thumbnail}
   palette={project.data.palette}
 >
   <Section as="article" size="page" class="case-study">
@@ -57,14 +59,14 @@ const { Content, headings } = await render(project);
               <thead>
                 <tr>
                   {project.data.role && <th scope="col">Role</th>}
-                  {project.data.year && <th scope="col">Year</th>}
+                  <th scope="col">Year</th>
                   {project.data.skills.length > 0 && <th scope="col">Skills</th>}
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   {project.data.role && <td>{project.data.role}</td>}
-                  {project.data.year && <td>{project.data.year}</td>}
+                  <td>{publishedYear}</td>
                   {project.data.skills.length > 0 && <td>{project.data.skills.join(", ")}</td>}
                 </tr>
               </tbody>
@@ -105,11 +107,11 @@ const { Content, headings } = await render(project);
           uses embedUrl today — this keeps the two near-identical templates
           from drifting apart the first time one does.
         */}
-        {project.data.heroImage ? (
+        {project.data.media.hero ? (
           <img
-            src={project.data.heroImage}
+            src={project.data.media.hero}
             alt=""
-            class="w-full border border-border"
+            class="w-full"
           />
         ) : (
           !project.data.embedUrl && <div class="media-placeholder"></div>

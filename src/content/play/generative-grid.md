@@ -1,13 +1,14 @@
 ---
 title: Generative Grid
 description: A tiny code sketch that grows a poster grid from a single seed number — same rules, endlessly different layouts.
+status: published
+publishedAt: 2025-01-01
+featured: true
+featuredOrder: 5
 role: Experiment
-year: "2025"
 skills:
   - Creative coding
   - Layout
-sortOrder: 4
-draft: false
 ---
 
 Placeholder content. A made-up experiment — this file exists to fill out the

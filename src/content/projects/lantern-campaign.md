@@ -1,14 +1,16 @@
 ---
 title: Lantern Campaign
 description: Placeholder case study — a modular launch campaign for a fictional consumer app, built so a small team could ship it across six channels.
+status: published
+publishedAt: 2024-01-01
+type: campaign
+featured: true
+featuredOrder: 4
 role: Brand & Growth Designer
-year: "2024"
 skills:
   - Campaign design
   - Motion
   - Copywriting
-sortOrder: 4
-draft: false
 ---
 
 Placeholder content. Lantern is a made-up product — this file exists to fill

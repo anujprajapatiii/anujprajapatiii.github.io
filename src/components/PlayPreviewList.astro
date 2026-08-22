@@ -1,37 +1,21 @@
 ---
 /*
-  The homepage Play list: five rows on the left, a preview pane on the right
-  that shows the pointed-at row's three previews.
+  Homepage Experiments has two levels of state: a selected experiment row and
+  a selected preview frame. The row remains the link; the filmstrip only
+  changes which decorative preview is shown beside it.
 
-  THE PANE HOLDS THE LAST ROW YOU POINTED AT. It does not snap back to the
-  first when the pointer leaves, which is the one thing CSS cannot express:
-  `:has()` knows what is hovered NOW, and has no memory of a state that has
-  ended. So the script below marks a set and never unmarks it on the way out.
-
-  The CSS switch is still there and still correct — see `.play-preview` in
-  global.css — it just stops applying the moment the script marks the wrapper.
-  Keeping both means the pane answers the pointer with JavaScript unavailable;
-  it simply returns to the first row rather than holding.
-
-  THE PERFORMANCE COMES FROM THE SAME PLACE. Hidden sets are `display: none`,
-  so their images have no box, never intersect the viewport, and a lazy image
-  in one is never fetched. Five items x three previews is fifteen assets, and
-  a visitor who hovers two rows pays for six. Only the first set — the one
-  shown at rest — is fetched on load.
-
-  The cost of that is a beat of empty frame the first time a row is pointed
-  at, so the script at the bottom warms the rest when the pointer first
-  enters the section: by the time it reaches a row, they are in cache. A
-  visitor who never points at Play never pays for them.
+  JavaScript adds memory and autoplay. Without it, CSS still lets row hover or
+  focus choose an experiment and shows that item's first frame. The filmstrip
+  stays hidden in that fallback so it never exposes controls that do nothing.
 */
-import { getEntry } from "astro:content";
-
 type PlayItem = {
   id: string;
   data: {
     title: string;
     description: string;
-    thumbnail?: string;
+    media: {
+      thumbnail?: string;
+    };
     previews: string[];
   };
 };
@@ -43,21 +27,19 @@ interface Props {
 const { items } = Astro.props;
 
 const VIDEO = /\.(mp4|webm|mov)$/i;
-/* Three frames per row, always — an item with one preview still gets three
-   slots, so the pane's height never changes as the pointer moves down the
-   list. Missing ones render as the empty frame the design shows. */
-const framesFor = (previews: string[]) =>
-  [0, 1, 2].map((i) => previews[i] ?? null);
+/* The component supports up to three frames, but missing sources disappear
+   completely: no empty autoplay stop and no inert thumbnail button. */
+const framesFor = (previews: string[]) => previews.slice(0, 3).filter(Boolean);
 ---
 
 <div class="play-preview">
   <div class="play-preview__list">
     {items.map((item) => (
-      <a class="play-item" href={`/play/${item.id}`}>
-        {item.data.thumbnail ? (
+      <a class="play-item" href={`/play/${item.id}`} data-play-row>
+        {item.data.media.thumbnail ? (
           <img
             class="play-item__thumb"
-            src={item.data.thumbnail}
+            src={item.data.media.thumbnail}
             alt=""
             loading="lazy"
             decoding="async"
@@ -73,108 +55,274 @@ const framesFor = (previews: string[]) =>
     ))}
   </div>
 
-  {/*
-    Decorative by construction. The pane repeats what the row already says, so
-    announcing it again would read the list twice; the links carry the meaning.
-  */}
-  <div class="play-preview__pane" aria-hidden="true">
-    {items.map((item) => (
-      <div class="play-preview__set">
-        {framesFor(item.data.previews).map((src) => (
-          <div class="play-preview__frame">
-            {src && (VIDEO.test(src) ? (
-              <video src={src} muted loop playsinline preload="none" autoplay></video>
-            ) : (
-              <img src={src} alt="" loading="lazy" decoding="async" />
+  <div class="play-preview__pane">
+    {items.map((item) => {
+      const frames = framesFor(item.data.previews);
+      return (
+        <div class="play-preview__set" data-play-set>
+          {/* The row already names and links the work; main media is visual. */}
+          <div class="play-preview__main" aria-hidden="true">
+            {frames.map((src, frameIndex) => (
+              <div class="play-preview__frame" data-play-frame={frameIndex}>
+                {VIDEO.test(src) ? (
+                  <video src={src} muted loop playsinline preload="none" autoplay></video>
+                ) : (
+                  <img src={src} alt="" loading="lazy" decoding="async" />
+                )}
+              </div>
             ))}
           </div>
-        ))}
-      </div>
-    ))}
+
+          {frames.length > 0 && (
+            <div
+              class="play-preview__filmstrip"
+              role="group"
+              data-preview-count={frames.length}
+              aria-label={`${item.data.title} previews`}
+            >
+              {frames.map((src, frameIndex) => (
+                <button
+                  type="button"
+                  class="play-preview__thumbnail"
+                  data-play-thumbnail={frameIndex}
+                  aria-label={`Show ${item.data.title} preview ${
+                    frameIndex + 1
+                  } of ${frames.length}`}
+                  aria-pressed="false"
+                >
+                  {VIDEO.test(src) ? (
+                    <video src={src} muted playsinline preload="metadata" aria-hidden="true"></video>
+                  ) : (
+                    <img src={src} alt="" loading="lazy" decoding="async" />
+                  )}
+                  <span class="play-preview__loader" aria-hidden="true">
+                    <span class="play-preview__loader-fill"></span>
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    })}
   </div>
 </div>
 
 <script>
-  /*
-    Three small jobs, all progressive enhancement — the list still switches
-    with this script removed, it just cannot hold the last row.
-
-    1. Hold the pointed-at row's set, rather than reverting to the first when
-       the pointer leaves.
-
-    2. Warm the hidden previews once, when the pointer first enters the
-       section. `display: none` means they are not fetched until revealed, so
-       without this the first hover on each row shows an empty frame while the
-       image arrives. Entering the section happens a beat before reaching a
-       row, which is the lead time this needs. Images only: videos carry
-       preload="none" deliberately and start when they are revealed.
-
-    3. Stop the videos for anyone who asked for less motion. A muted looping
-       clip is exactly the "slow looping oscillation" reduced-motion is meant
-       to suppress, and `autoplay` has no media query.
-  */
   const root = document.querySelector<HTMLElement>(".play-preview");
 
   if (root) {
-    /*
-      Selection. Marking the wrapper switches global.css from the CSS-only
-      fallback to the one rule below, so this must happen before the first
-      paint of an active set — do it immediately, not on first interaction, or
-      the two switches would both be live for a moment and show two sets.
-    */
-    const rows = [...root.querySelectorAll<HTMLElement>(".play-item")];
-    const sets = [...root.querySelectorAll<HTMLElement>(".play-preview__set")];
+    const CYCLE_DURATION = 4000;
+    const rows = [...root.querySelectorAll<HTMLElement>("[data-play-row]")];
+    const sets = [...root.querySelectorAll<HTMLElement>("[data-play-set]")];
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const desktop = window.matchMedia("(min-width: 56rem)");
 
-    const activate = (index: number) => {
-      if (index < 0 || index >= sets.length) return;
-      for (const [i, set] of sets.entries()) {
-        set.classList.toggle("play-preview__set--active", i === index);
+    let activeSetIndex = 0;
+    let activeFrameIndex = 0;
+    let pinnedFrameIndex: number | null = null;
+    let pointerInspecting = false;
+    let focusInspecting = false;
+    let sectionVisible = !("IntersectionObserver" in window);
+    let progressAnimation: Animation | null = null;
+
+    const activeSet = () => sets[activeSetIndex];
+    const activeFrames = () => [
+      ...(activeSet()?.querySelectorAll<HTMLElement>("[data-play-frame]") ?? []),
+    ];
+    const activeThumbnails = () => [
+      ...(activeSet()?.querySelectorAll<HTMLButtonElement>("[data-play-thumbnail]") ?? []),
+    ];
+
+    const cancelProgress = () => {
+      progressAnimation?.cancel();
+      progressAnimation = null;
+      for (const fill of root.querySelectorAll<HTMLElement>(".play-preview__loader-fill")) {
+        fill.style.transform = "scaleX(0)";
+      }
+    };
+
+    const autoplayAllowed = () =>
+      desktop.matches &&
+      !reduceMotion.matches &&
+      !document.hidden &&
+      sectionVisible &&
+      !pointerInspecting &&
+      !focusInspecting &&
+      pinnedFrameIndex === null &&
+      activeFrames().length > 1;
+
+    const syncVideos = () => {
+      const mayPlay =
+        desktop.matches &&
+        !reduceMotion.matches &&
+        !document.hidden &&
+        sectionVisible;
+      for (const [setIndex, set] of sets.entries()) {
+        const frames = [...set.querySelectorAll<HTMLElement>("[data-play-frame]")];
+        for (const [frameIndex, frame] of frames.entries()) {
+          const video = frame.querySelector("video");
+          if (!video) continue;
+          if (mayPlay && setIndex === activeSetIndex && frameIndex === activeFrameIndex) {
+            video.autoplay = true;
+            void video.play().catch(() => {});
+          } else {
+            video.autoplay = false;
+            video.pause();
+          }
+        }
+      }
+    };
+
+    const syncFrameState = () => {
+      for (const [frameIndex, frame] of activeFrames().entries()) {
+        frame.classList.toggle("play-preview__frame--active", frameIndex === activeFrameIndex);
+      }
+      for (const [frameIndex, thumbnail] of activeThumbnails().entries()) {
+        const selected = frameIndex === activeFrameIndex;
+        thumbnail.classList.toggle("play-preview__thumbnail--active", selected);
+        thumbnail.setAttribute("aria-pressed", String(selected));
+      }
+      syncVideos();
+    };
+
+    const startProgress = () => {
+      if (!autoplayAllowed()) return;
+      const fill = activeThumbnails()[activeFrameIndex]
+        ?.querySelector<HTMLElement>(".play-preview__loader-fill");
+      if (!fill) return;
+
+      progressAnimation = fill.animate(
+        [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }],
+        { duration: CYCLE_DURATION, easing: "linear", fill: "forwards" },
+      );
+      const animation = progressAnimation;
+      void animation.finished
+        .then(() => {
+          if (progressAnimation !== animation || !autoplayAllowed()) return;
+          progressAnimation = null;
+          activeFrameIndex = (activeFrameIndex + 1) % activeFrames().length;
+          cancelProgress();
+          syncFrameState();
+          startProgress();
+        })
+        .catch(() => {});
+    };
+
+    const syncProgress = () => {
+      if (autoplayAllowed()) {
+        if (progressAnimation?.playState === "paused") progressAnimation.play();
+        else if (!progressAnimation) startProgress();
+      } else if (progressAnimation?.playState === "running") {
+        progressAnimation.pause();
+      }
+    };
+
+    const showFrame = (frameIndex: number) => {
+      if (frameIndex < 0 || frameIndex >= activeFrames().length) return;
+      cancelProgress();
+      activeFrameIndex = frameIndex;
+      syncFrameState();
+      syncProgress();
+    };
+
+    const selectExperiment = (setIndex: number) => {
+      if (setIndex < 0 || setIndex >= sets.length) return;
+      cancelProgress();
+      activeSetIndex = setIndex;
+      activeFrameIndex = 0;
+      pinnedFrameIndex = null;
+      pointerInspecting = false;
+      focusInspecting = false;
+
+      for (const [index, set] of sets.entries()) {
+        set.classList.toggle("play-preview__set--active", index === setIndex);
+      }
+      for (const [index, row] of rows.entries()) {
+        row.classList.toggle("play-item--active", index === setIndex);
+      }
+      syncFrameState();
+      syncProgress();
+    };
+
+    const finishManualInspection = () => {
+      if (pointerInspecting || focusInspecting) return;
+      if (pinnedFrameIndex !== null) showFrame(pinnedFrameIndex);
+      else {
+        cancelProgress();
+        syncProgress();
       }
     };
 
     root.dataset.enhanced = "";
-    activate(0);
+    selectExperiment(0);
 
-    rows.forEach((row, i) => {
-      /* pointerenter, not pointerover: it does not re-fire as the pointer
-         crosses the thumbnail and the text inside the same row. */
-      row.addEventListener("pointerenter", () => activate(i));
-      /* Keyboard gets the same treatment, and for the same reason the CSS
-         fallback lists the focus pseudo-classes: tabbing the list should drive
-         the pane exactly as pointing at it does. */
-      row.addEventListener("focus", () => activate(i));
+    rows.forEach((row, setIndex) => {
+      row.addEventListener("pointerenter", () => selectExperiment(setIndex));
+      row.addEventListener("focus", () => selectExperiment(setIndex));
+    });
+
+    sets.forEach((set, setIndex) => {
+      const thumbnails = [
+        ...set.querySelectorAll<HTMLButtonElement>("[data-play-thumbnail]"),
+      ];
+      thumbnails.forEach((thumbnail, frameIndex) => {
+        const inspect = () => {
+          if (setIndex !== activeSetIndex) return;
+          showFrame(frameIndex);
+        };
+        thumbnail.addEventListener("pointerenter", () => {
+          pointerInspecting = true;
+          inspect();
+        });
+        thumbnail.addEventListener("pointerleave", () => {
+          pointerInspecting = false;
+          finishManualInspection();
+        });
+        thumbnail.addEventListener("focus", () => {
+          focusInspecting = true;
+          inspect();
+        });
+        thumbnail.addEventListener("blur", () => {
+          focusInspecting = false;
+          finishManualInspection();
+        });
+        thumbnail.addEventListener("click", () => {
+          pinnedFrameIndex = frameIndex;
+          showFrame(frameIndex);
+        });
+      });
     });
 
     let warmed = false;
-    root.addEventListener(
-      "pointerenter",
-      () => {
-        if (warmed) return;
-        warmed = true;
-        const sources = [...root.querySelectorAll<HTMLImageElement>(".play-preview__frame img")]
-          .map((img) => img.currentSrc || img.src)
-          .filter(Boolean);
-        /* At idle so it never competes with what is already on screen. */
-        const warm = () => sources.forEach((src) => { new Image().src = src; });
-        "requestIdleCallback" in window
-          ? requestIdleCallback(warm, { timeout: 2000 })
-          : setTimeout(warm, 200);
-      },
-      { once: false },
-    );
+    root.addEventListener("pointerenter", () => {
+      if (warmed) return;
+      warmed = true;
+      const sources = [...root.querySelectorAll<HTMLImageElement>(".play-preview__frame img")]
+        .map((img) => img.currentSrc || img.src)
+        .filter(Boolean);
+      const warm = () => sources.forEach((src) => { new Image().src = src; });
+      "requestIdleCallback" in window
+        ? requestIdleCallback(warm, { timeout: 2000 })
+        : setTimeout(warm, 200);
+    }, { once: true });
 
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const syncMotion = () => {
-      for (const video of root.querySelectorAll("video")) {
-        if (reduceMotion.matches) {
-          video.autoplay = false;
-          video.pause();
-        } else {
-          video.autoplay = true;
-        }
-      }
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(([entry]) => {
+        sectionVisible = entry.isIntersecting;
+        syncVideos();
+        syncProgress();
+      }, { threshold: 0.2 });
+      observer.observe(root);
+    }
+
+    const syncEnvironment = () => {
+      if (reduceMotion.matches || !desktop.matches) cancelProgress();
+      syncVideos();
+      syncProgress();
     };
-    syncMotion();
-    reduceMotion.addEventListener("change", syncMotion);
+    document.addEventListener("visibilitychange", syncEnvironment);
+    reduceMotion.addEventListener("change", syncEnvironment);
+    desktop.addEventListener("change", syncEnvironment);
   }
 </script>

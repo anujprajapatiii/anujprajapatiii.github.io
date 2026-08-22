@@ -1,13 +1,12 @@
 ---
 title: Sound × Shape
 description: An audio-visual sketch mapping a short loop of field recordings to shapes that pulse and drift in time.
+status: published
+publishedAt: 2025-01-01
 role: Experiment
-year: "2025"
 skills:
   - Audio-visual
   - Motion
-sortOrder: 5
-draft: false
 ---
 
 Placeholder content. A made-up experiment — this file exists to fill out the

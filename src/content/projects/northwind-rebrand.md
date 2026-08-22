@@ -1,14 +1,16 @@
 ---
 title: Northwind Rebrand
 description: Placeholder case study — a full brand identity refresh for a fictional logistics company, from wordmark to rollout.
+status: published
+publishedAt: 2025-01-01
+type: brand
+featured: true
+featuredOrder: 2
 role: Brand Designer
-year: "2025"
 skills:
   - Brand identity
   - Art direction
   - Design systems
-sortOrder: 2
-draft: false
 ---
 
 Placeholder content. Northwind is a made-up company — this file exists to fill

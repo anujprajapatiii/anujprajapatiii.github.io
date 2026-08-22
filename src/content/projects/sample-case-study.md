@@ -1,18 +1,21 @@
 ---
 title: Sample Case Study
 description: A placeholder project showing the case-study format. Replace with your first real project.
+status: published
+publishedAt: 2026-01-01
+type: product
+featured: true
+featuredOrder: 1
 role: Product Designer
-year: "2026"
 skills:
   - Product design
   - Prototyping
 palette: blue
 # Both optional. Leave them out and the card and hero show a plain grey
 # placeholder; add them and the real image takes over, no other change needed.
-# thumbnail: /images/work/sample-case-study/cover.png
-# heroImage: /images/work/sample-case-study/hero.png
-sortOrder: 1
-draft: false
+# media:
+#   thumbnail: /images/work/sample-case-study/cover.png
+#   hero: /images/work/sample-case-study/hero.png
 ---
 
 This is a sample case study so the site has something to render. Replace it

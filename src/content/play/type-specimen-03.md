@@ -1,13 +1,14 @@
 ---
 title: Type Specimen No. 3
 description: A self-initiated type specimen exploring how a single grotesk behaves across weights, sizes, and a very dark page.
+status: published
+publishedAt: 2026-01-01
+featured: true
+featuredOrder: 3
 role: Experiment
-year: "2026"
 skills:
   - Typography
   - Art direction
-sortOrder: 2
-draft: false
 ---
 
 Placeholder content. A made-up experiment — this file exists to fill out the

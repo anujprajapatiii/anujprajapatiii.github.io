@@ -6,10 +6,9 @@ import Container from "@/components/primitives/Container.astro";
 import Stack from "@/components/primitives/Stack.astro";
 import Grid from "@/components/primitives/Grid.astro";
 import GridItem from "@/components/primitives/GridItem.astro";
-import { getCollection } from "astro:content";
+import { getPublishedProjects } from "@/lib/content/queries";
 
-const projects = (await getCollection("projects", ({ data }) => !data.draft))
-  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+const projects = await getPublishedProjects();
 ---
 
 <PageLayout title="Work — Anuj Prajapati" description="Selected design work and case studies.">
@@ -29,7 +28,7 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft))
                 id={project.id}
                 title={project.data.title}
                 description={project.data.description}
-                thumbnail={project.data.thumbnail}
+                thumbnail={project.data.media.thumbnail}
               />
             </GridItem>
           ))}

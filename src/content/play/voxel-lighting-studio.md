@@ -1,13 +1,17 @@
 ---
 title: Voxel Lighting Studio
 description: A browser tool for building voxel scenes in a 16×16×16 grid, then watching light change them. Sun angle, colour temperature, shadow softness and sky, all adjustable live.
+status: published
+publishedAt: 2026-01-01
+featured: true
+featuredOrder: 2
 role: Experiment
-year: "2026"
 skills:
   - Creative coding
   - Real-time 3D
   - Lighting
-thumbnail: /images/play/voxel-lighting-studio/golden-hour.jpg
+media:
+  thumbnail: /images/play/voxel-lighting-studio/golden-hour.jpg
 # Shown beside the homepage Play list while this row is pointed at. The first
 # two are the case study's own screenshots, resized to the frame they render
 # in (550w, ~22KB) rather than served at 1600w; the third is a stand-in until
@@ -21,8 +25,6 @@ liveUrl: https://anujprajapatiii.github.io/voxel_lighting/
 # EmbedFrame requirement): it re-renders and re-bakes shadows when the canvas
 # gains real dimensions, so a hidden/zero-size mount no longer stays blank.
 embedUrl: https://anujprajapatiii.github.io/voxel_lighting/
-sortOrder: 1
-draft: false
 ---
 
 The lighting rig is the point. The blocks are only there to catch the light.

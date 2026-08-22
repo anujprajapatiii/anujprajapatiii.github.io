@@ -1351,9 +1351,6 @@
   width: 100%;
   margin-top: var(--spacing-sm);
   object-fit: cover;
-  border-width: 1px;
-  border-style: solid;
-  border-color: var(--border);
 }
 
 /*
@@ -1371,7 +1368,7 @@
 */
 .media-placeholder {
   aspect-ratio: 16 / 10; width: 100%;
-  background: var(--muted); border: 1px solid var(--border);
+  background: var(--muted);
 }
 .project-card .media-placeholder {
   aspect-ratio: 5 / 3;
@@ -1381,10 +1378,8 @@
   Hero shader — the metaball beside the headline, in place of the grey
   placeholder that used to sit there.
 
-  No border and no background, unlike every other media surface here. That is
-  the design: `colorBack` is transparent, so the shape sits directly on the
-  page ground rather than inside a box, and a rule around it would put a frame
-  around empty space.
+  No background, unlike the neutral media placeholders. `colorBack` is
+  transparent, so the shape sits directly on the page ground.
 
   It keeps the placeholder's 16/10 aspect rather than the design file's fixed
   300px height, so the hero column behaves at every width exactly as it does
@@ -1402,16 +1397,9 @@
 
 /*
   ===== Play preview list =====
-  Five rows and a pane that shows the pointed-at row's previews.
-
-  MOBILE FIRST, AND THE PANE IS DESKTOP-ONLY. It is driven by hover, and touch
-  has none — so below the breakpoint it is not hidden so much as absent, and
-  the rows take the full width with a smaller thumbnail. Nothing is lost: each
-  row is a link to the same place the preview was advertising.
-
-  The breakpoint is the sidebar's 56rem, reused rather than invented. At that
-  width a 16 / 8 split leaves the list roughly 564px: enough for the 250px
-  thumbnail, padding, and a useful single-line title/description run.
+  A linked experiment index beside one main preview and a three-frame
+  filmstrip. Mobile remains the complete linked list; the media controls are a
+  desktop enhancement rather than navigation someone must use.
 */
 .play-preview {
   display: grid;
@@ -1428,14 +1416,18 @@
      subtitle pushes the row past the pane and the section scrolls sideways. */
   min-width: 0;
 }
-.play-item { display: flex; width: 100%; border: 1px solid var(--border); }
+.play-item {
+  position: relative;
+  display: flex;
+  width: 100%;
+  border: 1px solid var(--border);
+}
 .play-item__thumb {
   width: 120px;
   align-self: stretch;
   flex-shrink: 0;
   object-fit: cover;
   background: var(--muted);
-  border-inline-end: 1px solid var(--border);
 }
 .play-item__body {
   display: flex;
@@ -1465,24 +1457,113 @@
 .play-preview__pane { display: none; }
 
 @media (min-width: 56rem) {
-  .play-preview__list { grid-column: span 16; }
-  .play-item__thumb { width: 250px; height: 80px; align-self: auto; }
+  .play-preview__list { grid-column: span 14; }
+  .play-item__thumb {
+    width: var(--spacing-3xl);
+    height: var(--spacing-3xl);
+    align-self: auto;
+  }
+
+  /*
+    Selection marker. Its width and colour are the title marker's exact two
+    declarations, not close-looking local values. Absolute positioning
+    reserves no space, so selection never nudges a row's content sideways.
+  */
+  .play-item::before {
+    content: "";
+    position: absolute;
+    inset-block: -1px;
+    inset-inline-start: -1px;
+    width: var(--spacing-2xs);
+    background: transparent;
+    pointer-events: none;
+  }
+
   .play-preview__pane {
     display: flex;
-    flex-direction: column;
-    gap: var(--spacing-2xs);
-    grid-column: span 8;
-    /* Matches the list's height rather than its own content, so the pane is
-       one steady rectangle while the pointer moves down the rows. */
+    grid-column: span 10;
     align-self: stretch;
+    min-height: 0;
     padding: var(--spacing-2xs);
-    background: var(--muted);
     border: 1px solid var(--border);
   }
-  .play-preview__set { display: none; flex-direction: column; gap: var(--spacing-2xs); flex: 1; }
-  .play-preview__frame { flex: 1; overflow: clip; background: var(--background); }
-  .play-preview__frame :is(img, video) {
-    width: 100%; height: 100%; object-fit: cover; display: block;
+
+  .play-preview__set {
+    display: none;
+    flex: 1;
+    min-height: 0;
+    flex-direction: column;
+    gap: var(--spacing-2xs);
+  }
+  .play-preview__main {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow: clip;
+    background: var(--background);
+  }
+  .play-preview__frame {
+    position: absolute;
+    inset: 0;
+    display: none;
+  }
+  .play-preview__frame :is(img, video),
+  .play-preview__thumbnail :is(img, video) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* No-JS: one useful preview, with no inert filmstrip controls. */
+  .play-preview:not([data-enhanced]) .play-preview__frame:first-child {
+    display: block;
+  }
+  .play-preview__filmstrip { display: none; }
+
+  .play-preview[data-enhanced] .play-preview__filmstrip {
+    display: grid;
+    gap: var(--spacing-2xs);
+  }
+  .play-preview__filmstrip[data-preview-count="1"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .play-preview__filmstrip[data-preview-count="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .play-preview__filmstrip[data-preview-count="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .play-preview__thumbnail {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    min-width: 0;
+    overflow: clip;
+    padding: 0;
+    border: 0;
+    background: var(--background);
+    cursor: pointer;
+  }
+  .play-preview__loader {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    display: none;
+    height: 2px;
+    overflow: hidden;
+    background: var(--border);
+    pointer-events: none;
+  }
+  .play-preview__thumbnail--active .play-preview__loader {
+    display: block;
+  }
+  .play-preview__loader-fill {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
+    background: var(--decorative-accent);
   }
 
   /*
@@ -1514,6 +1595,12 @@
     display: flex;
   }
 
+  .play-preview:not([data-enhanced]):not(:has(.play-item:is(:hover, :focus-visible, :focus-within))) .play-item:first-child::before,
+  .play-preview:not([data-enhanced]) .play-item:is(:hover, :focus-visible, :focus-within)::before,
+  .play-preview[data-enhanced] .play-item--active::before {
+    background: var(--decorative-accent);
+  }
+
   /*
     THE SWITCH, WITH IT. The script marks one set and never unmarks it on the
     way out, which is the whole difference: the pane holds the last row you
@@ -1521,6 +1608,7 @@
     selectors, because the script can name the element directly.
   */
   .play-preview[data-enhanced] .play-preview__set--active { display: flex; }
+  .play-preview[data-enhanced] .play-preview__frame--active { display: block; }
 }
 
 /*
@@ -1744,9 +1832,6 @@
 /* .prose a is styled with .btn--link — see the BUTTONS block above. */
 .prose strong {
   @apply font-semibold;
-}
-.prose img {
-  @apply border border-border;
 }
 .prose figure {
   @apply my-lg;

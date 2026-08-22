@@ -1,13 +1,14 @@
 ---
 title: Monsoon Gradient Study
 description: A colour study turning a week of monsoon photos into a palette and a set of layered, rain-soft gradients.
+status: published
+publishedAt: 2026-01-01
+featured: true
+featuredOrder: 4
 role: Experiment
-year: "2026"
 skills:
   - Colour
   - Motion
-sortOrder: 3
-draft: false
 ---
 
 Placeholder content. A made-up experiment — this file exists to fill out the

@@ -10,10 +10,11 @@ import Grid from "@/components/primitives/Grid.astro";
 import GridItem from "@/components/primitives/GridItem.astro";
 import OnThisPage from "@/components/OnThisPage.astro";
 import DataTable from "@/components/DataTable.astro";
-import { getCollection, render } from "astro:content";
+import { getPublishedExperiments } from "@/lib/content/queries";
+import { render } from "astro:content";
 
 export async function getStaticPaths() {
-  const play = await getCollection("play", ({ data }) => !data.draft);
+  const play = await getPublishedExperiments();
   return play.map((item) => ({
     params: { slug: item.id },
     props: { item },
@@ -22,12 +23,13 @@ export async function getStaticPaths() {
 
 const { item } = Astro.props;
 const { Content, headings } = await render(item);
+const publishedYear = item.data.publishedAt.getUTCFullYear();
 ---
 
 <PageLayout
   title={`${item.data.title} — Anuj Prajapati`}
   description={item.data.description}
-  image={item.data.heroImage ?? item.data.thumbnail}
+  image={item.data.media.hero ?? item.data.media.thumbnail}
   palette={item.data.palette}
 >
   <Section as="article" size="page" class="case-study">
@@ -57,14 +59,14 @@ const { Content, headings } = await render(item);
               <thead>
                 <tr>
                   {item.data.role && <th scope="col">Role</th>}
-                  {item.data.year && <th scope="col">Year</th>}
+                  <th scope="col">Year</th>
                   {item.data.skills.length > 0 && <th scope="col">Skills</th>}
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   {item.data.role && <td>{item.data.role}</td>}
-                  {item.data.year && <td>{item.data.year}</td>}
+                  <td>{publishedYear}</td>
                   {item.data.skills.length > 0 && <td>{item.data.skills.join(", ")}</td>}
                 </tr>
               </tbody>
@@ -106,11 +108,11 @@ const { Content, headings } = await render(item);
           picture of nothing to a page that already leads with something.
           Everything else shows the placeholder until a real image lands.
         */}
-        {item.data.heroImage ? (
+        {item.data.media.hero ? (
           <img
-            src={item.data.heroImage}
+            src={item.data.media.hero}
             alt=""
-            class="w-full border border-border"
+            class="w-full"
           />
         ) : (
           !item.data.embedUrl && <div class="media-placeholder"></div>

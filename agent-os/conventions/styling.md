@@ -36,6 +36,12 @@ What that means in practice:
   `brown-300` through `--decorative-accent` for homepage section markers and
   wide-screen navigation dividers; that specialised role stays identical in
   both themes.
+  - A selection strip that belongs to a homepage section reuses the section
+    marker's exact `--spacing-2xs` width and `--decorative-accent` colour. Do
+    not approximate either at the component. Autonomous progress may use the
+    same colour at a thinner, component-local 2px rule when it needs to read as
+    time rather than selection; the Experiments preview loader is the standing
+    example.
 - **Corners are square, everywhere.** No radius on cards, images, buttons,
   embeds or code blocks. The edge is the edge; a border and the space around
   it do the containing, and nothing is softened to look friendlier.

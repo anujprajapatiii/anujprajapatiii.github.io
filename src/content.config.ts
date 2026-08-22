@@ -1,18 +1,57 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 import { pagePalettes } from "@/data/page-palettes";
+import { projectTypes } from "@/lib/content/project-types";
 
-// Shared schema — Work ("projects") and Play use the same case-study shape.
-const caseStudySchema = z.object({
+const baseCaseStudyShape = {
   title: z.string(),
   description: z.string(),
+  status: z.enum(["draft", "published", "archived"]),
+  publishedAt: z.coerce.date(),
+  featured: z.boolean().default(false),
+  featuredOrder: z.number().int().positive().optional(),
   role: z.string().optional(),
-  year: z.string().optional(),
   skills: z.array(z.string()).default([]),
-  thumbnail: z.string().optional(),
-  heroImage: z.string().optional(),
+  media: z
+    .object({
+      thumbnail: z.string().optional(),
+      hero: z.string().optional(),
+    })
+    .default({}),
   // Authored page identity, independent of the visitor's light/dark mode.
   palette: z.enum(pagePalettes).default("default"),
+};
+
+function validateFeaturedOrder(
+  data: { featured: boolean; featuredOrder?: number },
+  context: z.RefinementCtx,
+) {
+  if (data.featured && data.featuredOrder === undefined) {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["featuredOrder"],
+      message: "Featured content needs a featuredOrder value.",
+    });
+  }
+  if (!data.featured && data.featuredOrder !== undefined) {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["featuredOrder"],
+      message: "featuredOrder is only valid when featured is true.",
+    });
+  }
+}
+
+const projectSchema = z
+  .object({
+    ...baseCaseStudyShape,
+    type: z.enum(projectTypes),
+  })
+  .superRefine(validateFeaturedOrder);
+
+const experimentSchema = z
+  .object({
+    ...baseCaseStudyShape,
   // Optional link to a live/deployed version (e.g. an interactive experiment
   // hosted in its own repo). Rendered as a "Try it live" link.
   liveUrl: z.string().url().optional(),
@@ -27,21 +66,19 @@ const caseStudySchema = z.object({
   embedOnPhone: z.boolean().default(false),
   // Up to three stills or clips shown beside the Play list on the homepage
   // while a row is pointed at. The file extension decides which element
-  // renders: .mp4/.webm/.mov become <video>, anything else an <img>. Leave it
-  // empty and the row shows three empty frames — the design's placeholder.
+  // renders: .mp4/.webm/.mov become <video>, anything else an <img>.
   previews: z.array(z.string()).max(3).default([]),
-  sortOrder: z.number().default(0),
-  draft: z.boolean().default(false),
-});
+  })
+  .superRefine(validateFeaturedOrder);
 
 const projects = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/projects" }),
-  schema: caseStudySchema,
+  schema: projectSchema,
 });
 
 const play = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/play" }),
-  schema: caseStudySchema,
+  schema: experimentSchema,
 });
 
 export const collections = { projects, play };

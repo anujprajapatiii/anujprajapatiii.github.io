@@ -11,17 +11,16 @@ import Cluster from "@/components/primitives/Cluster.astro";
 import Grid from "@/components/primitives/Grid.astro";
 import GridItem from "@/components/primitives/GridItem.astro";
 import { siteConfig } from "@/data/site-config";
-import { getCollection } from "astro:content";
+import {
+  getFeaturedExperiments,
+  getFeaturedProjects,
+} from "@/lib/content/queries";
 
-const featured = (await getCollection("projects", ({ data }) => !data.draft))
-  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
-  .slice(0, 4);
+const featured = await getFeaturedProjects(4);
 
 /* Five, to match the preview pane: the switch in global.css has one rule per
    row, so the cap and that block have to agree. */
-const play = (await getCollection("play", ({ data }) => !data.draft))
-  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
-  .slice(0, 5);
+const play = await getFeaturedExperiments(5);
 ---
 
 <PageLayout preloadDisplayFont>
@@ -77,7 +76,7 @@ const play = (await getCollection("play", ({ data }) => !data.draft))
                 id={project.id}
                 title={project.data.title}
                 description={project.data.description}
-                thumbnail={project.data.thumbnail}
+                thumbnail={project.data.media.thumbnail}
               />
             </GridItem>
           ))}
