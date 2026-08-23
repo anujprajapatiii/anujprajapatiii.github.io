@@ -38,6 +38,12 @@ timers and data. It passes controlled values and callbacks down through the
 demo compositions into UI primitives. Astro continues to own the route,
 metadata, prose and static page shell.
 
+The proposed component maturity, field anatomy, control selection,
+customization and control-panel recipe rules are documented in
+`agent-os/conventions/experiment-interfaces.md`. Adopt them through the phased
+plan in `agent-os/plans/experiment-interface-system.md`; do not treat planned
+components as shipped APIs.
+
 ## Layout Hierarchy
 
 - `BaseLayout.astro`: the HTML document — head, SEO, theme bootstrapping
@@ -54,3 +60,4 @@ Add specialized layouts (e.g. a case-study layout) as children of
 - `src/components/`
 - `src/components/ui/`
 - `src/components/demo/`
+- `agent-os/conventions/experiment-interfaces.md`
