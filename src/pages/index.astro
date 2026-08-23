@@ -10,6 +10,7 @@ import Cluster from "@/components/primitives/Cluster.astro";
 import Grid from "@/components/primitives/Grid.astro";
 import GridItem from "@/components/primitives/GridItem.astro";
 import ThemeImage from "@/components/ThemeImage.astro";
+import RainOverlay from "@/components/RainOverlay.astro";
 import { siteConfig } from "@/data/site-config";
 import {
   getFeaturedExperiments,
@@ -23,14 +24,14 @@ const featured = await getFeaturedProjects(4);
 const play = await getFeaturedExperiments(5);
 ---
 
-<PageLayout preloadDisplayFont>
+<PageLayout>
   {/* Hero */}
   <Section size="hero">
     <Container>
       <Grid class="hero-grid">
         <GridItem spanLg={8}>
           <Stack gap="lg">
-            <h1 class="text-display">
+            <h1 class="hero-display">
               Monsoon Projects 2026
             </h1>
             <div class="info-box">
@@ -51,7 +52,9 @@ const play = await getFeaturedExperiments(5);
             darkSrc="/images/hero-placeholder-night.webp"
             alt=""
             class="theme-image--cover"
-          />
+          >
+            <RainOverlay slot="effect" />
+          </ThemeImage>
         </GridItem>
       </Grid>
     </Container>

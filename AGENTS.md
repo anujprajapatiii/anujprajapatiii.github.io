@@ -34,10 +34,12 @@ neutral, minimal, and content-first.
   `pnpm dlx shadcn@latest add <component>`
 - React: only for stateful, client-interactive UI; prefer `.astro` otherwise
 - Content: Astro content collections with Zod schemas in `src/content.config.ts`
-- Fonts: TASA Orbiter (Regular 400, Medium 500, Semibold 600) for everything
-  that is read, plus Violet Sans on the display step alone. Self-hosted from
-  `src/assets/fonts/`. See `agent-os/conventions/styling.md` for the rules
-  that come with each.
+- Fonts: KMR Apparat across the portfolio—Regular 400 for display/title and
+  body/meta, and Medium 500 for headings, labels and emphasis. Light 300
+  remains an approved cut but is not assigned to a shared type role.
+  Self-hosted from the original Kimera WOFF2 files in `src/assets/fonts/` under
+  the purchased Web License. See `agent-os/conventions/styling.md` for the
+  usage and hosting rules.
 - Package manager: pnpm 10+
 - Node: v20+
 - Deployment: GitHub Pages through GitHub Actions on pushes to `main`

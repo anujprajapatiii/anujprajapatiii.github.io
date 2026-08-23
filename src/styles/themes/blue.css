@@ -10,11 +10,11 @@
   --bg-primary: var(--blue-100);
   --bg-secondary: var(--blue-200);
   --bg-tertiary: var(--blue-400);
-  --bg-quaternary: var(--neutral-white);
-  --bg-primary-hover: var(--neutral-white);
+  --bg-quaternary: var(--blue-50);
+  --bg-primary-hover: var(--blue-50);
   --bg-secondary-hover: var(--blue-100);
   --bg-tertiary-hover: var(--blue-500);
-  --bg-quaternary-hover: var(--blue-100);
+  --bg-quaternary-hover: var(--neutral-white);
   --bg-black-solid: var(--blue-700);
   --bg-black-solid-hover: var(--blue-800);
   --bg-disabled: var(--blue-200);
@@ -73,11 +73,11 @@
 .dark[data-palette="blue"] {
   /* Background */
   --bg-primary: var(--blue-900);
-  --bg-secondary: var(--blue-800);
+  --bg-secondary: var(--blue-950);
   --bg-tertiary: var(--blue-200);
   --bg-quaternary: var(--blue-800);
   --bg-primary-hover: var(--blue-800);
-  --bg-secondary-hover: var(--blue-700);
+  --bg-secondary-hover: var(--blue-900);
   --bg-tertiary-hover: var(--blue-100);
   --bg-quaternary-hover: var(--blue-700);
   --bg-black-solid: var(--blue-200);

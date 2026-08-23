@@ -1,6 +1,6 @@
 ---
 title: Lantern Campaign
-description: Placeholder case study — a modular launch campaign for a fictional consumer app, built so a small team could ship it across six channels.
+description: One launch system, built for six channels.
 status: published
 publishedAt: 2024-01-01
 type: campaign

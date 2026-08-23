@@ -13,29 +13,27 @@ What that means in practice:
 - **Restraint over decoration.** No eyebrows, kickers, or ornamental labels.
   If a piece of text is a section heading, make it a heading; don't dress it
   up as a 12px uppercase whisper.
-- **One reading font, three approved weights.** TASA Orbiter Regular 400,
-  Medium 500 and Semibold 600. Hierarchy comes from size, space and colour
-  before it comes from weight; 600 is reserved for emphasis and real labels.
-- **One display font, one step.** Violet Sans on `text-display` and nowhere
-  else. It has a single weight, so it can only sit on a step already set in
-  400; extending it downward means dropping the heading role to 400 first.
-- **Big type is set light.** Display and title at 400 — this is the Klim habit
-  and it is why the hero reads as composed rather than shouted.
+- **One portfolio font, three approved cuts.** KMR Apparat Light 300, Regular
+  400 and Medium 500. Hierarchy comes from size, space and colour before it
+  comes from weight; Medium is reserved for headings, emphasis and real labels.
+- **Big type is set regular.** Display and title use Apparat Regular 400. Their
+  scale and spacing carry the hierarchy without requiring a heavier cut.
 - **14px is the meta step.** It carries metadata, captions and compact
   interface labels at 1.5 leading; body remains 16px for reading.
 - **Tracking is zero, everywhere.** One value for every size, in both
-  directions. TASA Orbiter is drawn to be spaced correctly at each size; the system
+  directions. Apparat is drawn to be spaced correctly at each size; the system
   trusts it rather than second-guessing it per step.
 - **Portfolio reading text stays neutral.** Public content currently uses the
   primary and secondary neutral roles after Apple's label model. The canonical
   system also contains tertiary, disabled, accent and status roles so the
   vocabulary is complete; their existence is not permission to add hue to
   ordinary body copy without a real semantic reason.
-- **Brown is the portfolio accent family.** The complete brown ramp supports
-  canonical accent surfaces, text, icons and borders. The live site still uses
-  `brown-300` through `--decorative-accent` for homepage section markers and
+- **Sage is the portfolio accent family.** The authored Sage stops support the
+  canonical accent surfaces, text, icons and borders. The live site uses
+  `sage-500` through `--decorative-accent` for homepage section markers and
   wide-screen navigation dividers; that specialised role stays identical in
-  both themes.
+  both themes. The complete Brown ramp remains available as a primitive family
+  for future page palettes, but does not drive the default theme.
   - Accent bars use the 4px `--spacing-3xs` width and
     `--decorative-accent` colour, including homepage section markers and
     Experiments selection strips. Do not approximate either at the component.
@@ -43,9 +41,11 @@ What that means in practice:
     rather than mark section state. Autonomous progress may use the same colour
     at a thinner, component-local 2px rule when it needs to read as time rather
     than selection; the Experiments preview loader is the standing example.
-- **Corners are square, everywhere.** No radius on cards, images, buttons,
-  embeds or code blocks. The edge is the edge; a border and the space around
-  it do the containing, and nothing is softened to look friendlier.
+- **Geometry follows function.** Structural cards, images, embeds and code
+  blocks stay crisp and square. Controls and physical simulations may use the
+  small semantic radius vocabulary when curvature clarifies their behaviour:
+  modest control corners, fully round switches/thumbs and a device radius.
+  Rounding is never a decorative skin applied to an entire page.
 - **Space does the grouping.** Rules and separators are a last resort, used
   only where a line genuinely beats space. Tables are the standing exception:
   there the rules *are* the structure, and they are drawn in full.
@@ -75,7 +75,7 @@ What that means in practice:
   the canonical base palette's design-documentation mirror; a base
   colour-system change is complete only when the primitive values, semantic
   mappings and names agree in both places.
-- Colours are a two-tier token system in `src/styles/global.css`: 46 primitives
+- Colours are a two-tier token system in `src/styles/global.css`: 52 primitives
   (raw hex, `:root` only) and 106 canonical semantic roles across background,
   text, icon and border groups. Semantic roles reference primitives via
   `var()`, with light values in `:root` and a complete dark remap in `.dark`.
@@ -83,8 +83,8 @@ What that means in practice:
   established components stable.
 - **Appearance mode and page palette are separate axes.** `.dark` is the
   visitor-controlled light/dark preference. `data-palette` on `<html>` is an
-  authored page identity such as `default` or `blue`; changing one must never
-  overwrite or persist the other.
+  authored page identity such as `default`, `blue` or `sage`; changing one
+  must never overwrite or persist the other.
   - Content pages opt in with validated `palette` frontmatter. Ordinary Astro
     pages pass the same value to `PageLayout`; components never inspect the
     palette name.
@@ -92,10 +92,10 @@ What that means in practice:
     with both its light selector and its combined dark selector. It remaps
     semantic roles to existing primitives; it never adds literal colours or
     component selectors.
-  - Page palettes remap structural background, text, icon, border,
-    interaction and decorative roles. Error, success, warning and info retain
-    their canonical families so state meaning is not erased for the sake of a
-    monochrome treatment.
+  - Page palettes may remap the full structural stack, as Blue does, or retain
+    the neutral stack and remap one authored accent family, as Sage does.
+    Error, success, warning and info retain their canonical families so state
+    meaning is not erased for the sake of content identity.
   - `--text-reading` is the long-form body-copy role. It aliases primary text
     by default, while a page palette can make reading text quieter than titles
     without weakening headings, navigation states, or controls. Prose headings
@@ -104,13 +104,25 @@ What that means in practice:
   - Valid names live in `src/data/page-palettes.ts`. Adding a palette means
     registering the name, adding its mapping file, importing it in
     `global.css`, and documenting it on `/style-guide`.
-  - The blue primitive family runs from 100–900. Its 700–900 stops exist to
-    give blue-authored dark pages real canvas and surface depth; the default
-    portfolio palette does not consume those stops.
+  - The blue primitive family runs from 50–950. Its 700–950 stops give
+    blue-authored dark pages real canvas, inset and surface depth; its 50 stop
+    gives light pages a raised surface without falling back to grey.
   - Blue dark mode is deliberately low-glare and fully monochrome: 200 carries
     titles and primary controls, 300 carries reading and secondary text, and
-    700–800 carry rules and quiet surfaces against the 900 canvas. Do not use
-    neutral white inside this palette.
+    700–950 carry rules and quiet surfaces against the 900 canvas. Neutral
+    white is reserved for the light palette's raised-hover endpoint; resting
+    surfaces remain blue.
+  - Sage begins with three deliberately deep authored stops: 900, 700 and 500.
+    The 500 stop carries visible accents and boundaries; 700 and 900 add depth
+    to interactive states. Filled Sage controls use neutral text until lighter
+    Sage tints are authored, so contrast is not invented from missing stops.
+  - **Every palette uses the same four-level surface ladder.** Canvas is
+    `--bg-primary`, inset/recessed content is `--bg-secondary`, raised content
+    is `--bg-quaternary`, and raised hover is `--bg-quaternary-hover`.
+    `--bg-primary-hover` deliberately equals raised rest, while
+    `--bg-secondary-hover` deliberately returns to canvas. A parent and nested
+    child must never resolve to the same primitive in either state. New page
+    palettes preserve this topology even when their colour ramps differ.
   - Shiki is the one cascade exception: it injects GitHub-dark colours inline
     on rendered code blocks. The scoped blue-dark override in `global.css`
     uses semantic surface/reading roles with `!important` and makes token spans
@@ -120,33 +132,27 @@ What that means in practice:
   raw hex values, named colors, or palette classes like `bg-zinc-100`.
 - Dark mode is class-based with `.dark` on `<html>`; both modes must be
   checked for any visual change.
-- **One reading font: TASA Orbiter** (SIL OFL), self-hosted as a variable
-  WOFF2 from `src/assets/fonts/`. The font axis covers 400–800; this design
-  intentionally uses **Regular 400, Medium 500 and Semibold 600** only.
-  - Regular carries body/meta/title, Medium carries heading and the wordmark, and
-    Semibold is reserved for strong emphasis and genuine labels.
+- **One portfolio font: KMR Apparat**, self-hosted from `src/assets/fonts/`
+  under the purchased Kimera Web License. The site uses the three original,
+  unchanged WOFF2 files supplied by Kimera and maps their authored cuts to
+  **Light 300, Regular 400 and Medium 500**.
+  - Regular carries display/title and body/meta. Medium carries heading,
+    wordmark, strong emphasis and genuine labels. Light remains available but
+    is not assigned to a shared type role.
   - The convention checker rejects weights outside that approved hierarchy,
     even when the font file could technically render them, and rejects weight
     utilities at component call sites.
-  - The variable face is preloaded in `BaseLayout.astro`; that URL and the
-    `src()` paths in `global.css` must resolve to the same hashed asset or
-    the preload silently double-downloads. Check `dist/` after changing either.
-  - `TASA Orbiter Fallback` is Arial calibrated from the real x-height,
-    ascent, descent and line gap in the local font files. Do not copy metric
-    overrides from another typeface.
-- **One display font: Violet Sans** (SIL OFL, licence copy sits beside the
-  file), self-hosted from the same folder. It has
-  **one weight and one style — that is the whole family, not a licence limit.**
-  - It is bound to `.text-display` in `global.css` rather than to a token,
-    because Tailwind's `--text-*` steps carry size, leading and weight but
-    not family.
-  - `font-synthesis-weight: none` is set on that rule. A fake bold here would
-    be a smeared regular with no upside — and
-    note this switches off weight only, so `<em>` is unaffected.
-  - Violet is conditionally preloaded through `preloadDisplayFont` only on
-    routes that render display type; CSS loads it normally everywhere else.
-    Its Arial fallback is calibrated separately from TASA's.
-  - Do not extend it to heading without first dropping that role to 400.
+  - All three cuts are preloaded in `BaseLayout.astro`; those URLs and the
+    `src()` paths in `global.css` must resolve to the same three hashed assets
+    or a preload silently double-downloads. Check `dist/` after changing either.
+  - `KMR Apparat Fallback` is Arial calibrated from Apparat's real x-height,
+    ascent, descent and line gap. All three cuts share those metrics. Do not
+    copy metric overrides from another typeface.
+  - `font-synthesis-weight: none` is inherited from `html`; if a role asks for
+    a weight outside 300/400/500, the browser must not fabricate it.
+  - The Web License permits only `@font-face` use on the licensed domain with
+    the fonts stored on the same server. Do not modify, convert, subset,
+    rename, or move the font files to a third-party host.
   `--font-mono` is a system fallback stack reserved for code only (inline
   `code` + code blocks) — never for labels, wordmarks, or metadata.
 - **Spacing** uses the named scale (`p-md`, `gap-sm`, `py-xl`, …) or the
@@ -181,8 +187,8 @@ What that means in practice:
     to zero. After any conversion, measure the computed values — don't just
     check that the build passed.
 - **Hierarchy rule: size at large scale, weight at small scale.** Display
-  and title stay at 400 and let size do the work; heading sits close enough to
-  body that size alone cannot separate it, so it carries TASA Medium 500.
+  and title use Regular 400 and let size do the work; heading sits close enough
+  to body that size alone cannot separate it, so it carries Apparat Medium 500.
   Weight lives inside the token — no component writes `font-*`.
 - **No decorative eyebrows or uppercase kickers.** Section headings are real
   headings. `.label` is reserved for genuine metadata (table headers, the
@@ -194,19 +200,27 @@ What that means in practice:
   line-height and weight, so **never write `tracking-*`, `leading-*` or
   `font-*` at a call site**: if a step needs to change, change the token in
   global.css and every use follows.
-- **Five sizes, by decision: 64 → 44 → 20 → 16 → 14.** Display is fluid
-  from 40–64px; title is fluid from 32–44px; heading is a fixed 20px. The old
+- **Five sizes, by decision: 64 → 36 → 20 → 16 → 14.** Display is fluid
+  from 40–64px; title is a fixed 36px; heading is a fixed 20px. The old
   h2 and h3 steps share `text-heading` in prose and cards: semantic document
   structure and space distinguish their level instead of a second size.
-  Homepage section h2s use `text-title` (44px desktop) to carry the same major
-  rhythm as page titles. Homepage experiment-row titles use `text-heading`.
-  Project-card titles and descriptions both use `text-body`; primary versus
-  secondary colour creates their hierarchy without adding a local type size
-  or weight. Body is 16px / 1.5; meta is 14px / 1.5.
-  - A project card is a quiet, borderless surface, not one large anchor. Copy
-    comes first, inset media comes last, and a dedicated `View case study` or
-    `View experiment` CTA is its only link and hover target. Never lift the
-    card surface, title, description, or media when that link changes state.
+  Homepage section h2s use `text-title` (36px) to carry the same major
+  rhythm as page titles. The homepage hero alone uses the named `hero-display`
+  treatment: it keeps the display token's size and leading, then applies
+  Medium 500 and uppercase. All project, work, and experiment card titles use
+  `text-body` (16px), medium weight (500), uppercase, and the primary text
+  colour. Apply uppercase as a presentation rule so content titles retain
+  their natural casing everywhere else. Card descriptions use `text-body` in
+  the secondary colour, creating hierarchy without a local type size. Body is
+  16px / 1.5; meta is 14px / 1.5.
+  - Project cards and homepage experiment rows are quiet, borderless linked
+    surfaces. Copy comes first and project-card media comes last. Hover, focus,
+    and press move only the elevated background role and reveal a reserved-
+    space `→` beside the title; primary/secondary text colours remain stable.
+    The experiment row's thin accent/progress strip is selection state, not a
+    border, and remains independent of the shared interaction treatment.
+    The desktop experiment preview pane shares the card's borderless raised
+    surface and interior padding; its main frame and filmstrip are inset media.
   - `.type-reading` layers secondary reading colour and
     `--leading-reading` (1.4) on the 16px body role. Rendered prose shares the
     same declarations. This is a treatment, not a sixth size, and it never
@@ -222,15 +236,44 @@ What that means in practice:
   Do not reintroduce per-size tracking "to tighten the hero" — uniformity is
   the point, and this is the variation the system exists to prevent.
 - **Uppercase micro-text uses `.label`**, not a pile of utilities. It is a
-  treatment, not a size: uppercase and 600 weight carry it, it draws its size
+  treatment, not a size: uppercase and Medium 500 carry it, it draws its size
   from `--text-meta` like everything else, and tracking stays at 0.
-- **Corners are square on every element, by decision.** There is no
-  `--radius` token and no `--radius-*` scale; never write `rounded-*` or
-  `border-radius`. The tokens are *absent* rather than set to 0 on purpose:
-  Tailwind keeps its own built-in radius scale for any key `global.css` does
-  not override, so a `rounded-lg` that survived a cleanup renders at
-  Tailwind's value — a curve no file in this repo declares. `pnpm check`
-  fails on both the utility and the raw property.
+- **Demo interfaces use the shared primitive contract.** Low-level behaviour
+  and states live in `src/components/ui/`; guided stage/panel composition lives
+  in `src/components/demo/`; experiment-specific CSS owns only the artifact and
+  domain visuals. New demos compose those layers instead of hand-rolling tabs,
+  switches, tooltips or action buttons.
+  - Compact desktop controls use `--control-height-compact` (32px), and
+    coarse-pointer layouts grow them to `--control-height-touch` (48px).
+    Icons use `--control-icon-size` (16px).
+  - Guided panels use one 20px Medium heading. Steps, explanations, settings
+    and actions all use the 14px meta role; colour and Regular/Medium weight
+    carry hierarchy instead of extra sizes or fonts.
+  - The default panel contains one ordered task, its current explanation, at
+    most a small number of secondary settings, and wayfinding. Raw state,
+    event logs, code and playback controls require an explicit disclosure and
+    a demonstrated visitor need. Canvas status badges are opt-in, not default.
+  - Binary controls must remain unmistakable when off: the track keeps a
+    semantic boundary and the thumb contrasts with it. On adds the semantic
+    accent; colour is never the only state signal.
+  - Rest, hover, press, selected, focus and disabled states use semantic
+    surface/text roles. Guided-step selection gets a quiet neutral surface,
+    primary text and `aria-current`; it does not add an accent rule.
+  - Demo motion uses `--motion-feedback` for immediate response and
+    `--motion-settle` for restrained state settling. Reduced motion removes
+    travel; reduced transparency returns materials to solid semantic surfaces.
+  - Page palettes and dark mode work by remapping semantic roles. Shared
+    controls contain no palette names, raw colours or component-level dark
+    exceptions.
+- **Corners are square by default, with three semantic exceptions.** Never
+  use a radius utility or a raw radius value at a call site. Functional
+  curvature must use `--radius-control`, `--radius-round` or
+  `--radius-device`: modest input/control corners, true capsule/circle
+  geometry, and simulated hardware respectively. Annotation outlines mirror
+  the target's computed radius and fall back to `--radius-control`. The
+  convention checker permits only those tokens and rejects arbitrary
+  `border-radius` values, so a purposeful exception cannot quietly become a
+  site-wide rounded-card style.
 - **There is one table treatment, and it is a real table.** Full grid: every
   cell ruled, outer border included, header cells in the `.label` style,
   padding from the spacing scale, tabular figures. Never build a table out of
@@ -406,6 +449,14 @@ What that means in practice:
   invents an undeclared colour outside the token system and quietly costs
   contrast — prose body was rendering at 10.66:1 instead of 14.35:1. If a
   softer colour is wanted, that is `--text-secondary`.
+- **Ambient effects belong to media, not the page.** Clip them to the image
+  that gives them meaning, keep them non-interactive and absent from the
+  accessibility tree, and derive their colour from an existing semantic role.
+  Motion must stop when the media is offscreen or the document is hidden;
+  reduced-motion gets one deliberate still frame rather than an empty hole.
+  Cap resolution and frame rate, and let the underlying image remain the
+  complete fallback if the rendering API is unavailable. The homepage rain
+  overlay is the reference implementation.
 - **`pnpm check` enforces the mechanical rules** (`scripts/check-conventions.mjs`,
   run in CI before the build). It covers raw spacing steps, raw type sizes,
   call-site tracking/leading/weight, unapproved font weights, non-zero

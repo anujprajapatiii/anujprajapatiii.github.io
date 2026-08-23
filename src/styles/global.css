@@ -41,73 +41,58 @@
 */
 @import "shadcn/tailwind.css";
 @import "./themes/blue.css";
+@import "./themes/sage.css";
+@import "./demo-controls.css";
 
 /*
-  TASA Orbiter — Local Remote, SIL Open Font License. One variable face covers
-  the site's approved reading weights: Regular 400, Medium 500 and Semibold
-  600. The licence copy sits beside the font file.
+  KMR Apparat — Kimera. The purchased Web License permits the original font
+  software to be embedded through @font-face on the licensed site and served
+  from the same domain. These are Kimera's original WOFF2 files, unchanged and
+  with their supplied filenames retained. Do not convert, modify, subset,
+  rename, or move them to a third-party font host.
 
-  The file is preloaded in BaseLayout; that URL must stay in sync with the
-  src() path here or the preload silently double-downloads.
+  The source files expose unconventional internal weight classes, so the
+  authored cuts are grouped into one CSS family with deliberate role weights:
+  Light 300, Regular 400, Medium 500. The files themselves are not rewritten.
 */
 @font-face {
-  font-family: 'TASA Orbiter';
-  src: url('../assets/fonts/tasa-orbiter-variable.woff2') format('woff2');
-  font-weight: 400 800;
+  font-family: 'KMR Apparat';
+  src: url('../assets/fonts/kmr-apparat-light.woff2') format('woff2');
+  font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 
-/*
-  Arial is calibrated to TASA's real x-height and vertical metrics so the
-  first paint keeps nearly the same line boxes while the webfont arrives.
-  These values are derived from the local font files, not copied from another
-  type system: TASA x-height 500/1000; Arial x-height 1062/2048.
-*/
 @font-face {
-  font-family: 'TASA Orbiter Fallback';
-  src: local('Arial');
-  size-adjust: 96.4218%;
-  ascent-override: 97.4883%;
-  descent-override: 26.9648%;
-  line-gap-override: 0%;
-  font-weight: 400 800;
-  font-style: normal;
-}
-
-/*
-  Violet Sans — Calvin Waterman, SIL Open Font License (licence copy sits
-  beside the file). A geometric display face with flattened curves and wide
-  counters; it carries the homepage hero and nothing else.
-
-  ONE WEIGHT, ONE STYLE — that is the whole family, not a licence limit. So it
-  is bound to the one step of the scale already set in 400, and `font-synthesis:
-  weight` is switched off on it: asked for a bold it does not have, the browser
-  would smear the regular and the hero would stop looking like this typeface.
-  Do not extend it to h2/h3 without first dropping those steps to 400.
-
-  Preloaded like TASA Orbiter, and for a stronger reason — the hero is the
-  largest text on the homepage and almost certainly its LCP element, so a swap
-  would reflow the biggest thing on the page. Keep the URL in BaseLayout in
-  sync with the src() below or the preload silently double-downloads.
-*/
-@font-face {
-  font-family: 'Violet Sans';
-  src: url('../assets/fonts/violet-sans-regular.woff2') format('woff2');
+  font-family: 'KMR Apparat';
+  src: url('../assets/fonts/kmr-apparat-regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
-/* Violet Sans x-height 480/1000, calibrated against the same Arial fallback. */
 @font-face {
-  font-family: 'Violet Sans Fallback';
+  font-family: 'KMR Apparat';
+  src: url('../assets/fonts/kmr-apparat-medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/*
+  All three Apparat cuts share the same 515/1000 x-height and
+  949/-249/100 vertical metrics. This Arial fallback is calibrated from those
+  local files so the first paint keeps nearly identical line boxes while the
+  webfonts arrive; Arial's x-height is 1062/2048.
+*/
+@font-face {
+  font-family: 'KMR Apparat Fallback';
   src: local('Arial');
-  size-adjust: 92.5650%;
-  ascent-override: 87.5061%;
-  descent-override: 20.5261%;
-  line-gap-override: 0%;
-  font-weight: 400;
+  size-adjust: 99.3145%;
+  ascent-override: 95.5550%;
+  descent-override: 25.0719%;
+  line-gap-override: 10.0690%;
+  font-weight: 300 500;
   font-style: normal;
 }
 
@@ -141,6 +126,7 @@
     --neutral-350: #6d7580;
     --neutral-300: #99a1ac;
     --neutral-200: #d3d7dd;
+    --neutral-150: #eef0f2;
     --neutral-100: #f6f7f8;
     --neutral-white: #ffffff;
 
@@ -160,6 +146,7 @@
     --amber-100: #f5c2a3;
 
     /* Blue */
+    --blue-950: #000318;
     --blue-900: #00062a;
     --blue-800: #001147;
     --blue-700: #001d64;
@@ -169,12 +156,18 @@
     --blue-300: #99b6ff;
     --blue-200: #dae5ff;
     --blue-100: #f0f3ff;
+    --blue-50: #f8f9ff;
 
     /* Green */
     --green-400: #1a4723;
     --green-300: #37954a;
     --green-200: #53c069;
     --green-100: #b4e4be;
+
+    /* Sage — the first authored stops; lighter tints can extend below 500. */
+    --sage-900: #081813;
+    --sage-700: #1b3631;
+    --sage-500: #32544e;
 
     /* Red */
     --red-400: #67090a;
@@ -192,22 +185,22 @@
 
     /* ---- 2. CANONICAL SEMANTICS — LIGHT ---- */
     /* Background */
-    --bg-primary: var(--neutral-100);
+    --bg-primary: var(--neutral-150);
     --bg-secondary: var(--neutral-200);
     --bg-tertiary: var(--yellow-500);
-    --bg-quaternary: var(--neutral-white);
-    --bg-primary-hover: var(--neutral-white);
-    --bg-secondary-hover: var(--neutral-100);
+    --bg-quaternary: var(--neutral-100);
+    --bg-primary-hover: var(--neutral-100);
+    --bg-secondary-hover: var(--neutral-150);
     --bg-tertiary-hover: var(--yellow-600);
     --bg-quaternary-hover: var(--neutral-white);
     --bg-black-solid: var(--neutral-800);
     --bg-black-solid-hover: var(--neutral-black);
     --bg-disabled: var(--neutral-200);
     --bg-disabled-alt: var(--neutral-100);
-    --bg-accent-primary: var(--brown-50);
-    --bg-accent-primary-hover: var(--brown-100);
-    --bg-accent-solid: var(--brown-400);
-    --bg-accent-solid-hover: var(--brown-500);
+    --bg-accent-primary: var(--sage-500);
+    --bg-accent-primary-hover: var(--sage-700);
+    --bg-accent-solid: var(--sage-500);
+    --bg-accent-solid-hover: var(--sage-700);
     --bg-error-primary: var(--red-100);
     --bg-error-primary-hover: var(--red-200);
     --bg-error-secondary: var(--red-300);
@@ -235,10 +228,10 @@
     --text-disabled: var(--neutral-300);
     --text-disabled-alt: var(--neutral-200);
     --text-placeholder: var(--neutral-350);
-    --text-accent-primary: var(--brown-400);
-    --text-accent-secondary: var(--brown-300);
-    --text-accent-primary-hover: var(--brown-500);
-    --text-accent-secondary-hover: var(--brown-400);
+    --text-accent-primary: var(--neutral-white);
+    --text-accent-secondary: var(--sage-500);
+    --text-accent-primary-hover: var(--neutral-white);
+    --text-accent-secondary-hover: var(--sage-700);
     --text-error-primary: var(--red-400);
     --text-error-secondary: var(--red-300);
     --text-error-primary-hover: var(--red-400);
@@ -266,10 +259,10 @@
     --icon-disabled: var(--neutral-300);
     --icon-disabled-alt: var(--neutral-200);
     --icon-placeholder: var(--neutral-350);
-    --icon-accent-primary: var(--brown-400);
-    --icon-accent-secondary: var(--brown-300);
-    --icon-accent-primary-hover: var(--brown-500);
-    --icon-accent-secondary-hover: var(--brown-400);
+    --icon-accent-primary: var(--sage-500);
+    --icon-accent-secondary: var(--sage-700);
+    --icon-accent-primary-hover: var(--sage-700);
+    --icon-accent-secondary-hover: var(--sage-900);
     --icon-error-primary: var(--red-400);
     --icon-error-secondary: var(--red-300);
     --icon-error-primary-hover: var(--red-400);
@@ -289,13 +282,13 @@
 
     /* Border */
     --border-primary: var(--neutral-300);
-    --border-secondary: var(--brown-200);
+    --border-secondary: var(--sage-500);
     --border-tertiary: var(--neutral-200);
     --border-primary-solid: var(--neutral-800);
     --border-disabled: var(--neutral-200);
     --border-disabled-alt: var(--neutral-100);
-    --border-accent-primary: var(--brown-300);
-    --border-accent-secondary: var(--brown-100);
+    --border-accent-primary: var(--sage-500);
+    --border-accent-secondary: var(--sage-700);
     --border-error-primary: var(--red-300);
     --border-error-secondary: var(--red-100);
     --border-success-primary: var(--green-300);
@@ -317,7 +310,7 @@
     --text-reading: var(--text-secondary);
     --text-alternate: var(--neutral-100);
     --border-hover: var(--neutral-350);
-    --decorative-accent: var(--brown-300);
+    --decorative-accent: var(--sage-500);
 
     /* Tailwind/shadcn aliases currently consumed by components. */
     --background: var(--background-primary);
@@ -335,21 +328,21 @@
     /* Complete canonical dark-mode remap. Primitives and aliases stay put. */
     /* Background */
     --bg-primary: var(--neutral-800);
-    --bg-secondary: var(--neutral-600);
+    --bg-secondary: var(--neutral-900);
     --bg-tertiary: var(--yellow-500);
     --bg-quaternary: var(--neutral-700);
     --bg-primary-hover: var(--neutral-700);
-    --bg-secondary-hover: var(--neutral-500);
+    --bg-secondary-hover: var(--neutral-800);
     --bg-tertiary-hover: var(--yellow-400);
     --bg-quaternary-hover: var(--neutral-600);
     --bg-black-solid: var(--neutral-100);
     --bg-black-solid-hover: var(--neutral-white);
     --bg-disabled: var(--neutral-600);
     --bg-disabled-alt: var(--neutral-700);
-    --bg-accent-primary: var(--brown-600);
-    --bg-accent-primary-hover: var(--brown-500);
-    --bg-accent-solid: var(--brown-200);
-    --bg-accent-solid-hover: var(--brown-100);
+    --bg-accent-primary: var(--sage-700);
+    --bg-accent-primary-hover: var(--sage-500);
+    --bg-accent-solid: var(--sage-700);
+    --bg-accent-solid-hover: var(--sage-500);
     --bg-error-primary: var(--red-100);
     --bg-error-primary-hover: var(--red-200);
     --bg-error-secondary: var(--red-300);
@@ -377,10 +370,10 @@
     --text-disabled: var(--neutral-500);
     --text-disabled-alt: var(--neutral-400);
     --text-placeholder: var(--neutral-350);
-    --text-accent-primary: var(--brown-100);
-    --text-accent-secondary: var(--brown-200);
-    --text-accent-primary-hover: var(--brown-50);
-    --text-accent-secondary-hover: var(--brown-100);
+    --text-accent-primary: var(--neutral-150);
+    --text-accent-secondary: var(--sage-500);
+    --text-accent-primary-hover: var(--neutral-white);
+    --text-accent-secondary-hover: var(--sage-500);
     --text-error-primary: var(--red-100);
     --text-error-secondary: var(--red-200);
     --text-error-primary-hover: var(--red-100);
@@ -408,10 +401,10 @@
     --icon-disabled: var(--neutral-500);
     --icon-disabled-alt: var(--neutral-400);
     --icon-placeholder: var(--neutral-350);
-    --icon-accent-primary: var(--brown-100);
-    --icon-accent-secondary: var(--brown-200);
-    --icon-accent-primary-hover: var(--brown-50);
-    --icon-accent-secondary-hover: var(--brown-100);
+    --icon-accent-primary: var(--sage-500);
+    --icon-accent-secondary: var(--sage-700);
+    --icon-accent-primary-hover: var(--sage-500);
+    --icon-accent-secondary-hover: var(--sage-500);
     --icon-error-primary: var(--red-100);
     --icon-error-secondary: var(--red-200);
     --icon-error-primary-hover: var(--red-100);
@@ -431,13 +424,13 @@
 
     /* Border */
     --border-primary: var(--neutral-500);
-    --border-secondary: var(--brown-400);
+    --border-secondary: var(--sage-700);
     --border-tertiary: var(--neutral-600);
     --border-primary-solid: var(--neutral-100);
     --border-disabled: var(--neutral-600);
     --border-disabled-alt: var(--neutral-700);
-    --border-accent-primary: var(--brown-200);
-    --border-accent-secondary: var(--brown-400);
+    --border-accent-primary: var(--sage-500);
+    --border-accent-secondary: var(--sage-700);
     --border-error-primary: var(--red-200);
     --border-error-secondary: var(--red-400);
     --border-success-primary: var(--green-200);
@@ -450,16 +443,14 @@
     /* Portfolio-specific semantic remaps. */
     --text-alternate: var(--neutral-800);
     --border-hover: var(--neutral-400);
-    --decorative-accent: var(--brown-300);
+    --decorative-accent: var(--sage-500);
 }
 
 @theme inline {
-    /* One brand font for everything that is read, plus one display face for
-       the single largest thing on the site. --font-mono is a system fallback
-       stack reserved for code only (inline code + code blocks), never for
-       design/labels. */
-    --font-sans: 'TASA Orbiter', 'TASA Orbiter Fallback', ui-sans-serif, system-ui, sans-serif;
-    --font-display: 'Violet Sans', 'Violet Sans Fallback', 'TASA Orbiter', 'TASA Orbiter Fallback', ui-sans-serif, system-ui, sans-serif;
+    /* One Apparat family for every portfolio role. --font-mono is a system
+       fallback stack reserved for code only (inline code + code blocks),
+       never for design or labels. */
+    --font-sans: 'KMR Apparat', 'KMR Apparat Fallback', ui-sans-serif, system-ui, sans-serif;
     --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
     /* Component aliases already in use. */
     --color-ring: var(--ring);
@@ -598,20 +589,10 @@
     --color-decorative-accent: var(--decorative-accent);
 
     /*
-      CORNERS ARE SQUARE EVERYWHERE, BY DECISION. There is no --radius token
-      and no --radius-* scale: every corner on the site is a right angle.
-
-      The five --radius-* keys are deliberately left undefined rather than set
-      to 0. Tailwind keeps its own built-in radius scale for any key this file
-      does not override, so a rounded-<size> utility that survived a cleanup
-      renders at Tailwind's value, not at nothing — verified in dist/: the
-      built CSS emits --radius-lg:.5rem the moment such a class appears. The
-      utilities are therefore the only way a curve can come back, and
-      `pnpm check` fails on them (see scripts/check-conventions.mjs).
-
-      Write the utility names discursively in comments, as above: Tailwind
-      scans this file for class candidates, so spelling one out verbatim
-      generates the very rule the decision removes.
+      Geometry follows function. Structural portfolio surfaces stay crisp by
+      default, while controls and physical simulations may opt into the small
+      semantic radius vocabulary below. Components use those roles directly;
+      arbitrary Tailwind radius utilities remain disallowed.
     */
 }
 
@@ -643,6 +624,33 @@
        CTA and inset media so every internal edge stays aligned. */
     --spacing-card: 1rem;
     --spacing-grid: 0.625rem;
+
+    /* ---- INTERACTIVE GEOMETRY ----
+       Compact on precise pointers, generous on touch. These are component
+       roles rather than new general spacing steps. */
+    --control-height-compact: var(--spacing-lg);
+    --control-height-touch: var(--spacing-xl);
+    --control-icon-size: var(--spacing-sm);
+    --control-inset: 0.125rem;
+    --control-indicator-size: 0.0625rem;
+    --control-switch-width: 2.25rem;
+    --control-switch-height: 1.25rem;
+    --control-switch-thumb: var(--spacing-sm);
+
+    /* Purposeful radii: modest controls, genuinely round geometry, and
+       physical device silhouettes. A panel or card gets none by default. */
+    --radius-control: 0.375rem;
+    --radius-round: 999px;
+    --radius-device: var(--spacing-lg);
+
+    /* Demo motion is separate from the site's instant lift system. Pointer
+       down remains immediate; these values govern release, selection settling
+       and contextual material arrival. */
+    --motion-none: 0ms;
+    --motion-feedback: 140ms;
+    --motion-settle: 340ms;
+    --ease-feedback: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
 
     /* ---- CONTAINERS ----
        ONE 1300px content box. Header, footer and every page share it, so the
@@ -677,18 +685,17 @@
        produces finished type. Nothing in the codebase should ever set
        font-*, tracking-* or leading-* by hand — if a step needs to change,
        fix it here and every use updates. Family is the one exception: it is
-       not part of a --text-* step in Tailwind, so the display step picks up
-       --font-display in a rule of its own further down.
+       Apparat supplies every role, so family is inherited once from html.
 
        TRACKING IS ZERO EVERYWHERE, BY DECISION. No step sets
        letter-spacing, in either direction, and no call site may either.
-       TASA Orbiter is drawn to be spaced correctly at every size, so the scale
+       KMR Apparat is drawn to be spaced correctly at every size, so the scale
        trusts the typeface instead of second-guessing it. Do not reintroduce
        per-size tracking "to tighten the hero" — that is the variation this
        system exists to prevent.
 
        Five unique sizes, named by intent rather than HTML tags:
-       64 → 44 → 20 → 16 → 14. Prose h2s and card/prose h3s share one heading
+       64 → 36 → 20 → 16 → 14. Prose h2s and card/prose h3s share one heading
        role; semantic structure and spacing distinguish their level. Homepage
        section h2s deliberately use title to carry the landing-page rhythm.
        Meta is the dedicated metadata and interface step restored from Paper;
@@ -707,15 +714,14 @@
        draws its size from --text-meta like everything else. Do not
        reintroduce a step to make one call site fit.
 
-       Weight is part of the token too. TASA Orbiter supplies the 400/500/600
-       hierarchy used below while Violet Sans has only 400. Display and title
-       stay at 400 and let their size do the work; heading uses Medium 500 for
-       quiet separation, and Semibold 600 remains available for emphasis and
-       genuine labels. */
+       Weight is part of the token too. Apparat supplies an authored
+       Light/Regular/Medium hierarchy, mapped to 300/400/500. Display and title
+       use Regular 400; heading uses Medium 500 for quiet separation. Medium
+       also carries emphasis and genuine labels. */
     --text-display: clamp(2.5rem, 7vw, 4rem);
     --text-display--line-height: 1.02;
     --text-display--font-weight: 400;
-    --text-title: clamp(2rem, 5vw, 2.75rem);
+    --text-title: 2.25rem;
     --text-title--line-height: 1.08;
     --text-title--font-weight: 400;
     --text-heading: 1.25rem;
@@ -730,20 +736,6 @@
     --text-meta--font-weight: 400;
 }
 
-/*
-  The display step is the one place a second typeface appears. Tailwind's
-  --text-* namespace carries size, leading and weight but not family, so the
-  binding is written here rather than in the scale above.
-
-  font-synthesis-weight is off because Violet Sans has exactly one weight: if
-  anything ever asks this step for a bold, a smeared fake is worse than the
-  hierarchy being wrong, and silently worse.
-*/
-.text-display {
-  font-family: var(--font-display);
-  font-synthesis-weight: none;
-}
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -753,6 +745,7 @@
   }
   html {
     @apply font-sans;
+    font-synthesis-weight: none;
   }
   /*
     Focus ring. The site had none — it inherited the browser default while the
@@ -868,7 +861,14 @@
   grid-template-columns: repeat(24, minmax(0, 1fr));
   gap: var(--spacing-grid);
 }
-.hero-grid { column-gap: var(--spacing-md); }
+/* The larger split gap starts with the split itself. Across 24 mobile tracks,
+   23 × 24px of gap alone is wider than a phone viewport. */
+.hero-grid { column-gap: var(--spacing-grid); }
+.hero-display {
+  @apply text-display;
+  font-weight: 500;
+  text-transform: uppercase;
+}
 .layout-grid > *,
 .grid-item { min-width: 0; }
 .grid-item {
@@ -906,6 +906,7 @@
 }
 
 @media (min-width: 64rem) {
+  .hero-grid { column-gap: var(--spacing-md); }
   .grid-item--lg-span-6 { --grid-span: 6; }
   .grid-item--lg-span-8 { --grid-span: 8; }
   .grid-item--lg-span-12 { --grid-span: 12; }
@@ -1048,13 +1049,15 @@
 @media (min-width: 38rem) { :root { --header-height: 64px; } }
 .site-footer { border-top: 1px solid var(--border); padding-block: var(--spacing-lg); }
 /*
-  The wordmark is body-sized furniture, not a heading. TASA Medium gives it
-  one quiet step over the 400 navigation without making it compete with the
-  page hierarchy.
+  The wordmark is navigation-sized furniture, not a heading. It shares the
+  navigation's Apparat Medium, meta size and uppercase presentation treatment
+  without competing with the page hierarchy. The canonical name remains
+  naturally cased for metadata and accessible text elsewhere.
 */
 .wordmark {
-  font-size: var(--text-body);
+  font-size: var(--text-meta);
   font-weight: 500;
+  text-transform: uppercase;
 }
 
 /*
@@ -1078,6 +1081,8 @@
   align-items: center;
   gap: var(--spacing-md);
   font-size: var(--text-meta);
+  font-weight: 500;
+  text-transform: uppercase;
 }
 .site-nav__links a { display: inline-flex; align-items: center; }
 .site-nav__toggle { margin-inline-start: auto; }   /* pin toggle to right edge */
@@ -1114,13 +1119,13 @@
   terms, section kickers and card roles. This replaces repeating
   `text-xs uppercase tracking-widest text-muted-foreground` at every call
   site. Tracking is zero here like everywhere else — the uppercase and the
-  600 weight carry it.
+  Medium weight carries it.
 */
 .label {
   font-size: var(--text-meta);
   line-height: var(--text-meta--line-height);
   text-transform: uppercase;
-  font-weight: 600;         /* Small caps use TASA Semibold to hold their colour. */
+  font-weight: 500;
   color: var(--muted-foreground);
 }
 /*
@@ -1250,7 +1255,7 @@
   font-size: var(--text-meta);
   line-height: var(--text-meta--line-height);
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--muted-foreground);
   white-space: nowrap;
 }
@@ -1323,26 +1328,20 @@
 .dark .theme-toggle__moon { display: block; }
 
 /*
-  Project card. The surface is deliberately quiet and never interactive: the
-  dedicated text link below is the card's only target. A flex column keeps
-  media and CTA edges aligned when neighbouring descriptions differ in length.
+  Project card. The article supplies document structure; its one anchor fills
+  the whole quiet surface. Copy stays first and media last.
 */
 .project-card {
+  height: 100%;
+}
+.project-card__content {
+  flex: 1;
+}
+.project-card__link {
   display: flex;
   height: 100%;
   flex-direction: column;
   padding: var(--spacing-card);
-  background: var(--card);
-}
-.project-card__content {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-}
-.project-card__link {
-  align-self: flex-start;
-  margin-top: auto;
-  padding-top: var(--spacing-md);
   text-decoration-line: none;
 }
 .project-card__media {
@@ -1398,7 +1397,6 @@
   position: relative;
   display: flex;
   width: 100%;
-  border: 1px solid var(--border);
 }
 .play-item__thumb {
   width: 120px;
@@ -1416,7 +1414,18 @@
   flex: 1;
   min-width: 0;
 }
-.play-item__title { @apply text-heading; }
+.project-card__title,
+.play-item__title {
+  @apply text-body;
+  color: var(--text-primary);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.card-title__arrow {
+  display: inline-block;
+  margin-inline-start: var(--spacing-3xs);
+  opacity: 0;
+}
 /*
   ONE LINE, ALWAYS. The design's subtitle is a short written line; the field it
   is fed from is the item's full description, which runs to two or three. Left
@@ -1426,6 +1435,7 @@
 */
 .play-item__subtitle {
   @apply text-body;
+  color: var(--text-secondary);
   max-width: 100%;
   white-space: nowrap;
   overflow: hidden;
@@ -1450,8 +1460,8 @@
   .play-item::before {
     content: "";
     position: absolute;
-    inset-block: -1px;
-    inset-inline-start: -1px;
+    inset-block: 0;
+    inset-inline-start: 0;
     width: var(--spacing-3xs);
     background: transparent;
     pointer-events: none;
@@ -1462,8 +1472,8 @@
     grid-column: span 10;
     align-self: stretch;
     min-height: 0;
-    padding: var(--spacing-2xs);
-    border: 1px solid var(--border);
+    padding: var(--spacing-card);
+    background: var(--background-elevated);
   }
 
   .play-preview__set {
@@ -1471,14 +1481,14 @@
     flex: 1;
     min-height: 0;
     flex-direction: column;
-    gap: var(--spacing-2xs);
+    gap: var(--spacing-sm);
   }
   .play-preview__main {
     position: relative;
     flex: 1;
     min-height: 0;
     overflow: clip;
-    background: var(--background);
+    background: var(--background-secondary);
   }
   .play-preview__frame {
     position: absolute;
@@ -1519,7 +1529,7 @@
     overflow: clip;
     padding: 0;
     border: 0;
-    background: var(--background);
+    background: var(--background-secondary);
     cursor: pointer;
   }
   .play-preview__loader {
@@ -1809,7 +1819,7 @@
 }
 /* .prose a is styled with .btn--link — see the BUTTONS block above. */
 .prose strong {
-  @apply font-semibold;
+  font-weight: 500;
 }
 .prose figure {
   @apply my-lg;
@@ -1954,8 +1964,8 @@
   Two neighbour-reaching variants lived here, for collapsed table borders,
   where a hovered row's top edge is painted by the element ABOVE it. They went
   with the interactive table: the Play list is `.play-preview` now, and its
-  rows are separate bordered boxes with a gap, so no edge is shared and no
-  rule has to reach past its own element.
+  rows are separate items with a gap, so no edge is shared and no rule has to
+  reach past its own element.
 */
 
 /*
@@ -2085,11 +2095,14 @@
   --lift-rule-on: var(--background-alternate-hover);
 }
 
-/* The card itself does not lift. Its dedicated CTA is the only interactive
-   element and uses the existing brown accent channel at both ends. */
-.project-card__link {
-  --lift-text: var(--text-accent-primary);
-  --lift-text-on: var(--text-accent-primary-hover);
+/* Shared linked surfaces. Text stays in its authored primary/secondary roles;
+   the background and title arrow carry the interaction. */
+.project-card__link,
+.play-item {
+  --lift-text: var(--text-primary);
+  --lift-text-on: var(--text-primary);
+  --lift-surface: var(--background-elevated);
+  --lift-surface-on: var(--background-elevated-hover);
 }
 .project-card__meta { color: var(--text-secondary); }
 
@@ -2108,39 +2121,9 @@
   --lift-rule-on: var(--border-hover);
 }
 
-/*
-  The Play row, inheriting the interactive table row's values — it replaced
-  that row and does the same job. It owns a rule as well as a surface, because
-  unlike the table's collapsed edges this row is its own bordered box.
-
-  The row's --lift-text is now the SUBTITLE's colour, not the whole row's. The
-  title is named separately below, so the two lines no longer share one value.
-  The lift moves both, one step each, and the gap between them survives it:
-
-      rest    title --text-primary   subtitle --text-secondary
-      hover   title --text-interactive   subtitle --text-primary
-
-  --lift-text-on is pinned rather than left to default. Without it the
-  subtitle would default to --text-interactive and land on the title's hover
-  colour, flattening at exactly the moment the row is being read.
-*/
-.play-item {
-  --lift-text: var(--text-secondary);
-  --lift-text-on: var(--text-primary);
-  --lift-surface-on: var(--background-hover);
-  --lift-rule: var(--border);
-  --lift-rule-on: var(--border-hover);
-}
-/*
-  The title rests at full contrast — Anuj's call, and the same level every
-  other heading on the site rests at. It needs its own hover value for the
-  same reason .project-card__meta does: an explicit colour on a child is not
-  reached by the parent's inherited one, so without the lift-on rule the title
-  would be the one part of the row that sits still.
-*/
-.play-item__title { color: var(--text-primary); }
-.play-item {
+/* Both component families reveal the same reserved-space arrow. */
+:is(.project-card__link, .play-item) {
   @variant lift-on {
-    & .play-item__title { color: var(--text-interactive); }
+    & .card-title__arrow { opacity: 1; }
   }
 }

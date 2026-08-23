@@ -1,6 +1,6 @@
 ---
-title: Voxel Lighting Studio
-description: A browser tool for building voxel scenes in a 16×16×16 grid, then watching light change them. Sun angle, colour temperature, shadow softness and sky, all adjustable live.
+title: Voxel Lighting
+description: Build voxel scenes. Shape light live.
 status: published
 publishedAt: 2026-01-01
 featured: true

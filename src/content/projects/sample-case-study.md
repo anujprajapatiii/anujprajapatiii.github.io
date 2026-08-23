@@ -1,6 +1,6 @@
 ---
-title: Sample Case Study
-description: A placeholder project showing the case-study format. Replace with your first real project.
+title: Sample Project
+description: A clean template for future case studies.
 status: published
 publishedAt: 2026-01-01
 type: product

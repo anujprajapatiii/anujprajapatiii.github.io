@@ -1,6 +1,6 @@
 ---
 title: Northwind Rebrand
-description: Placeholder case study — a full brand identity refresh for a fictional logistics company, from wordmark to rollout.
+description: A scalable identity for a growing logistics brand.
 status: published
 publishedAt: 2025-01-01
 type: brand

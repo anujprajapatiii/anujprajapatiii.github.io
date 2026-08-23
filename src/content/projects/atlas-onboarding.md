@@ -1,6 +1,6 @@
 ---
 title: Atlas Onboarding
-description: Placeholder case study — rebuilding the first-run experience of a fictional B2B analytics tool to get teams to their first insight faster.
+description: Faster first-run insights for analytics teams.
 status: published
 publishedAt: 2025-01-01
 type: product

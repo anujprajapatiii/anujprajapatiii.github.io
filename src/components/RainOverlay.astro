@@ -1,0 +1,407 @@
+<canvas
+  class="rain-overlay"
+  data-rain-overlay
+  aria-hidden="true"
+></canvas>
+
+<style>
+  .rain-overlay {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: var(--text-secondary);
+    border-color: var(--background-primary-hover);
+    pointer-events: none;
+  }
+
+  @media (prefers-contrast: more) {
+    .rain-overlay {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const vertexSource = `
+    attribute vec2 a_position;
+    varying vec2 v_uv;
+
+    void main() {
+      v_uv = a_position * 0.5 + 0.5;
+      gl_Position = vec4(a_position, 0.0, 1.0);
+    }
+  `;
+
+  const fragmentSource = `
+    precision highp float;
+
+    uniform vec2 u_resolution;
+    uniform float u_time;
+    uniform vec3 u_color;
+    uniform vec3 u_mist_color;
+    uniform float u_opacity;
+    varying vec2 v_uv;
+
+    float hash21(vec2 point) {
+      point = fract(point * vec2(123.34, 456.21));
+      point += dot(point, point + 45.32);
+      return fract(point.x * point.y);
+    }
+
+    float noise21(vec2 point) {
+      vec2 cell = floor(point);
+      vec2 local = fract(point);
+      local = local * local * (3.0 - 2.0 * local);
+
+      float bottomLeft = hash21(cell);
+      float bottomRight = hash21(cell + vec2(1.0, 0.0));
+      float topLeft = hash21(cell + vec2(0.0, 1.0));
+      float topRight = hash21(cell + vec2(1.0, 1.0));
+
+      return mix(
+        mix(bottomLeft, bottomRight, local.x),
+        mix(topLeft, topRight, local.x),
+        local.y
+      );
+    }
+
+    vec2 gradient21(vec2 point) {
+      point = vec2(
+        dot(point, vec2(127.1, 311.7)),
+        dot(point, vec2(269.5, 183.3))
+      );
+      return normalize(-1.0 + 2.0 * fract(sin(point) * 43758.5453));
+    }
+
+    float perlin21(vec2 point) {
+      vec2 cell = floor(point);
+      vec2 local = fract(point);
+      vec2 curve = local * local * (3.0 - 2.0 * local);
+
+      float bottomLeft = dot(gradient21(cell), local);
+      float bottomRight = dot(
+        gradient21(cell + vec2(1.0, 0.0)),
+        local - vec2(1.0, 0.0)
+      );
+      float topLeft = dot(
+        gradient21(cell + vec2(0.0, 1.0)),
+        local - vec2(0.0, 1.0)
+      );
+      float topRight = dot(
+        gradient21(cell + vec2(1.0, 1.0)),
+        local - vec2(1.0, 1.0)
+      );
+
+      return 0.5 + 0.5 * mix(
+        mix(bottomLeft, bottomRight, curve.x),
+        mix(topLeft, topRight, curve.x),
+        curve.y
+      );
+    }
+
+    float fbm(vec2 point) {
+      float value = 0.0;
+      float amplitude = 0.5;
+      for (int octave = 0; octave < 4; octave++) {
+        value += amplitude * perlin21(point);
+        point = point * 2.03 + vec2(13.17, 7.91);
+        amplitude *= 0.5;
+      }
+      return value;
+    }
+
+    float groundHeight(float x) {
+      return 0.055 + 0.215 * noise21(vec2(x * 3.4, 11.73));
+    }
+
+    float dropLayer(
+      vec2 uv,
+      float lanes,
+      float speed,
+      float seed,
+      float density,
+      float width,
+      float length
+    ) {
+      float lane = floor(uv.x * lanes);
+      float localX = fract(uv.x * lanes) - 0.5;
+      float identity = hash21(vec2(lane + seed, seed * 2.13));
+      float present = step(1.0 - density, hash21(vec2(lane, seed * 5.71)));
+      float centerOffset = (identity - 0.5) * 0.58;
+      float centerX = (lane + 0.5 + centerOffset) / lanes;
+      float ground = groundHeight(centerX + seed * 0.01);
+
+      float cycle = fract(u_time * speed + identity);
+      float fallDuration = 0.68;
+      float fallProgress = min(cycle / fallDuration, 1.0);
+      float headY = mix(1.08, ground, fallProgress);
+      float relativeY = uv.y - headY;
+
+      float thread = 1.0 - smoothstep(width, width * 2.5, abs(localX - centerOffset));
+      float tail = step(0.0, relativeY) * (1.0 - smoothstep(0.0, length, relativeY));
+      float head = 1.0 - smoothstep(0.0, 0.012, abs(relativeY));
+      float airborne = 1.0 - smoothstep(fallDuration - 0.025, fallDuration, cycle);
+      float variation = 0.72 + 0.28 * hash21(vec2(lane + seed * 3.17, seed));
+
+      return present * thread * max(tail * 0.74, head) * airborne * variation;
+    }
+
+    float rippleLayer(
+      vec2 uv,
+      float lanes,
+      float speed,
+      float seed,
+      float density,
+      float reach
+    ) {
+      float lane = floor(uv.x * lanes);
+      float identity = hash21(vec2(lane + seed, seed * 2.13));
+      float present = step(1.0 - density, hash21(vec2(lane, seed * 5.71)));
+      float centerOffset = (identity - 0.5) * 0.58;
+      float centerX = (lane + 0.5 + centerOffset) / lanes;
+      float ground = groundHeight(centerX + seed * 0.01);
+
+      float cycle = fract(u_time * speed + identity);
+      float fallDuration = 0.68;
+      float ripplePhase = clamp((cycle - fallDuration) / (1.0 - fallDuration), 0.0, 1.0);
+      float active = step(fallDuration, cycle);
+
+      vec2 delta = vec2(
+        (uv.x - centerX) * u_resolution.x / max(u_resolution.y, 1.0),
+        (uv.y - ground) * 4.6
+      );
+      float radius = ripplePhase * reach;
+      float ring = 1.0 - smoothstep(0.003, 0.009, abs(length(delta) - radius));
+      float reveal = smoothstep(0.0, 0.08, ripplePhase);
+      float fade = 1.0 - smoothstep(0.48, 1.0, ripplePhase);
+
+      return present * active * ring * reveal * fade;
+    }
+
+    void main() {
+      float farRain = dropLayer(v_uv, 24.0, 0.28, 3.7, 0.28, 0.010, 0.050);
+      float midRain = dropLayer(v_uv, 15.0, 0.32, 8.9, 0.35, 0.009, 0.078);
+      float nearRain = dropLayer(v_uv, 9.0, 0.36, 15.4, 0.45, 0.008, 0.115);
+
+      float farRipple = rippleLayer(v_uv, 24.0, 0.28, 3.7, 0.28, 0.040);
+      float midRipple = rippleLayer(v_uv, 15.0, 0.32, 8.9, 0.35, 0.057);
+      float nearRipple = rippleLayer(v_uv, 9.0, 0.36, 15.4, 0.45, 0.078);
+
+      float rain = farRain * 0.140 + midRain * 0.220 + nearRain * 0.340;
+      float ripples = farRipple * 0.050 + midRipple * 0.075 + nearRipple * 0.100;
+
+      vec2 mistPoint = vec2(
+        v_uv.x * 2.15 + u_time * 0.010,
+        v_uv.y * 2.65 - u_time * 0.004
+      );
+      float mistNoise = fbm(mistPoint) * 0.72 + fbm(mistPoint * 1.73 + 4.8) * 0.28;
+      float topThird = smoothstep(0.64, 0.80, v_uv.y)
+        * (1.0 - smoothstep(0.96, 1.0, v_uv.y));
+      float mist = mix(0.46, 1.0, smoothstep(0.30, 0.78, mistNoise))
+        * topThird
+        * 0.040;
+
+      float rainAlpha = (rain + ripples) * u_opacity;
+      float mistAlpha = mist * u_opacity;
+      float combinedAlpha = min(rainAlpha + mistAlpha, 0.14);
+      vec3 combinedColor = u_color;
+      if (rainAlpha + mistAlpha > 0.0001) {
+        combinedColor = (
+          u_color * rainAlpha + u_mist_color * mistAlpha
+        ) / (rainAlpha + mistAlpha);
+      }
+
+      gl_FragColor = vec4(combinedColor, combinedAlpha);
+    }
+  `;
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const highContrast = window.matchMedia("(prefers-contrast: more)");
+  const STATIC_FRAME = 19.75;
+  const FRAME_INTERVAL = 1000 / 30;
+  const MAX_PIXEL_RATIO = 1.5;
+
+  function createShader(
+    gl: WebGLRenderingContext,
+    type: number,
+    source: string,
+  ) {
+    const shader = gl.createShader(type);
+    if (!shader) return null;
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      gl.deleteShader(shader);
+      return null;
+    }
+    return shader;
+  }
+
+  function createProgram(gl: WebGLRenderingContext) {
+    const vertex = createShader(gl, gl.VERTEX_SHADER, vertexSource);
+    const fragment = createShader(gl, gl.FRAGMENT_SHADER, fragmentSource);
+    if (!vertex || !fragment) return null;
+
+    const program = gl.createProgram();
+    if (!program) return null;
+    gl.attachShader(program, vertex);
+    gl.attachShader(program, fragment);
+    gl.linkProgram(program);
+    gl.deleteShader(vertex);
+    gl.deleteShader(fragment);
+
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      gl.deleteProgram(program);
+      return null;
+    }
+    return program;
+  }
+
+  function cssColorToRgb(cssColor: string): [number, number, number] {
+    const probe = document.createElement("canvas");
+    probe.width = 1;
+    probe.height = 1;
+    const context = probe.getContext("2d", { willReadFrequently: true });
+    if (!context) return [1, 1, 1];
+    context.clearRect(0, 0, 1, 1);
+    context.fillStyle = cssColor;
+    context.fillRect(0, 0, 1, 1);
+    const [red, green, blue] = context.getImageData(0, 0, 1, 1).data;
+    return [red / 255, green / 255, blue / 255];
+  }
+
+  function setupRain(canvas: HTMLCanvasElement) {
+    if (canvas.dataset.rainReady || highContrast.matches) return;
+
+    const gl = canvas.getContext("webgl", {
+      alpha: true,
+      antialias: false,
+      depth: false,
+      powerPreference: "low-power",
+      premultipliedAlpha: false,
+    });
+    if (!gl) {
+      canvas.hidden = true;
+      return;
+    }
+
+    const program = createProgram(gl);
+    if (!program) {
+      canvas.hidden = true;
+      return;
+    }
+
+    const positionLocation = gl.getAttribLocation(program, "a_position");
+    const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
+    const timeLocation = gl.getUniformLocation(program, "u_time");
+    const colorLocation = gl.getUniformLocation(program, "u_color");
+    const mistColorLocation = gl.getUniformLocation(program, "u_mist_color");
+    const opacityLocation = gl.getUniformLocation(program, "u_opacity");
+    const buffer = gl.createBuffer();
+    if (!buffer) {
+      canvas.hidden = true;
+      return;
+    }
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]),
+      gl.STATIC_DRAW,
+    );
+    gl.useProgram(program);
+    gl.enableVertexAttribArray(positionLocation);
+    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+    gl.clearColor(0, 0, 0, 0);
+
+    let color = cssColorToRgb(getComputedStyle(canvas).color);
+    let mistColor = cssColorToRgb(getComputedStyle(canvas).borderTopColor);
+    const opacity = 0.5;
+    let elapsed = STATIC_FRAME;
+    let previousFrame = 0;
+    let animationFrame = 0;
+    let isVisible = false;
+
+    const resize = () => {
+      const bounds = canvas.getBoundingClientRect();
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO);
+      const width = Math.max(1, Math.round(bounds.width * pixelRatio));
+      const height = Math.max(1, Math.round(bounds.height * pixelRatio));
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+        gl.viewport(0, 0, width, height);
+      }
+    };
+
+    const readTheme = () => {
+      color = cssColorToRgb(getComputedStyle(canvas).color);
+      mistColor = cssColorToRgb(getComputedStyle(canvas).borderTopColor);
+      draw(reducedMotion.matches ? STATIC_FRAME : elapsed);
+    };
+
+    const draw = (time: number) => {
+      resize();
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
+      gl.uniform1f(timeLocation, time);
+      gl.uniform3f(colorLocation, color[0], color[1], color[2]);
+      gl.uniform3f(mistColorLocation, mistColor[0], mistColor[1], mistColor[2]);
+      gl.uniform1f(opacityLocation, opacity);
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+    };
+
+    const stop = () => {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
+      previousFrame = 0;
+    };
+
+    const animate = (now: number) => {
+      if (!isVisible || document.hidden || reducedMotion.matches) {
+        stop();
+        return;
+      }
+      if (!previousFrame || now - previousFrame >= FRAME_INTERVAL) {
+        const delta = previousFrame ? Math.min((now - previousFrame) / 1000, 0.05) : 0;
+        elapsed += delta;
+        previousFrame = now;
+        draw(elapsed);
+      }
+      animationFrame = requestAnimationFrame(animate);
+    };
+
+    const syncMotion = () => {
+      stop();
+      if (reducedMotion.matches) draw(STATIC_FRAME);
+      else if (isVisible && !document.hidden) animationFrame = requestAnimationFrame(animate);
+    };
+
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        syncMotion();
+      },
+      { threshold: 0.05 },
+    );
+    const resizeObserver = new ResizeObserver(() => draw(reducedMotion.matches ? STATIC_FRAME : elapsed));
+    const themeObserver = new MutationObserver(readTheme);
+
+    visibilityObserver.observe(canvas);
+    resizeObserver.observe(canvas);
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    reducedMotion.addEventListener("change", syncMotion);
+    document.addEventListener("visibilitychange", syncMotion);
+
+    canvas.dataset.rainReady = "true";
+    resize();
+    readTheme();
+  }
+
+  document
+    .querySelectorAll<HTMLCanvasElement>("[data-rain-overlay]")
+    .forEach(setupRain);
+</script>

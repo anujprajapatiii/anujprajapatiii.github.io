@@ -1,6 +1,6 @@
 ---
 title: Weathering
-description: A procedural rain study. Pick the terrain and the weather, then watch water run off the ledges, fall through the gaps, and pool wherever it can.
+description: Procedural rain across shifting terrain.
 status: published
 publishedAt: 2026-01-01
 featured: true

@@ -11,6 +11,10 @@
 ## Frontmatter Rules
 
 - Every entry needs `title`, `description`, `status`, and `publishedAt`.
+- Keep public titles to two words maximum and descriptions to eight words
+  maximum by default. Titles identify; descriptions add one concrete idea.
+  Preserve natural casing in frontmatter—the card treatment controls visual
+  capitalization without changing canonical content.
 - `status` is `draft`, `published`, or `archived`. Only `published` content is
   included by the public query helpers and static routes. New entries start as
   drafts until reviewed in the browser.
@@ -26,6 +30,13 @@
 - Experiments may name an approved coded hero treatment under `heroOverlay`.
   Keep the allow-list in the content schema and render the component in the
   shared Play route; never bake reusable interface UI into the image asset.
+- A stateful experiment that should inherit the portfolio system may name an
+  approved component under `interactiveDemo`. Keep the allow-list in the
+  content schema and render it at full content width in the shared Play route.
+  The component owns only its interaction state; the content entry still owns
+  metadata and prose, and the route still owns the page shell. Use semantic
+  tokens and a focused React island rather than an iframe when visual and
+  appearance-mode inheritance are part of the experiment.
 
 ## Work Types
 

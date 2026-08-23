@@ -1,0 +1,53 @@
+/*
+  Explicit Sage accent page palette.
+
+  This currently matches the portfolio default, but remains an authored page
+  identity so Sage-led experiments keep their intended palette if the site
+  default changes later. Neutral text on filled accents preserves contrast
+  until lighter Sage stops are introduced.
+*/
+:root[data-palette="sage"] {
+  --bg-accent-primary: var(--sage-500);
+  --bg-accent-primary-hover: var(--sage-700);
+  --bg-accent-solid: var(--sage-500);
+  --bg-accent-solid-hover: var(--sage-700);
+
+  --text-accent-primary: var(--neutral-white);
+  --text-accent-secondary: var(--sage-500);
+  --text-accent-primary-hover: var(--neutral-white);
+  --text-accent-secondary-hover: var(--sage-700);
+
+  --icon-accent-primary: var(--sage-500);
+  --icon-accent-secondary: var(--sage-700);
+  --icon-accent-primary-hover: var(--sage-700);
+  --icon-accent-secondary-hover: var(--sage-900);
+
+  --border-secondary: var(--sage-500);
+  --border-accent-primary: var(--sage-500);
+  --border-accent-secondary: var(--sage-700);
+
+  --decorative-accent: var(--sage-500);
+}
+
+.dark[data-palette="sage"] {
+  --bg-accent-primary: var(--sage-700);
+  --bg-accent-primary-hover: var(--sage-500);
+  --bg-accent-solid: var(--sage-700);
+  --bg-accent-solid-hover: var(--sage-500);
+
+  --text-accent-primary: var(--neutral-150);
+  --text-accent-secondary: var(--sage-500);
+  --text-accent-primary-hover: var(--neutral-white);
+  --text-accent-secondary-hover: var(--sage-500);
+
+  --icon-accent-primary: var(--sage-500);
+  --icon-accent-secondary: var(--sage-700);
+  --icon-accent-primary-hover: var(--sage-500);
+  --icon-accent-secondary-hover: var(--sage-500);
+
+  --border-secondary: var(--sage-700);
+  --border-accent-primary: var(--sage-500);
+  --border-accent-secondary: var(--sage-700);
+
+  --decorative-accent: var(--sage-500);
+}

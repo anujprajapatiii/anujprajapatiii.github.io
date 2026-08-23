@@ -10,10 +10,9 @@ interface Props {
   image?: string;
   noindex?: boolean;
   palette?: PagePalette;
-  preloadDisplayFont?: boolean;
 }
 
-const { title, description, image, noindex, palette, preloadDisplayFont } = Astro.props;
+const { title, description, image, noindex, palette } = Astro.props;
 ---
 
 <BaseLayout
@@ -22,7 +21,6 @@ const { title, description, image, noindex, palette, preloadDisplayFont } = Astr
   image={image}
   noindex={noindex}
   palette={palette}
-  preloadDisplayFont={preloadDisplayFont}
 >
   <div class="flex min-h-dvh flex-col">
     <Header />

@@ -16,12 +16,14 @@ const {
   class: className,
 } = Astro.props;
 const hasOverlay = Astro.slots.has("overlay");
+const hasEffect = Astro.slots.has("effect");
 ---
 
 <div
   class:list={[
     "theme-image",
     darkSrc && "theme-image--switchable",
+    hasEffect && "theme-image--with-effect",
     hasOverlay && "theme-image--with-overlay",
     className,
   ]}
@@ -39,6 +41,11 @@ const hasOverlay = Astro.slots.has("overlay");
       class="theme-image__dark"
       decoding="async"
     />
+  )}
+  {hasEffect && (
+    <div class="theme-image__effect">
+      <slot name="effect" />
+    </div>
   )}
   {hasOverlay && (
     <div class="theme-image__overlay">
@@ -80,6 +87,11 @@ const hasOverlay = Astro.slots.has("overlay");
     overflow: hidden;
   }
 
+  .theme-image--with-effect {
+    position: relative;
+    overflow: hidden;
+  }
+
   .theme-image--with-overlay > img {
     position: absolute;
     inset: 0;
@@ -90,10 +102,22 @@ const hasOverlay = Astro.slots.has("overlay");
   .theme-image__overlay {
     position: absolute;
     inset: 0;
-    z-index: 1;
+    z-index: 2;
     display: flex;
     align-items: center;
     padding-inline: var(--spacing-gutter);
+  }
+
+  .theme-image__effect {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .theme-image__effect > :global(*) {
+    width: 100%;
+    height: 100%;
   }
 
   .theme-image__overlay > :global(.layout-grid) {

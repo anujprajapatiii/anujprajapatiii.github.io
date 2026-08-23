@@ -12,9 +12,11 @@ workflows change.
 | Public site shell | Shared layout, navigation, footer, theme, metadata | `src/layouts/`, `src/components/layout/`, `src/data/site-config.ts` |
 | Work | Portfolio/case-study section at `/work` | `src/content/projects/`, rendered through `/work` routes |
 | Content queries | Published filtering, recency, type filtering, and homepage curation | `src/lib/content/queries.ts`, `src/lib/content/project-types.ts` |
-| Native experiments | Interactive Play content authored as MDX with small React islands that inherit site tokens | `src/content/play/*.mdx`, experiment components in `src/components/` |
+| Native experiments | Interactive Play content selected by an explicit typed flag and rendered as small React islands that inherit site tokens | `src/content.config.ts`, `src/pages/play/[...slug].astro`, experiment components in `src/components/` |
+| Demo interface primitives | Accessible controls plus a guided stage/panel composition; experiments retain their own controlled state and diagnostics stay opt-in | `src/components/ui/`, `src/components/demo/`, `src/styles/demo-controls.css` |
 | Design tokens | Base color, type, spacing, and container tokens; light/dark appearance modes | `src/styles/global.css` |
 | Page palettes | Authored per-page semantic colour remaps, independent of light/dark mode | `src/data/page-palettes.ts`, `src/styles/themes/`, layout palette props |
+| Ambient media effects | Optional, media-clipped atmosphere with semantic colour, reduced-motion stills, and offscreen pausing | `src/components/RainOverlay.astro`, `src/components/ThemeImage.astro` |
 | Layout primitives | One 1300px page container plus Section/Stack/Cluster and a typed 24-track Grid/GridItem system | `src/components/primitives/`, CSS in `src/styles/global.css` |
 | Deployment | Static build published to GitHub Pages | `.github/workflows/deploy.yml` |
 | Work orchestration | Strategy, plans, conventions, learnings | `agent-os/` |
@@ -28,7 +30,7 @@ workflows change.
 | `/work` | Work index listing case studies |
 | `/work/<slug>` | Case-study detail pages |
 | `/play` | Experiments index |
-| `/play/<slug>` | Experiment detail pages and live embeds |
+| `/play/<slug>` | Experiment detail pages, native interactive labs, and live embeds |
 | `/style-guide` | Internal design-system reference page |
 
 ## Content Model
@@ -41,6 +43,12 @@ has one controlled primary type (`brand`, `campaign`, or `product`);
 Experiments deliberately have no taxonomy. Both collections can opt into a
 validated authored colour palette with the `palette` frontmatter field; the
 default keeps the site palette.
+
+Stateful Play entries can opt into an allow-listed `interactiveDemo`. The
+shared route places that component at full content width between the entry
+header and prose. React owns the live state only; the surrounding route,
+content model, Apparat typography, semantic tokens, and light/dark behavior
+remain shared with every other experiment.
 
 | Collection | Public route | Source |
 | --- | --- | --- |

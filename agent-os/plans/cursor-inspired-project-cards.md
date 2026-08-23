@@ -2,7 +2,7 @@
 
 ## Status
 
-Complete
+Archived — interaction model superseded by `whole-card-project-interaction.md`
 
 ## Context
 

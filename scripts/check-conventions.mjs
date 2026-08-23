@@ -61,14 +61,13 @@ const RULES = [
   },
   {
     /*
-      TASA Orbiter is variable, but this design deliberately uses only Regular
-      400, Medium 500 and Semibold 600. Restricting the checker to those three
-      keeps the hierarchy intentional instead of treating the whole axis as a
-      grab bag.
+      Apparat supplies three authored cuts mapped to Light 300, Regular 400 and
+      Medium 500. Restricting the checker to those weights prevents synthetic
+      faces and keeps the hierarchy intentional.
     */
     id: "unapproved-weight",
-    test: /(?<![\w-])font-(?:thin|extralight|light|bold|extrabold|black)(?![\w-])|font-weight:\s*(?:100|200|300|700|800|900)\b/,
-    msg: "that weight is outside the approved TASA Orbiter hierarchy — use Regular 400, Medium 500 or Semibold 600",
+    test: /(?<![\w-])font-(?:thin|extralight|light|semibold|bold|extrabold|black)(?![\w-])|font-weight:\s*(?:100|200|600|700|800|900)\b/,
+    msg: "that weight is outside the approved Apparat hierarchy — use Light 300, Regular 400 or Medium 500",
   },
   {
     /*
@@ -82,15 +81,15 @@ const RULES = [
   },
   {
     /*
-      Corners are square by decision, and the radius tokens are gone. That
-      makes a stray `rounded-*` worse than a no-op: with no --radius-* key to
-      find, Tailwind falls back to its OWN built-in scale, so the class curves
-      the corner at a value nothing in this repo declares. Catch the utility
-      and the raw property alike.
+      Geometry follows function, but it still belongs to the system. The
+      approved roles cover modest controls, genuinely circular/capsule forms
+      and physical device silhouettes. Tailwind radius utilities bypass those
+      roles, while a literal border-radius silently creates a new shape.
     */
-    id: "no-radius",
+    id: "semantic-radius",
     test: /(?<![\w-])rounded[\w\-.[\]]*|border-radius\s*:/,
-    msg: "corners are square everywhere, by decision — no rounded-* utility, no border-radius",
+    skip: /border-radius\s*:\s*var\(--radius-(?:control|round|device)\)\s*;/,
+    msg: "use an approved semantic radius token (control, round, or device); arbitrary radius utilities and literal values are not allowed",
   },
   {
     id: "logical-properties",

@@ -1,4 +1,6 @@
 ---
+import ThemeImage from "@/components/ThemeImage.astro";
+
 /*
   Homepage Experiments has two levels of state: a selected experiment row and
   a selected preview frame. The row remains the link; the filmstrip only
@@ -15,6 +17,8 @@ type PlayItem = {
     description: string;
     media: {
       thumbnail?: string;
+      hero?: string;
+      heroDark?: string;
     };
     previews: string[];
   };
@@ -48,7 +52,9 @@ const framesFor = (previews: string[]) => previews.slice(0, 3).filter(Boolean);
           <span class="play-item__thumb"></span>
         )}
         <span class="play-item__body">
-          <span class="play-item__title">{item.data.title}</span>
+          <span class="play-item__title">
+            {item.data.title}<span class="card-title__arrow" aria-hidden="true">&rarr;</span>
+          </span>
           <span class="play-item__subtitle">{item.data.description}</span>
         </span>
       </a>
@@ -57,14 +63,31 @@ const framesFor = (previews: string[]) => previews.slice(0, 3).filter(Boolean);
 
   <div class="play-preview__pane">
     {items.map((item) => {
-      const frames = framesFor(item.data.previews);
+      const authoredFrames = framesFor(item.data.previews);
+      const frames = authoredFrames.length > 0
+        ? authoredFrames
+        : item.data.media.thumbnail
+          ? [item.data.media.thumbnail]
+          : item.data.media.hero
+            ? [item.data.media.hero]
+          : [];
+      const usesThemeFallback =
+        authoredFrames.length === 0 &&
+        !item.data.media.thumbnail &&
+        Boolean(item.data.media.hero);
       return (
         <div class="play-preview__set" data-play-set>
           {/* The row already names and links the work; main media is visual. */}
           <div class="play-preview__main" aria-hidden="true">
             {frames.map((src, frameIndex) => (
               <div class="play-preview__frame" data-play-frame={frameIndex}>
-                {VIDEO.test(src) ? (
+                {usesThemeFallback ? (
+                  <ThemeImage
+                    lightSrc={src}
+                    darkSrc={item.data.media.heroDark}
+                    alt=""
+                  />
+                ) : VIDEO.test(src) ? (
                   <video src={src} muted loop playsinline preload="none" autoplay></video>
                 ) : (
                   <img src={src} alt="" loading="lazy" decoding="async" />
@@ -73,7 +96,7 @@ const framesFor = (previews: string[]) => previews.slice(0, 3).filter(Boolean);
             ))}
           </div>
 
-          {frames.length > 0 && (
+          {authoredFrames.length > 0 && (
             <div
               class="play-preview__filmstrip"
               role="group"

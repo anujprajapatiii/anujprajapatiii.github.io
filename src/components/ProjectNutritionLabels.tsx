@@ -21,6 +21,7 @@ import {
   Users,
   Wifi,
 } from "lucide-react";
+import { SegmentedControl } from "@/components/ui/segmented-control";
 import "./project-nutrition-labels.css";
 
 type Icon = ComponentType<{
@@ -87,10 +88,10 @@ interface ProjectNutritionLabelsProps {
   showSwitcher?: boolean;
 }
 
-const labels: Array<{ key: ExampleKey; label: string }> = [
-  { key: "performance", label: "Performance" },
-  { key: "impact", label: "Impact" },
-  { key: "learnings", label: "Learnings" },
+const labels: Array<{ value: ExampleKey; label: string }> = [
+  { value: "performance", label: "Performance" },
+  { value: "impact", label: "Impact" },
+  { value: "learnings", label: "Learnings" },
 ];
 
 export default function ProjectNutritionLabels({
@@ -104,27 +105,13 @@ export default function ProjectNutritionLabels({
   return (
     <div className="nutrition-label-demo">
       {showSwitcher && (
-        <div
+        <SegmentedControl
           className="nutrition-label-switcher"
-          role="group"
-          aria-label="Choose a project label"
-        >
-          {labels.map(({ key, label }) => {
-            const isActive = key === activeKey;
-            return (
-              <button
-                key={key}
-                type="button"
-                className="nutrition-label-switcher__button"
-                data-active={isActive ? "true" : undefined}
-                aria-pressed={isActive}
-                onClick={() => setActiveKey(key)}
-              >
-                {label}
-              </button>
-            );
-          })}
-        </div>
+          label="Choose a project label"
+          value={activeKey}
+          items={labels}
+          onValueChange={setActiveKey}
+        />
       )}
 
       <section

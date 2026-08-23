@@ -68,6 +68,9 @@ const experimentSchema = z
   // turns on the tap guard that stops the embed from swallowing page scroll.
   // Default off: most tools lay out for a mouse and a wide canvas.
   embedOnPhone: z.boolean().default(false),
+  // Approved native interactive artifacts rendered at full page width. The
+  // enum keeps content data typed and prevents arbitrary component injection.
+  interactiveDemo: z.enum(["interaction-anatomy"]).optional(),
   // Up to three stills or clips shown beside the Play list on the homepage
   // while a row is pointed at. The file extension decides which element
   // renders: .mp4/.webm/.mov become <video>, anything else an <img>.

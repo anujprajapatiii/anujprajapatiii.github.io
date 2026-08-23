@@ -8,33 +8,30 @@ interface Props {
 }
 
 const { id, title, description, thumbnail, base = "/work" } = Astro.props;
-const isExperiment = base === "/play";
-const ctaLabel = isExperiment ? "View experiment" : "View case study";
+const titleId = `project-card-title-${base === "/play" ? "play" : "work"}-${id}`;
 ---
 
 <article class="project-card">
-  <div class="project-card__content">
-    <div>
-      <h3 class="text-body">{title}</h3>
+  <a
+    href={`${base}/${id}`}
+    class="project-card__link"
+    aria-labelledby={titleId}
+  >
+    <div class="project-card__content">
+      <h3 id={titleId} class="project-card__title">
+        {title}<span class="card-title__arrow" aria-hidden="true">&rarr;</span>
+      </h3>
       <p class="project-card__meta mt-2xs text-body">{description}</p>
     </div>
-    <a
-      href={`${base}/${id}`}
-      class="project-card__link text-body"
-      aria-label={`${ctaLabel}: ${title}`}
-    >
-      {ctaLabel}
-      <span aria-hidden="true">&rarr;</span>
-    </a>
-  </div>
-  {thumbnail ? (
-    <img
-      src={thumbnail}
-      alt=""
-      loading="lazy"
-      class="project-card__media"
-    />
-  ) : (
-    <div class="media-placeholder project-card__media"></div>
-  )}
+    {thumbnail ? (
+      <img
+        src={thumbnail}
+        alt=""
+        loading="lazy"
+        class="project-card__media"
+      />
+    ) : (
+      <div class="media-placeholder project-card__media"></div>
+    )}
+  </a>
 </article>

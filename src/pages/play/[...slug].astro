@@ -12,6 +12,7 @@ import OnThisPage from "@/components/OnThisPage.astro";
 import DataTable from "@/components/DataTable.astro";
 import ThemeImage from "@/components/ThemeImage.astro";
 import ProjectNutritionLabels from "@/components/ProjectNutritionLabels";
+import InteractionAnatomyLab from "@/components/InteractionAnatomyLab";
 import { getPublishedExperiments } from "@/lib/content/queries";
 import { render } from "astro:content";
 
@@ -104,6 +105,12 @@ const publishedYear = item.data.publishedAt.getUTCFullYear();
       />
     )}
 
+    {item.data.interactiveDemo === "interaction-anatomy" && (
+      <Container>
+        <InteractionAnatomyLab client:load />
+      </Container>
+    )}
+
     <Container>
       <Stack gap="lg">
         {/*
@@ -126,7 +133,9 @@ const publishedYear = item.data.publishedAt.getUTCFullYear();
             )}
           </ThemeImage>
         ) : (
-          !item.data.embedUrl && <div class="media-placeholder"></div>
+          !item.data.embedUrl &&
+          !item.data.interactiveDemo &&
+          <div class="media-placeholder"></div>
         )}
         {/* Rail beside the body only: the table of contents belongs to the
             prose it describes, and the header above wants its full width. */}

@@ -7,6 +7,8 @@ import GridItem from "@/components/primitives/GridItem.astro";
 import Stack from "@/components/primitives/Stack.astro";
 import Cluster from "@/components/primitives/Cluster.astro";
 import DataTable from "@/components/DataTable.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import DemoPrimitivesSpecimen from "@/components/DemoPrimitivesSpecimen";
 
 /* Keep these arrays in sync with the token block in src/styles/global.css
    (see agent-os/plans/design-token-session.md). */
@@ -17,7 +19,7 @@ const primitiveFamilies = [
   {
     name: "Neutral",
     prefix: "neutral",
-    swatches: ["black", "900", "800", "700", "600", "500", "400", "350", "300", "200", "100", "white"],
+    swatches: ["black", "900", "800", "700", "600", "500", "400", "350", "300", "200", "150", "100", "white"],
   },
   {
     name: "Brown",
@@ -32,12 +34,17 @@ const primitiveFamilies = [
   {
     name: "Blue",
     prefix: "blue",
-    swatches: ["900", "800", "700", "600", "500", "400", "300", "200", "100"],
+    swatches: ["950", "900", "800", "700", "600", "500", "400", "300", "200", "100", "50"],
   },
   {
     name: "Green",
     prefix: "green",
     swatches: ["400", "300", "200", "100"],
+  },
+  {
+    name: "Sage",
+    prefix: "sage",
+    swatches: ["900", "700", "500"],
   },
   {
     name: "Red",
@@ -52,22 +59,22 @@ const primitiveFamilies = [
 ];
 
 const backgroundTokens = [
-  { name: "primary", light: "neutral-100", dark: "neutral-800" },
-  { name: "secondary", light: "neutral-200", dark: "neutral-600" },
+  { name: "primary", light: "neutral-150", dark: "neutral-800" },
+  { name: "secondary", light: "neutral-200", dark: "neutral-900" },
   { name: "tertiary", light: "yellow-500", dark: "yellow-500" },
-  { name: "quaternary", light: "white", dark: "neutral-700" },
-  { name: "primary-hover", light: "white", dark: "neutral-700" },
-  { name: "secondary-hover", light: "neutral-100", dark: "neutral-500" },
+  { name: "quaternary", light: "neutral-100", dark: "neutral-700" },
+  { name: "primary-hover", light: "neutral-100", dark: "neutral-700" },
+  { name: "secondary-hover", light: "neutral-150", dark: "neutral-800" },
   { name: "tertiary-hover", light: "yellow-600", dark: "yellow-400" },
   { name: "quaternary-hover", light: "white", dark: "neutral-600" },
   { name: "black-solid", light: "neutral-800", dark: "neutral-100" },
   { name: "black-solid-hover", light: "black", dark: "white" },
   { name: "disabled", light: "neutral-200", dark: "neutral-600" },
   { name: "disabled-alt", light: "neutral-100", dark: "neutral-700" },
-  { name: "accent-primary", light: "brown-50", dark: "brown-600" },
-  { name: "accent-primary-hover", light: "brown-100", dark: "brown-500" },
-  { name: "accent-solid", light: "brown-400", dark: "brown-200" },
-  { name: "accent-solid-hover", light: "brown-500", dark: "brown-100" },
+  { name: "accent-primary", light: "sage-500", dark: "sage-700" },
+  { name: "accent-primary-hover", light: "sage-700", dark: "sage-500" },
+  { name: "accent-solid", light: "sage-500", dark: "sage-700" },
+  { name: "accent-solid-hover", light: "sage-700", dark: "sage-500" },
   { name: "error-primary", light: "red-100", dark: "red-100" },
   { name: "error-primary-hover", light: "red-200", dark: "red-200" },
   { name: "error-secondary", light: "red-300", dark: "red-300" },
@@ -96,10 +103,10 @@ const textTokens = [
   { name: "disabled", light: "neutral-300", dark: "neutral-500" },
   { name: "disabled-alt", light: "neutral-200", dark: "neutral-400" },
   { name: "placeholder", light: "neutral-350", dark: "neutral-350" },
-  { name: "accent-primary", light: "brown-400", dark: "brown-100" },
-  { name: "accent-secondary", light: "brown-300", dark: "brown-200" },
-  { name: "accent-primary-hover", light: "brown-500", dark: "brown-50" },
-  { name: "accent-secondary-hover", light: "brown-400", dark: "brown-100" },
+  { name: "accent-primary", light: "white", dark: "neutral-150" },
+  { name: "accent-secondary", light: "sage-500", dark: "sage-500" },
+  { name: "accent-primary-hover", light: "white", dark: "white" },
+  { name: "accent-secondary-hover", light: "sage-700", dark: "sage-500" },
   { name: "error-primary", light: "red-400", dark: "red-100" },
   { name: "error-secondary", light: "red-300", dark: "red-200" },
   { name: "error-primary-hover", light: "red-400", dark: "red-100" },
@@ -118,15 +125,30 @@ const textTokens = [
   { name: "info-secondary-hover", light: "blue-600", dark: "blue-200" },
 ];
 
+const iconTokens = textTokens.map((token) => {
+  switch (token.name) {
+    case "accent-primary":
+      return { ...token, light: "sage-500", dark: "sage-500" };
+    case "accent-secondary":
+      return { ...token, light: "sage-700", dark: "sage-700" };
+    case "accent-primary-hover":
+      return { ...token, light: "sage-700", dark: "sage-500" };
+    case "accent-secondary-hover":
+      return { ...token, light: "sage-900", dark: "sage-500" };
+    default:
+      return token;
+  }
+});
+
 const borderTokens = [
   { name: "primary", light: "neutral-300", dark: "neutral-500" },
-  { name: "secondary", light: "brown-200", dark: "brown-400" },
+  { name: "secondary", light: "sage-500", dark: "sage-700" },
   { name: "tertiary", light: "neutral-200", dark: "neutral-600" },
   { name: "primary-solid", light: "neutral-800", dark: "neutral-100" },
   { name: "disabled", light: "neutral-200", dark: "neutral-600" },
   { name: "disabled-alt", light: "neutral-100", dark: "neutral-700" },
-  { name: "accent-primary", light: "brown-300", dark: "brown-200" },
-  { name: "accent-secondary", light: "brown-100", dark: "brown-400" },
+  { name: "accent-primary", light: "sage-500", dark: "sage-500" },
+  { name: "accent-secondary", light: "sage-700", dark: "sage-700" },
   { name: "error-primary", light: "red-300", dark: "red-200" },
   { name: "error-secondary", light: "red-100", dark: "red-400" },
   { name: "success-primary", light: "green-300", dark: "green-200" },
@@ -148,7 +170,7 @@ const semanticGroups = [
   },
   {
     name: "Icon",
-    tokens: textTokens.map((token) => ({ ...token, name: `icon-${token.name}` })),
+    tokens: iconTokens.map((token) => ({ ...token, name: `icon-${token.name}` })),
   },
   {
     name: "Border",
@@ -168,19 +190,17 @@ const semanticGroups = [
       { name: "text-reading", light: "text-secondary", dark: "text-secondary" },
       { name: "text-alternate", light: "neutral-100", dark: "neutral-800" },
       { name: "border-hover", light: "neutral-350", dark: "neutral-400" },
-      { name: "decorative-accent", light: "brown-300", dark: "brown-300" },
+      { name: "decorative-accent", light: "sage-500", dark: "sage-500" },
     ],
   },
 ];
 
-/* `face` names the typeface as well as the weight, because the display step is
-   no longer in the same family as the rest of the scale. */
 const typeScale = [
-  { name: "display", class: "text-display", size: "clamp(40px → 64px) / 1.02", weight: "Violet Sans 400", sample: "Display" },
-  { name: "title", class: "text-title", size: "clamp(32px → 44px) / 1.08", weight: "TASA Orbiter Regular 400", sample: "Page or homepage section title" },
-  { name: "heading", class: "text-heading", size: "20px / 1.3", weight: "TASA Orbiter Medium 500", sample: "Shared heading" },
-  { name: "body", class: "text-body", size: "16px / 1.5", weight: "TASA Orbiter Regular 400", sample: "Body text. The quick brown fox jumps over the lazy dog." },
-  { name: "meta", class: "text-meta", size: "14px / 1.5", weight: "TASA Orbiter Regular 400", sample: "Metadata, captions, and compact interface text" },
+  { name: "display", class: "text-display", size: "clamp(40px → 64px) / 1.02", weight: "Apparat Regular 400", sample: "Display" },
+  { name: "title", class: "text-title", size: "36px / 1.08", weight: "Apparat Regular 400", sample: "Page or homepage section title" },
+  { name: "heading", class: "text-heading", size: "20px / 1.3", weight: "Apparat Medium 500", sample: "Shared heading" },
+  { name: "body", class: "text-body", size: "16px / 1.5", weight: "Apparat Regular 400", sample: "Body text. The quick brown fox jumps over the lazy dog." },
+  { name: "meta", class: "text-meta", size: "14px / 1.5", weight: "Apparat Regular 400", sample: "Metadata, captions, and compact interface text" },
 ];
 
 const spacingScale = [
@@ -225,21 +245,28 @@ const pagePaletteRows = [
   {
     name: "Default",
     id: "default",
-    light: "neutral-100 / neutral-600 / neutral-600",
-    dark: "neutral-800 / neutral-200 / neutral-200",
+    light: "neutral-150 / neutral-600 / sage-500",
+    dark: "neutral-800 / neutral-200 / sage-500",
     use: "Site default",
   },
   {
     name: "Blue",
     id: "blue",
-    light: "blue-100 / blue-600 / blue-600",
+    light: "blue-100 / blue-600 / blue-400",
     dark: "blue-900 / blue-200 / blue-300",
     use: "Sample Case Study",
+  },
+  {
+    name: "Sage accent",
+    id: "sage",
+    light: "neutral-150 / neutral-600 / sage-500",
+    dark: "neutral-800 / neutral-200 / sage-500",
+    use: "Interaction Anatomy",
   },
 ];
 ---
 
-<PageLayout title="Style Guide — Anuj Prajapati" description="Internal design-system reference." noindex preloadDisplayFont>
+<PageLayout title="Style Guide — Anuj Prajapati" description="Internal design-system reference." noindex>
   <Section size="page">
     <Container>
     <h1 class="mb-2xs text-title">Style guide</h1>
@@ -345,8 +372,8 @@ const pagePaletteRows = [
           <tr>
             <th scope="col">Palette</th>
             <th scope="col">Frontmatter</th>
-            <th scope="col">Light canvas / title / body</th>
-            <th scope="col">Dark canvas / title / body</th>
+            <th scope="col">Light canvas / title / accent</th>
+            <th scope="col">Dark canvas / title / accent</th>
             <th scope="col">Current use</th>
           </tr>
         </thead>
@@ -369,25 +396,25 @@ const pagePaletteRows = [
         Type scale
       </h2>
       <p class="mb-md max-w-measure text-meta text-muted-foreground">
-        TASA Orbiter carries everything that is read: Regular (400), Medium
-        (500), and Semibold (600) for strong emphasis and genuine labels. Size,
-        line-height and weight travel inside the role, and tracking is 0 on
-        every step, so
+        KMR Apparat carries every interface and reading role: Light (300),
+        Regular (400), and Medium (500). Size, line-height and weight travel
+        inside the role, and tracking is 0 on every step, so
         <code>text-heading</code> alone produces finished type and nothing writes
         <code>tracking-*</code>, <code>leading-*</code> or <code>font-*</code>
         at a call site. Size carries the hierarchy at display scale; weight
         takes over once the sizes get close to body.
       </p>
       <p class="mb-md max-w-measure text-meta text-muted-foreground">
-        Display is the exception, and the only one — Violet Sans, a geometric
-        face with one weight. It sits on <code>text-display</code> alone.
-        Everything below it stays TASA Orbiter, which supplies the complete
-        non-display hierarchy without synthesised weights.
+        Display, title, body, and metadata use Apparat Regular. Headings, the
+        wordmark, genuine labels, table headers, and strong emphasis use
+        Medium. Light remains available but is not assigned to a shared role.
+        No role asks the browser to synthesise a weight.
       </p>
       <p class="mb-md max-w-measure text-meta text-muted-foreground">
-        Both webfonts have Arial fallbacks calibrated from their own x-height
-        and vertical metrics. TASA is preloaded on every route; Violet is
-        preloaded only when a page renders the display role.
+        The three original Kimera WOFF2 files are self-hosted under the Web
+        License and share one Arial fallback calibrated from Apparat's x-height
+        and vertical metrics. All three authored roles are preloaded because
+        standard pages use them above the fold.
       </p>
       <p class="mb-md max-w-measure text-meta text-muted-foreground">
         Five unique sizes carry the whole site: display, title, one shared
@@ -521,23 +548,47 @@ const pagePaletteRows = [
     </Section>
 
     <Section size="standard" class="border-t border-border">
-      <h2 class="label mb-md">
+      <h2 class="label mb-2xs">
         Surfaces
       </h2>
+      <p class="mb-md max-w-measure text-meta text-muted-foreground">
+        One depth model in both appearances: canvas, inset, raised, then raised
+        hover. The repeated nested inset proves that adjacent levels remain
+        distinct instead of merging at rest or during interaction.
+      </p>
+      <div class="bg-background p-md">
+        <p class="label mb-sm">Canvas</p>
+        <Grid>
+          <GridItem spanMd={12}>
+            <div class="bg-card p-md">
+              <p class="label">Raised</p>
+              <p class="mt-3xs text-meta text-muted-foreground">Card rest / canvas hover</p>
+              <div class="mt-sm bg-muted p-sm">
+                <p class="label">Inset</p>
+                <p class="mt-3xs text-meta text-muted-foreground">Media, code and recessed content</p>
+              </div>
+            </div>
+          </GridItem>
+          <GridItem spanMd={12}>
+            <div class="bg-background-elevated-hover p-md">
+              <p class="label">Raised hover</p>
+              <p class="mt-3xs text-meta text-muted-foreground">A quiet step beyond raised</p>
+              <div class="mt-sm bg-muted p-sm">
+                <p class="label">Inset</p>
+                <p class="mt-3xs text-meta text-muted-foreground">Still distinct from its parent</p>
+              </div>
+            </div>
+          </GridItem>
+        </Grid>
+      </div>
+      <h3 class="label mb-sm mt-md">Live components</h3>
       <Grid>
         <GridItem spanMd={12}>
-          <article class="project-card">
-            <div class="project-card__content">
-              <div>
-                <h3 class="text-body">Project card</h3>
-                <p class="project-card__meta mt-2xs text-body">Borderless surface, inset media, and a dedicated link.</p>
-              </div>
-              <a href="/work" class="project-card__link text-body" aria-label="View project card examples">
-                View examples <span aria-hidden="true">&rarr;</span>
-              </a>
-            </div>
-            <div class="media-placeholder project-card__media"></div>
-          </article>
+          <ProjectCard
+            id="sample-case-study"
+            title="Project card"
+            description="Raised surface with inset media and one whole-card link."
+          />
         </GridItem>
         <GridItem spanMd={12}>
           <div class="bg-muted p-md">
@@ -603,6 +654,19 @@ const pagePaletteRows = [
           </tr>
         </tbody>
       </DataTable>
+    </Section>
+
+    <Section size="standard" class="border-t border-border">
+      <h2 class="label mb-2xs">
+        Demo panels
+      </h2>
+      <p class="mb-md max-w-measure text-meta text-muted-foreground">
+        A guided pattern for interactive experiments. Each panel names the
+        task, offers one clear sequence, explains the current step, and keeps
+        optional settings secondary. Controls inherit the page palette, stay
+        compact on desktop, and grow for touch.
+      </p>
+      <DemoPrimitivesSpecimen client:load />
     </Section>
 
     <Section size="standard" class="border-t border-border">
