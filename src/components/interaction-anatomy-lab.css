@@ -2,10 +2,8 @@
   --lab-canvas: var(--background-secondary);
   --lab-screen: var(--background-primary);
   --lab-surface: var(--background-elevated);
-  --lab-surface-hover: var(--background-elevated-hover);
   --lab-ink: var(--text-primary);
   --lab-reading: var(--text-secondary);
-  --lab-subtle: var(--text-tertiary);
   --lab-rule: var(--border-primary);
   --lab-rule-quiet: var(--border-tertiary);
   --lab-accent: var(--decorative-accent);
@@ -17,6 +15,9 @@
   --lab-phone-height: 41rem;
   --lab-stage-height: 47.5rem;
   --lab-callout-width: 11.25rem;
+  --lab-thinking-duration: 1s;
+  --lab-thinking-stagger: 120ms;
+  --lab-thinking-ease: ease-in-out;
 }
 
 .interaction-anatomy input {
@@ -95,7 +96,7 @@
 .interaction-anatomy__app-bar strong {
   font-size: var(--text-body);
   line-height: var(--text-body--line-height);
-  font-weight: 500;
+  font-weight: var(--text-heading--font-weight);
 }
 
 .interaction-anatomy__reset-button.ui-button--secondary {
@@ -143,7 +144,7 @@
 .interaction-anatomy__empty-state strong {
   font-size: var(--text-body);
   line-height: var(--text-body--line-height);
-  font-weight: 500;
+  font-weight: var(--text-heading--font-weight);
 }
 
 .interaction-anatomy__empty-state p {
@@ -183,7 +184,7 @@
   display: block;
   margin-block-end: var(--spacing-3xs);
   color: var(--lab-reading);
-  font-weight: 500;
+  font-weight: var(--text-heading--font-weight);
 }
 
 .interaction-anatomy__thinking {
@@ -201,11 +202,13 @@
   height: var(--spacing-3xs);
   border-radius: var(--radius-round);
   background: var(--lab-reading);
-  animation: interaction-anatomy-thinking 1s ease-in-out infinite;
+  animation: interaction-anatomy-thinking var(--lab-thinking-duration) var(--lab-thinking-ease) infinite;
 }
 
-.interaction-anatomy__thinking i:nth-child(2) { animation-delay: 120ms; }
-.interaction-anatomy__thinking i:nth-child(3) { animation-delay: 240ms; }
+.interaction-anatomy__thinking i:nth-child(2) { animation-delay: var(--lab-thinking-stagger); }
+.interaction-anatomy__thinking i:nth-child(3) {
+  animation-delay: calc(var(--lab-thinking-stagger) * 2);
+}
 
 .interaction-anatomy__composer-shell {
   display: grid;
@@ -320,7 +323,7 @@
 }
 
 .interaction-anatomy__callout strong {
-  font-weight: 500;
+  font-weight: var(--text-heading--font-weight);
 }
 
 .interaction-anatomy__callout span {

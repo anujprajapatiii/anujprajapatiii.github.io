@@ -1,33 +1,42 @@
 # Design sync notes
 
-## This is an off-script, tokens-only sync
+## Configured shape
 
-This repo is an Astro **website**, not a component library, so the
-`/design-sync` converter (which bundles a compiled `dist/` of React
-components) does not apply. There are zero React components to ship.
+This repository is an Astro website with React interactive islands. The design
+sync project is deliberately configured as `tokens-only`: application
+components remain in the website, while the portable bundle carries the full
+colour vocabulary and its preview.
 
-Per the skill's allowance for repos outside the converter's envelope, the
-bundle is produced by hand and contains **only the colour tokens**:
+The bundle contains:
 
-- `ds-bundle/styles.css` — entry the app reads; `@import`s the tokens.
-- `ds-bundle/tokens/tokens.css` — primitives + semantic tokens + `.dark`
-  overrides, extracted verbatim from `src/styles/global.css`.
-- `ds-bundle/tokens/colours.html` — the one preview card (`@dsCard`),
-  a palette catalog mirroring the site's `/style-guide` page.
+- `ds-bundle/styles.css` — the entry stylesheet.
+- `ds-bundle/tokens/tokens.css` — all primitives, canonical light/dark
+  semantics, portfolio aliases, and Blue/Sage page-palette remaps.
+- `ds-bundle/tokens/colours.html` — a generated catalog card.
 
-No `_ds_bundle.js`, no `components/**`, no `_vendor/**` — there are no
-components. No `_ds_sync.json` anchor is written (off-script, no story
-facts), so the next sync re-verifies from scratch, which is correct.
+There is no component distribution, `_vendor` tree, or compiled React bundle
+because those are outside the configured shape—not because the website lacks
+components.
 
-## To re-sync after changing tokens
+## Regeneration
 
-The source of truth is `src/styles/global.css`. When tokens change there,
-regenerate `ds-bundle/tokens/tokens.css` to match, refresh the swatches in
-`colours.html`, and re-run the upload to project
-`8b771c23-a549-49dc-b6b2-5189d309df80` (pinned in config.json).
+The implementation source of truth is `src/styles/global.css`; its imported
+files in `src/styles/themes/` are part of the same source graph. Run:
 
-## Source of truth
+```bash
+pnpm sync:design-bundle
+pnpm check
+```
 
-`src/styles/global.css` is the sole source of truth for the palette. Figma
-has been dropped (2026-07-21) — there is no external design file to mirror
-to or from.
+The generator owns both files under `ds-bundle/tokens/`. The convention checker
+fails if checked-in output differs from the canonical sources.
+
+## Figma relationship
+
+Code is the runtime implementation source of truth. The corresponding Figma
+variables are a design-documentation mirror of the base palette; they are not a
+runtime dependency and there is no bidirectional automated sync. A base palette
+change is complete when code, this generated bundle, and the documented Figma
+variables agree. Authored page palettes remain code-owned remaps.
+
+The design-sync project identifier remains pinned in `config.json`.

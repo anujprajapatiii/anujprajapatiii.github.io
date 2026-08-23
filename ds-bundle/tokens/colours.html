@@ -6,75 +6,2007 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Colour Tokens — Anuj Prajapati</title>
 <style>
+  @import "./tokens.css";
   * { box-sizing: border-box; }
-  body { margin: 0; padding: 32px; background: #f6f7f8; color: #21252b; font-family: ui-sans-serif, system-ui, sans-serif; }
-  h1 { margin: 0 0 4px; font-size: 22px; font-weight: 600; }
-  .sub { margin: 0 0 28px; color: #434b56; font-size: 14px; }
-  h2 { margin: 28px 0 12px; color: #434b56; font-size: 14px; font-weight: 600; text-transform: uppercase; }
-  .family { margin-bottom: 16px; }
-  .family-name { margin: 0 0 8px; font-size: 14px; font-weight: 600; }
-  .row { display: flex; flex-wrap: wrap; gap: 8px; }
-  .swatch { width: 76px; }
-  .chip { height: 44px; border: 1px solid #d3d7dd; }
-  .label { margin-top: 6px; color: #434b56; font-size: 11px; line-height: 1.3; }
-  .label b { display: block; color: #21252b; font-weight: 600; }
-  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
-  .sem-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; }
-  .sem { padding: 12px; border: 1px solid #d3d7dd; background: #ffffff; }
-  .sem-name { font-size: 12px; font-weight: 600; }
-  .sem-pair { display: flex; gap: 8px; margin: 8px 0 6px; }
-  .box { position: relative; flex: 1; height: 34px; border: 1px solid #d3d7dd; }
-  .box span { position: absolute; inset: auto auto 3px 5px; color: #434b56; font-size: 9px; text-transform: uppercase; }
-  .box--dark span { color: #d3d7dd; }
-  .sem-map { color: #434b56; font-size: 10px; }
+  body {
+    margin: 0;
+    padding: 32px;
+    background: var(--background-primary);
+    color: var(--text-primary);
+    font-family: ui-sans-serif, system-ui, sans-serif;
+  }
+  h1, h2, h3, p { margin-block-start: 0; }
+  h1 { margin-block-end: 4px; font-size: 24px; }
+  h2 { margin-block: 40px 16px; font-size: 18px; }
+  h3 { margin-block-end: 10px; font-size: 14px; text-transform: capitalize; }
+  p { max-width: 70ch; color: var(--text-secondary); }
+  code { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 11px; }
+  .family + .family { margin-block-start: 24px; }
+  .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 10px; }
+  .primitive, .semantic { min-width: 0; border: 1px solid var(--border-primary); background: var(--background-elevated); }
+  .primitive { padding: 8px; }
+  .primitive strong, .primitive code { display: block; }
+  .chip { height: 52px; margin-block-end: 8px; border: 1px solid var(--border-tertiary); }
+  .semantic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+  .semantic { padding: 12px; }
+  .semantic > code { display: block; margin-block-end: 10px; overflow-wrap: anywhere; }
+  .semantic__pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .semantic__pair > div { min-width: 0; }
+  .semantic__chip { display: block; height: 40px; margin-block-end: 5px; border: 1px solid var(--border-tertiary); }
+  .semantic small { display: block; color: var(--text-secondary); font-size: 9px; overflow-wrap: anywhere; }
+  .note { padding: 16px; border: 1px solid var(--border-primary); background: var(--background-elevated); }
 </style>
 </head>
 <body>
-  <h1>Colour Tokens</h1>
-  <p class="sub">A two-tier system: neutral functional colours plus one brown decorative flourish.</p>
+  <h1>Colour tokens</h1>
+  <p>Generated from the portfolio's 52 primitives, canonical light/dark semantics, compatibility aliases, and Blue/Sage page-palette remaps.</p>
 
   <h2>Primitives</h2>
-  <div class="family">
-    <p class="family-name">Neutral</p>
-    <div class="row">
-      <div class="swatch"><div class="chip" style="background:#000000"></div><div class="label"><b>black</b><span class="mono">#000000</span></div></div>
-      <div class="swatch"><div class="chip" style="background:#0e0f12"></div><div class="label"><b>900</b><span class="mono">#0e0f12</span></div></div>
-      <div class="swatch"><div class="chip" style="background:#141619"></div><div class="label"><b>800</b><span class="mono">#141619</span></div></div>
-      <div class="swatch"><div class="chip" style="background:#1c1f24"></div><div class="label"><b>700</b><span class="mono">#1c1f24</span></div></div>
-      <div class="swatch"><div class="chip" style="background:#21252b"></div><div class="label"><b>600</b><span class="mono">#21252b</span></div></div>
-      <div class="swatch"><div class="chip" style="background:#2c323a"></div><div class="label"><b>500</b><span class="mono">#2c323a</span></div></div>
-      <div class="swatch"><div class="chip" style="background:#434b56"></div><div class="label"><b>400</b><span class="mono">#434b56</span></div></div>
-      <div class="swatch"><div class="chip" style="background:#6d7580"></div><div class="label"><b>350</b><span class="mono">#6d7580</span></div></div>
-      <div class="swatch"><div class="chip" style="background:#99a1ac"></div><div class="label"><b>300</b><span class="mono">#99a1ac</span></div></div>
-      <div class="swatch"><div class="chip" style="background:#d3d7dd"></div><div class="label"><b>200</b><span class="mono">#d3d7dd</span></div></div>
-      <div class="swatch"><div class="chip" style="background:#f6f7f8"></div><div class="label"><b>100</b><span class="mono">#f6f7f8</span></div></div>
-      <div class="swatch"><div class="chip" style="background:#ffffff"></div><div class="label"><b>white</b><span class="mono">#ffffff</span></div></div>
-    </div>
-  </div>
-  <div class="family">
-    <p class="family-name">Brown</p>
-    <div class="row">
-      <div class="swatch"><div class="chip" style="background:#847b73"></div><div class="label"><b>300</b><span class="mono">#847b73</span></div></div>
-    </div>
-  </div>
+
+      <section class="family">
+        <h3>neutral</h3>
+        <div class="swatch-grid">
+
+            <article class="primitive">
+              <div class="chip" style="background:var(--neutral-black)"></div>
+              <strong>black</strong>
+              <code>#000000</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--neutral-900)"></div>
+              <strong>900</strong>
+              <code>#0e0f12</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--neutral-800)"></div>
+              <strong>800</strong>
+              <code>#141619</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--neutral-700)"></div>
+              <strong>700</strong>
+              <code>#1c1f24</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--neutral-600)"></div>
+              <strong>600</strong>
+              <code>#21252b</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--neutral-500)"></div>
+              <strong>500</strong>
+              <code>#2c323a</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--neutral-400)"></div>
+              <strong>400</strong>
+              <code>#434b56</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--neutral-350)"></div>
+              <strong>350</strong>
+              <code>#6d7580</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--neutral-300)"></div>
+              <strong>300</strong>
+              <code>#99a1ac</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--neutral-200)"></div>
+              <strong>200</strong>
+              <code>#d3d7dd</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--neutral-150)"></div>
+              <strong>150</strong>
+              <code>#eef0f2</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--neutral-100)"></div>
+              <strong>100</strong>
+              <code>#f6f7f8</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--neutral-white)"></div>
+              <strong>white</strong>
+              <code>#ffffff</code>
+            </article>
+        </div>
+      </section>
+      <section class="family">
+        <h3>brown</h3>
+        <div class="swatch-grid">
+
+            <article class="primitive">
+              <div class="chip" style="background:var(--brown-600)"></div>
+              <strong>600</strong>
+              <code>#2e2d2c</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--brown-500)"></div>
+              <strong>500</strong>
+              <code>#302f2e</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--brown-400)"></div>
+              <strong>400</strong>
+              <code>#595551</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--brown-300)"></div>
+              <strong>300</strong>
+              <code>#847b73</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--brown-200)"></div>
+              <strong>200</strong>
+              <code>#aba199</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--brown-100)"></div>
+              <strong>100</strong>
+              <code>#cfc7c1</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--brown-50)"></div>
+              <strong>50</strong>
+              <code>#f1eeec</code>
+            </article>
+        </div>
+      </section>
+      <section class="family">
+        <h3>amber</h3>
+        <div class="swatch-grid">
+
+            <article class="primitive">
+              <div class="chip" style="background:var(--amber-400)"></div>
+              <strong>400</strong>
+              <code>#7c370e</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--amber-300)"></div>
+              <strong>300</strong>
+              <code>#e66c24</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--amber-200)"></div>
+              <strong>200</strong>
+              <code>#ee9a68</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--amber-100)"></div>
+              <strong>100</strong>
+              <code>#f5c2a3</code>
+            </article>
+        </div>
+      </section>
+      <section class="family">
+        <h3>blue</h3>
+        <div class="swatch-grid">
+
+            <article class="primitive">
+              <div class="chip" style="background:var(--blue-950)"></div>
+              <strong>950</strong>
+              <code>#000318</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--blue-900)"></div>
+              <strong>900</strong>
+              <code>#00062a</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--blue-800)"></div>
+              <strong>800</strong>
+              <code>#001147</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--blue-700)"></div>
+              <strong>700</strong>
+              <code>#001d64</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--blue-600)"></div>
+              <strong>600</strong>
+              <code>#002c83</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--blue-500)"></div>
+              <strong>500</strong>
+              <code>#1841ac</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--blue-400)"></div>
+              <strong>400</strong>
+              <code>#1e50d3</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--blue-300)"></div>
+              <strong>300</strong>
+              <code>#99b6ff</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--blue-200)"></div>
+              <strong>200</strong>
+              <code>#dae5ff</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--blue-100)"></div>
+              <strong>100</strong>
+              <code>#f0f3ff</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--blue-50)"></div>
+              <strong>50</strong>
+              <code>#f8f9ff</code>
+            </article>
+        </div>
+      </section>
+      <section class="family">
+        <h3>green</h3>
+        <div class="swatch-grid">
+
+            <article class="primitive">
+              <div class="chip" style="background:var(--green-400)"></div>
+              <strong>400</strong>
+              <code>#1a4723</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--green-300)"></div>
+              <strong>300</strong>
+              <code>#37954a</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--green-200)"></div>
+              <strong>200</strong>
+              <code>#53c069</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--green-100)"></div>
+              <strong>100</strong>
+              <code>#b4e4be</code>
+            </article>
+        </div>
+      </section>
+      <section class="family">
+        <h3>sage</h3>
+        <div class="swatch-grid">
+
+            <article class="primitive">
+              <div class="chip" style="background:var(--sage-900)"></div>
+              <strong>900</strong>
+              <code>#081813</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--sage-700)"></div>
+              <strong>700</strong>
+              <code>#1b3631</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--sage-500)"></div>
+              <strong>500</strong>
+              <code>#32544e</code>
+            </article>
+        </div>
+      </section>
+      <section class="family">
+        <h3>red</h3>
+        <div class="swatch-grid">
+
+            <article class="primitive">
+              <div class="chip" style="background:var(--red-400)"></div>
+              <strong>400</strong>
+              <code>#67090a</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--red-300)"></div>
+              <strong>300</strong>
+              <code>#ec2426</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--red-200)"></div>
+              <strong>200</strong>
+              <code>#f2696a</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--red-100)"></div>
+              <strong>100</strong>
+              <code>#f7a1a2</code>
+            </article>
+        </div>
+      </section>
+      <section class="family">
+        <h3>yellow</h3>
+        <div class="swatch-grid">
+
+            <article class="primitive">
+              <div class="chip" style="background:var(--yellow-600)"></div>
+              <strong>600</strong>
+              <code>#853e0f</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--yellow-500)"></div>
+              <strong>500</strong>
+              <code>#d17600</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--yellow-400)"></div>
+              <strong>400</strong>
+              <code>#ffb700</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--yellow-300)"></div>
+              <strong>300</strong>
+              <code>#ffd293</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--yellow-200)"></div>
+              <strong>200</strong>
+              <code>#ffe9d0</code>
+            </article>
+            <article class="primitive">
+              <div class="chip" style="background:var(--yellow-100)"></div>
+              <strong>100</strong>
+              <code>#fff5f5</code>
+            </article>
+        </div>
+      </section>
 
   <h2>Semantic tokens — light / dark</h2>
-  <div class="sem-grid">
-    <div class="sem"><div class="sem-name">background-primary</div><div class="sem-pair"><div class="box" style="background:#f6f7f8"><span>light</span></div><div class="box box--dark" style="background:#141619"><span>dark</span></div></div><div class="sem-map mono">neutral-100 → neutral-800</div></div>
-    <div class="sem"><div class="sem-name">background-secondary</div><div class="sem-pair"><div class="box" style="background:#d3d7dd"><span>light</span></div><div class="box box--dark" style="background:#21252b"><span>dark</span></div></div><div class="sem-map mono">neutral-200 → neutral-600</div></div>
-    <div class="sem"><div class="sem-name">background-alternate</div><div class="sem-pair"><div class="box box--dark" style="background:#141619"><span>light</span></div><div class="box" style="background:#f6f7f8"><span>dark</span></div></div><div class="sem-map mono">neutral-800 → neutral-100</div></div>
-    <div class="sem"><div class="sem-name">background-alternate-hover</div><div class="sem-pair"><div class="box box--dark" style="background:#000000"><span>light</span></div><div class="box" style="background:#ffffff"><span>dark</span></div></div><div class="sem-map mono">black → white</div></div>
-    <div class="sem"><div class="sem-name">background-hover</div><div class="sem-pair"><div class="box" style="background:#ffffff"><span>light</span></div><div class="box box--dark" style="background:#1c1f24"><span>dark</span></div></div><div class="sem-map mono">white → neutral-700</div></div>
-    <div class="sem"><div class="sem-name">background-elevated</div><div class="sem-pair"><div class="box" style="background:#ffffff"><span>light</span></div><div class="box box--dark" style="background:#1c1f24"><span>dark</span></div></div><div class="sem-map mono">white → neutral-700</div></div>
-    <div class="sem"><div class="sem-name">background-elevated-hover</div><div class="sem-pair"><div class="box" style="background:#ffffff"><span>light</span></div><div class="box box--dark" style="background:#21252b"><span>dark</span></div></div><div class="sem-map mono">white → neutral-600</div></div>
-    <div class="sem"><div class="sem-name">border-primary</div><div class="sem-pair"><div class="box" style="background:#99a1ac"><span>light</span></div><div class="box box--dark" style="background:#2c323a"><span>dark</span></div></div><div class="sem-map mono">neutral-300 → neutral-500</div></div>
-    <div class="sem"><div class="sem-name">border-hover</div><div class="sem-pair"><div class="box box--dark" style="background:#6d7580"><span>light</span></div><div class="box box--dark" style="background:#6d7580"><span>dark</span></div></div><div class="sem-map mono">neutral-350 → neutral-350</div></div>
-    <div class="sem"><div class="sem-name">text-primary</div><div class="sem-pair"><div class="box box--dark" style="background:#21252b"><span>light</span></div><div class="box" style="background:#d3d7dd"><span>dark</span></div></div><div class="sem-map mono">neutral-600 → neutral-200</div></div>
-    <div class="sem"><div class="sem-name">text-secondary</div><div class="sem-pair"><div class="box box--dark" style="background:#434b56"><span>light</span></div><div class="box box--dark" style="background:#99a1ac"><span>dark</span></div></div><div class="sem-map mono">neutral-400 → neutral-300</div></div>
-    <div class="sem"><div class="sem-name">text-alternate</div><div class="sem-pair"><div class="box" style="background:#f6f7f8"><span>light</span></div><div class="box box--dark" style="background:#141619"><span>dark</span></div></div><div class="sem-map mono">neutral-100 → neutral-800</div></div>
-    <div class="sem"><div class="sem-name">text-interactive</div><div class="sem-pair"><div class="box box--dark" style="background:#0e0f12"><span>light</span></div><div class="box" style="background:#f6f7f8"><span>dark</span></div></div><div class="sem-map mono">neutral-900 → neutral-100</div></div>
-    <div class="sem"><div class="sem-name">shader-tint</div><div class="sem-pair"><div class="box box--dark" style="background:#2c323a"><span>light</span></div><div class="box box--dark" style="background:#99a1ac"><span>dark</span></div></div><div class="sem-map mono">neutral-500 → neutral-300</div></div>
-    <div class="sem"><div class="sem-name">decorative-accent</div><div class="sem-pair"><div class="box box--dark" style="background:#847b73"><span>light</span></div><div class="box box--dark" style="background:#847b73"><span>dark</span></div></div><div class="sem-map mono">brown-300 → brown-300</div></div>
-  </div>
+  <div class="semantic-grid">
+        <article class="semantic">
+          <code>--bg-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-primary)"></span>
+              <small>Light · var(--neutral-150)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-primary)"></span>
+              <small>Dark · var(--neutral-800)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-secondary)"></span>
+              <small>Light · var(--neutral-200)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-secondary)"></span>
+              <small>Dark · var(--neutral-900)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-tertiary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-tertiary)"></span>
+              <small>Light · var(--yellow-500)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-tertiary)"></span>
+              <small>Dark · var(--yellow-500)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-quaternary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-quaternary)"></span>
+              <small>Light · var(--neutral-100)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-quaternary)"></span>
+              <small>Dark · var(--neutral-700)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-primary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-primary-hover)"></span>
+              <small>Light · var(--neutral-100)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-primary-hover)"></span>
+              <small>Dark · var(--neutral-700)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-secondary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-secondary-hover)"></span>
+              <small>Light · var(--neutral-150)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-secondary-hover)"></span>
+              <small>Dark · var(--neutral-800)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-tertiary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-tertiary-hover)"></span>
+              <small>Light · var(--yellow-600)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-tertiary-hover)"></span>
+              <small>Dark · var(--yellow-400)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-quaternary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-quaternary-hover)"></span>
+              <small>Light · var(--neutral-white)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-quaternary-hover)"></span>
+              <small>Dark · var(--neutral-600)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-black-solid</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-black-solid)"></span>
+              <small>Light · var(--neutral-800)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-black-solid)"></span>
+              <small>Dark · var(--neutral-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-black-solid-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-black-solid-hover)"></span>
+              <small>Light · var(--neutral-black)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-black-solid-hover)"></span>
+              <small>Dark · var(--neutral-white)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-disabled</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-disabled)"></span>
+              <small>Light · var(--neutral-200)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-disabled)"></span>
+              <small>Dark · var(--neutral-600)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-disabled-alt</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-disabled-alt)"></span>
+              <small>Light · var(--neutral-100)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-disabled-alt)"></span>
+              <small>Dark · var(--neutral-700)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-accent-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-accent-primary)"></span>
+              <small>Light · var(--sage-500)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-accent-primary)"></span>
+              <small>Dark · var(--sage-700)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-accent-primary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-accent-primary-hover)"></span>
+              <small>Light · var(--sage-700)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-accent-primary-hover)"></span>
+              <small>Dark · var(--sage-500)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-accent-solid</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-accent-solid)"></span>
+              <small>Light · var(--sage-500)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-accent-solid)"></span>
+              <small>Dark · var(--sage-700)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-accent-solid-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-accent-solid-hover)"></span>
+              <small>Light · var(--sage-700)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-accent-solid-hover)"></span>
+              <small>Dark · var(--sage-500)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-error-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-error-primary)"></span>
+              <small>Light · var(--red-100)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-error-primary)"></span>
+              <small>Dark · var(--red-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-error-primary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-error-primary-hover)"></span>
+              <small>Light · var(--red-200)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-error-primary-hover)"></span>
+              <small>Dark · var(--red-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-error-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-error-secondary)"></span>
+              <small>Light · var(--red-300)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-error-secondary)"></span>
+              <small>Dark · var(--red-300)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-error-secondary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-error-secondary-hover)"></span>
+              <small>Light · var(--red-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-error-secondary-hover)"></span>
+              <small>Dark · var(--red-400)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-success-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-success-primary)"></span>
+              <small>Light · var(--green-100)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-success-primary)"></span>
+              <small>Dark · var(--green-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-success-primary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-success-primary-hover)"></span>
+              <small>Light · var(--green-200)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-success-primary-hover)"></span>
+              <small>Dark · var(--green-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-success-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-success-secondary)"></span>
+              <small>Light · var(--green-300)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-success-secondary)"></span>
+              <small>Dark · var(--green-300)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-success-secondary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-success-secondary-hover)"></span>
+              <small>Light · var(--green-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-success-secondary-hover)"></span>
+              <small>Dark · var(--green-400)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-warning-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-warning-primary)"></span>
+              <small>Light · var(--yellow-200)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-warning-primary)"></span>
+              <small>Dark · var(--yellow-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-warning-primary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-warning-primary-hover)"></span>
+              <small>Light · var(--yellow-300)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-warning-primary-hover)"></span>
+              <small>Dark · var(--yellow-300)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-warning-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-warning-secondary)"></span>
+              <small>Light · var(--yellow-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-warning-secondary)"></span>
+              <small>Dark · var(--yellow-400)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-warning-secondary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-warning-secondary-hover)"></span>
+              <small>Light · var(--yellow-500)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-warning-secondary-hover)"></span>
+              <small>Dark · var(--yellow-500)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-info-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-info-primary)"></span>
+              <small>Light · var(--blue-100)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-info-primary)"></span>
+              <small>Dark · var(--blue-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-info-primary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-info-primary-hover)"></span>
+              <small>Light · var(--blue-200)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-info-primary-hover)"></span>
+              <small>Dark · var(--blue-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-info-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-info-secondary)"></span>
+              <small>Light · var(--blue-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-info-secondary)"></span>
+              <small>Dark · var(--blue-400)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--bg-info-secondary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--bg-info-secondary-hover)"></span>
+              <small>Light · var(--blue-500)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--bg-info-secondary-hover)"></span>
+              <small>Dark · var(--blue-500)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-primary)"></span>
+              <small>Light · var(--neutral-600)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-primary)"></span>
+              <small>Dark · var(--neutral-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-secondary)"></span>
+              <small>Light · var(--neutral-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-secondary)"></span>
+              <small>Dark · var(--neutral-300)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-tertiary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-tertiary)"></span>
+              <small>Light · var(--neutral-350)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-tertiary)"></span>
+              <small>Dark · var(--neutral-350)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-primary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-primary-hover)"></span>
+              <small>Light · var(--neutral-900)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-primary-hover)"></span>
+              <small>Dark · var(--neutral-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-secondary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-secondary-hover)"></span>
+              <small>Light · var(--neutral-600)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-secondary-hover)"></span>
+              <small>Dark · var(--neutral-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-tertiary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-tertiary-hover)"></span>
+              <small>Light · var(--neutral-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-tertiary-hover)"></span>
+              <small>Dark · var(--neutral-300)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-disabled</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-disabled)"></span>
+              <small>Light · var(--neutral-300)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-disabled)"></span>
+              <small>Dark · var(--neutral-500)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-disabled-alt</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-disabled-alt)"></span>
+              <small>Light · var(--neutral-200)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-disabled-alt)"></span>
+              <small>Dark · var(--neutral-400)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-placeholder</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-placeholder)"></span>
+              <small>Light · var(--neutral-350)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-placeholder)"></span>
+              <small>Dark · var(--neutral-350)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-accent-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-accent-primary)"></span>
+              <small>Light · var(--neutral-white)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-accent-primary)"></span>
+              <small>Dark · var(--neutral-150)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-accent-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-accent-secondary)"></span>
+              <small>Light · var(--sage-500)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-accent-secondary)"></span>
+              <small>Dark · var(--sage-500)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-accent-primary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-accent-primary-hover)"></span>
+              <small>Light · var(--neutral-white)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-accent-primary-hover)"></span>
+              <small>Dark · var(--neutral-white)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-accent-secondary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-accent-secondary-hover)"></span>
+              <small>Light · var(--sage-700)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-accent-secondary-hover)"></span>
+              <small>Dark · var(--sage-500)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-error-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-error-primary)"></span>
+              <small>Light · var(--red-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-error-primary)"></span>
+              <small>Dark · var(--red-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-error-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-error-secondary)"></span>
+              <small>Light · var(--red-300)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-error-secondary)"></span>
+              <small>Dark · var(--red-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-error-primary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-error-primary-hover)"></span>
+              <small>Light · var(--red-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-error-primary-hover)"></span>
+              <small>Dark · var(--red-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-error-secondary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-error-secondary-hover)"></span>
+              <small>Light · var(--red-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-error-secondary-hover)"></span>
+              <small>Dark · var(--red-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-success-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-success-primary)"></span>
+              <small>Light · var(--green-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-success-primary)"></span>
+              <small>Dark · var(--green-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-success-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-success-secondary)"></span>
+              <small>Light · var(--green-300)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-success-secondary)"></span>
+              <small>Dark · var(--green-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-success-primary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-success-primary-hover)"></span>
+              <small>Light · var(--green-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-success-primary-hover)"></span>
+              <small>Dark · var(--green-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-success-secondary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-success-secondary-hover)"></span>
+              <small>Light · var(--green-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-success-secondary-hover)"></span>
+              <small>Dark · var(--green-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-warning-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-warning-primary)"></span>
+              <small>Light · var(--yellow-600)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-warning-primary)"></span>
+              <small>Dark · var(--yellow-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-warning-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-warning-secondary)"></span>
+              <small>Light · var(--yellow-500)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-warning-secondary)"></span>
+              <small>Dark · var(--yellow-300)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-warning-primary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-warning-primary-hover)"></span>
+              <small>Light · var(--yellow-600)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-warning-primary-hover)"></span>
+              <small>Dark · var(--yellow-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-warning-secondary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-warning-secondary-hover)"></span>
+              <small>Light · var(--yellow-600)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-warning-secondary-hover)"></span>
+              <small>Dark · var(--yellow-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-info-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-info-primary)"></span>
+              <small>Light · var(--blue-600)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-info-primary)"></span>
+              <small>Dark · var(--blue-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-info-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-info-secondary)"></span>
+              <small>Light · var(--blue-500)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-info-secondary)"></span>
+              <small>Dark · var(--blue-300)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-info-primary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-info-primary-hover)"></span>
+              <small>Light · var(--blue-600)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-info-primary-hover)"></span>
+              <small>Dark · var(--blue-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-info-secondary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-info-secondary-hover)"></span>
+              <small>Light · var(--blue-600)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-info-secondary-hover)"></span>
+              <small>Dark · var(--blue-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-primary)"></span>
+              <small>Light · var(--neutral-600)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-primary)"></span>
+              <small>Dark · var(--neutral-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-secondary)"></span>
+              <small>Light · var(--neutral-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-secondary)"></span>
+              <small>Dark · var(--neutral-300)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-tertiary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-tertiary)"></span>
+              <small>Light · var(--neutral-350)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-tertiary)"></span>
+              <small>Dark · var(--neutral-350)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-primary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-primary-hover)"></span>
+              <small>Light · var(--neutral-900)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-primary-hover)"></span>
+              <small>Dark · var(--neutral-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-secondary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-secondary-hover)"></span>
+              <small>Light · var(--neutral-600)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-secondary-hover)"></span>
+              <small>Dark · var(--neutral-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-tertiary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-tertiary-hover)"></span>
+              <small>Light · var(--neutral-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-tertiary-hover)"></span>
+              <small>Dark · var(--neutral-300)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-disabled</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-disabled)"></span>
+              <small>Light · var(--neutral-300)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-disabled)"></span>
+              <small>Dark · var(--neutral-500)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-disabled-alt</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-disabled-alt)"></span>
+              <small>Light · var(--neutral-200)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-disabled-alt)"></span>
+              <small>Dark · var(--neutral-400)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-placeholder</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-placeholder)"></span>
+              <small>Light · var(--neutral-350)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-placeholder)"></span>
+              <small>Dark · var(--neutral-350)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-accent-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-accent-primary)"></span>
+              <small>Light · var(--sage-500)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-accent-primary)"></span>
+              <small>Dark · var(--sage-500)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-accent-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-accent-secondary)"></span>
+              <small>Light · var(--sage-700)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-accent-secondary)"></span>
+              <small>Dark · var(--sage-700)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-accent-primary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-accent-primary-hover)"></span>
+              <small>Light · var(--sage-700)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-accent-primary-hover)"></span>
+              <small>Dark · var(--sage-500)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-accent-secondary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-accent-secondary-hover)"></span>
+              <small>Light · var(--sage-900)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-accent-secondary-hover)"></span>
+              <small>Dark · var(--sage-500)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-error-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-error-primary)"></span>
+              <small>Light · var(--red-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-error-primary)"></span>
+              <small>Dark · var(--red-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-error-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-error-secondary)"></span>
+              <small>Light · var(--red-300)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-error-secondary)"></span>
+              <small>Dark · var(--red-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-error-primary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-error-primary-hover)"></span>
+              <small>Light · var(--red-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-error-primary-hover)"></span>
+              <small>Dark · var(--red-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-error-secondary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-error-secondary-hover)"></span>
+              <small>Light · var(--red-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-error-secondary-hover)"></span>
+              <small>Dark · var(--red-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-success-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-success-primary)"></span>
+              <small>Light · var(--green-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-success-primary)"></span>
+              <small>Dark · var(--green-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-success-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-success-secondary)"></span>
+              <small>Light · var(--green-300)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-success-secondary)"></span>
+              <small>Dark · var(--green-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-success-primary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-success-primary-hover)"></span>
+              <small>Light · var(--green-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-success-primary-hover)"></span>
+              <small>Dark · var(--green-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-success-secondary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-success-secondary-hover)"></span>
+              <small>Light · var(--green-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-success-secondary-hover)"></span>
+              <small>Dark · var(--green-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-warning-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-warning-primary)"></span>
+              <small>Light · var(--yellow-600)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-warning-primary)"></span>
+              <small>Dark · var(--yellow-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-warning-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-warning-secondary)"></span>
+              <small>Light · var(--yellow-500)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-warning-secondary)"></span>
+              <small>Dark · var(--yellow-300)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-warning-primary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-warning-primary-hover)"></span>
+              <small>Light · var(--yellow-600)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-warning-primary-hover)"></span>
+              <small>Dark · var(--yellow-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-warning-secondary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-warning-secondary-hover)"></span>
+              <small>Light · var(--yellow-600)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-warning-secondary-hover)"></span>
+              <small>Dark · var(--yellow-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-info-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-info-primary)"></span>
+              <small>Light · var(--blue-600)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-info-primary)"></span>
+              <small>Dark · var(--blue-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-info-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-info-secondary)"></span>
+              <small>Light · var(--blue-500)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-info-secondary)"></span>
+              <small>Dark · var(--blue-300)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-info-primary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-info-primary-hover)"></span>
+              <small>Light · var(--blue-600)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-info-primary-hover)"></span>
+              <small>Dark · var(--blue-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--icon-info-secondary-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--icon-info-secondary-hover)"></span>
+              <small>Light · var(--blue-600)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--icon-info-secondary-hover)"></span>
+              <small>Dark · var(--blue-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--border-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--border-primary)"></span>
+              <small>Light · var(--neutral-300)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--border-primary)"></span>
+              <small>Dark · var(--neutral-500)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--border-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--border-secondary)"></span>
+              <small>Light · var(--sage-500)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--border-secondary)"></span>
+              <small>Dark · var(--sage-700)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--border-tertiary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--border-tertiary)"></span>
+              <small>Light · var(--neutral-200)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--border-tertiary)"></span>
+              <small>Dark · var(--neutral-600)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--border-primary-solid</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--border-primary-solid)"></span>
+              <small>Light · var(--neutral-800)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--border-primary-solid)"></span>
+              <small>Dark · var(--neutral-100)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--border-disabled</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--border-disabled)"></span>
+              <small>Light · var(--neutral-200)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--border-disabled)"></span>
+              <small>Dark · var(--neutral-600)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--border-disabled-alt</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--border-disabled-alt)"></span>
+              <small>Light · var(--neutral-100)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--border-disabled-alt)"></span>
+              <small>Dark · var(--neutral-700)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--border-accent-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--border-accent-primary)"></span>
+              <small>Light · var(--sage-500)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--border-accent-primary)"></span>
+              <small>Dark · var(--sage-500)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--border-accent-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--border-accent-secondary)"></span>
+              <small>Light · var(--sage-700)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--border-accent-secondary)"></span>
+              <small>Dark · var(--sage-700)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--border-error-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--border-error-primary)"></span>
+              <small>Light · var(--red-300)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--border-error-primary)"></span>
+              <small>Dark · var(--red-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--border-error-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--border-error-secondary)"></span>
+              <small>Light · var(--red-100)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--border-error-secondary)"></span>
+              <small>Dark · var(--red-400)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--border-success-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--border-success-primary)"></span>
+              <small>Light · var(--green-300)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--border-success-primary)"></span>
+              <small>Dark · var(--green-200)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--border-success-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--border-success-secondary)"></span>
+              <small>Light · var(--green-100)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--border-success-secondary)"></span>
+              <small>Dark · var(--green-400)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--border-warning-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--border-warning-primary)"></span>
+              <small>Light · var(--yellow-500)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--border-warning-primary)"></span>
+              <small>Dark · var(--yellow-300)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--border-warning-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--border-warning-secondary)"></span>
+              <small>Light · var(--yellow-300)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--border-warning-secondary)"></span>
+              <small>Dark · var(--yellow-600)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--border-info-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--border-info-primary)"></span>
+              <small>Light · var(--blue-400)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--border-info-primary)"></span>
+              <small>Dark · var(--blue-300)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--border-info-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--border-info-secondary)"></span>
+              <small>Light · var(--blue-200)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--border-info-secondary)"></span>
+              <small>Dark · var(--blue-600)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--background-primary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--background-primary)"></span>
+              <small>Light · var(--bg-primary)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--background-primary)"></span>
+              <small>Dark · var(--bg-primary)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--background-secondary</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--background-secondary)"></span>
+              <small>Light · var(--bg-secondary)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--background-secondary)"></span>
+              <small>Dark · var(--bg-secondary)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--background-alternate</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--background-alternate)"></span>
+              <small>Light · var(--bg-black-solid)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--background-alternate)"></span>
+              <small>Dark · var(--bg-black-solid)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--background-alternate-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--background-alternate-hover)"></span>
+              <small>Light · var(--bg-black-solid-hover)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--background-alternate-hover)"></span>
+              <small>Dark · var(--bg-black-solid-hover)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--background-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--background-hover)"></span>
+              <small>Light · var(--bg-primary-hover)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--background-hover)"></span>
+              <small>Dark · var(--bg-primary-hover)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--background-elevated</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--background-elevated)"></span>
+              <small>Light · var(--bg-quaternary)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--background-elevated)"></span>
+              <small>Dark · var(--bg-quaternary)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--background-elevated-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--background-elevated-hover)"></span>
+              <small>Light · var(--bg-quaternary-hover)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--background-elevated-hover)"></span>
+              <small>Dark · var(--bg-quaternary-hover)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-interactive</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-interactive)"></span>
+              <small>Light · var(--text-primary-hover)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-interactive)"></span>
+              <small>Dark · var(--text-primary-hover)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-reading</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-reading)"></span>
+              <small>Light · var(--text-secondary)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-reading)"></span>
+              <small>Dark · var(--text-secondary)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--text-alternate</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--text-alternate)"></span>
+              <small>Light · var(--neutral-100)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--text-alternate)"></span>
+              <small>Dark · var(--neutral-800)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--border-hover</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--border-hover)"></span>
+              <small>Light · var(--neutral-350)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--border-hover)"></span>
+              <small>Dark · var(--neutral-400)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--decorative-accent</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--decorative-accent)"></span>
+              <small>Light · var(--sage-500)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--decorative-accent)"></span>
+              <small>Dark · var(--sage-500)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--background</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--background)"></span>
+              <small>Light · var(--background-primary)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--background)"></span>
+              <small>Dark · var(--background-primary)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--foreground</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--foreground)"></span>
+              <small>Light · var(--text-primary)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--foreground)"></span>
+              <small>Dark · var(--text-primary)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--card</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--card)"></span>
+              <small>Light · var(--background-elevated)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--card)"></span>
+              <small>Dark · var(--background-elevated)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--muted</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--muted)"></span>
+              <small>Light · var(--background-secondary)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--muted)"></span>
+              <small>Dark · var(--background-secondary)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--muted-foreground</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--muted-foreground)"></span>
+              <small>Light · var(--text-secondary)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--muted-foreground)"></span>
+              <small>Dark · var(--text-secondary)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--accent</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--accent)"></span>
+              <small>Light · var(--text-interactive)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--accent)"></span>
+              <small>Dark · var(--text-interactive)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--accent-foreground</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--accent-foreground)"></span>
+              <small>Light · var(--text-alternate)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--accent-foreground)"></span>
+              <small>Dark · var(--text-alternate)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--border</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--border)"></span>
+              <small>Light · var(--border-primary)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--border)"></span>
+              <small>Dark · var(--border-primary)</small>
+            </div>
+          </div>
+        </article>
+        <article class="semantic">
+          <code>--ring</code>
+          <div class="semantic__pair">
+            <div>
+              <span class="semantic__chip" style="background:var(--ring)"></span>
+              <small>Light · var(--border-hover)</small>
+            </div>
+            <div class="dark">
+              <span class="semantic__chip" style="background:var(--ring)"></span>
+              <small>Dark · var(--border-hover)</small>
+            </div>
+          </div>
+        </article></div>
+
+  <h2>Page palettes</h2>
+  <p class="note"><code>data-palette="blue"</code> and <code>data-palette="sage"</code> remaps are included in <code>tokens.css</code>. Appearance remains independent through the <code>.dark</code> class.</p>
 </body>
 </html>

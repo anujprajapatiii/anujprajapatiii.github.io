@@ -31,15 +31,15 @@ const year = new Date().getFullYear();
                 discursively on purpose: Tailwind scans this file's comments
                 too, so spelling the classes out would generate the rules this
                 removes.) */}
-            <a href="/style-guide">Style guide</a>
+            <a href="/style-guide" class="site-hit-target">Style guide</a>
             {siteConfig.social.github && (
-              <a href={siteConfig.social.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+              <a class="site-hit-target" href={siteConfig.social.github} target="_blank" rel="noopener noreferrer">GitHub</a>
             )}
             {siteConfig.social.linkedin && (
-              <a href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <a class="site-hit-target" href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
             )}
             {siteConfig.social.email && (
-              <a href={`mailto:${siteConfig.social.email}`}>Email</a>
+              <a href={`mailto:${siteConfig.social.email}`} class="site-hit-target">Email</a>
             )}
           </Cluster>
         </Cluster>

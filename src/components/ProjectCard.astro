@@ -5,10 +5,19 @@ interface Props {
   description: string;
   thumbnail?: string;
   base?: string;
+  headingLevel?: "h2" | "h3";
 }
 
-const { id, title, description, thumbnail, base = "/work" } = Astro.props;
+const {
+  id,
+  title,
+  description,
+  thumbnail,
+  base = "/work",
+  headingLevel = "h3",
+} = Astro.props;
 const titleId = `project-card-title-${base === "/play" ? "play" : "work"}-${id}`;
+const Heading = headingLevel;
 ---
 
 <article class="project-card">
@@ -18,9 +27,9 @@ const titleId = `project-card-title-${base === "/play" ? "play" : "work"}-${id}`
     aria-labelledby={titleId}
   >
     <div class="project-card__content">
-      <h3 id={titleId} class="project-card__title">
+      <Heading id={titleId} class="project-card__title">
         {title}<span class="card-title__arrow" aria-hidden="true">&rarr;</span>
-      </h3>
+      </Heading>
       <p class="project-card__meta mt-2xs text-body">{description}</p>
     </div>
     {thumbnail ? (

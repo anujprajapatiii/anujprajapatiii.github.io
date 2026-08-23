@@ -636,6 +636,8 @@
     --control-switch-width: 2.25rem;
     --control-switch-height: 1.25rem;
     --control-switch-thumb: var(--spacing-sm);
+    --control-tooltip-max-width: 18rem;
+    --demo-step-detail-min-height: 7rem;
 
     /* Purposeful radii: modest controls, genuinely round geometry, and
        physical device silhouettes. A panel or card gets none by default. */
@@ -648,6 +650,7 @@
        and contextual material arrival. */
     --motion-none: 0ms;
     --motion-feedback: 140ms;
+    --motion-theme: 300ms;
     --motion-settle: 340ms;
     --ease-feedback: cubic-bezier(0.2, 0.8, 0.2, 1);
     --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
@@ -866,7 +869,7 @@
 .hero-grid { column-gap: var(--spacing-grid); }
 .hero-display {
   @apply text-display;
-  font-weight: 500;
+  font-weight: var(--text-heading--font-weight);
   text-transform: uppercase;
 }
 .layout-grid > *,
@@ -1056,7 +1059,7 @@
 */
 .wordmark {
   font-size: var(--text-meta);
-  font-weight: 500;
+  font-weight: var(--text-heading--font-weight);
   text-transform: uppercase;
 }
 
@@ -1081,11 +1084,33 @@
   align-items: center;
   gap: var(--spacing-md);
   font-size: var(--text-meta);
-  font-weight: 500;
+  font-weight: var(--text-heading--font-weight);
   text-transform: uppercase;
 }
 .site-nav__links a { display: inline-flex; align-items: center; }
 .site-nav__toggle { margin-inline-start: auto; }   /* pin toggle to right edge */
+
+/*
+  Site furniture keeps its compact visual box while exposing a 48px pointer
+  target. The absolutely positioned pseudo-element participates in hit testing
+  but not layout, so neither header shape nor footer rhythm changes. One class
+  keeps the contract explicit at every shared call site and lets automated QA
+  distinguish intentional hit-area expansion from ordinary decoration.
+*/
+.site-hit-target {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.site-hit-target::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  width: max(100%, var(--control-height-touch));
+  height: max(100%, var(--control-height-touch));
+  transform: translate(-50%, -50%);
+}
 /*
   Content-driven breakpoint, not a device preset: wordmark + links + toggle
   need ~540px, so the bar holds its single row down to 38rem (608px) — the
@@ -1125,7 +1150,7 @@
   font-size: var(--text-meta);
   line-height: var(--text-meta--line-height);
   text-transform: uppercase;
-  font-weight: 500;
+  font-weight: var(--text-heading--font-weight);
   color: var(--muted-foreground);
 }
 /*
@@ -1255,7 +1280,7 @@
   font-size: var(--text-meta);
   line-height: var(--text-meta--line-height);
   text-transform: uppercase;
-  font-weight: 500;
+  font-weight: var(--text-heading--font-weight);
   color: var(--muted-foreground);
   white-space: nowrap;
 }
@@ -1418,7 +1443,7 @@
 .play-item__title {
   @apply text-body;
   color: var(--text-primary);
-  font-weight: 500;
+  font-weight: var(--text-heading--font-weight);
   text-transform: uppercase;
 }
 .card-title__arrow {
@@ -1612,6 +1637,13 @@
   against the frame.
 */
 .embed { container-type: inline-size; }
+
+/* When the mobile embed fallback already owns the live URL, keep the header's
+   primary action for the wide view where the iframe is also present. */
+.live-action--wide-only { display: none; }
+@media (min-width: 48rem) {
+  .live-action--wide-only { display: flex; }
+}
 
 .embed-frame { display: none; }
 .embed-fallback {
@@ -1819,7 +1851,7 @@
 }
 /* .prose a is styled with .btn--link — see the BUTTONS block above. */
 .prose strong {
-  font-weight: 500;
+  font-weight: var(--text-heading--font-weight);
 }
 .prose figure {
   @apply my-lg;
@@ -1873,7 +1905,7 @@
    and stays. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 300ms;
+  animation-duration: var(--motion-theme);
 }
 
 /* ==========================================================================

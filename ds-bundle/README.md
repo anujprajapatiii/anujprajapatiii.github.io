@@ -1,43 +1,54 @@
 # Colour Tokens — Anuj Prajapati
 
-A colour-only design system: the palette from Anuj Prajapati's portfolio.
-No components — style with these CSS custom properties.
+This is the portfolio's generated, colour-only design-system bundle. The
+website itself contains Astro and React components; those components are
+intentionally outside this bundle's configured `tokens-only` shape.
+
+## Source of truth
+
+`src/styles/global.css` is the implementation source of truth and imports the
+authored page-palette remaps from `src/styles/themes/`. Never edit
+`tokens/tokens.css` or `tokens/colours.html` by hand.
+
+Regenerate both files after a colour-system change:
+
+```bash
+pnpm sync:design-bundle
+```
+
+`pnpm check` also compares the generated output with the checked-in bundle and
+fails when they drift.
 
 ## How to use
 
-All colour lives in CSS custom properties, defined in `styles.css` (which
-imports `tokens/tokens.css`). Reference them with `var(--…)`.
+`styles.css` imports the complete generated token file. Prefer semantic roles
+over primitives so appearance and page-palette remaps remain automatic.
 
-**Prefer semantic tokens over primitives.** Semantic tokens carry the design
-intent and adapt to dark mode automatically; primitives are the raw palette.
+- Canonical semantics: `--bg-*`, `--text-*`, `--icon-*`, and `--border-*`.
+- Portfolio aliases: `--background-*`, `--text-reading`,
+  `--text-interactive`, `--decorative-accent`, and the Tailwind/shadcn aliases
+  currently consumed by the site.
+- Primitives: Neutral, Brown, Amber, Blue, Green, Sage, Red, and Yellow.
 
-- Semantic (use these): `var(--background-primary)`, `var(--background-secondary)`,
-  `var(--background-elevated)` (cards), `var(--text-primary)`,
-  `var(--text-secondary)`, `var(--border-primary)`, `var(--link-primary)`,
-  plus state colours `--text-success` / `--text-warning` / `--text-error`
-  and their `--background-*` counterparts.
-- Primitives (raw scale, use only when no semantic token fits):
-  `--neutral-100`…`--neutral-900` (+ `-black`/`-white`), `--brown-50`…`--brown-600`,
-  `--amber-100`…`--amber-400`, `--blue-100`…`--blue-600`, `--green-100`…`--green-400`,
-  `--red-100`…`--red-400`, `--yellow-100`…`--yellow-600`.
-
-## Dark mode
-
-Add `class="dark"` to an ancestor element. Semantic tokens remap themselves;
-you do not write any dark-mode colours by hand. Primitives never change.
-
-## Example
+Example:
 
 ```html
-<article style="background: var(--background-elevated);
+<article style="background: var(--bg-quaternary);
                 color: var(--text-primary);
-                border: 1px solid var(--border-primary);
-                padding: 24px;">
-  <h3 style="color: var(--text-primary);">Card title</h3>
+                border: 1px solid var(--border-primary);">
+  <h3>Card title</h3>
   <p style="color: var(--text-secondary);">Secondary copy.</p>
-  <a style="color: var(--link-primary);">A link</a>
 </article>
 ```
 
-The source of truth is `tokens/tokens.css`. See the "Colours" preview card
-for the full palette with light/dark mappings.
+## Appearance and page palettes
+
+Add `.dark` to the root element for dark appearance. Primitives remain fixed;
+the complete semantic set remaps.
+
+Page identity is independent from appearance. Set `data-palette="blue"` or
+`data-palette="sage"` on the root element, optionally together with `.dark`.
+The default palette needs no attribute.
+
+The generated Colours preview catalogs every primitive and base semantic token
+and confirms that the Blue and Sage page-palette remaps ship in the bundle.

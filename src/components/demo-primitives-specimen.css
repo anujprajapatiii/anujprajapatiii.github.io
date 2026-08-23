@@ -55,7 +55,7 @@
 
 .demo-specimen__object strong {
   color: var(--demo-text);
-  font-weight: 500;
+  font-weight: var(--text-heading--font-weight);
 }
 
 @media (max-width: 48rem) {

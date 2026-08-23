@@ -75,6 +75,10 @@ What that means in practice:
   the canonical base palette's design-documentation mirror; a base
   colour-system change is complete only when the primitive values, semantic
   mappings and names agree in both places.
+- `ds-bundle/` is a generated, tokens-only distribution of that colour source
+  graph. Run `pnpm sync:design-bundle` after changing base tokens or page
+  palettes; never hand-edit its generated token or preview files. `pnpm check`
+  verifies the checked-in bundle against the canonical CSS.
 - Colours are a two-tier token system in `src/styles/global.css`: 52 primitives
   (raw hex, `:root` only) and 106 canonical semantic roles across background,
   text, icon and border groups. Semantic roles reference primitives via
@@ -419,6 +423,11 @@ What that means in practice:
 - **Gutters take the safe area**: `max(var(--spacing-gutter),
   env(safe-area-inset-*))` on `.container` / `.page-wrapper`, so content
   never slides under a notch in landscape.
+- **Compact site furniture keeps a 48px hit area without taking 48px of
+  layout.** Header navigation, the wordmark, footer links and the theme toggle
+  use `.site-hit-target`; its absolutely positioned pseudo-element expands hit
+  testing to `--control-height-touch` in both axes without changing header
+  height or spacing. Do not replace it with padding at individual call sites.
 - **Two reading-text colours, both measured.** `--text-primary` (14.35:1 light,
   12.55:1 dark) and `--text-secondary` (8.23:1 / 6.95:1), checked against
   both the page background and the card surface. These are the roles used by
@@ -463,7 +472,10 @@ What that means in practice:
   letter-spacing, physical direction properties, alpha-diluted colours, raw
   hex in components, inline layout, raw public-page grid columns, the retired
   auto-fit Grid API, unsupported primitive gaps, corner radius, bare tables,
-  variant-less buttons, retired type steps, and eyebrows.
+  variant-less buttons, retired type steps, and eyebrows. Structural audits
+  additionally cover unresolved custom-property references, tokenized motion
+  and type literals, ProjectCard heading-level contracts, shared site hit
+  targets, and generated design-bundle parity.
   Add a rule
   whenever a convention here gets broken in practice.
   - It runs **before** the build on purpose: every one of these produces

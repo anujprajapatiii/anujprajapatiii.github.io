@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "check": "node scripts/check-conventions.mjs"
+    "check": "node scripts/check-conventions.mjs",
+    "sync:design-bundle": "node scripts/sync-design-bundle.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",

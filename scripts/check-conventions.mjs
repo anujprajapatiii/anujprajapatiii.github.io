@@ -15,6 +15,7 @@
 */
 import { readFileSync } from "node:fs";
 import { globSync } from "node:fs";
+import { designBundleDrift } from "./sync-design-bundle.mjs";
 
 const FILES = globSync("src/**/*.{astro,css,ts,tsx}", { cwd: process.cwd() });
 
@@ -199,9 +200,193 @@ for (const file of FILES) {
   });
 }
 
+function report(file, line, id, found, message) {
+  failures += 1;
+  console.error(`${file}:${line}  [${id}]  ${found}`);
+  console.error(`    ${message}\n`);
+}
+
+function withoutComments(source) {
+  return source
+    .replace(/\/\*[\s\S]*?\*\//g, (comment) => comment.replace(/[^\n]/g, " "))
+    .replace(/\/\/.*$/gm, "");
+}
+
+function lineAt(source, index) {
+  return source.slice(0, index).split("\n").length;
+}
+
+/*
+  CSS accepts an unknown custom property and only fails when it is consumed,
+  so a typo is invisible to both Astro and the browser console. Inventory every
+  local definition and reference. Base UI owns the four allowlisted properties
+  at runtime; all other references must resolve inside this repository.
+*/
+const RUNTIME_CUSTOM_PROPERTIES = new Set([
+  "--active-tab-left",
+  "--active-tab-right",
+  "--active-tab-width",
+  "--transform-origin",
+]);
+const customPropertyDefinitions = new Set();
+const customPropertyReferences = [];
+
+for (const file of FILES) {
+  const source = withoutComments(readFileSync(file, "utf8"));
+  for (const match of source.matchAll(/(--[a-z0-9-]+)\s*:/gi)) {
+    customPropertyDefinitions.add(match[1]);
+  }
+  for (const match of source.matchAll(/@property\s+(--[a-z0-9-]+)/gi)) {
+    customPropertyDefinitions.add(match[1]);
+  }
+  for (const match of source.matchAll(/\.setProperty\(\s*["'](--[a-z0-9-]+)["']/gi)) {
+    customPropertyDefinitions.add(match[1]);
+  }
+  for (const match of source.matchAll(/var\(\s*(--[a-z0-9-]+)/gi)) {
+    customPropertyReferences.push({ file, source, name: match[1], index: match.index });
+  }
+}
+
+for (const reference of customPropertyReferences) {
+  if (
+    customPropertyDefinitions.has(reference.name) ||
+    RUNTIME_CUSTOM_PROPERTIES.has(reference.name)
+  ) continue;
+  report(
+    reference.file,
+    lineAt(reference.source, reference.index),
+    "undefined-token",
+    reference.name,
+    "custom-property references must resolve locally or be documented in the runtime allowlist",
+  );
+}
+
+/* Medium is an authored face, but component/treatment CSS still references the
+   shared type role so a future hierarchy change cannot leave local 500s behind.
+   Font-face declarations and the token definitions themselves are foundations,
+   not call sites. */
+for (const file of FILES.filter((candidate) => candidate.endsWith(".css"))) {
+  const source = withoutComments(readFileSync(file, "utf8"));
+  let inFontFace = false;
+  let fontFaceDepth = 0;
+  source.split("\n").forEach((line, index) => {
+    if (line.includes("@font-face")) inFontFace = true;
+    if (inFontFace) {
+      fontFaceDepth += (line.match(/{/g) ?? []).length;
+      fontFaceDepth -= (line.match(/}/g) ?? []).length;
+      if (fontFaceDepth <= 0 && line.includes("}")) inFontFace = false;
+      return;
+    }
+    if (line.trimStart().startsWith("--")) return;
+    const match = line.match(/font-weight:\s*(?:300|400|500)\b/);
+    if (match) {
+      report(
+        file,
+        index + 1,
+        "tokenized-type-weight",
+        match[0],
+        "shared treatments use a type-role weight token instead of a numeric call-site value",
+      );
+    }
+  });
+}
+
+/* Keep authored motion timings at token definitions. The 1ms reduced-motion
+   duration is the standards-aligned exception that effectively disables an
+   animation without removing its end state. */
+for (const file of FILES.filter((candidate) => candidate.endsWith(".css"))) {
+  const source = withoutComments(readFileSync(file, "utf8"));
+  source.split("\n").forEach((line, index) => {
+    if (line.trimStart().startsWith("--")) return;
+    if (/animation-duration:\s*1ms\s*!important/.test(line)) return;
+    const match = line.match(/(?:animation(?:-duration|-delay)?|transition-duration)\s*:[^;]*\b\d+(?:ms|s)\b/);
+    if (match) {
+      report(
+        file,
+        index + 1,
+        "tokenized-motion",
+        match[0],
+        "authored motion durations and delays belong in named motion tokens",
+      );
+    }
+  });
+}
+
+/* ProjectCard is reused under a section heading and directly under a page
+   title. Listing pages must opt into h2; the component keeps h3 as its nested
+   default for the homepage and style guide. */
+for (const file of ["src/pages/work/index.astro", "src/pages/play/index.astro"]) {
+  const source = readFileSync(file, "utf8");
+  for (const match of source.matchAll(/<ProjectCard\b[\s\S]*?\/>/g)) {
+    if (/\bheadingLevel="h2"/.test(match[0])) continue;
+    report(
+      file,
+      lineAt(source, match.index),
+      "project-card-heading",
+      "<ProjectCard>",
+      "top-level Work and Experiments cards use h2 headings",
+    );
+  }
+}
+
+const projectCard = readFileSync("src/components/ProjectCard.astro", "utf8");
+if (!/headingLevel\?:\s*"h2"\s*\|\s*"h3"/.test(projectCard) || !/headingLevel\s*=\s*"h3"/.test(projectCard)) {
+  report(
+    "src/components/ProjectCard.astro",
+    1,
+    "project-card-heading-contract",
+    "headingLevel",
+    "ProjectCard accepts h2/h3 and defaults to the nested h3 level",
+  );
+}
+
+/* Shared site furniture opts into one named, layout-neutral hit-area contract. */
+const HIT_TARGET_COUNTS = new Map([
+  ["src/components/layout/Header.astro", 2],
+  ["src/components/layout/Footer.astro", 4],
+  ["src/components/layout/ThemeToggle.astro", 1],
+]);
+for (const [file, minimum] of HIT_TARGET_COUNTS) {
+  const source = readFileSync(file, "utf8");
+  const count = source.match(/site-hit-target/g)?.length ?? 0;
+  if (count < minimum) {
+    report(
+      file,
+      1,
+      "site-hit-target",
+      `${count}/${minimum}`,
+      "every shared navigation, footer, wordmark, and theme control uses the enlarged hit-area contract",
+    );
+  }
+}
+const globalCss = readFileSync("src/styles/global.css", "utf8");
+if (
+  !/\.site-hit-target::after\s*{[\s\S]*?width:\s*max\(100%,\s*var\(--control-height-touch\)\);[\s\S]*?height:\s*max\(100%,\s*var\(--control-height-touch\)\);/.test(globalCss)
+) {
+  report(
+    "src/styles/global.css",
+    1,
+    "site-hit-target-contract",
+    ".site-hit-target::after",
+    "the layout-neutral pseudo-element must expose at least the touch control size in both axes",
+  );
+}
+
+for (const file of designBundleDrift()) {
+  report(
+    file,
+    1,
+    "design-bundle-parity",
+    "generated output differs",
+    "run pnpm sync:design-bundle after changing canonical colour sources",
+  );
+}
+
 if (failures) {
   console.error(`✗ ${failures} design-system violation${failures === 1 ? "" : "s"}.`);
   console.error("  Rules: agent-os/conventions/styling.md");
   process.exit(1);
 }
-console.log(`✓ design system clean (${FILES.length} files, ${RULES.length} rules)`);
+console.log(
+  `✓ design system clean (${FILES.length} files, ${RULES.length} pattern rules + structural audits)`,
+);

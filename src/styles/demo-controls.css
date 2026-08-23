@@ -30,7 +30,7 @@
   border-radius: var(--radius-control);
   font-size: var(--text-meta);
   line-height: var(--text-meta--line-height);
-  font-weight: 500;
+  font-weight: var(--text-heading--font-weight);
   transition:
     color var(--motion-feedback) var(--ease-feedback),
     background-color var(--motion-feedback) var(--ease-feedback),
@@ -283,7 +283,7 @@
 }
 
 .ui-switch:active:not(:disabled):not([data-checked]) {
-  background: var(--background-secondary-hover);
+  background: var(--bg-secondary-hover);
   transition-duration: var(--motion-none);
 }
 
@@ -368,7 +368,7 @@
 }
 
 .ui-tooltip__content {
-  max-width: 18rem;
+  max-width: var(--control-tooltip-max-width);
   padding: var(--spacing-2xs) var(--spacing-xs);
   border-radius: var(--radius-control);
   background: var(--background-alternate);
@@ -397,8 +397,6 @@
   --demo-text: var(--text-primary);
   --demo-reading: var(--text-secondary);
   --demo-subtle: var(--text-tertiary);
-  --demo-rule: var(--border-tertiary);
-  --demo-accent: var(--decorative-accent);
   display: grid;
   grid-template-columns: minmax(0, 16fr) minmax(var(--demo-panel-min), 8fr);
   gap: var(--spacing-grid);
@@ -440,7 +438,7 @@
 .demo-panel__heading h2 {
   font-size: var(--text-heading);
   line-height: var(--text-heading--line-height);
-  font-weight: 500;
+  font-weight: var(--text-heading--font-weight);
 }
 
 .demo-panel__heading p,
@@ -509,7 +507,7 @@
 .demo-step-list__button[aria-current="step"] {
   background: var(--demo-surface);
   color: var(--demo-text);
-  font-weight: 500;
+  font-weight: var(--text-heading--font-weight);
 }
 
 .demo-step-list__button[aria-current="step"] .demo-step-list__number {
@@ -524,7 +522,7 @@
 .demo-step-detail {
   display: grid;
   min-width: 0;
-  min-height: 7rem;
+  min-height: var(--demo-step-detail-min-height);
   align-content: start;
   gap: var(--spacing-2xs);
 }
@@ -539,7 +537,7 @@
 .demo-step-detail h3,
 .demo-setting label {
   color: var(--demo-text);
-  font-weight: 500;
+  font-weight: var(--text-heading--font-weight);
 }
 
 .demo-step-detail p {

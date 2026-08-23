@@ -27,6 +27,11 @@ export async function getStaticPaths() {
 const { item } = Astro.props;
 const { Content, headings } = await render(item);
 const publishedYear = item.data.publishedAt.getUTCFullYear();
+const mobileLiveActionUsesEmbedFallback = Boolean(
+  item.data.liveUrl &&
+  item.data.liveUrl === item.data.embedUrl &&
+  !item.data.embedOnPhone,
+);
 ---
 
 <PageLayout
@@ -78,7 +83,7 @@ const publishedYear = item.data.publishedAt.getUTCFullYear();
               </DataTable>
 
               {item.data.liveUrl && (
-                <Cluster>
+                <Cluster class={mobileLiveActionUsesEmbedFallback ? "live-action--wide-only" : undefined}>
                   <a
                     href={item.data.liveUrl}
                     target="_blank"
