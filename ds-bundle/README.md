@@ -22,9 +22,15 @@ fails when they drift.
 ## How to use
 
 `styles.css` imports the complete generated token file. Prefer semantic roles
-over primitives so appearance and page-palette remaps remain automatic.
+over primitives so appearance changes remain automatic and each component
+keeps its intended relationship to page palettes.
 
 - Canonical semantics: `--bg-*`, `--text-*`, `--icon-*`, and `--border-*`.
+  Use `--border-interactive` for a control boundary that communicates
+  affordance; keep `--border-primary` and `--border-tertiary` for structure.
+- Button semantics: `--button-*`. These roles share one neutral hierarchy in
+  light and dark appearance and intentionally do not remap under Blue or Sage
+  page palettes.
 - Portfolio aliases: `--background-*`, `--text-reading`,
   `--text-interactive`, `--decorative-accent`, and the Tailwind/shadcn aliases
   currently consumed by the site.
@@ -48,7 +54,10 @@ the complete semantic set remaps.
 
 Page identity is independent from appearance. Set `data-palette="blue"` or
 `data-palette="sage"` on the root element, optionally together with `.dark`.
-The default palette needs no attribute.
+The default palette needs no attribute. Page palettes remap structural and
+content colours; neutral button roles only respond to light or dark
+appearance.
 
-The generated Colours preview catalogs every primitive and base semantic token
-and confirms that the Blue and Sage page-palette remaps ship in the bundle.
+The generated Colours preview catalogs every primitive, base semantic token
+and button role. It also confirms that the Blue and Sage structural remaps ship
+in the bundle without defining palette-specific button themes.

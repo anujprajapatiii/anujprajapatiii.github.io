@@ -1,5 +1,6 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
+import ActionLink from "@/components/ActionLink.astro";
 import EmbedFrame from "@/components/EmbedFrame.astro";
 import Section from "@/components/primitives/Section.astro";
 import Container from "@/components/primitives/Container.astro";
@@ -40,10 +41,10 @@ const publishedYear = project.data.publishedAt.getUTCFullYear();
         {/* The back action owns the first row. The title and details table
             then share one grid row and align along the same top edge. */}
         <Cluster>
-          <a href="/work" class="btn btn--secondary">
+          <ActionLink href="/work">
             <span aria-hidden="true">&larr;</span>
             Work
-          </a>
+          </ActionLink>
         </Cluster>
 
         <Grid class="case-study-header-grid">
@@ -77,15 +78,15 @@ const publishedYear = project.data.publishedAt.getUTCFullYear();
 
               {project.data.liveUrl && (
                 <Cluster>
-                  <a
+                  <ActionLink
                     href={project.data.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="btn btn--primary"
+                    variant="primary"
                   >
                     Try it live
                     <span aria-hidden="true">&rarr;</span>
-                  </a>
+                  </ActionLink>
                 </Cluster>
               )}
             </Stack>

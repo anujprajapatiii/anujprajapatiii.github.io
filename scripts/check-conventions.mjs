@@ -8,8 +8,8 @@
   spacing collapses to zero and the build still passes. A reviewer cannot
   catch these by reading a diff.
 
-  What this cannot check: contrast ratios, reading measure, and anything
-  visual. Those still need measuring in a browser — see agent-os/conventions.
+  It can protect declared token contrast pairs. Reading measure, perceptual
+  state difference and other visual relationships still need a browser review.
 
   Run: pnpm check
 */
@@ -162,6 +162,12 @@ const RULES = [
     test: /class(?::list)?=(?:"|'|\{")[^"']*(?<![\w-])btn(?![\w-])(?![^"']*(?<![\w-])btn--(?:primary|secondary|link)(?![\w-]))/,
     only: (f) => f.endsWith(".astro"),
     msg: "btn needs a variant — btn--primary, btn--secondary or btn--link (the base alone is an unstyled box)",
+  },
+  {
+    id: "action-link-component",
+    test: /class(?::list)?=(?:"|'|\{)[^"']*(?<![\w-])btn(?:--[a-z-]+)?(?![\w-])/,
+    only: (f) => f.endsWith(".astro") && !f.endsWith("ActionLink.astro"),
+    msg: "public links presented as actions use ActionLink.astro instead of hand-authored btn classes",
   },
   {
     id: "no-eyebrow",
@@ -372,6 +378,99 @@ if (
   );
 }
 
+/* The public and React button runtimes stay separate, but both must expose the
+   neutral state contract that prevents call-site and palette drift. */
+const actionLinkSource = readFileSync("src/components/ActionLink.astro", "utf8");
+if (
+  !/type ActionLinkVariant = "primary" \| "secondary" \| "link"/.test(actionLinkSource) ||
+  !/class:list=\{\["btn", `btn--\$\{variant\}`/.test(actionLinkSource)
+) {
+  report(
+    "src/components/ActionLink.astro",
+    1,
+    "action-link-contract",
+    "ActionLink",
+    "the public action-link component owns the complete primary/secondary/link class contract",
+  );
+}
+
+const reactButtonSource = readFileSync("src/components/ui/button.tsx", "utf8");
+for (const requirement of [
+  /loading\?: boolean/,
+  /aria-busy=\{loading \|\| undefined\}/,
+  /data-loading=\{loading \? "" : undefined\}/,
+  /focusableWhenDisabled=\{loading \|\| focusableWhenDisabled\}/,
+]) {
+  if (requirement.test(reactButtonSource)) continue;
+  report(
+    "src/components/ui/button.tsx",
+    1,
+    "button-loading-contract",
+    requirement.source,
+    "Button loading must retain geometry, expose busy state and remain focusable while blocking repeat activation",
+  );
+}
+
+const uiControlsCss = readFileSync("src/styles/ui-controls.css", "utf8");
+const interactionAnatomyCss = readFileSync(
+  "src/components/interaction-anatomy-lab.css",
+  "utf8",
+);
+const buttonStateCssContracts = [
+  {
+    file: "src/styles/global.css",
+    source: globalCss,
+    test: /\.btn--primary:active\s*\{[\s\S]*?--lift-surface-on:\s*var\(--button-primary-background-active\)/,
+    found: ".btn--primary:active",
+  },
+  {
+    file: "src/styles/global.css",
+    source: globalCss,
+    test: /@media \(pointer: coarse\)\s*\{[\s\S]*?\.btn:not\(\.btn--link\)[\s\S]*?min-height:\s*var\(--control-height-touch\)/,
+    found: "coarse-pointer .btn",
+  },
+  {
+    file: "src/styles/ui-controls.css",
+    source: uiControlsCss,
+    test: /@media \(pointer: coarse\)\s*\{[\s\S]*?\.ui-button,[\s\S]*?min-height:\s*var\(--control-height-touch\)/,
+    found: "coarse-pointer .ui-button",
+  },
+  {
+    file: "src/components/interaction-anatomy-lab.css",
+    source: interactionAnatomyCss,
+    test: /@media \(pointer: coarse\) and \(max-width: 48rem\)\s*\{[\s\S]*?\.interaction-anatomy__phone-wrap\s*\{[\s\S]*?transform:\s*none;[\s\S]*?\.interaction-anatomy__composer\s*\{[\s\S]*?grid-template-columns:\s*1fr var\(--control-height-touch\)/,
+    found: "coarse-pointer interaction phone controls",
+  },
+  {
+    file: "src/styles/ui-controls.css",
+    source: uiControlsCss,
+    test: /\.ui-button--primary:active:not\(:disabled\):not\(\[data-disabled\]\)\s*\{[\s\S]*?background:\s*var\(--button-primary-background-active\)/,
+    found: ".ui-button--primary:active",
+  },
+  {
+    file: "src/styles/ui-controls.css",
+    source: uiControlsCss,
+    test: /\.ui-button\[data-loading\]\s*\{[\s\S]*?cursor:\s*progress/,
+    found: ".ui-button[data-loading]",
+  },
+  {
+    file: "src/styles/ui-controls.css",
+    source: uiControlsCss,
+    test: /\.ui-button--quiet:disabled:not\(\[data-loading\]\),[\s\S]*?background:\s*transparent/,
+    found: "disabled quiet-button hierarchy",
+  },
+];
+for (const contract of buttonStateCssContracts) {
+  if (contract.test.test(withoutComments(contract.source))) continue;
+  report(
+    contract.file,
+    1,
+    "button-state-contract",
+    contract.found,
+    "public and React buttons require distinct pressed, loading and coarse-pointer states",
+  );
+}
+
 /* Base UI is an implementation detail of the local wrappers. If an experiment
    imports it directly, keyboard behaviour and component APIs can drift without
    any visual warning. */
@@ -410,6 +509,210 @@ for (const file of FILES.filter(
       "shared `.ui-*` selectors are styled only in the central primitive or recipe stylesheets",
     );
   });
+}
+
+/* Contrast is a token contract, so protect it at the source instead of relying
+   on a screenshot audit to rediscover the same drift. These checks cover the
+   default and fully-remapped Blue structural palettes; Sage inherits the
+   default text and interactive-boundary roles. */
+function extractTokenRule(source, selector) {
+  const start = source.indexOf(`${selector} {`);
+  if (start === -1) return "";
+  const open = source.indexOf("{", start);
+  let depth = 0;
+  for (let index = open; index < source.length; index += 1) {
+    if (source[index] === "{") depth += 1;
+    if (source[index] === "}") depth -= 1;
+    if (depth === 0) return source.slice(start, index + 1);
+  }
+  return "";
+}
+
+function tokenProperties(rule) {
+  return new Map(
+    [...rule.matchAll(/^\s*(--[a-z0-9-]+):\s*([^;]+);/gim)].map((match) => [
+      match[1],
+      match[2].trim(),
+    ]),
+  );
+}
+
+function mergeTokenMaps(...maps) {
+  return new Map(maps.flatMap((map) => [...map]));
+}
+
+function resolveToken(tokens, name, trail = []) {
+  if (trail.includes(name)) return null;
+  const value = tokens.get(name);
+  if (!value) return null;
+  if (/^#[0-9a-f]{6}$/i.test(value)) return value;
+  const reference = value.match(/^var\((--[a-z0-9-]+)\)$/i)?.[1];
+  return reference ? resolveToken(tokens, reference, [...trail, name]) : null;
+}
+
+function relativeLuminance(hex) {
+  const channels = [1, 3, 5].map((start) => Number.parseInt(hex.slice(start, start + 2), 16) / 255);
+  const linear = channels.map((channel) => (
+    channel <= 0.04045
+      ? channel / 12.92
+      : ((channel + 0.055) / 1.055) ** 2.4
+  ));
+  return (0.2126 * linear[0]) + (0.7152 * linear[1]) + (0.0722 * linear[2]);
+}
+
+function contrastRatio(first, second) {
+  const a = relativeLuminance(first);
+  const b = relativeLuminance(second);
+  return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+}
+
+const baseRootTokens = tokenProperties(extractTokenRule(globalCss, ":root"));
+const baseDarkTokens = tokenProperties(extractTokenRule(globalCss, ".dark"));
+const blueCss = readFileSync("src/styles/themes/blue.css", "utf8");
+const blueRootTokens = tokenProperties(extractTokenRule(blueCss, ':root[data-palette="blue"]'));
+const blueDarkTokens = tokenProperties(extractTokenRule(blueCss, '.dark[data-palette="blue"]'));
+
+const contrastThemes = new Map([
+  ["default light", baseRootTokens],
+  ["default dark", mergeTokenMaps(baseRootTokens, baseDarkTokens)],
+  ["blue light", mergeTokenMaps(baseRootTokens, blueRootTokens)],
+  ["blue dark", mergeTokenMaps(baseRootTokens, baseDarkTokens, blueRootTokens, blueDarkTokens)],
+]);
+const contrastContracts = [
+  { role: "--text-tertiary", surfaces: ["--bg-primary", "--bg-quaternary"], minimum: 4.5 },
+  { role: "--text-placeholder", surfaces: ["--bg-primary", "--bg-quaternary"], minimum: 4.5 },
+  { role: "--border-interactive", surfaces: ["--bg-primary", "--bg-quaternary"], minimum: 3 },
+  { role: "--border-hover", surfaces: ["--bg-primary-hover", "--bg-quaternary-hover"], minimum: 3 },
+];
+
+for (const [theme, tokens] of contrastThemes) {
+  for (const contract of contrastContracts) {
+    const foreground = resolveToken(tokens, contract.role);
+    for (const surface of contract.surfaces) {
+      const background = resolveToken(tokens, surface);
+      if (!foreground || !background) {
+        report(
+          "src/styles/global.css",
+          1,
+          "contrast-token-resolution",
+          `${theme}: ${contract.role} / ${surface}`,
+          "contrast contracts must resolve through semantic tokens to literal primitive colours",
+        );
+        continue;
+      }
+      const ratio = contrastRatio(foreground, background);
+      if (ratio + Number.EPSILON >= contract.minimum) continue;
+      report(
+        "src/styles/global.css",
+        1,
+        "token-contrast",
+        `${theme}: ${contract.role} / ${surface} = ${ratio.toFixed(2)}:1`,
+        `this semantic pair must remain at or above ${contract.minimum.toFixed(1)}:1`,
+      );
+    }
+  }
+}
+
+/* Button roles are intentionally neutral and are reviewed only in the default
+   light/dark appearances. Sage and Blue button direction remains unscoped. */
+const neutralButtonRoles = [
+  "--button-primary-background",
+  "--button-primary-background-hover",
+  "--button-primary-background-active",
+  "--button-primary-foreground",
+  "--button-secondary-background-hover",
+  "--button-secondary-background-active",
+  "--button-secondary-foreground",
+  "--button-secondary-foreground-hover",
+  "--button-secondary-border",
+  "--button-secondary-border-hover",
+  "--button-secondary-border-active",
+  "--button-quiet-foreground",
+  "--button-quiet-foreground-hover",
+  "--button-disabled-background",
+  "--button-disabled-foreground",
+  "--button-disabled-border",
+];
+for (const tokens of [baseRootTokens, baseDarkTokens]) {
+  for (const role of neutralButtonRoles) {
+    if (/^var\(--neutral-(?:black|white|\d+)\)$/.test(tokens.get(role) ?? "")) continue;
+    report(
+      "src/styles/global.css",
+      1,
+      "neutral-button-role",
+      role,
+      "button component roles must map directly to neutral primitives in both light and dark appearance",
+    );
+  }
+}
+
+const buttonContrastThemes = new Map([
+  ["default light", baseRootTokens],
+  ["default dark", mergeTokenMaps(baseRootTokens, baseDarkTokens)],
+]);
+const buttonContrastContracts = [
+  {
+    foreground: "--button-primary-foreground",
+    backgrounds: [
+      "--button-primary-background",
+      "--button-primary-background-hover",
+      "--button-primary-background-active",
+    ],
+  },
+  {
+    foreground: "--button-secondary-foreground",
+    backgrounds: ["--bg-primary", "--bg-quaternary", "--button-secondary-background-active"],
+  },
+  {
+    foreground: "--button-secondary-foreground-hover",
+    backgrounds: ["--button-secondary-background-hover"],
+  },
+  {
+    foreground: "--button-quiet-foreground",
+    backgrounds: ["--bg-primary", "--bg-quaternary"],
+  },
+];
+
+for (const [theme, tokens] of buttonContrastThemes) {
+  for (const contract of buttonContrastContracts) {
+    const foreground = resolveToken(tokens, contract.foreground);
+    for (const role of contract.backgrounds) {
+      const background = resolveToken(tokens, role);
+      if (!foreground || !background) {
+        report(
+          "src/styles/global.css",
+          1,
+          "button-contrast-token-resolution",
+          `${theme}: ${contract.foreground} / ${role}`,
+          "button text and surfaces must resolve to literal neutral primitives",
+        );
+        continue;
+      }
+      const ratio = contrastRatio(foreground, background);
+      if (ratio + Number.EPSILON >= 4.5) continue;
+      report(
+        "src/styles/global.css",
+        1,
+        "button-token-contrast",
+        `${theme}: ${contract.foreground} / ${role} = ${ratio.toFixed(2)}:1`,
+        "enabled button text must remain at or above 4.5:1",
+      );
+    }
+  }
+
+  const primaryStates = [
+    "--button-primary-background",
+    "--button-primary-background-hover",
+    "--button-primary-background-active",
+  ].map((role) => resolveToken(tokens, role));
+  if (primaryStates.every(Boolean) && new Set(primaryStates).size === primaryStates.length) continue;
+  report(
+    "src/styles/global.css",
+    1,
+    "button-state-distinction",
+    `${theme}: ${primaryStates.join(" / ")}`,
+    "primary rest, hover and pressed surfaces must resolve to three distinct neutral colours",
+  );
 }
 
 for (const file of designBundleDrift()) {

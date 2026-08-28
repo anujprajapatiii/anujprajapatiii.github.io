@@ -1,5 +1,6 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
+import ActionLink from "@/components/ActionLink.astro";
 import Section from "@/components/primitives/Section.astro";
 import Container from "@/components/primitives/Container.astro";
 import Grid from "@/components/primitives/Grid.astro";
@@ -20,7 +21,7 @@ const primitiveFamilies = [
   {
     name: "Neutral",
     prefix: "neutral",
-    swatches: ["black", "900", "800", "700", "600", "500", "400", "350", "300", "200", "150", "100", "white"],
+    swatches: ["black", "900", "800", "700", "600", "500", "400", "375", "350", "325", "300", "200", "150", "100", "white"],
   },
   {
     name: "Brown",
@@ -35,7 +36,7 @@ const primitiveFamilies = [
   {
     name: "Blue",
     prefix: "blue",
-    swatches: ["950", "900", "800", "700", "600", "500", "400", "300", "200", "100", "50"],
+    swatches: ["950", "900", "800", "700", "600", "500", "400", "350", "300", "200", "100", "50"],
   },
   {
     name: "Green",
@@ -97,13 +98,13 @@ const backgroundTokens = [
 const textTokens = [
   { name: "primary", light: "neutral-600", dark: "neutral-200" },
   { name: "secondary", light: "neutral-400", dark: "neutral-300" },
-  { name: "tertiary", light: "neutral-350", dark: "neutral-350" },
+  { name: "tertiary", light: "neutral-375", dark: "neutral-325" },
   { name: "primary-hover", light: "neutral-900", dark: "neutral-100" },
   { name: "secondary-hover", light: "neutral-600", dark: "neutral-200" },
   { name: "tertiary-hover", light: "neutral-400", dark: "neutral-300" },
   { name: "disabled", light: "neutral-300", dark: "neutral-500" },
   { name: "disabled-alt", light: "neutral-200", dark: "neutral-400" },
-  { name: "placeholder", light: "neutral-350", dark: "neutral-350" },
+  { name: "placeholder", light: "neutral-375", dark: "neutral-325" },
   { name: "accent-primary", light: "white", dark: "neutral-150" },
   { name: "accent-secondary", light: "sage-500", dark: "sage-500" },
   { name: "accent-primary-hover", light: "white", dark: "white" },
@@ -143,6 +144,7 @@ const iconTokens = textTokens.map((token) => {
 
 const borderTokens = [
   { name: "primary", light: "neutral-300", dark: "neutral-500" },
+  { name: "interactive", light: "neutral-350", dark: "neutral-350" },
   { name: "secondary", light: "sage-500", dark: "sage-700" },
   { name: "tertiary", light: "neutral-200", dark: "neutral-600" },
   { name: "primary-solid", light: "neutral-800", dark: "neutral-100" },
@@ -190,8 +192,29 @@ const semanticGroups = [
       { name: "text-interactive", light: "text-primary-hover", dark: "text-primary-hover" },
       { name: "text-reading", light: "text-secondary", dark: "text-secondary" },
       { name: "text-alternate", light: "neutral-100", dark: "neutral-800" },
-      { name: "border-hover", light: "neutral-350", dark: "neutral-400" },
+      { name: "border-hover", light: "neutral-400", dark: "neutral-300" },
       { name: "decorative-accent", light: "sage-500", dark: "sage-500" },
+    ],
+  },
+  {
+    name: "Button component",
+    tokens: [
+      { name: "button-primary-background", light: "neutral-500", dark: "neutral-300" },
+      { name: "button-primary-background-hover", light: "neutral-700", dark: "neutral-200" },
+      { name: "button-primary-background-active", light: "neutral-black", dark: "neutral-white" },
+      { name: "button-primary-foreground", light: "neutral-100", dark: "neutral-800" },
+      { name: "button-secondary-background-hover", light: "neutral-100", dark: "neutral-700" },
+      { name: "button-secondary-background-active", light: "neutral-200", dark: "neutral-900" },
+      { name: "button-secondary-foreground", light: "neutral-600", dark: "neutral-200" },
+      { name: "button-secondary-foreground-hover", light: "neutral-900", dark: "neutral-100" },
+      { name: "button-secondary-border", light: "neutral-350", dark: "neutral-350" },
+      { name: "button-secondary-border-hover", light: "neutral-400", dark: "neutral-300" },
+      { name: "button-secondary-border-active", light: "neutral-600", dark: "neutral-200" },
+      { name: "button-quiet-foreground", light: "neutral-400", dark: "neutral-300" },
+      { name: "button-quiet-foreground-hover", light: "neutral-600", dark: "neutral-200" },
+      { name: "button-disabled-background", light: "neutral-100", dark: "neutral-700" },
+      { name: "button-disabled-foreground", light: "neutral-300", dark: "neutral-500" },
+      { name: "button-disabled-border", light: "neutral-200", dark: "neutral-600" },
     ],
   },
 ];
@@ -605,29 +628,29 @@ const pagePaletteRows = [
         Buttons
       </h2>
       <p class="mb-md max-w-measure text-meta text-muted-foreground">
-        Three variants, one base. They are levels of emphasis, not shapes:
-        <code>.btn--primary</code> is the one action a page is for and there
-        should be at most one per view; <code>.btn--secondary</code> is the
-        bordered default for navigation and everything that is an action but
-        not <em>the</em> action; <code>.btn--link</code> is an action inside or
-        beside a run of text, with no box. Markdown links in a case study get
-        the link variant automatically through <code>.prose a</code>.
+        One hierarchy serves both runtimes. Use <code>ActionLink</code> when an
+        Astro link is presented as an action, and <code>Button</code> or
+        <code>IconButton</code> for React commands. Primary is the action a
+        region is for; secondary is the bordered default; quiet supports a
+        primary inside an experiment; link belongs inside or beside text.
       </p>
       <p class="mb-md max-w-measure text-meta text-muted-foreground">
-        Always write both classes — <code>btn</code> alone is a transparent
-        box with inherited text, which looks close enough to plain markup to
-        ship unnoticed. <code>pnpm check</code> fails on a missing variant.
+        Button colours stay neutral in light and dark appearance. Authored
+        page palettes do not remap them. Rest, hover and pressed are separate
+        tonal steps; focus adds the shared outline without impersonating
+        hover, disabled is neutral, and loading retains its action hierarchy
+        while preserving the label's space.
       </p>
       <Cluster gap="sm" class="mb-md">
-        <a href="/style-guide" class="btn btn--primary">
+        <ActionLink href="/style-guide" variant="primary">
           Primary
           <span aria-hidden="true">&rarr;</span>
-        </a>
-        <a href="/style-guide" class="btn btn--secondary">
+        </ActionLink>
+        <ActionLink href="/style-guide">
           Secondary
           <span aria-hidden="true">&rarr;</span>
-        </a>
-        <a href="/style-guide" class="btn btn--link">Hyperlink</a>
+        </ActionLink>
+        <ActionLink href="/style-guide" variant="link">Hyperlink</ActionLink>
       </Cluster>
       <DataTable label="Button variants">
         <thead>
@@ -635,23 +658,27 @@ const pagePaletteRows = [
             <th scope="col">Variant</th>
             <th scope="col">Rest</th>
             <th scope="col">Hover</th>
+            <th scope="col">Pressed</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>primary</td>
-            <td>background-alternate on text-alternate</td>
-            <td>background-alternate-hover</td>
+            <td>button-primary-background</td>
+            <td>button-primary-background-hover</td>
+            <td>button-primary-background-active</td>
           </tr>
           <tr>
             <td>secondary</td>
-            <td>border-primary, text-primary, no fill</td>
-            <td>border-hover, background-hover, accent</td>
+            <td>button-secondary-border and foreground, transparent fill</td>
+            <td>button-secondary background, border and foreground hover roles</td>
+            <td>button-secondary background and border active roles</td>
           </tr>
           <tr>
             <td>link</td>
-            <td>text-primary, underlined, no box</td>
-            <td>accent</td>
+            <td>button-secondary-foreground, underlined, no box</td>
+            <td>button-secondary-foreground-hover</td>
+            <td>same as hover</td>
           </tr>
         </tbody>
       </DataTable>

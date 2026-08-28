@@ -6,6 +6,7 @@
   --lab-reading: var(--text-secondary);
   --lab-rule: var(--border-primary);
   --lab-rule-quiet: var(--border-tertiary);
+  --lab-rule-interactive: var(--border-interactive);
   --lab-accent: var(--decorative-accent);
   --lab-annotation-rule: var(--border-accent-primary);
   --lab-annotation-surface: var(--background-elevated);
@@ -211,7 +212,7 @@
   gap: var(--spacing-2xs);
   align-items: center;
   padding: var(--spacing-2xs);
-  border: 1px solid var(--lab-rule);
+  border: 1px solid var(--lab-rule-interactive);
   border-radius: var(--radius-control);
   background: var(--lab-screen);
 }
@@ -348,6 +349,20 @@
 
   .interaction-anatomy__phone-wrap {
     transform: scale(0.68);
+  }
+}
+
+@media (pointer: coarse) and (max-width: 48rem) {
+  .interaction-anatomy {
+    --lab-stage-height: calc(var(--lab-phone-height) + var(--spacing-lg));
+  }
+
+  .interaction-anatomy__phone-wrap {
+    transform: none;
+  }
+
+  .interaction-anatomy__composer {
+    grid-template-columns: 1fr var(--control-height-touch);
   }
 }
 

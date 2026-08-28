@@ -123,7 +123,9 @@
     --neutral-600: #21252b;
     --neutral-500: #2c323a;
     --neutral-400: #434b56;
+    --neutral-375: #5f6670;
     --neutral-350: #6d7580;
+    --neutral-325: #808894;
     --neutral-300: #99a1ac;
     --neutral-200: #d3d7dd;
     --neutral-150: #eef0f2;
@@ -153,6 +155,7 @@
     --blue-600: #002c83;
     --blue-500: #1841ac;
     --blue-400: #1e50d3;
+    --blue-350: #4169d9;
     --blue-300: #99b6ff;
     --blue-200: #dae5ff;
     --blue-100: #f0f3ff;
@@ -221,13 +224,13 @@
     /* Text */
     --text-primary: var(--neutral-600);
     --text-secondary: var(--neutral-400);
-    --text-tertiary: var(--neutral-350);
+    --text-tertiary: var(--neutral-375);
     --text-primary-hover: var(--neutral-900);
     --text-secondary-hover: var(--neutral-600);
     --text-tertiary-hover: var(--neutral-400);
     --text-disabled: var(--neutral-300);
     --text-disabled-alt: var(--neutral-200);
-    --text-placeholder: var(--neutral-350);
+    --text-placeholder: var(--neutral-375);
     --text-accent-primary: var(--neutral-white);
     --text-accent-secondary: var(--sage-500);
     --text-accent-primary-hover: var(--neutral-white);
@@ -252,13 +255,13 @@
     /* Icon — deliberately parallels text so paired labels and icons agree. */
     --icon-primary: var(--neutral-600);
     --icon-secondary: var(--neutral-400);
-    --icon-tertiary: var(--neutral-350);
+    --icon-tertiary: var(--neutral-375);
     --icon-primary-hover: var(--neutral-900);
     --icon-secondary-hover: var(--neutral-600);
     --icon-tertiary-hover: var(--neutral-400);
     --icon-disabled: var(--neutral-300);
     --icon-disabled-alt: var(--neutral-200);
-    --icon-placeholder: var(--neutral-350);
+    --icon-placeholder: var(--neutral-375);
     --icon-accent-primary: var(--sage-500);
     --icon-accent-secondary: var(--sage-700);
     --icon-accent-primary-hover: var(--sage-700);
@@ -282,6 +285,7 @@
 
     /* Border */
     --border-primary: var(--neutral-300);
+    --border-interactive: var(--neutral-350);
     --border-secondary: var(--sage-500);
     --border-tertiary: var(--neutral-200);
     --border-primary-solid: var(--neutral-800);
@@ -309,8 +313,27 @@
     --text-interactive: var(--text-primary-hover);
     --text-reading: var(--text-secondary);
     --text-alternate: var(--neutral-100);
-    --border-hover: var(--neutral-350);
+    --border-hover: var(--neutral-400);
     --decorative-accent: var(--sage-500);
+
+    /* Button component roles stay deliberately neutral. Page palettes are
+       authored content identity; they do not recolour action hierarchy. */
+    --button-primary-background: var(--neutral-500);
+    --button-primary-background-hover: var(--neutral-700);
+    --button-primary-background-active: var(--neutral-black);
+    --button-primary-foreground: var(--neutral-100);
+    --button-secondary-background-hover: var(--neutral-100);
+    --button-secondary-background-active: var(--neutral-200);
+    --button-secondary-foreground: var(--neutral-600);
+    --button-secondary-foreground-hover: var(--neutral-900);
+    --button-secondary-border: var(--neutral-350);
+    --button-secondary-border-hover: var(--neutral-400);
+    --button-secondary-border-active: var(--neutral-600);
+    --button-quiet-foreground: var(--neutral-400);
+    --button-quiet-foreground-hover: var(--neutral-600);
+    --button-disabled-background: var(--neutral-100);
+    --button-disabled-foreground: var(--neutral-300);
+    --button-disabled-border: var(--neutral-200);
 
     /* Tailwind/shadcn aliases currently consumed by components. */
     --background: var(--background-primary);
@@ -363,13 +386,13 @@
     /* Text */
     --text-primary: var(--neutral-200);
     --text-secondary: var(--neutral-300);
-    --text-tertiary: var(--neutral-350);
+    --text-tertiary: var(--neutral-325);
     --text-primary-hover: var(--neutral-100);
     --text-secondary-hover: var(--neutral-200);
     --text-tertiary-hover: var(--neutral-300);
     --text-disabled: var(--neutral-500);
     --text-disabled-alt: var(--neutral-400);
-    --text-placeholder: var(--neutral-350);
+    --text-placeholder: var(--neutral-325);
     --text-accent-primary: var(--neutral-150);
     --text-accent-secondary: var(--sage-500);
     --text-accent-primary-hover: var(--neutral-white);
@@ -394,13 +417,13 @@
     /* Icon */
     --icon-primary: var(--neutral-200);
     --icon-secondary: var(--neutral-300);
-    --icon-tertiary: var(--neutral-350);
+    --icon-tertiary: var(--neutral-325);
     --icon-primary-hover: var(--neutral-100);
     --icon-secondary-hover: var(--neutral-200);
     --icon-tertiary-hover: var(--neutral-300);
     --icon-disabled: var(--neutral-500);
     --icon-disabled-alt: var(--neutral-400);
-    --icon-placeholder: var(--neutral-350);
+    --icon-placeholder: var(--neutral-325);
     --icon-accent-primary: var(--sage-500);
     --icon-accent-secondary: var(--sage-700);
     --icon-accent-primary-hover: var(--sage-500);
@@ -424,6 +447,7 @@
 
     /* Border */
     --border-primary: var(--neutral-500);
+    --border-interactive: var(--neutral-350);
     --border-secondary: var(--sage-700);
     --border-tertiary: var(--neutral-600);
     --border-primary-solid: var(--neutral-100);
@@ -442,8 +466,26 @@
 
     /* Portfolio-specific semantic remaps. */
     --text-alternate: var(--neutral-800);
-    --border-hover: var(--neutral-400);
+    --border-hover: var(--neutral-300);
     --decorative-accent: var(--sage-500);
+
+    /* Dark appearance remaps the same neutral button hierarchy. */
+    --button-primary-background: var(--neutral-300);
+    --button-primary-background-hover: var(--neutral-200);
+    --button-primary-background-active: var(--neutral-white);
+    --button-primary-foreground: var(--neutral-800);
+    --button-secondary-background-hover: var(--neutral-700);
+    --button-secondary-background-active: var(--neutral-900);
+    --button-secondary-foreground: var(--neutral-200);
+    --button-secondary-foreground-hover: var(--neutral-100);
+    --button-secondary-border: var(--neutral-350);
+    --button-secondary-border-hover: var(--neutral-300);
+    --button-secondary-border-active: var(--neutral-200);
+    --button-quiet-foreground: var(--neutral-300);
+    --button-quiet-foreground-hover: var(--neutral-200);
+    --button-disabled-background: var(--neutral-700);
+    --button-disabled-foreground: var(--neutral-500);
+    --button-disabled-border: var(--neutral-600);
 }
 
 @theme inline {
@@ -560,6 +602,7 @@
 
     /* Canonical border roles. */
     --color-border-primary: var(--border-primary);
+    --color-border-interactive: var(--border-interactive);
     --color-border-secondary: var(--border-secondary);
     --color-border-tertiary: var(--border-tertiary);
     --color-border-primary-solid: var(--border-primary-solid);
@@ -631,11 +674,11 @@
     --control-height-compact: var(--spacing-lg);
     --control-height-touch: var(--spacing-xl);
     --control-icon-size: var(--spacing-sm);
-    --control-inset: 0.125rem;
     --control-indicator-size: 0.0625rem;
-    --control-switch-width: 2.25rem;
+    --control-switch-width: 2rem;
     --control-switch-height: 1.25rem;
     --control-switch-thumb: var(--spacing-sm);
+    --control-switch-offset: 0.125rem;
     --control-tooltip-max-width: 18rem;
     --demo-step-detail-min-height: 7rem;
 
@@ -829,6 +872,11 @@
 .section--standard { padding-block: var(--spacing-xl); }         /* 48 */
 .section--large { padding-block: var(--spacing-3xl); }           /* 96 */
 .section--hero { padding-block: clamp(4rem, 10vw, 8rem); }       /* 64–128 */
+
+@media (max-width: 48rem) {
+  /* Bring the first portfolio work one scale step closer to the homepage hero. */
+  .home-featured { padding-block-start: var(--spacing-2xl); }
+}
 
 /* Stack — vertical flex with consistent gap */
 .stack { display: flex; flex-direction: column; }
@@ -1204,9 +1252,16 @@
   border-style: solid;
   font-size: var(--text-meta);
   line-height: var(--text-meta--line-height);
+  font-weight: var(--text-heading--font-weight);
   text-decoration-line: none;
   /* <button> does not get the hand cursor for free the way <a href> does. */
   cursor: pointer;
+}
+
+@media (pointer: coarse) {
+  .btn:not(.btn--link) {
+    min-height: var(--control-height-touch);
+  }
 }
 
 /*
@@ -1557,14 +1612,31 @@
     background: var(--background-secondary);
     cursor: pointer;
   }
+  .play-preview__thumbnail::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: var(--control-indicator-size) solid transparent;
+    pointer-events: none;
+  }
+  @media (hover: hover) {
+    .play-preview__thumbnail:hover::after {
+      border-color: var(--border-primary-solid);
+    }
+  }
+  .play-preview__thumbnail:active::after,
+  .play-preview__thumbnail[aria-pressed="true"]::after {
+    border-width: calc(var(--control-indicator-size) * 2);
+    border-color: var(--border-primary-solid);
+  }
   .play-preview__loader {
     position: absolute;
     inset-inline: 0;
     inset-block-end: 0;
     display: none;
-    height: 2px;
+    height: calc(var(--control-indicator-size) * 2);
     overflow: hidden;
-    background: var(--border);
+    background: var(--button-secondary-border);
     pointer-events: none;
   }
   .play-preview__thumbnail--active .play-preview__loader {
@@ -1576,7 +1648,7 @@
     height: 100%;
     transform: scaleX(0);
     transform-origin: left;
-    background: var(--decorative-accent);
+    background: var(--border-primary-solid);
   }
 
   /*
@@ -2101,30 +2173,54 @@
   ends, which is exactly how they already looked. Anuj's call: leave prose
   links alone.
 */
-.btn--link,
 .prose a {
   --lift-text: var(--text-primary);
+  --lift-line: currentColor;
+}
+
+.btn--link {
+  --lift-text: var(--button-secondary-foreground);
+  --lift-text-on: var(--button-secondary-foreground-hover);
   --lift-line: currentColor;
 }
 
 /* BUTTONS. Secondary grows a surface out of nothing on hover — the same
    pattern as the table row, which is why neither declares --lift-surface. */
 .btn--secondary {
-  --lift-text: var(--text-primary);
-  --lift-rule: var(--border);
-  --lift-rule-on: var(--border-hover);
-  --lift-surface-on: var(--background-hover);
+  --lift-text: var(--button-secondary-foreground);
+  --lift-text-on: var(--button-secondary-foreground-hover);
+  --lift-rule: var(--button-secondary-border);
+  --lift-rule-on: var(--button-secondary-border-hover);
+  --lift-surface-on: var(--button-secondary-background-hover);
 }
-/* Primary is the one control whose LABEL deliberately holds still: the surface
-   moves under it. Pinning --lift-text-on to the resting value says that, where
-   omitting it would silently inherit the shared destination. */
+.btn--secondary:focus-visible {
+  --lift-text-on: var(--button-secondary-foreground);
+  --lift-rule-on: var(--button-secondary-border);
+  --lift-surface-on: transparent;
+}
+.btn--secondary:active {
+  --lift-text-on: var(--button-secondary-foreground);
+  --lift-rule-on: var(--button-secondary-border-active);
+  --lift-surface-on: var(--button-secondary-background-active);
+}
+
+/* Primary uses one neutral tonal ladder. The label holds still while the
+   surface moves from rest to hover to a distinct pressed state. */
 .btn--primary {
-  --lift-text: var(--text-alternate);
-  --lift-text-on: var(--text-alternate);
-  --lift-surface: var(--background-alternate);
-  --lift-surface-on: var(--background-alternate-hover);
-  --lift-rule: var(--background-alternate);
-  --lift-rule-on: var(--background-alternate-hover);
+  --lift-text: var(--button-primary-foreground);
+  --lift-text-on: var(--button-primary-foreground);
+  --lift-surface: var(--button-primary-background);
+  --lift-surface-on: var(--button-primary-background-hover);
+  --lift-rule: var(--button-primary-background);
+  --lift-rule-on: var(--button-primary-background-hover);
+}
+.btn--primary:focus-visible {
+  --lift-surface-on: var(--button-primary-background);
+  --lift-rule-on: var(--button-primary-background);
+}
+.btn--primary:active {
+  --lift-surface-on: var(--button-primary-background-active);
+  --lift-rule-on: var(--button-primary-background-active);
 }
 
 /* Shared linked surfaces. Text stays in its authored primary/secondary roles;

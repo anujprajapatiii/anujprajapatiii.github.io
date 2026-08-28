@@ -227,6 +227,18 @@ Every applicable primitive documents and tests:
 Hover is an enhancement, never the only signal. Selected, invalid and status
 states cannot rely on colour alone.
 
+For actions, use one hierarchy across recipes:
+
+- primary advances or completes the action a region is for;
+- secondary supports that action without competing;
+- quiet handles reset, previous and other low-emphasis commands;
+- loading retains the chosen variant and its dimensions, exposes `aria-busy`,
+  prevents repeat activation and remains focusable until the work finishes.
+
+Button rest, hover and active colours come from the neutral `--button-*`
+component roles. Experiment-local CSS must not recolour them, and authored page
+palettes do not remap them.
+
 ### Customization boundary
 
 - A component's `className` is for layout only: width, alignment, gap and
@@ -239,9 +251,9 @@ states cannot rely on colour alone.
   and experiments consume the local wrappers.
 - Use the configured Lucide icon set. Icons inside controls follow the
   `data-icon` contract so sizing belongs to the control, not every call site.
-- The public Astro `.btn` pattern and React `Button` solve different runtime
-  needs. Keep them visually related, but do not force one implementation
-  across both environments.
+- Public links presented as actions use `ActionLink.astro`; React commands use
+  `Button` or `IconButton`. They solve different runtime needs and share the
+  neutral state contract without forcing one implementation across both.
 - Overlay placement comes from the primitive. Do not add arbitrary z-index
   values at call sites.
 

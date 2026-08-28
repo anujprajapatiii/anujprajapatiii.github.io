@@ -1,5 +1,6 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
+import ActionLink from "@/components/ActionLink.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
 import PlayPreviewList from "@/components/PlayPreviewList.astro";
 import SectionHeading from "@/components/SectionHeading.astro";
@@ -61,15 +62,15 @@ const play = await getFeaturedExperiments(5);
   </Section>
 
   {/* Featured projects */}
-  <Section size="large">
+  <Section size="large" class="home-featured">
     <Container>
       <Stack gap="lg">
         <Cluster justify="between" align="start">
           <SectionHeading>Featured Projects</SectionHeading>
-          <a href="/work" class="btn btn--secondary">
+          <ActionLink href="/work">
             View all
             <span aria-hidden="true">&rarr;</span>
-          </a>
+          </ActionLink>
         </Cluster>
         <Grid>
           {featured.map((project) => (
@@ -93,10 +94,10 @@ const play = await getFeaturedExperiments(5);
       <Stack gap="lg">
         <Cluster justify="between" align="start">
           <SectionHeading>Experiments</SectionHeading>
-          <a href="/play" class="btn btn--secondary">
+          <ActionLink href="/play">
             View all
             <span aria-hidden="true">&rarr;</span>
-          </a>
+          </ActionLink>
         </Cluster>
         <PlayPreviewList items={play} />
       </Stack>
@@ -109,10 +110,10 @@ const play = await getFeaturedExperiments(5);
       <Stack gap="sm">
         <SectionHeading>Get in touch</SectionHeading>
         <Cluster gap="lg" class="text-meta">
-          <a href={`mailto:${siteConfig.social.email}`} class="btn btn--link"
-            >{siteConfig.social.email}</a
-          >
-          <a href={siteConfig.social.github} class="btn btn--link">GitHub</a>
+          <ActionLink href={`mailto:${siteConfig.social.email}`} variant="link">
+            {siteConfig.social.email}
+          </ActionLink>
+          <ActionLink href={siteConfig.social.github} variant="link">GitHub</ActionLink>
         </Cluster>
       </Stack>
     </Container>
