@@ -11,7 +11,6 @@ import Cluster from "@/components/primitives/Cluster.astro";
 import Grid from "@/components/primitives/Grid.astro";
 import GridItem from "@/components/primitives/GridItem.astro";
 import ThemeImage from "@/components/ThemeImage.astro";
-import RainOverlay from "@/components/RainOverlay.astro";
 import { siteConfig } from "@/data/site-config";
 import {
   getFeaturedExperiments,
@@ -37,25 +36,19 @@ const play = await getFeaturedExperiments(5);
             </h1>
             <div class="info-box">
               <div class="info-box__row">Brand &amp; Growth Designer</div>
-              <a
-                class="info-box__row flex items-center justify-between"
-                href="#connect"
-              >
-                <span>Connect</span>
-                <span aria-hidden="true">→</span>
-              </a>
+              <div class="info-box__row">Brand systems</div>
+              <div class="info-box__row">Campaigns &amp; activations</div>
+              <div class="info-box__row">Digital products</div>
             </div>
           </Stack>
         </GridItem>
         <GridItem spanLg={16}>
           <ThemeImage
-            lightSrc="/images/hero-placeholder-day.webp"
-            darkSrc="/images/hero-placeholder-night.webp"
+            lightSrc="/images/hero-neutral-light.jpg"
+            darkSrc="/images/hero-neutral-dark.jpg"
             alt=""
             class="theme-image--cover"
-          >
-            <RainOverlay slot="effect" />
-          </ThemeImage>
+          />
         </GridItem>
       </Grid>
     </Container>

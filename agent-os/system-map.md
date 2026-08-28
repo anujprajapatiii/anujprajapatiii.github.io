@@ -16,7 +16,7 @@ workflows change.
 | Demo interface primitives | Accessible controls plus a Supported guided recipe and Candidate inspector recipe; experiments retain their own controlled state, candidate components require live proof, and diagnostics stay opt-in | `src/components/ui/`, `src/components/demo/`, `src/styles/ui-controls.css`, `src/styles/demo-recipes.css`, `agent-os/conventions/experiment-interfaces.md` |
 | Design tokens | Base color, type, spacing, and container tokens; light/dark appearance modes | `src/styles/global.css` |
 | Page palettes | Authored per-page semantic colour remaps, independent of light/dark mode | `src/data/page-palettes.ts`, `src/styles/themes/`, layout palette props |
-| Ambient media effects | Optional, media-clipped atmosphere with semantic colour, reduced-motion stills, and offscreen pausing | `src/components/RainOverlay.astro`, `src/components/ThemeImage.astro` |
+| Theme-aware media | Selects matched light and dark imagery while preserving shared layout and accessibility semantics | `src/components/ThemeImage.astro` |
 | Layout primitives | One 1300px page container plus Section/Stack/Cluster and a typed 24-track Grid/GridItem system | `src/components/primitives/`, CSS in `src/styles/global.css` |
 | Deployment | Static build published to GitHub Pages | `.github/workflows/deploy.yml` |
 | Design exploration | Isolated worktree and branch workflow for comparing alternatives, selecting one, and cleaning temporary lab code before merge | `agent-os/conventions/design-exploration.md`, `agent-os/plans/design-exploration-template.md` |
