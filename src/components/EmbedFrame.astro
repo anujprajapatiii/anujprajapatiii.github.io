@@ -1,4 +1,5 @@
 ---
+import ActionLink from "@/components/ActionLink.astro";
 import Section from "@/components/primitives/Section.astro";
 import Container from "@/components/primitives/Container.astro";
 
@@ -53,21 +54,21 @@ const { url, title, onPhone = false } = Astro.props;
       </div>
       <p class="embed-fallback">
         This one needs a bigger screen than a phone —
-        <a
+        <ActionLink
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          class="btn btn--link"
-        >open it in a new tab</a>.
+          variant="link"
+        >open it in a new tab</ActionLink>.
       </p>
       <p class="embed-note">
         Runs live in the page.
-        <a
+        <ActionLink
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          class="btn btn--link"
-        >Open full screen</a>.
+          variant="link"
+        >Open full screen</ActionLink>.
       </p>
     </div>
   </Container>

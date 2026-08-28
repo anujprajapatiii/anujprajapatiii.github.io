@@ -354,7 +354,7 @@ export default function InteractionAnatomyLab() {
               <header className="interaction-anatomy__app-bar">
                 <strong>Assistant</strong>
                 <Button
-                  variant="secondary"
+                  variant="quiet"
                   onClick={resetDemo}
                 >
                   <RotateCcw data-icon="inline-start" aria-hidden="true" />
@@ -414,10 +414,12 @@ export default function InteractionAnatomyLab() {
                   <IconButton
                     className="interaction-anatomy__send-button"
                     label="Send message"
+                    loading={phase === "thinking"}
+                    loadingLabel="Sending message"
                     type="submit"
                     variant="primary"
-                  disabled={phase === "thinking" || !draft.trim()}
-                >
+                    disabled={!draft.trim()}
+                  >
                     <ArrowUp data-icon="inline-start" aria-hidden="true" />
                   </IconButton>
                 </form>
@@ -511,7 +513,7 @@ export default function InteractionAnatomyLab() {
           >
             Previous
           </Button>
-          <Button variant="secondary" onClick={() => selectLesson(nextLesson)}>
+          <Button variant="primary" onClick={() => selectLesson(nextLesson)}>
             {lessonIndex === LESSON_ORDER.length - 1
               ? "Start again"
               : `Next: ${LESSONS[nextLesson].label}`}

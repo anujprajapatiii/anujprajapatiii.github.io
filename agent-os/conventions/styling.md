@@ -79,8 +79,8 @@ What that means in practice:
   graph. Run `pnpm sync:design-bundle` after changing base tokens or page
   palettes; never hand-edit its generated token or preview files. `pnpm check`
   verifies the checked-in bundle against the canonical CSS.
-- Colours are a two-tier token system in `src/styles/global.css`: 52 primitives
-  (raw hex, `:root` only) and 106 canonical semantic roles across background,
+- Colours are a two-tier token system in `src/styles/global.css`: 55 primitives
+  (raw hex, `:root` only) and 107 canonical semantic roles across background,
   text, icon and border groups. Semantic roles reference primitives via
   `var()`, with light values in `:root` and a complete dark remap in `.dark`.
   Portfolio-specific compatibility roles sit above those two tiers and keep
@@ -257,9 +257,13 @@ What that means in practice:
     most a small number of secondary settings, and wayfinding. Raw state,
     event logs, code and playback controls require an explicit disclosure and
     a demonstrated visitor need. Canvas status badges are opt-in, not default.
-  - Binary controls must remain unmistakable when off: the track keeps a
-    semantic boundary and the thumb contrasts with it. On adds the semantic
-    accent; colour is never the only state signal.
+  - Binary controls use the familiar shadcn/Base UI switch anatomy: a 32×20
+    round track, a 16px round thumb and an enlarged 48px coarse-pointer target.
+    Off uses `--border-interactive` as a neutral track; on moves the thumb and
+    fills the track with `--background-alternate`. The position change carries
+    the state, so colour is never the only signal. The thumb stays on
+    `--background-primary`, preserving at least 3:1 separation from both tracks
+    across default, Blue and Sage palettes in light and dark mode.
   - Rest, hover, press, selected, focus and disabled states use semantic
     surface/text roles. Guided-step selection gets a quiet neutral surface,
     primary text and `aria-current`; it does not add an accent rule.
@@ -317,25 +321,23 @@ What that means in practice:
   - The hero info box is deliberately *not* a table — it has no headings and
     none were invented for it — but it takes the same border, padding and
     type so it reads as part of the same family.
-- **There are three buttons, and they are levels of emphasis, not shapes.**
-  Every actionable control is `class="btn btn--<variant>"`; nothing hand-rolls
-  a border, padding and hover triplet at a call site again.
-  - `.btn--primary` — the one action a page is *for*. Inverted surface
-    (`--background-alternate` on `--text-alternate`). **At most one per view:**
-    a second primary makes both mean less. Today that is "Try it live" on a
-    case study, and nothing else.
-  - `.btn--secondary` — the bordered default. Navigation and every action that
-    is an action but not *the* action: the back links on work and play, the
-    "View all" links beside the homepage section headings. It
-    moves the same three properties an interactive table row moves — border,
-    surface, text — so it reads as one object lifting.
-  - `.btn--link` — an action inside, or beside, a run of text. No box.
-    `--text-primary`, underlined at `--spacing-3xs` offset, hovering to
-    `--accent`.
-  - **Always write both classes.** `btn` alone is a transparent box with
-    inherited colour, which renders as text with padding — it looks like plain
-    markup rather than a bug, so it ships. `pnpm check` fails on a missing or
-    unknown variant.
+- **Buttons are levels of emphasis, not shapes.** `ActionLink.astro` is the
+  public Astro entry point; React commands use `Button` or `IconButton`. The
+  two runtimes remain separate, but share the same neutral component roles and
+  state vocabulary.
+  - `primary` — the action a region is *for*. Use one per action group; a
+    simulated device and its surrounding guided panel are separate regions.
+    Its surface follows a real three-step neutral ladder: rest, hover, pressed.
+  - `secondary` — the bordered default for navigation and supporting actions.
+    Rest is transparent; hover and pressed use separate neutral surfaces while
+    border and text move with them.
+  - `quiet` — React-only support for actions such as Previous and Reset beside
+    a stronger action. It has no resting box.
+  - `link` — an Astro action inside, or beside, running text. It stays
+    underlined, has no box, and uses the neutral button foreground ladder.
+  - **Do not hand-author `.btn` at a call site.** Pass `variant` to
+    `ActionLink`; the component writes both classes and the checker rejects raw
+    CTA class lists elsewhere.
   - The base carries `border: 1px solid transparent` so a filled button and an
     outlined one are the same height. Without it the primary sits 2px shorter,
     which is only visible once two variants stand side by side — by which time
@@ -349,12 +351,16 @@ What that means in practice:
     the same rule rather than written twice — a case-study `<a>` cannot carry a
     class, exactly as with `.prose table`. They join at the *variant*, never at
     `.btn`: the base is a box and a prose link is not.
-  - `--background-alternate-hover` exists for the primary variant alone, and
-    follows `--background-hover`'s rule — step AWAY from the page (black on
-    light, white on dark), never toward the middle. `--text-interactive` cannot
-    serve: it is correct in light mode and collides exactly with
-    `--background-alternate` in dark, so the button would stop responding in
-    one theme only.
+  - **Button component roles map directly to neutral primitives in `:root` and
+    `.dark`.** Page palettes do not override them. This keeps current CTAs calm
+    and deliberately leaves Sage and Blue button direction open for future
+    design work.
+  - Boxed public CTAs grow to `--control-height-touch` on a coarse pointer while
+    preserving their compact fine-pointer presentation. The inline link
+    variant is excluded because it must wrap like the sentence around it.
+  - Loading is distinct from disabled: the React button retains its variant,
+    preserves the content box, marks itself busy and blocks reactivation while
+    remaining focusable. Disabled controls use the neutral disabled roles.
   - The header nav and the footer are deliberately **not** buttons. They are
     site furniture with their own quiet treatment (`--text-secondary`, no
     underline); giving them `.btn--link` would make both louder than the
@@ -428,11 +434,21 @@ What that means in practice:
   use `.site-hit-target`; its absolutely positioned pseudo-element expands hit
   testing to `--control-height-touch` in both axes without changing header
   height or spacing. Do not replace it with padding at individual call sites.
-- **Two reading-text colours, both measured.** `--text-primary` (14.35:1 light,
+- **Three readable text levels, all measured.** `--text-primary` (14.35:1 light,
   12.55:1 dark) and `--text-secondary` (8.23:1 / 6.95:1), checked against
-  both the page background and the card surface. These are the roles used by
-  ordinary portfolio copy; the wider canonical text vocabulary is reserved for
-  the semantic situations named by each token.
+  both the page background and the card surface, carry ordinary portfolio
+  copy. `--text-tertiary` is reserved for compact supporting labels and uses
+  separate accessible intermediate stops: 5.08:1 / 5.06:1 on the canvas and
+  5.41:1 / 4.62:1 on raised surfaces. Placeholder text shares those measured
+  mappings. The wider canonical vocabulary remains reserved for the semantic
+  situations named by each token.
+- **Structural and interactive rules are different jobs.** `--border-primary`
+  and `--border-tertiary` may stay quiet when a line only divides content.
+  Controls whose outline communicates affordance use `--border-interactive`,
+  measured at 4.08:1 / 3.89:1 on the canvas and 4.35:1 / 3.54:1 on raised
+  surfaces. Blue supplies the same contract at 4.47:1 / 4.01:1 and 4.71:1 /
+  3.63:1. Hover moves to the stronger `--border-hover`; never strengthen every
+  divider to solve a control-boundary problem.
 - **Hover always increases contrast.** One rule, one token: interactive text
   moves to `--accent` (= `--text-interactive`, 17.87:1 / 16.90:1), which
   out-contrasts `--text-primary` by design. Apple: "Maximize the contrast
@@ -445,10 +461,13 @@ What that means in practice:
     13.26:1 dark — the rule above is satisfied, just from a quieter start.
     Resting muted is what makes the lift readable: if every row already sat at
     full contrast, hover would have nothing left to add.
-  - **Measured on the buttons**, light → dark: primary 16.90 → 19.58 and
-    16.90 → 18.13; secondary 14.35 → 19.17 and 12.55 → 17.87, with its rule
-    going 2.43 → 18.13 and 1.40 → 7.34; link 14.35 → 17.87 and 12.55 → 16.90.
-    Every variant gains contrast on hover in both themes.
+  - **Measured on the neutral buttons**, rest → hover → pressed: primary is
+    12.05 → 15.41 → 19.58 light and 6.95 → 12.55 → 18.13 dark. Secondary is
+    13.47 → 17.87 → 10.65 light and 12.55 → 15.41 → 13.26 dark; its resting
+    boundary remains 4.08:1 / 3.89:1 and strengthens in interactive states.
+    Link is 13.47 → 16.78 light and 12.55 → 16.90 dark. Label readability and
+    state visibility are reviewed separately; a high text-contrast number does
+    not prove that two surfaces look different.
   - **`--background-hover` brightens in both themes**, to white on light and
     neutral-700 on dark, rather than changing direction between modes. It was
     `neutral-200`, which laid a heavy grey band under a hovered row; one step

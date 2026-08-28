@@ -1,5 +1,6 @@
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { cva, type VariantProps } from "class-variance-authority";
+import { LoaderCircle } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
@@ -22,20 +23,44 @@ const buttonVariants = cva("ui-button", {
   },
 });
 
-type ButtonProps = ButtonPrimitive.Props & VariantProps<typeof buttonVariants>;
+type ButtonProps = ButtonPrimitive.Props &
+  VariantProps<typeof buttonVariants> & {
+    loading?: boolean;
+    loadingLabel?: string;
+  };
 
 function Button({
+  "aria-label": ariaLabel,
+  children,
   className,
+  disabled = false,
+  focusableWhenDisabled,
+  loading = false,
+  loadingLabel,
   variant = "secondary",
   size = "compact",
   ...props
 }: ButtonProps) {
   return (
     <ButtonPrimitive
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size }), className)}
       {...props}
-    />
+      aria-busy={loading || undefined}
+      aria-label={loading ? loadingLabel ?? ariaLabel : ariaLabel}
+      className={cn(buttonVariants({ variant, size }), className)}
+      data-loading={loading ? "" : undefined}
+      data-slot="button"
+      disabled={disabled || loading}
+      focusableWhenDisabled={loading || focusableWhenDisabled}
+    >
+      <span className="ui-button__content">{children}</span>
+      {loading && (
+        <LoaderCircle
+          className="ui-button__spinner"
+          data-icon="loading"
+          aria-hidden="true"
+        />
+      )}
+    </ButtonPrimitive>
   );
 }
 

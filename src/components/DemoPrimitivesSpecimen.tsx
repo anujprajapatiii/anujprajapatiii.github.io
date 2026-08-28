@@ -112,7 +112,7 @@ export default function DemoPrimitivesSpecimen() {
           >
             Previous
           </Button>
-          <Button variant="secondary" onClick={() => setActiveStep(nextStep)}>
+          <Button variant="primary" onClick={() => setActiveStep(nextStep)}>
             {activeIndex === STEP_ORDER.length - 1
               ? "Start again"
               : `Next: ${STEPS[nextStep].label}`}

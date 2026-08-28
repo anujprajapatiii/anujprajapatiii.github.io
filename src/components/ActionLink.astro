@@ -1,0 +1,26 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type ActionLinkVariant = "primary" | "secondary" | "link";
+
+type Props = Omit<HTMLAttributes<"a">, "class" | "href"> & {
+  href: string;
+  variant?: ActionLinkVariant;
+  class?: string;
+};
+
+const {
+  href,
+  variant = "secondary",
+  class: className,
+  ...attrs
+} = Astro.props;
+---
+
+<a
+  {...attrs}
+  href={href}
+  class:list={["btn", `btn--${variant}`, className]}
+>
+  <slot />
+</a>

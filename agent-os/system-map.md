@@ -19,6 +19,8 @@ workflows change.
 | Ambient media effects | Optional, media-clipped atmosphere with semantic colour, reduced-motion stills, and offscreen pausing | `src/components/RainOverlay.astro`, `src/components/ThemeImage.astro` |
 | Layout primitives | One 1300px page container plus Section/Stack/Cluster and a typed 24-track Grid/GridItem system | `src/components/primitives/`, CSS in `src/styles/global.css` |
 | Deployment | Static build published to GitHub Pages | `.github/workflows/deploy.yml` |
+| Design exploration | Isolated worktree and branch workflow for comparing alternatives, selecting one, and cleaning temporary lab code before merge | `agent-os/conventions/design-exploration.md`, `agent-os/plans/design-exploration-template.md` |
+| Pull-request review | Non-deploying convention and production-build checks plus a human design-review checklist | `.github/workflows/checks.yml`, `.github/pull_request_template.md` |
 | Work orchestration | Strategy, plans, conventions, learnings | `agent-os/` |
 
 ## Public Routes
@@ -63,11 +65,27 @@ pnpm build     # production build to dist/
 pnpm preview   # preview the production build
 ```
 
+## Change Workflow
+
+`main` is the approved, deployable portfolio. Non-trivial changes start with an
+approved plan and are developed on a separate branch. Design questions with
+several alternatives use a Codex worktree, a short-lived exploration branch,
+and a temporary `/lab/<topic>` comparison route. Only the selected direction
+survives cleanup and review.
+
+Pull requests into `main` run `.github/workflows/checks.yml`. The workflow
+installs the locked dependencies, runs `pnpm check`, and builds the production
+site without deploying it. Temporary lab routes and rejected alternatives are
+removed before the pull request is ready to merge.
+
 ## Deployment
 
 Pushes to `main` trigger `.github/workflows/deploy.yml`. The workflow uses
 `withastro/action@v3` to build and `actions/deploy-pages@v4` to publish to
 GitHub Pages.
+
+Pull requests do not deploy. They use `.github/workflows/checks.yml` to catch
+convention or production-build failures before merge.
 
 Before merging changes that affect routes, content schema, or layouts, run
 `pnpm build`. For visual changes, also run `pnpm dev` and check the affected

@@ -48,7 +48,7 @@
   --icon-tertiary-hover: var(--blue-500);
   --icon-disabled: var(--blue-300);
   --icon-disabled-alt: var(--blue-200);
-  --icon-placeholder: var(--blue-400);
+  --icon-placeholder: var(--blue-350);
   --icon-accent-primary: var(--blue-600);
   --icon-accent-secondary: var(--blue-500);
   --icon-accent-primary-hover: var(--blue-700);
@@ -56,6 +56,7 @@
 
   /* Border */
   --border-primary: var(--blue-300);
+  --border-interactive: var(--blue-350);
   --border-secondary: var(--blue-300);
   --border-tertiary: var(--blue-200);
   --border-primary-solid: var(--blue-700);
@@ -98,7 +99,7 @@
   --text-tertiary-hover: var(--blue-200);
   --text-disabled: var(--blue-500);
   --text-disabled-alt: var(--blue-600);
-  --text-placeholder: var(--blue-400);
+  --text-placeholder: var(--blue-300);
   --text-accent-primary: var(--blue-200);
   --text-accent-secondary: var(--blue-300);
   --text-accent-primary-hover: var(--blue-200);
@@ -121,6 +122,7 @@
 
   /* Border */
   --border-primary: var(--blue-700);
+  --border-interactive: var(--blue-350);
   --border-secondary: var(--blue-600);
   --border-tertiary: var(--blue-800);
   --border-primary-solid: var(--blue-200);
@@ -132,6 +134,6 @@
   /* Portfolio-specific roles that do not alias the canonical set. */
   --text-reading: var(--text-secondary);
   --text-alternate: var(--blue-900);
-  --border-hover: var(--blue-600);
+  --border-hover: var(--blue-300);
   --decorative-accent: var(--blue-300);
 }
