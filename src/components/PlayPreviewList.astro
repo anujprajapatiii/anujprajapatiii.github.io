@@ -52,9 +52,7 @@ const framesFor = (previews: string[]) => previews.slice(0, 3).filter(Boolean);
           <span class="play-item__thumb"></span>
         )}
         <span class="play-item__body">
-          <span class="play-item__title">
-            {item.data.title}<span class="card-title__arrow" aria-hidden="true">&rarr;</span>
-          </span>
+          <span class="play-item__title">{item.data.title}</span>
           <span class="play-item__subtitle">{item.data.description}</span>
         </span>
       </a>

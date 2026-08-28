@@ -31,18 +31,18 @@ const RULES = [
   {
     id: "type-scale",
     test: /(?<![\w-])text-(?:xs|sm|base|lg|xl|[2-9]xl|\[[^\]]+\])(?![\w-])/,
-    msg: "raw Tailwind text size — use a role (text-display/title/heading/body/meta)",
+    msg: "raw Tailwind text size — use a role (text-display/title/heading/body)",
   },
   {
     /*
-      The scale is five role-based sizes. Old tag-shaped and retired names now
+      The scale is four role-based sizes. Old tag-shaped and retired names now
       match no token, so Tailwind emits nothing and the element silently
       inherits its parent's size — exactly the failure mode this file exists
       for.
     */
     id: "retired-type-step",
-    test: /(?<![\w-])text-(?:h1|h2|h3|small|lead|label)(?![\w-])/,
-    msg: "that type name was retired — use display, title, heading, body or meta (.label and .type-reading are treatments)",
+    test: /(?<![\w-])text-(?:h1|h2|h3|small|meta|lead|label)(?![\w-])/,
+    msg: "that type name was retired — use display, title, heading or body (.label and .type-reading are treatments)",
   },
   {
     id: "no-call-site-type",

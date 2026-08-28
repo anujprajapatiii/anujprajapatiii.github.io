@@ -67,8 +67,8 @@
 .demo-inspector__header p,
 .demo-inspector__section-heading p {
   color: var(--demo-reading);
-  font-size: var(--text-meta);
-  line-height: var(--text-meta--line-height);
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
 }
 
 .demo-panel__progress {
@@ -104,8 +104,8 @@
   background: transparent;
   color: var(--demo-reading);
   font: inherit;
-  font-size: var(--text-meta);
-  line-height: var(--text-meta--line-height);
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
   text-align: start;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -153,8 +153,8 @@
 .demo-step-detail :is(h3, h4),
 .demo-step-detail p,
 .demo-inspector__section-heading :is(h3, h4) {
-  font-size: var(--text-meta);
-  line-height: var(--text-meta--line-height);
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
 }
 
 .demo-step-detail :is(h3, h4),

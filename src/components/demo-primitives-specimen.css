@@ -49,8 +49,8 @@
 
 .demo-specimen__object span,
 .demo-specimen__object strong {
-  font-size: var(--text-meta);
-  line-height: var(--text-meta--line-height);
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
 }
 
 .demo-specimen__object strong {

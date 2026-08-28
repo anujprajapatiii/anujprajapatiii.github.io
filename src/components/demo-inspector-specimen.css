@@ -59,8 +59,8 @@
 .demo-inspector-specimen__object span,
 .demo-inspector-specimen__object strong,
 .demo-inspector-specimen__value-row output {
-  font-size: var(--text-meta);
-  line-height: var(--text-meta--line-height);
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
 }
 
 .demo-inspector-specimen__object span {

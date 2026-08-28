@@ -223,8 +223,7 @@ const typeScale = [
   { name: "display", class: "text-display", size: "clamp(40px → 64px) / 1.02", weight: "Apparat Regular 400", sample: "Display" },
   { name: "title", class: "text-title", size: "36px / 1.08", weight: "Apparat Regular 400", sample: "Page or homepage section title" },
   { name: "heading", class: "text-heading", size: "20px / 1.3", weight: "Apparat Medium 500", sample: "Shared heading" },
-  { name: "body", class: "text-body", size: "16px / 1.5", weight: "Apparat Regular 400", sample: "Body text. The quick brown fox jumps over the lazy dog." },
-  { name: "meta", class: "text-meta", size: "14px / 1.5", weight: "Apparat Regular 400", sample: "Metadata, captions, and compact interface text" },
+  { name: "body", class: "text-body", size: "14px / 1.5", weight: "Apparat Regular 400", sample: "Body text, metadata, captions, and compact interface text." },
 ];
 
 const spacingScale = [
@@ -305,7 +304,7 @@ const pagePaletteRows = [
       <h2 class="label mb-2xs">
         Primitives
       </h2>
-      <p class="mb-md text-meta text-muted-foreground">
+      <p class="mb-md text-body text-muted-foreground">
         Raw palette. Same values in both themes; components never use these directly.
       </p>
       <Stack gap="md">
@@ -319,7 +318,7 @@ const pagePaletteRows = [
                     class="h-10 border border-border"
                     style={`background: var(--${family.prefix}-${swatch})`}
                   ></div>
-                  <p class="mt-3xs text-meta tabular-nums text-muted-foreground">
+                  <p class="mt-3xs text-body tabular-nums text-muted-foreground">
                     {swatch}<br /><span data-swatch-value={`--${family.prefix}-${swatch}`}>…</span>
                   </p>
                 </div>
@@ -334,7 +333,7 @@ const pagePaletteRows = [
       <h2 class="label mb-2xs">
         Semantic tokens
       </h2>
-      <p class="mb-md text-meta text-muted-foreground">
+      <p class="mb-md text-body text-muted-foreground">
         Semantic role names. The swatch shows the token in the theme you're
         viewing; the caption lists its light → dark primitive mapping.
       </p>
@@ -350,8 +349,8 @@ const pagePaletteRows = [
                       class="h-12 border border-border"
                       style={`background: var(--${token.name})`}
                     ></div>
-                    <p class="mt-2xs text-meta">--{token.name}</p>
-                    <p class="text-meta tabular-nums text-muted-foreground">
+                    <p class="mt-2xs text-body">--{token.name}</p>
+                    <p class="text-body tabular-nums text-muted-foreground">
                       {token.light} → {token.dark}
                     </p>
                   </div>
@@ -367,13 +366,13 @@ const pagePaletteRows = [
       <h2 class="label mb-2xs">
         Aliases
       </h2>
-      <p class="mb-md text-meta text-muted-foreground">
+      <p class="mb-md text-body text-muted-foreground">
         Internal names the components use, pointed at the semantic tokens above.
       </p>
       <Grid>
         {aliases.map((alias) => (
           <GridItem spanMd={12}>
-            <p class="text-meta text-muted-foreground">
+            <p class="text-body text-muted-foreground">
               --{alias.name} → {alias.to}
             </p>
           </GridItem>
@@ -385,7 +384,7 @@ const pagePaletteRows = [
       <h2 class="label mb-2xs">
         Page palettes
       </h2>
-      <p class="mb-md max-w-measure text-meta text-muted-foreground">
+      <p class="mb-md max-w-measure text-body text-muted-foreground">
         A page palette is authored content identity; light/dark is the
         visitor's appearance preference. Components keep using the semantic
         roles above, while a palette remaps their structural colours for both
@@ -419,7 +418,7 @@ const pagePaletteRows = [
       <h2 class="label mb-2xs">
         Type scale
       </h2>
-      <p class="mb-md max-w-measure text-meta text-muted-foreground">
+      <p class="mb-md max-w-measure text-body text-muted-foreground">
         KMR Apparat carries every interface and reading role: Light (300),
         Regular (400), and Medium (500). Size, line-height and weight travel
         inside the role, and tracking is 0 on every step, so
@@ -428,31 +427,31 @@ const pagePaletteRows = [
         at a call site. Size carries the hierarchy at display scale; weight
         takes over once the sizes get close to body.
       </p>
-      <p class="mb-md max-w-measure text-meta text-muted-foreground">
+      <p class="mb-md max-w-measure text-body text-muted-foreground">
         Display, title, body, and metadata use Apparat Regular. Headings, the
         wordmark, genuine labels, table headers, and strong emphasis use
         Medium. Light remains available but is not assigned to a shared role.
         No role asks the browser to synthesise a weight.
       </p>
-      <p class="mb-md max-w-measure text-meta text-muted-foreground">
+      <p class="mb-md max-w-measure text-body text-muted-foreground">
         The three original Kimera WOFF2 files are self-hosted under the Web
         License and share one Arial fallback calibrated from Apparat's x-height
         and vertical metrics. All three authored roles are preloaded because
         standard pages use them above the fold.
       </p>
-      <p class="mb-md max-w-measure text-meta text-muted-foreground">
-        Five unique sizes carry the whole site: display, title, one shared
-        heading, body and meta. The former h2 and h3 steps now share the 20px
-        heading role; semantic structure and spacing distinguish their level.
-        Meta remains 14px for captions and compact interface text. Long-form
-        reading is a treatment on 16px body, with secondary colour and 1.4
-        leading rather than another size.
+      <p class="mb-md max-w-measure text-body text-muted-foreground">
+        Four unique sizes carry the whole site: display, title, one shared
+        heading, and body. The former h2 and h3 steps share the 20px heading
+        role; semantic structure and spacing distinguish their level. Body,
+        metadata, captions, and compact interface text share the 14px body
+        role. Long-form reading adds secondary colour and 1.4 leading rather
+        than another size.
       </p>
       <Stack gap="md">
         {typeScale.map((t) => (
           <div>
             <p class={t.class}>{t.sample}</p>
-            <p class="mt-3xs text-meta tabular-nums text-muted-foreground">
+            <p class="mt-3xs text-body tabular-nums text-muted-foreground">
               text-{t.name} · {t.size} · {t.weight}
             </p>
           </div>
@@ -481,22 +480,22 @@ const pagePaletteRows = [
       <h2 class="label mb-2xs">
         Spacing
       </h2>
-      <p class="mb-md text-meta text-muted-foreground">
+      <p class="mb-md text-body text-muted-foreground">
         4px base scale, plus semantic roles a brief can name directly.
       </p>
       <Stack gap="2xs">
         {spacingScale.map((s) => (
           <Cluster gap="sm">
-            <span class="w-20 shrink-0 text-meta tabular-nums text-muted-foreground">{s.name}</span>
+            <span class="w-20 shrink-0 text-body tabular-nums text-muted-foreground">{s.name}</span>
             <span class="h-4 bg-accent" style={`width: ${s.value}`}></span>
-            <span class="text-meta tabular-nums text-muted-foreground">{s.px}</span>
+            <span class="text-body tabular-nums text-muted-foreground">{s.px}</span>
           </Cluster>
         ))}
       </Stack>
       <Grid class="mt-md">
         {semanticSpacing.map((s) => (
           <GridItem spanMd={12}>
-            <p class="text-meta text-muted-foreground">--spacing-{s.name} → {s.value}</p>
+            <p class="text-body text-muted-foreground">--spacing-{s.name} → {s.value}</p>
           </GridItem>
         ))}
       </Grid>
@@ -506,7 +505,7 @@ const pagePaletteRows = [
       <h2 class="label mb-2xs">
         Layout primitives
       </h2>
-      <p class="mb-md max-w-measure text-meta text-muted-foreground">
+      <p class="mb-md max-w-measure text-body text-muted-foreground">
         Pages compose <code>Section &gt; Container &gt; Stack | Grid + GridItem | Cluster</code>
         and never inline layout. The structural grid has 24 tracks and one 10px
         gutter. Items are full-width on phones, then opt into named tablet and
@@ -515,7 +514,7 @@ const pagePaletteRows = [
       </p>
       <Stack gap="md">
         <div>
-          <p class="mb-2xs text-meta text-muted-foreground">24 tracks</p>
+          <p class="mb-2xs text-body text-muted-foreground">24 tracks</p>
           <Grid class="grid-specimen" aria-hidden="true">
             {Array.from({ length: 24 }).map(() => <span class="grid-specimen__track"></span>)}
           </Grid>
@@ -554,18 +553,18 @@ const pagePaletteRows = [
       <h2 class="label mb-2xs">
         Containers
       </h2>
-      <p class="mb-md max-w-measure text-meta text-muted-foreground">
+      <p class="mb-md max-w-measure text-body text-muted-foreground">
         One page container, used by the header, the footer and every page, so
         everything sits on the same two vertical edges. <code>Container</code>
         has no size prop. <code>max-w-measure</code> is not a container — it
-        is the reading measure (~70 characters) for long-form text and lead
-        paragraphs, and it must never be collapsed into the page width.
+        is the shared measure for long-form text and lead paragraphs, and it
+        must never be collapsed into the page width.
       </p>
       <Stack gap="2xs">
         {containers.map((c) => (
           <div>
             <div class="h-3 bg-muted" style={`max-width: ${c.value}; width: 100%`}></div>
-            <p class="mt-3xs text-meta tabular-nums text-muted-foreground">max-w-{c.name} · {c.value} ({c.px})</p>
+            <p class="mt-3xs text-body tabular-nums text-muted-foreground">max-w-{c.name} · {c.value} ({c.px})</p>
           </div>
         ))}
       </Stack>
@@ -575,7 +574,7 @@ const pagePaletteRows = [
       <h2 class="label mb-2xs">
         Surfaces
       </h2>
-      <p class="mb-md max-w-measure text-meta text-muted-foreground">
+      <p class="mb-md max-w-measure text-body text-muted-foreground">
         One depth model in both appearances: canvas, inset, raised, then raised
         hover. The repeated nested inset proves that adjacent levels remain
         distinct instead of merging at rest or during interaction.
@@ -586,20 +585,20 @@ const pagePaletteRows = [
           <GridItem spanMd={12}>
             <div class="bg-card p-md">
               <p class="label">Raised</p>
-              <p class="mt-3xs text-meta text-muted-foreground">Card rest / canvas hover</p>
+              <p class="mt-3xs text-body text-muted-foreground">Card rest / canvas hover</p>
               <div class="mt-sm bg-muted p-sm">
                 <p class="label">Inset</p>
-                <p class="mt-3xs text-meta text-muted-foreground">Media, code and recessed content</p>
+                <p class="mt-3xs text-body text-muted-foreground">Media, code and recessed content</p>
               </div>
             </div>
           </GridItem>
           <GridItem spanMd={12}>
             <div class="bg-background-elevated-hover p-md">
               <p class="label">Raised hover</p>
-              <p class="mt-3xs text-meta text-muted-foreground">A quiet step beyond raised</p>
+              <p class="mt-3xs text-body text-muted-foreground">A quiet step beyond raised</p>
               <div class="mt-sm bg-muted p-sm">
                 <p class="label">Inset</p>
-                <p class="mt-3xs text-meta text-muted-foreground">Still distinct from its parent</p>
+                <p class="mt-3xs text-body text-muted-foreground">Still distinct from its parent</p>
               </div>
             </div>
           </GridItem>
@@ -617,7 +616,7 @@ const pagePaletteRows = [
         <GridItem spanMd={12}>
           <div class="bg-muted p-md">
             <p class="label">Muted surface</p>
-            <p class="mt-3xs text-meta text-muted-foreground">bg-muted, no border</p>
+            <p class="mt-3xs text-body text-muted-foreground">bg-muted, no border</p>
           </div>
         </GridItem>
       </Grid>
@@ -627,14 +626,14 @@ const pagePaletteRows = [
       <h2 class="label mb-2xs">
         Buttons
       </h2>
-      <p class="mb-md max-w-measure text-meta text-muted-foreground">
+      <p class="mb-md max-w-measure text-body text-muted-foreground">
         One hierarchy serves both runtimes. Use <code>ActionLink</code> when an
         Astro link is presented as an action, and <code>Button</code> or
         <code>IconButton</code> for React commands. Primary is the action a
         region is for; secondary is the bordered default; quiet supports a
         primary inside an experiment; link belongs inside or beside text.
       </p>
-      <p class="mb-md max-w-measure text-meta text-muted-foreground">
+      <p class="mb-md max-w-measure text-body text-muted-foreground">
         Button colours stay neutral in light and dark appearance. Authored
         page palettes do not remap them. Rest, hover and pressed are separate
         tonal steps; focus adds the shared outline without impersonating
@@ -692,7 +691,7 @@ const pagePaletteRows = [
       <h2 class="label mb-2xs">
         Experiment interfaces
       </h2>
-      <p class="mb-md max-w-measure text-meta text-muted-foreground">
+      <p class="mb-md max-w-measure text-body text-muted-foreground">
         Two compositions share the same controls without forcing every
         experiment into one layout. The guided panel teaches a sequence; the
         inspector keeps persistent settings available. Both inherit the page
@@ -702,7 +701,7 @@ const pagePaletteRows = [
         <Stack gap="sm">
           <div>
             <h3 class="label mb-2xs">Guided panel — supported</h3>
-            <p class="max-w-measure text-meta text-muted-foreground">
+            <p class="max-w-measure text-body text-muted-foreground">
               Use when the visitor is learning the experiment one part at a
               time. Its supported structure remains documented in the
               specimen below.
@@ -714,7 +713,7 @@ const pagePaletteRows = [
         <Stack gap="sm">
           <div>
             <h3 class="label mb-2xs">Control panel — candidate</h3>
-            <p class="max-w-measure text-meta text-muted-foreground">
+            <p class="max-w-measure text-body text-muted-foreground">
               Use for settings that remain available while the visitor
               changes the stage. Its API stays flexible until a real
               experiment adopts it.
@@ -729,7 +728,7 @@ const pagePaletteRows = [
       <h2 class="label mb-2xs">
         Tables
       </h2>
-      <p class="mb-md max-w-measure text-meta text-muted-foreground">
+      <p class="mb-md max-w-measure text-body text-muted-foreground">
         One treatment for every table: full grid, header cells in the
         <code>.label</code> style, padding from the spacing scale, tabular
         figures. Component tables use <code>DataTable.astro</code>, which adds

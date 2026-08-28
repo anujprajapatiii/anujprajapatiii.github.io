@@ -18,8 +18,8 @@ What that means in practice:
   comes from weight; Medium is reserved for headings, emphasis and real labels.
 - **Big type is set regular.** Display and title use Apparat Regular 400. Their
   scale and spacing carry the hierarchy without requiring a heavier cut.
-- **14px is the meta step.** It carries metadata, captions and compact
-  interface labels at 1.5 leading; body remains 16px for reading.
+- **14px is the shared body step.** Body copy, metadata, captions and compact
+  interface labels all use it at 1.5 leading.
 - **Tracking is zero, everywhere.** One value for every size, in both
   directions. Apparat is drawn to be spaced correctly at each size; the system
   trusts it rather than second-guessing it per step.
@@ -140,7 +140,7 @@ What that means in practice:
   under the purchased Kimera Web License. The site uses the three original,
   unchanged WOFF2 files supplied by Kimera and maps their authored cuts to
   **Light 300, Regular 400 and Medium 500**.
-  - Regular carries display/title and body/meta. Medium carries heading,
+  - Regular carries display/title/body. Medium carries heading,
     wordmark, strong emphasis and genuine labels. Light remains available but
     is not assigned to a shared type role.
   - The convention checker rejects weights outside that approved hierarchy,
@@ -197,14 +197,14 @@ What that means in practice:
 - **No decorative eyebrows or uppercase kickers.** Section headings are real
   headings. `.label` is reserved for genuine metadata (table headers, the
   on-this-page title, style-guide section names) and is the only place
-  uppercase and 600 weight combine.
-- **Type** uses five role tokens
-  (`text-display/title/heading/body/meta`) — never raw Tailwind sizes
+  uppercase and Medium 500 combine.
+- **Type** uses four role tokens
+  (`text-display/title/heading/body`) — never raw Tailwind sizes
   (`text-lg`, `text-4xl`, `text-[10px]`). Each token carries its own
   line-height and weight, so **never write `tracking-*`, `leading-*` or
   `font-*` at a call site**: if a step needs to change, change the token in
   global.css and every use follows.
-- **Five sizes, by decision: 64 → 36 → 20 → 16 → 14.** Display is fluid
+- **Four sizes, by decision: 64 → 36 → 20 → 14.** Display is fluid
   from 40–64px; title is a fixed 36px; heading is a fixed 20px. The old
   h2 and h3 steps share `text-heading` in prose and cards: semantic document
   structure and space distinguish their level instead of a second size.
@@ -212,36 +212,36 @@ What that means in practice:
   rhythm as page titles. The homepage hero alone uses the named `hero-display`
   treatment: it keeps the display token's size and leading, then applies
   Medium 500 and uppercase. All project, work, and experiment card titles use
-  `text-body` (16px), medium weight (500), uppercase, and the primary text
+  `text-body` (14px), medium weight (500), uppercase, and the primary text
   colour. Apply uppercase as a presentation rule so content titles retain
   their natural casing everywhere else. Card descriptions use `text-body` in
-  the secondary colour, creating hierarchy without a local type size. Body is
-  16px / 1.5; meta is 14px / 1.5.
+  the secondary colour, creating hierarchy without a local type size. Body,
+  metadata, captions and compact interface text all share 14px / 1.5.
   - Project cards and homepage experiment rows are quiet, borderless linked
-    surfaces. Copy comes first and project-card media comes last. Hover, focus,
-    and press move only the elevated background role and reveal a reserved-
-    space `→` beside the title; primary/secondary text colours remain stable.
+    surfaces. Copy comes first and project-card media comes last. Titles and
+    descriptions use the 4px `3xs` gap. Hover, focus and press move only the
+    elevated background role; primary/secondary text colours remain stable.
     The experiment row's thin accent/progress strip is selection state, not a
     border, and remains independent of the shared interaction treatment.
     The desktop experiment preview pane shares the card's borderless raised
     surface and interior padding; its main frame and filmstrip are inset media.
   - `.type-reading` layers secondary reading colour and
-    `--leading-reading` (1.4) on the 16px body role. Rendered prose shares the
-    same declarations. This is a treatment, not a sixth size, and it never
+    `--leading-reading` (1.4) on the 14px body role. Rendered prose shares the
+    same declarations. This is a treatment, not a fifth size, and it never
     mutates the body token through a local scope.
-  - The retired `text-h1`, `text-h2`, `text-h3`, `text-small`, `text-lead` and
-    `text-label` names match no token, so Tailwind emits nothing and the
-    element silently inherits. `pnpm check` fails on all six.
+  - The retired `text-h1`, `text-h2`, `text-h3`, `text-small`, `text-meta`,
+    `text-lead` and `text-label` names match no token, so Tailwind emits
+    nothing and the element silently inherits. `pnpm check` fails on all seven.
   - Do not add a step back to make one call site fit. If something needs to
     sit between two steps, it needs different space or colour, not a
-    sixth size.
+    fifth size.
 - **Tracking is 0 on every step and every class.** No negative tracking on
   display type, no positive tracking on uppercase labels, no exceptions.
   Do not reintroduce per-size tracking "to tighten the hero" — uniformity is
   the point, and this is the variation the system exists to prevent.
 - **Uppercase micro-text uses `.label`**, not a pile of utilities. It is a
   treatment, not a size: uppercase and Medium 500 carry it, it draws its size
-  from `--text-meta` like everything else, and tracking stays at 0.
+  from `--text-body` like everything else, and tracking stays at 0.
 - **Demo interfaces use the shared primitive contract.** Low-level behaviour
   and states live in `src/components/ui/`; guided stage/panel composition lives
   in `src/components/demo/`; experiment-specific CSS owns only the artifact and
@@ -251,7 +251,7 @@ What that means in practice:
     coarse-pointer layouts grow them to `--control-height-touch` (48px).
     Icons use `--control-icon-size` (16px).
   - Guided panels use one 20px Medium heading. Steps, explanations, settings
-    and actions all use the 14px meta role; colour and Regular/Medium weight
+    and actions all use the 14px body role; colour and Regular/Medium weight
     carry hierarchy instead of extra sizes or fonts.
   - The default panel contains one ordered task, its current explanation, at
     most a small number of secondary settings, and wayfinding. Raw state,
@@ -345,8 +345,8 @@ What that means in practice:
   - **`.btn--link` sets `display: inline`, and that is load-bearing.** The base
     is `inline-flex`, which cannot break across lines; mid-sentence that pushes
     the whole label onto one line and blows the paragraph sideways. It also
-    resets `font-size` to `inherit`, so a link in body copy doesn't shrink to
-    `--text-meta`. It is the one variant that appears inside text.
+    resets `font-size` to `inherit`, so a link in body copy follows its
+    surrounding type. It is the one variant that appears inside text.
   - **Markdown links get the link variant through `.prose a`**, grouped into
     the same rule rather than written twice — a case-study `<a>` cannot carry a
     class, exactly as with `.prose table`. They join at the *variant*, never at
@@ -365,10 +365,9 @@ What that means in practice:
     site furniture with their own quiet treatment (`--text-secondary`, no
     underline); giving them `.btn--link` would make both louder than the
     content they frame.
-- **Long-form text is capped to the reading measure**
-  (`var(--container-measure)`, ~70 characters). `.prose` applies this to
-  `p`/`ul`/`ol`/`blockquote` only, so images and code blocks still run the
-  full width of their wrapper. Body text ran to ~89 characters before this.
+- **Long-form text is capped to the reading measure.** `.prose` applies
+  `var(--container-measure)` to `p`/`ul`/`ol`/`blockquote` only, so images and
+  code blocks still run the full width of their wrapper.
 - **Wrapping is set once in the base layer**: `text-wrap: balance` on
   headings, `pretty` on paragraphs. Don't repeat either at a call site.
 - Numbers that sit in a column or change at runtime get `tabular-nums`.
@@ -378,8 +377,8 @@ What that means in practice:
   side. Header, footer and every page use it, so everything sits on the same
   two vertical edges. `Container` has **no size prop** — a second container
   width is how a layout starts drifting.
-- **`max-w-measure` is not a container.** It is the reading measure (36rem,
-  ~70 characters) for long-form text and lead paragraphs. It lives in the
+- **`max-w-measure` is not a container.** It is the shared 36rem reading
+  measure for long-form text and lead paragraphs. It lives in the
   `--container-*` namespace only so Tailwind generates the utility; it is
   named `measure` precisely so a future "standardise the containers" pass
   cannot collapse it into the page width. The wider 1300px canvas makes this

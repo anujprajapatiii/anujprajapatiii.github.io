@@ -36,17 +36,7 @@ const publishedYear = project.data.publishedAt.getUTCFullYear();
 >
   <Section as="article" size="page" class="case-study">
     <Stack gap="xl">
-    <Container as="header">
-      <Stack gap="sm">
-        {/* The back action owns the first row. The title and details table
-            then share one grid row and align along the same top edge. */}
-        <Cluster>
-          <ActionLink href="/work">
-            <span aria-hidden="true">&larr;</span>
-            Work
-          </ActionLink>
-        </Cluster>
-
+      <Container as="header">
         <Grid class="case-study-header-grid">
           <GridItem spanLg={12}>
             <Stack gap="sm">
@@ -92,8 +82,7 @@ const publishedYear = project.data.publishedAt.getUTCFullYear();
             </Stack>
           </GridItem>
         </Grid>
-      </Stack>
-    </Container>
+      </Container>
 
     {/* Breaks out of the reading column to full width — see EmbedFrame. */}
     {project.data.embedUrl && (
