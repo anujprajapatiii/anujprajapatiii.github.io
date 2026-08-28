@@ -1,7 +1,7 @@
 # Experiment Interface System
 
-**Status:** Proposed. Adopt this contract through the approved phases in
-`agent-os/plans/experiment-interface-system.md`.
+**Status:** Active. The lean foundation is implemented; advanced controls and
+promotion remain gated by real experiment needs.
 
 ## Purpose
 
@@ -14,6 +14,21 @@ The intended experience is calm, direct and curious. Controls should feel
 immediate and physical, but the styling stays consistent with the portfolio:
 KMR Apparat, zero tracking, semantic colour, restrained surfaces and minimal
 chrome.
+
+## Working Model
+
+For day-to-day design work, remember six things:
+
+- **Tokens are the materials:** colour, type, space, radius and motion.
+- **Primitives are the parts:** button, switch, segmented control and slider.
+- **Fields arrange the parts:** label, control and optional explanation.
+- **`DemoPanel` teaches:** use it for a guided sequence.
+- **`DemoInspector` adjusts:** use it for settings that stay available.
+- **The experiment owns the idea:** its state, behaviour and visual character
+  remain local.
+
+Start with the parts that already exist. Add a new shared control only when a
+real experiment needs it; until then, leave it out.
 
 ## Non-goals
 
@@ -60,16 +75,33 @@ Promotion happens after live use exposes the right API.
 
 | Component | Current maturity | Evidence / next action |
 | --- | --- | --- |
-| `Button`, `IconButton` | Supported | Used in Interaction Anatomy; this accessibility-critical action primitive has a deliberately small API. Align icon and customization contracts during Phase 1. |
+| `Button`, `IconButton` | Supported | Used in Interaction Anatomy; this accessibility-critical action primitive has a deliberately small API and a shared `data-icon` contract. |
 | `Switch` | Supported | Used in Interaction Anatomy; the accessible toggle behaviour qualifies for support from one live adopter. Keep it for immediate boolean settings. |
 | `SegmentedControl` | Candidate | Used in Nutrition Labels; validate with a second real mode switch before promotion. |
 | `Tabs` | Candidate | Wrapper exists but has no live adopter. Keep only after its first real content-view use. |
 | `Slider` | Candidate | Wrapper exists but has no live adopter. Prove with a continuous-value experiment. |
-| `Tooltip` / `Hint` | Candidate | Provider exists, but the content wrapper has no live adopter. Keep hints supplemental. |
+| `Tooltip` / `Hint` | Candidate | Provider exists, but the content wrapper has no live adopter. Overlay placement remains owned by Base UI and hints stay supplemental. |
 | `DemoShell`, `DemoStage` | Supported | The responsive two-region behaviour is proven by Interaction Anatomy and documented in the style guide. |
 | `DemoPanel` family | Supported | The complex guided interaction is proven by Interaction Anatomy and documented in the style guide; reserve it for guided explanation. |
-| Field anatomy | Planned candidate | Add before text, number, select or validation controls. |
-| `DemoInspector` | Planned candidate | Add for compact control panels after a real adopter is selected. |
+| `Field`, `FieldLabel` | Supported | The accessibility-critical label/control relationship is used by `DemoSetting` in Interaction Anatomy. |
+| Remaining field anatomy | Candidate | `FieldGroup`, `FieldContent` and `FieldDescription` are shown in the inspector specimen; fieldset and error APIs remain unproven. |
+| `DemoInspector` | Candidate | Implemented and documented in the style guide; keep its API flexible until a real experiment adopts it. |
+
+### Lean foundation implemented
+
+- Primitive and recipe styles have separate owners behind the existing
+  compatibility import.
+- The field family provides shared label, description, grouping, disabled and
+  invalid anatomy without introducing a form framework.
+- `DemoInspector` provides a child-composed control panel next to the existing
+  guided `DemoPanel`.
+- `/style-guide` shows both recipes and labels the inspector Candidate.
+- Convention checks protect the Base UI import boundary and shared `.ui-*`
+  style ownership.
+
+Additional input primitives, a full state matrix and dedicated browser-test
+dependencies remain deferred until a real control-heavy experiment needs
+them.
 
 ## Primitive Selection
 
@@ -101,8 +133,8 @@ Every form-like control composes from the same anatomy:
 2. `FieldLabel` names the control in plain language.
 3. `FieldDescription` explains consequences or units only when necessary.
 4. The primitive owns the input behaviour.
-5. `FieldMessage` reports validation or status and is associated with the
-   control programmatically.
+5. `FieldError` reports validation; connect its `id` to the control with
+   `aria-describedby`. Non-error output belongs in `DemoOutput`.
 
 Use `FieldGroup` to group related fields and `fieldset`/`legend` semantics for
 a true set of choices. Required, invalid, read-only and disabled are distinct

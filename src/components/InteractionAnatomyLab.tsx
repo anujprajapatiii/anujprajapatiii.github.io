@@ -354,11 +354,10 @@ export default function InteractionAnatomyLab() {
               <header className="interaction-anatomy__app-bar">
                 <strong>Assistant</strong>
                 <Button
-                  className="interaction-anatomy__reset-button"
                   variant="secondary"
                   onClick={resetDemo}
                 >
-                  <RotateCcw aria-hidden="true" />
+                  <RotateCcw data-icon="inline-start" aria-hidden="true" />
                   Reset
                 </Button>
               </header>
@@ -417,9 +416,9 @@ export default function InteractionAnatomyLab() {
                     label="Send message"
                     type="submit"
                     variant="primary"
-                    disabled={phase === "thinking" || !draft.trim()}
-                  >
-                    <ArrowUp aria-hidden="true" />
+                  disabled={phase === "thinking" || !draft.trim()}
+                >
+                    <ArrowUp data-icon="inline-start" aria-hidden="true" />
                   </IconButton>
                 </form>
               </div>

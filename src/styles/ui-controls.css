@@ -1,0 +1,511 @@
+/*
+  Shared interaction primitives for native experiments.
+
+  These components own semantics, keyboard/pointer behaviour and visual
+  states. They inherit Apparat, semantic colour roles and authored page
+  palettes; experiment styles do not reach into their `.ui-*` selectors.
+*/
+
+.ui-button,
+.ui-tabs__trigger,
+.ui-segmented__item,
+.ui-switch {
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.ui-button {
+  display: inline-flex;
+  min-height: var(--control-height-compact);
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2xs);
+  padding-inline: var(--spacing-xs);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--radius-control);
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
+  font-weight: var(--text-heading--font-weight);
+  transition:
+    color var(--motion-feedback) var(--ease-feedback),
+    background-color var(--motion-feedback) var(--ease-feedback),
+    border-color var(--motion-feedback) var(--ease-feedback);
+}
+
+.ui-button > [data-icon] {
+  width: var(--control-icon-size);
+  height: var(--control-icon-size);
+  flex: none;
+  stroke-width: 1.5;
+}
+
+.ui-button--primary {
+  border-color: var(--background-alternate);
+  background: var(--background-alternate);
+  color: var(--text-alternate);
+}
+
+.ui-button--secondary {
+  border-color: var(--border-tertiary);
+  background: var(--background-primary);
+  color: var(--text-primary);
+}
+
+.ui-button--quiet {
+  border-color: transparent;
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.ui-button--icon {
+  width: var(--control-height-compact);
+  padding-inline: 0;
+}
+
+@media (hover: hover) {
+  .ui-button--primary:hover {
+    border-color: var(--background-alternate-hover);
+    background: var(--background-alternate-hover);
+  }
+
+  .ui-button--secondary:hover {
+    border-color: var(--border-hover);
+    background: var(--background-hover);
+  }
+
+  .ui-button--quiet:hover {
+    background: var(--background-hover);
+    color: var(--text-primary);
+  }
+}
+
+.ui-button:active:not(:disabled) {
+  transition-duration: var(--motion-none);
+}
+
+.ui-button--primary:active:not(:disabled) {
+  border-color: var(--bg-accent-solid-hover);
+  background: var(--bg-accent-solid-hover);
+}
+
+.ui-button--secondary:active:not(:disabled),
+.ui-button--quiet:active:not(:disabled) {
+  background: var(--background-secondary);
+  color: var(--text-primary);
+}
+
+.ui-button:disabled,
+.ui-button[data-disabled] {
+  border-color: var(--border-disabled);
+  background: var(--bg-disabled-alt);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.ui-field-set {
+  display: grid;
+  min-inline-size: 0;
+  gap: var(--spacing-sm);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.ui-field-legend,
+.ui-field__label {
+  color: var(--text-primary);
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
+  font-weight: var(--text-heading--font-weight);
+}
+
+.ui-field-legend {
+  margin: 0;
+  padding: 0;
+}
+
+.ui-field-group {
+  display: grid;
+  min-width: 0;
+  gap: var(--spacing-md);
+}
+
+.ui-field {
+  display: grid;
+  min-width: 0;
+  gap: var(--spacing-2xs);
+}
+
+.ui-field[data-orientation="horizontal"] {
+  min-height: var(--control-height-compact);
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.ui-field__content {
+  display: grid;
+  min-width: 0;
+  gap: var(--spacing-3xs);
+}
+
+.ui-field__label {
+  width: fit-content;
+  margin: 0;
+}
+
+label.ui-field__label {
+  cursor: pointer;
+}
+
+.ui-field__description,
+.ui-field__error {
+  margin: 0;
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
+  font-weight: var(--text-meta--font-weight);
+}
+
+.ui-field__description {
+  color: var(--text-secondary);
+}
+
+.ui-field__error,
+.ui-field[data-invalid] :is(.ui-field__label, .ui-field__description) {
+  color: var(--text-error-primary);
+}
+
+.ui-field[data-disabled] :is(.ui-field__label, .ui-field__description) {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.ui-tabs {
+  display: grid;
+  gap: var(--spacing-xs);
+  min-width: 0;
+}
+
+.ui-tabs__list {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  gap: var(--spacing-3xs);
+  padding: var(--spacing-3xs);
+  overflow-x: auto;
+  background: var(--background-secondary);
+  border-radius: var(--radius-control);
+  scrollbar-width: none;
+}
+
+.ui-tabs__trigger {
+  position: relative;
+  z-index: 1;
+  min-width: max-content;
+  min-height: var(--control-height-compact);
+  flex: 1;
+  padding-inline: var(--spacing-xs);
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
+  transition:
+    color var(--motion-feedback) var(--ease-feedback),
+    background-color var(--motion-feedback) var(--ease-feedback);
+}
+
+@media (hover: hover) {
+  .ui-tabs__trigger:hover {
+    background: var(--background-hover);
+    color: var(--text-primary);
+  }
+}
+
+.ui-tabs__trigger[data-active] {
+  background: var(--background-elevated);
+  color: var(--text-primary);
+}
+
+.ui-tabs__trigger:active:not(:disabled) {
+  background: var(--background-primary);
+  transition-duration: var(--motion-none);
+}
+
+.ui-tabs__trigger:disabled,
+.ui-tabs__trigger[data-disabled] {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.ui-tabs__indicator {
+  position: absolute;
+  z-index: 2;
+  inset-block-end: 0;
+  inset-inline-start: 0;
+  width: var(--active-tab-width);
+  height: var(--control-indicator-size);
+  background: var(--decorative-accent);
+  pointer-events: none;
+  transform: translateX(var(--active-tab-left));
+  transition:
+    width var(--motion-settle) var(--ease-settle),
+    transform var(--motion-settle) var(--ease-settle);
+}
+
+:dir(rtl) .ui-tabs__indicator {
+  transform: translateX(calc(var(--active-tab-right) * -1));
+}
+
+.ui-tabs__content {
+  min-width: 0;
+  outline: none;
+}
+
+.ui-segmented {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  gap: var(--spacing-3xs);
+  padding: var(--spacing-3xs);
+  background: var(--background-secondary);
+  border-radius: var(--radius-control);
+}
+
+.ui-segmented__item {
+  min-width: 0;
+  min-height: var(--control-height-compact);
+  flex: 1;
+  padding-inline: var(--spacing-xs);
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
+  transition:
+    color var(--motion-feedback) var(--ease-feedback),
+    background-color var(--motion-feedback) var(--ease-feedback);
+}
+
+@media (hover: hover) {
+  .ui-segmented__item:hover {
+    background: var(--background-hover);
+    color: var(--text-primary);
+  }
+}
+
+.ui-segmented__item[data-pressed] {
+  background: var(--background-elevated);
+  color: var(--text-primary);
+}
+
+.ui-segmented__item:active:not(:disabled) {
+  background: var(--background-primary);
+  transition-duration: var(--motion-none);
+}
+
+.ui-segmented__item:disabled,
+.ui-segmented__item[data-disabled] {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.ui-switch {
+  position: relative;
+  display: inline-flex;
+  width: var(--control-switch-width);
+  height: var(--control-switch-height);
+  flex: none;
+  align-items: center;
+  padding: var(--control-inset);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-round);
+  background: var(--background-secondary);
+  transition:
+    background-color var(--motion-feedback) var(--ease-feedback),
+    border-color var(--motion-feedback) var(--ease-feedback);
+}
+
+.ui-switch__thumb {
+  display: block;
+  width: var(--control-switch-thumb);
+  height: var(--control-switch-thumb);
+  border-radius: var(--radius-round);
+  background: var(--text-secondary);
+  transform: translateX(0);
+  transition: transform var(--motion-settle) var(--ease-settle);
+}
+
+.ui-switch[data-checked] {
+  border-color: var(--border-accent-primary);
+  background: var(--bg-accent-solid);
+}
+
+.ui-switch[data-checked] .ui-switch__thumb {
+  background: var(--background-primary);
+  transform: translateX(calc(var(--control-switch-width) - var(--control-switch-thumb) - (2 * var(--control-inset))));
+}
+
+:dir(rtl) .ui-switch[data-checked] .ui-switch__thumb {
+  transform: translateX(calc((var(--control-switch-width) - var(--control-switch-thumb) - (2 * var(--control-inset))) * -1));
+}
+
+.ui-switch:active:not(:disabled):not([data-checked]) {
+  background: var(--bg-secondary-hover);
+  transition-duration: var(--motion-none);
+}
+
+.ui-switch[data-checked]:active:not(:disabled) {
+  background: var(--bg-accent-solid-hover);
+  transition-duration: var(--motion-none);
+}
+
+.ui-switch:disabled,
+.ui-switch[data-disabled] {
+  border-color: var(--border-disabled);
+  background: var(--bg-disabled-alt);
+  cursor: not-allowed;
+}
+
+.ui-switch:disabled .ui-switch__thumb,
+.ui-switch[data-disabled] .ui-switch__thumb {
+  background: var(--text-disabled);
+}
+
+.ui-slider {
+  width: 100%;
+  min-width: 0;
+}
+
+.ui-slider__control {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: var(--control-height-compact);
+  align-items: center;
+  touch-action: none;
+  user-select: none;
+}
+
+.ui-slider__track {
+  position: relative;
+  width: 100%;
+  height: var(--spacing-3xs);
+  overflow: hidden;
+  border-radius: var(--radius-round);
+  background: var(--bg-disabled);
+}
+
+.ui-slider__indicator {
+  height: 100%;
+  border-radius: var(--radius-round);
+  background: var(--bg-accent-solid);
+}
+
+.ui-slider__thumb {
+  display: block;
+  width: var(--control-icon-size);
+  height: var(--control-icon-size);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-round);
+  background: var(--background-elevated);
+  cursor: grab;
+  transition:
+    background-color var(--motion-feedback) var(--ease-feedback),
+    border-color var(--motion-feedback) var(--ease-feedback);
+}
+
+.ui-slider__thumb[data-dragging],
+.ui-slider__thumb:active {
+  border-color: var(--border-accent-primary);
+  background: var(--background-elevated-hover);
+  cursor: grabbing;
+  transition-duration: var(--motion-none);
+}
+
+.ui-slider[data-disabled] {
+  opacity: 0.6;
+}
+
+.ui-slider[data-disabled] .ui-slider__thumb {
+  cursor: not-allowed;
+}
+
+.ui-tooltip__content {
+  max-width: var(--control-tooltip-max-width);
+  padding: var(--spacing-2xs) var(--spacing-xs);
+  border-radius: var(--radius-control);
+  background: var(--background-alternate);
+  color: var(--text-alternate);
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
+  opacity: 1;
+  transform: translateY(0);
+  transform-origin: var(--transform-origin);
+  transition:
+    opacity var(--motion-feedback) var(--ease-feedback),
+    transform var(--motion-feedback) var(--ease-feedback);
+}
+
+.ui-tooltip__content[data-starting-style],
+.ui-tooltip__content[data-ending-style] {
+  opacity: 0;
+  transform: translateY(var(--spacing-3xs));
+}
+
+@media (pointer: coarse) {
+  .ui-button,
+  .ui-tabs__trigger,
+  .ui-segmented__item,
+  .ui-slider__control {
+    min-height: var(--control-height-touch);
+  }
+
+  .ui-button--icon {
+    width: var(--control-height-touch);
+  }
+
+  .ui-switch::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, var(--control-height-touch));
+    height: max(100%, var(--control-height-touch));
+    content: "";
+    transform: translate(-50%, -50%);
+  }
+
+  .ui-field[data-orientation="horizontal"] {
+    min-height: var(--control-height-touch);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-button,
+  .ui-tabs__trigger,
+  .ui-tabs__indicator,
+  .ui-segmented__item,
+  .ui-switch,
+  .ui-switch__thumb,
+  .ui-slider__thumb,
+  .ui-tooltip__content {
+    transition-duration: var(--motion-none);
+  }
+}
+
+@media (prefers-contrast: more) {
+  .ui-tabs__list,
+  .ui-segmented {
+    outline: 1px solid var(--border-primary);
+    outline-offset: 0;
+  }
+
+  .ui-tabs__indicator {
+    height: calc(var(--control-indicator-size) * 2);
+  }
+}

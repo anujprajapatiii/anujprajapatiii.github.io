@@ -99,20 +99,6 @@
   font-weight: var(--text-heading--font-weight);
 }
 
-.interaction-anatomy__reset-button.ui-button--secondary {
-  border-color: var(--lab-rule);
-  background: var(--lab-screen);
-  color: var(--lab-ink);
-}
-
-@media (hover: hover) {
-  .interaction-anatomy__reset-button.ui-button--secondary:hover {
-    border-color: var(--border-accent-primary);
-    background: var(--bg-accent-primary);
-    color: var(--text-accent-primary);
-  }
-}
-
 .interaction-anatomy__chat {
   position: relative;
   min-height: 0;

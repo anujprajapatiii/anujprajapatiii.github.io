@@ -8,6 +8,7 @@ import Stack from "@/components/primitives/Stack.astro";
 import Cluster from "@/components/primitives/Cluster.astro";
 import DataTable from "@/components/DataTable.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
+import DemoInspectorSpecimen from "@/components/DemoInspectorSpecimen";
 import DemoPrimitivesSpecimen from "@/components/DemoPrimitivesSpecimen";
 
 /* Keep these arrays in sync with the token block in src/styles/global.css
@@ -656,17 +657,44 @@ const pagePaletteRows = [
       </DataTable>
     </Section>
 
-    <Section size="standard" class="border-t border-border">
+    <Section
+      id="experiment-interfaces"
+      size="standard"
+      class="border-t border-border"
+    >
       <h2 class="label mb-2xs">
-        Demo panels
+        Experiment interfaces
       </h2>
       <p class="mb-md max-w-measure text-meta text-muted-foreground">
-        A guided pattern for interactive experiments. Each panel names the
-        task, offers one clear sequence, explains the current step, and keeps
-        optional settings secondary. Controls inherit the page palette, stay
-        compact on desktop, and grow for touch.
+        Two compositions share the same controls without forcing every
+        experiment into one layout. The guided panel teaches a sequence; the
+        inspector keeps persistent settings available. Both inherit the page
+        palette, stay compact on desktop, and expose larger touch targets.
       </p>
-      <DemoPrimitivesSpecimen client:load />
+      <Stack gap="xl">
+        <Stack gap="sm">
+          <div>
+            <h3 class="label mb-2xs">Guided panel — supported</h3>
+            <p class="max-w-measure text-meta text-muted-foreground">
+              Use when the visitor is learning the experiment one part at a
+              time. Interaction Anatomy is the live adopter.
+            </p>
+          </div>
+          <DemoPrimitivesSpecimen client:load />
+        </Stack>
+
+        <Stack gap="sm">
+          <div>
+            <h3 class="label mb-2xs">Control panel — candidate</h3>
+            <p class="max-w-measure text-meta text-muted-foreground">
+              Use for settings that remain available while the visitor
+              changes the stage. Its API stays flexible until a real
+              experiment adopts it.
+            </p>
+          </div>
+          <DemoInspectorSpecimen client:load />
+        </Stack>
+      </Stack>
     </Section>
 
     <Section size="standard" class="border-t border-border">

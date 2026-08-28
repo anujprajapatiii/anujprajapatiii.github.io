@@ -1,5 +1,6 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { Field, FieldLabel } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
 type DemoPanelProps = ComponentPropsWithoutRef<"aside">;
@@ -13,6 +14,7 @@ type DemoPanelHeaderProps = {
   description: string;
   current?: number;
   total?: number;
+  headingLevel?: "h2" | "h3";
 };
 
 function DemoPanelHeader({
@@ -20,13 +22,15 @@ function DemoPanelHeader({
   description,
   current,
   total,
+  headingLevel = "h2",
 }: DemoPanelHeaderProps) {
   const hasProgress = current !== undefined && total !== undefined;
+  const Heading = headingLevel;
 
   return (
     <header className="demo-panel__header">
       <div className="demo-panel__heading">
-        <h2>{title}</h2>
+        <Heading>{title}</Heading>
         <p>{description}</p>
       </div>
       {hasProgress && (
@@ -44,14 +48,18 @@ function DemoPanelHeader({
 type DemoStepDetailProps = ComponentPropsWithoutRef<"section"> & {
   title: string;
   children: ReactNode;
+  headingLevel?: "h3" | "h4";
 };
 
 function DemoStepDetail({
   className,
   title,
   children,
+  headingLevel = "h3",
   ...props
 }: DemoStepDetailProps) {
+  const Heading = headingLevel;
+
   return (
     <section
       className={cn("demo-step-detail", className)}
@@ -59,7 +67,7 @@ function DemoStepDetail({
       aria-atomic="true"
       {...props}
     >
-      <h3>{title}</h3>
+      <Heading>{title}</Heading>
       <p>{children}</p>
     </section>
   );
@@ -79,10 +87,14 @@ function DemoSetting({
   ...props
 }: DemoSettingProps) {
   return (
-    <div className={cn("demo-setting", className)} {...props}>
-      <label htmlFor={htmlFor}>{label}</label>
+    <Field
+      className={cn("demo-setting", className)}
+      orientation="horizontal"
+      {...props}
+    >
+      <FieldLabel htmlFor={htmlFor}>{label}</FieldLabel>
       {control}
-    </div>
+    </Field>
   );
 }
 

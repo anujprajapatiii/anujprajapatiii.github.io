@@ -372,6 +372,46 @@ if (
   );
 }
 
+/* Base UI is an implementation detail of the local wrappers. If an experiment
+   imports it directly, keyboard behaviour and component APIs can drift without
+   any visual warning. */
+for (const file of FILES.filter((candidate) => !candidate.startsWith("src/components/ui/"))) {
+  const source = withoutComments(readFileSync(file, "utf8"));
+  for (const match of source.matchAll(/from\s+["'](@base-ui\/react[^"']*)["']/g)) {
+    report(
+      file,
+      lineAt(source, match.index),
+      "base-ui-boundary",
+      match[1],
+      "import Base UI only inside src/components/ui; experiments and demo recipes use the local wrappers",
+    );
+  }
+}
+
+/* Shared component visuals have one owner. Experiment-local styles may lay
+   components out through their own wrapper, but cannot reach into `.ui-*`
+   selectors to change a primitive's colours, type or interaction states. */
+const SHARED_UI_STYLE_OWNERS = new Set([
+  "src/styles/ui-controls.css",
+  "src/styles/demo-recipes.css",
+]);
+for (const file of FILES.filter(
+  (candidate) => candidate.endsWith(".css") && !SHARED_UI_STYLE_OWNERS.has(candidate),
+)) {
+  const source = withoutComments(readFileSync(file, "utf8"));
+  source.split("\n").forEach((line, index) => {
+    const match = line.match(/\.ui-[a-z0-9_-]+/i);
+    if (!match) return;
+    report(
+      file,
+      index + 1,
+      "shared-ui-style-owner",
+      match[0],
+      "shared `.ui-*` selectors are styled only in the central primitive or recipe stylesheets",
+    );
+  });
+}
+
 for (const file of designBundleDrift()) {
   report(
     file,

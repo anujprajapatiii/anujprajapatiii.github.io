@@ -38,11 +38,11 @@ timers and data. It passes controlled values and callbacks down through the
 demo compositions into UI primitives. Astro continues to own the route,
 metadata, prose and static page shell.
 
-The proposed component maturity, field anatomy, control selection,
-customization and control-panel recipe rules are documented in
-`agent-os/conventions/experiment-interfaces.md`. Adopt them through the phased
-plan in `agent-os/plans/experiment-interface-system.md`; do not treat planned
-components as shipped APIs.
+Component maturity, field anatomy, control selection, customization and
+control-panel recipe rules are documented in
+`agent-os/conventions/experiment-interfaces.md`. The guided panel is Supported;
+the implemented inspector remains Candidate until a real experiment adopts
+it. Do not treat later-phase controls as shipped APIs.
 
 ## Layout Hierarchy
 

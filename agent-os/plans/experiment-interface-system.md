@@ -1,6 +1,7 @@
 # Experiment Interface System
 
-**Status:** Planned — scope approval required before implementation.
+**Status:** Lean Phase 1 complete. Later phases require a real experiment
+adopter and separate scope approval.
 
 ## Context
 
@@ -14,6 +15,11 @@ anatomy. Adding controls one at a time without an explicit contract would
 create API drift, experiment-specific overrides and inconsistent accessibility.
 This plan extends the current system without redesigning shipped experiments
 or prebuilding a dashboard framework.
+
+The completed lean phase split primitive/recipe style ownership, hardened the
+existing wrapper boundary, added shared field anatomy, implemented a Candidate
+`DemoInspector`, expanded the style guide and added structural checks. No
+speculative input library was added.
 
 ## Desired Outcome
 
@@ -74,7 +80,7 @@ Documentation in this planning pass:
 - `agent-os/system-map.md`
 - `agent-os/plans/experiment-interface-system.md`
 
-Likely implementation files after scope approval:
+Implementation files in the lean phase or gated later phases:
 
 - `src/components/ui/button.tsx`
 - `src/components/ui/segmented-control.tsx`
@@ -148,7 +154,7 @@ matrices.
 - **Why it matters:** Control panels fail through inconsistent anatomy more
   often than through missing widget types.
 - **Direction:** Add `Field`, `FieldGroup`, `FieldLabel`,
-  `FieldDescription` and `FieldMessage`, then prove required, invalid,
+  `FieldDescription` and `FieldError`, then prove required, invalid,
   read-only and disabled states.
 - **Acceptance:** Every form-like candidate composes through the shared anatomy
   and exposes correct accessible relationships.
@@ -264,19 +270,21 @@ matrices.
   objects may correctly use native controls.
 - Preserve the current visual result while moving CSS; separation is an
   architecture change, not a redesign.
-- No source implementation begins until this plan's Scope is approved and a
-  real Phase 2 adopter is named.
+- The approved lean phase may ship without a real inspector adopter as long as
+  the inspector remains Candidate. Phase 2 controls do not begin until that
+  adopter is named.
 
 ## Steps
 
-1. Approve this Scope and select the first control-heavy experiment adopter.
-2. Complete Phase 1 in a dedicated branch with before/after visual captures.
-3. Review the field anatomy, inspector composition and state workbench in the
-   browser before adding more primitives.
-4. Implement only the adopter's minimum Phase 2 control set and behaviour
-   tests.
-5. Run convention checks, focused tests, production build and the supported
-   visual matrix.
+1. Completed: approve the lean Scope and preserve current experiment state
+   ownership.
+2. Completed: split style ownership, harden wrappers, add field anatomy and
+   implement the Candidate inspector in a dedicated branch.
+3. Completed: review the two recipes, field relationships and responsive
+   composition in the browser.
+4. Next: name the first control-heavy experiment adopter.
+5. Next: implement only that adopter's minimum Phase 2 control set and focused
+   behaviour tests.
 6. Promote components only when the maturity criteria and live-use evidence
    are met.
 7. Reassess Phase 3 after the adopter reveals actual gesture or advanced
@@ -302,4 +310,3 @@ After implementation, capture a learning note if the first inspector adopter
 changes the component-selection rules, maturity threshold, responsive model or
 state boundary. Update this convention directly when the rule is durable
 across future experiments.
-

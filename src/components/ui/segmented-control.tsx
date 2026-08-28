@@ -9,26 +9,32 @@ type SegmentedItem<Value extends string> = {
   disabled?: boolean;
 };
 
+type SegmentedControlLabel =
+  | { label: string; "aria-labelledby"?: never }
+  | { label?: never; "aria-labelledby": string };
+
 type SegmentedControlProps<Value extends string> = {
   value: Value;
   items: readonly SegmentedItem<Value>[];
   onValueChange: (value: Value) => void;
-  label: string;
   className?: string;
   disabled?: boolean;
-};
+} & SegmentedControlLabel;
 
 function SegmentedControl<Value extends string>({
   value,
   items,
   onValueChange,
   label,
+  "aria-labelledby": ariaLabelledBy,
   className,
   disabled,
 }: SegmentedControlProps<Value>) {
   return (
     <ToggleGroupPrimitive
       aria-label={label}
+      aria-labelledby={ariaLabelledBy}
+      data-slot="segmented-control"
       className={cn("ui-segmented", className)}
       disabled={disabled}
       value={[value]}
@@ -39,6 +45,7 @@ function SegmentedControl<Value extends string>({
     >
       {items.map((item) => (
         <TogglePrimitive
+          data-slot="segmented-control-item"
           className="ui-segmented__item"
           disabled={item.disabled}
           key={item.value}
