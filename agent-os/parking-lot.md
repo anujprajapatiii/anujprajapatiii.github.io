@@ -14,3 +14,5 @@ on this list unless Anuj asks for it by name.
       `guides/how-to-add-projects.md`)
 - [ ] Page-load and scroll-entrance animations
 - [ ] Image optimization pass (Astro `<Image>`, responsive sizes)
+- [ ] Revisit the authored page sub-theme concept before applying a custom
+      palette to another case study
