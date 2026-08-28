@@ -9,6 +9,14 @@ Small fixes do not need a plan unless requested.
 The agent drafts the plan; Anuj reviews it — especially the Scope section —
 before any code is written.
 
+## Design Explorations
+
+When the work compares several design directions before choosing one, copy
+`agent-os/plans/design-exploration-template.md` instead of the general template
+below. Follow `agent-os/conventions/design-exploration.md` so the alternatives
+stay isolated in a worktree, are compared under equal conditions, and are
+removed before the selected direction is merged.
+
 ## Template
 
 ```md

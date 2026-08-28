@@ -2,7 +2,7 @@
 
 ## Status
 
-Planned
+Complete
 
 ## Context
 
@@ -77,14 +77,14 @@ Out:
 
 ## Steps
 
-- [ ] Confirm the existing uncommitted `main` work has been reviewed and
+- [x] Confirm the existing uncommitted `main` work has been reviewed and
       secured before starting implementation; handling that work is a separate
       action requiring Anuj's direction.
-- [ ] Write the design-exploration convention in plain language.
-- [ ] Add the reusable exploration-plan template.
-- [ ] Add pull-request checks and the design review checklist.
-- [ ] Update the system map.
-- [ ] Verify the new workflow configuration and document a footer example.
+- [x] Write the design-exploration convention in plain language.
+- [x] Add the reusable exploration-plan template.
+- [x] Add pull-request checks and the design review checklist.
+- [x] Update the system map.
+- [x] Verify the new workflow configuration and document a footer example.
 
 ## Review
 
@@ -94,11 +94,12 @@ Out:
   experience.
 - Architecture: Exploration code is temporary; approved components and tokens
   remain in their existing source-of-truth locations.
-- Verification: Validate workflow syntax, run `pnpm check`, and run
-  `pnpm build` after implementation.
+- Verification: `git diff --check`, `pnpm check`, and `pnpm build` pass. The
+  production build emits all 13 expected pages and no temporary lab route.
 
 ## Learnings
 
-Capture durable workflow decisions in
-`agent-os/conventions/design-exploration.md`; no separate learning note is
-expected unless the first real exploration reveals a new reusable pattern.
+The durable workflow is captured in
+`agent-os/conventions/design-exploration.md`. No separate learning note is
+needed yet; the first real exploration can add one if it reveals a reusable
+pattern not covered by the convention.
