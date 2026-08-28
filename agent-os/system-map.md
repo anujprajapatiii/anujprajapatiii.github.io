@@ -12,7 +12,7 @@ workflows change.
 | Public site shell | Shared layout, navigation, footer, theme, metadata | `src/layouts/`, `src/components/layout/`, `src/data/site-config.ts` |
 | Work | Portfolio/case-study section at `/work` | `src/content/projects/`, rendered through `/work` routes |
 | Content queries | Published filtering, recency, type filtering, and homepage curation | `src/lib/content/queries.ts`, `src/lib/content/project-types.ts` |
-| Native experiments | Interactive Play content selected by an explicit typed flag and rendered as small React islands that inherit site tokens | `src/content.config.ts`, `src/pages/play/[...slug].astro`, experiment components in `src/components/` |
+| Experiments | Published Play entries with shared detail routes, neutral media fallbacks, and optional live links or embeds | `src/content/play/`, `src/content.config.ts`, `src/pages/play/` |
 | Demo interface primitives | Accessible controls plus a Supported guided recipe and Candidate inspector recipe; experiments retain their own controlled state, candidate components require live proof, and diagnostics stay opt-in | `src/components/ui/`, `src/components/demo/`, `src/styles/ui-controls.css`, `src/styles/demo-recipes.css`, `agent-os/conventions/experiment-interfaces.md` |
 | Design tokens | Base color, type, spacing, and container tokens; light/dark appearance modes | `src/styles/global.css` |
 | Page palettes | Authored per-page semantic colour remaps, independent of light/dark mode | `src/data/page-palettes.ts`, `src/styles/themes/`, layout palette props |
@@ -32,7 +32,7 @@ workflows change.
 | `/work` | Work index listing case studies |
 | `/work/<slug>` | Case-study detail pages |
 | `/play` | Experiments index |
-| `/play/<slug>` | Experiment detail pages, native interactive labs, and live embeds |
+| `/play/<slug>` | Experiment detail pages with optional live links and embeds |
 | `/style-guide` | Internal design-system reference page |
 
 ## Content Model
@@ -46,11 +46,9 @@ Experiments deliberately have no taxonomy. Both collections can opt into a
 validated authored colour palette with the `palette` frontmatter field; the
 default keeps the site palette.
 
-Stateful Play entries can opt into an allow-listed `interactiveDemo`. The
-shared route places that component at full content width between the entry
-header and prose. React owns the live state only; the surrounding route,
-content model, Apparat typography, semantic tokens, and light/dark behavior
-remain shared with every other experiment.
+Play entries can optionally link to or embed a live tool. The shared route
+owns the page structure, content model, Apparat typography, semantic tokens,
+and light/dark behavior around that authored content.
 
 | Collection | Public route | Source |
 | --- | --- | --- |

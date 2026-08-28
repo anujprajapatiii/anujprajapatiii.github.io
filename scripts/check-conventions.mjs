@@ -412,10 +412,6 @@ for (const requirement of [
 }
 
 const uiControlsCss = readFileSync("src/styles/ui-controls.css", "utf8");
-const interactionAnatomyCss = readFileSync(
-  "src/components/interaction-anatomy-lab.css",
-  "utf8",
-);
 const buttonStateCssContracts = [
   {
     file: "src/styles/global.css",
@@ -434,12 +430,6 @@ const buttonStateCssContracts = [
     source: uiControlsCss,
     test: /@media \(pointer: coarse\)\s*\{[\s\S]*?\.ui-button,[\s\S]*?min-height:\s*var\(--control-height-touch\)/,
     found: "coarse-pointer .ui-button",
-  },
-  {
-    file: "src/components/interaction-anatomy-lab.css",
-    source: interactionAnatomyCss,
-    test: /@media \(pointer: coarse\) and \(max-width: 48rem\)\s*\{[\s\S]*?\.interaction-anatomy__phone-wrap\s*\{[\s\S]*?transform:\s*none;[\s\S]*?\.interaction-anatomy__composer\s*\{[\s\S]*?grid-template-columns:\s*1fr var\(--control-height-touch\)/,
-    found: "coarse-pointer interaction phone controls",
   },
   {
     file: "src/styles/ui-controls.css",

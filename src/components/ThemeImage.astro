@@ -1,7 +1,4 @@
 ---
-import Grid from "@/components/primitives/Grid.astro";
-import GridItem from "@/components/primitives/GridItem.astro";
-
 interface Props {
   lightSrc: string;
   darkSrc?: string;
@@ -15,14 +12,12 @@ const {
   alt = "",
   class: className,
 } = Astro.props;
-const hasOverlay = Astro.slots.has("overlay");
 ---
 
 <div
   class:list={[
     "theme-image",
     darkSrc && "theme-image--switchable",
-    hasOverlay && "theme-image--with-overlay",
     className,
   ]}
 >
@@ -39,15 +34,6 @@ const hasOverlay = Astro.slots.has("overlay");
       class="theme-image__dark"
       decoding="async"
     />
-  )}
-  {hasOverlay && (
-    <div class="theme-image__overlay">
-      <Grid>
-        <GridItem spanMd={12} spanLg={8} startMd={7} startLg={9}>
-          <slot name="overlay" />
-        </GridItem>
-      </Grid>
-    </div>
   )}
 </div>
 
@@ -71,33 +57,6 @@ const hasOverlay = Astro.slots.has("overlay");
   .theme-image--cover > img {
     height: 100%;
     object-fit: cover;
-  }
-
-  .theme-image--with-overlay {
-    position: relative;
-    min-height: calc(4 * var(--spacing-4xl));
-    aspect-ratio: 2 / 1;
-    overflow: hidden;
-  }
-
-  .theme-image--with-overlay > img {
-    position: absolute;
-    inset: 0;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .theme-image__overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    padding-inline: var(--spacing-gutter);
-  }
-
-  .theme-image__overlay > :global(.layout-grid) {
-    width: 100%;
   }
 
   .theme-image > .theme-image__dark {

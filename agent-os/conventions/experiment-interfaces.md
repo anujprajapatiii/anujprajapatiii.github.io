@@ -75,15 +75,15 @@ Promotion happens after live use exposes the right API.
 
 | Component | Current maturity | Evidence / next action |
 | --- | --- | --- |
-| `Button`, `IconButton` | Supported | Used in Interaction Anatomy; this accessibility-critical action primitive has a deliberately small API and a shared `data-icon` contract. |
-| `Switch` | Supported | Used in Interaction Anatomy; the accessible toggle behaviour qualifies for support from one live adopter. Keep it for immediate boolean settings. |
-| `SegmentedControl` | Candidate | Used in Nutrition Labels; validate with a second real mode switch before promotion. |
+| `Button`, `IconButton` | Supported | Previously validated in Interaction Anatomy; this accessibility-critical action primitive has a deliberately small API and a shared `data-icon` contract. |
+| `Switch` | Supported | Previously validated in Interaction Anatomy; keep the accessible toggle for immediate boolean settings. |
+| `SegmentedControl` | Candidate | Previously tested in Nutrition Labels and retained in the inspector specimen; validate it with the next real mode switch. |
 | `Tabs` | Candidate | Wrapper exists but has no live adopter. Keep only after its first real content-view use. |
 | `Slider` | Candidate | Wrapper exists but has no live adopter. Prove with a continuous-value experiment. |
 | `Tooltip` / `Hint` | Candidate | Provider exists, but the content wrapper has no live adopter. Overlay placement remains owned by Base UI and hints stay supplemental. |
-| `DemoShell`, `DemoStage` | Supported | The responsive two-region behaviour is proven by Interaction Anatomy and documented in the style guide. |
-| `DemoPanel` family | Supported | The complex guided interaction is proven by Interaction Anatomy and documented in the style guide; reserve it for guided explanation. |
-| `Field`, `FieldLabel` | Supported | The accessibility-critical label/control relationship is used by `DemoSetting` in Interaction Anatomy. |
+| `DemoShell`, `DemoStage` | Supported | The responsive two-region behaviour was validated in Interaction Anatomy and remains documented in the style guide. |
+| `DemoPanel` family | Supported | The guided interaction was validated in Interaction Anatomy and remains documented in the style guide; reserve it for guided explanation. |
+| `Field`, `FieldLabel` | Supported | The accessibility-critical label/control relationship was validated through `DemoSetting` in Interaction Anatomy. |
 | Remaining field anatomy | Candidate | `FieldGroup`, `FieldContent` and `FieldDescription` are shown in the inspector specimen; fieldset and error APIs remain unproven. |
 | `DemoInspector` | Candidate | Implemented and documented in the style guide; keep its API flexible until a real experiment adopts it. |
 

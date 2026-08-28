@@ -12,8 +12,6 @@ import GridItem from "@/components/primitives/GridItem.astro";
 import OnThisPage from "@/components/OnThisPage.astro";
 import DataTable from "@/components/DataTable.astro";
 import ThemeImage from "@/components/ThemeImage.astro";
-import ProjectNutritionLabels from "@/components/ProjectNutritionLabels";
-import InteractionAnatomyLab from "@/components/InteractionAnatomyLab";
 import { getPublishedExperiments } from "@/lib/content/queries";
 import { render } from "astro:content";
 
@@ -111,36 +109,19 @@ const mobileLiveActionUsesEmbedFallback = Boolean(
       />
     )}
 
-    {item.data.interactiveDemo === "interaction-anatomy" && (
-      <Container>
-        <InteractionAnatomyLab client:load />
-      </Container>
-    )}
-
     <Container>
       <Stack gap="lg">
         {/*
-          An embed is its own hero. An item that opens with a live tool
-          (voxel) keeps its real imagery in the body and deliberately has no
-          hero image — a grey placeholder above a working embed would add a
-          picture of nothing to a page that already leads with something.
-          Everything else shows the placeholder until a real image lands.
+          An embed is its own hero. Entries without an embed or authored hero
+          show the neutral placeholder until real media lands.
         */}
         {item.data.media.hero ? (
           <ThemeImage
             lightSrc={item.data.media.hero}
             darkSrc={item.data.media.heroDark}
             alt=""
-          >
-            {item.data.heroOverlay === "nutrition-label" && (
-              <div slot="overlay">
-                <ProjectNutritionLabels showSwitcher={false} />
-              </div>
-            )}
-          </ThemeImage>
-        ) : (
-          !item.data.embedUrl &&
-          !item.data.interactiveDemo &&
+          />
+        ) : !item.data.embedUrl && (
           <div class="media-placeholder"></div>
         )}
         {/* Rail beside the body only: the table of contents belongs to the
