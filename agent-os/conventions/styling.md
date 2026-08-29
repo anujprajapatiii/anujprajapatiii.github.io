@@ -315,9 +315,6 @@ What that means in practice:
   - Prose tables need `width: max-content; max-width: 100%` with their
     `display: block`. Without it the border stretches to the container while
     the cells shrink-wrap, leaving empty space inside the outer rule.
-  - The hero info box is deliberately *not* a table — it has no headings and
-    none were invented for it. It retains a full box border because it is a
-    self-contained panel, while sharing the table's padding and type.
 - **Buttons are levels of emphasis, not shapes.** `ActionLink.astro` is the
   public Astro entry point; React commands use `Button` or `IconButton`. The
   two runtimes remain separate, but share the same neutral component roles and

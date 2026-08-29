@@ -1422,29 +1422,6 @@
 }
 
 /*
-  Hero info box: the two-row box in the hero. Not a table — it has no headings
-  and none were invented for it. It keeps a full box border because it is a
-  self-contained panel, while sharing the table's padding and type.
-*/
-.info-box { border: 1px solid var(--border); }
-.info-box__row {
-  padding: var(--spacing-2xs) var(--spacing-xs);
-  font-size: var(--text-body);
-  line-height: var(--text-body--line-height);
-}
-/*
-  Longhands, not `border-top: 1px solid var(--border)`. The shorthand sets
-  border-top-color, and at (0,2,0) it outranked the interaction list's (0,1,2)
-  at rest but LOST to the lift's (0,2,2) — so the divider sat correct until you
-  pointed at it and then vanished. Valid CSS, green build, invisible in review.
-  Width and style here; the colour is the row's rule channel.
-*/
-.info-box__row + .info-box__row {
-  border-top-width: 1px;
-  border-top-style: solid;
-}
-
-/*
   Theme toggle. The icon shows the CURRENT appearance — sun in light, moon in
   dark — and the swap is done here in CSS, off the same `.dark` class the
   pre-paint script sets. The adjacent keycap exposes the L shortcut and uses
@@ -2165,7 +2142,6 @@
   .site-footer a,
   .theme-toggle,
   .on-this-page a,
-  .info-box a,
   .play-item
 ) {
   color:                 var(--lift-text,    currentColor);
@@ -2347,18 +2323,3 @@ html[data-theme-key-active] .theme-toggle__key {
 /* Style-guide specimens expose the compound effects without recreating them. */
 .light-shade-specimen--raised { box-shadow: var(--light-shade-raised); }
 .light-shade-specimen--hover { box-shadow: var(--light-shade-raised-hover); }
-
-/*
-  The hero info box takes the table's border, padding and type, so it takes the
-  table's lift too. It moved one property before, on a row that sits inside a
-  ruled box claiming to be "in the same family" as the table.
-*/
-.info-box a {
-  --lift-text: var(--text-secondary);
-  --lift-surface-on: var(--background-hover);
-  /* Its divider is a rule it owns, so it lifts like every other rule. Without
-     these two the channel painted it transparent on hover — see the longhand
-     note on .info-box__row above. */
-  --lift-rule: var(--border);
-  --lift-rule-on: var(--border-hover);
-}

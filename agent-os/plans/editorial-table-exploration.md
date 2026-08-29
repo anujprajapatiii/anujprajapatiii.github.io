@@ -130,6 +130,8 @@ Still out:
 - [x] Promote the selected treatment to component and Markdown tables.
 - [x] Remove the temporary lab route and rejected variants.
 - [x] Verify real style-guide and case-study tables after promotion.
+- [x] Remove the homepage's legacy hero panel, its retired styles, and the
+  obsolete convention exception.
 
 ## Review Notes
 

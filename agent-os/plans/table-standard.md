@@ -60,7 +60,7 @@ Out:
 
 ## Files To Modify
 
-- `src/styles/global.css`: the table treatment; `.info-box` aligned to it
+- `src/styles/global.css`: the table treatment
 - `src/components/DataTable.astro`: new — table + scroll wrapper
 - `src/pages/index.astro`: Play list becomes a table
 - `src/pages/work/[...slug].astro`, `src/pages/play/[...slug].astro`: metadata table
