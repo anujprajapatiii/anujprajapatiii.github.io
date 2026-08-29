@@ -17,6 +17,7 @@ workflows change.
 | Design tokens | Base color, type, spacing, and container tokens; light/dark appearance modes | `src/styles/global.css` |
 | Page palettes | Authored per-page semantic colour remaps, independent of light/dark mode | `src/data/page-palettes.ts`, `src/styles/themes/`, layout palette props |
 | Theme-aware media | Selects matched light and dark imagery while preserving shared layout and accessibility semantics | `src/components/ThemeImage.astro` |
+| Homepage atmosphere | Hero-bounded Sunlit lighting with token colours, static grain, transform-only motion, and off-screen suspension | `src/components/SunlitHeroScene.astro`, `src/components/sunlit-hero-scene.css` |
 | Layout primitives | One 1300px page container plus Section/Stack/Cluster and a typed 24-track Grid/GridItem system | `src/components/primitives/`, CSS in `src/styles/global.css` |
 | Deployment | Static build published to GitHub Pages | `.github/workflows/deploy.yml` |
 | Design exploration | Isolated worktree and branch workflow for comparing alternatives, selecting one, and cleaning temporary lab code before merge | `agent-os/conventions/design-exploration.md`, `agent-os/plans/design-exploration-template.md` |

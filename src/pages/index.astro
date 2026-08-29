@@ -10,7 +10,7 @@ import Stack from "@/components/primitives/Stack.astro";
 import Cluster from "@/components/primitives/Cluster.astro";
 import Grid from "@/components/primitives/Grid.astro";
 import GridItem from "@/components/primitives/GridItem.astro";
-import ThemeImage from "@/components/ThemeImage.astro";
+import SunlitHeroScene from "@/components/SunlitHeroScene.astro";
 import { siteConfig } from "@/data/site-config";
 import {
   getFeaturedExperiments,
@@ -26,8 +26,9 @@ const play = await getFeaturedExperiments(5);
 
 <PageLayout>
   {/* Hero */}
-  <Section size="hero">
-    <Container>
+  <Section size="hero" class="home-hero">
+    <SunlitHeroScene />
+    <Container class="home-hero__content">
       <Grid class="hero-grid">
         <GridItem spanLg={8}>
           <h1 class="hero-display">
@@ -35,12 +36,7 @@ const play = await getFeaturedExperiments(5);
           </h1>
         </GridItem>
         <GridItem spanLg={16}>
-          <ThemeImage
-            lightSrc="/images/hero-neutral-light.jpg"
-            darkSrc="/images/hero-neutral-dark.jpg"
-            alt=""
-            class="theme-image--cover"
-          />
+          <div class="media-placeholder"></div>
         </GridItem>
       </Grid>
     </Container>
@@ -104,3 +100,39 @@ const play = await getFeaturedExperiments(5);
     </Container>
   </Section>
 </PageLayout>
+
+<style>
+  :global(.home-hero) {
+    position: relative;
+    display: grid;
+    align-items: center;
+    min-height: 100svh;
+    overflow: clip;
+    isolation: isolate;
+  }
+
+  :global(.home-hero__content) {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+  }
+
+  :global(body:has(.home-hero) main) {
+    margin-block-start: calc(-1 * var(--header-height));
+  }
+
+  :global(body:has(.home-hero) .site-header) {
+    background: var(--background-primary);
+    background: color-mix(in srgb, var(--background-primary) 48%, transparent);
+    -webkit-backdrop-filter: blur(28px) saturate(140%);
+    backdrop-filter: blur(28px) saturate(140%);
+  }
+
+  @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+    :global(body:has(.home-hero) .site-header) {
+      background: var(--background-primary);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+</style>

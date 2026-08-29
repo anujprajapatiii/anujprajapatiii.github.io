@@ -16,3 +16,5 @@ on this list unless Anuj asks for it by name.
 - [ ] Image optimization pass (Astro `<Image>`, responsive sizes)
 - [ ] Revisit the authored page sub-theme concept before applying a custom
       palette to another case study
+- [ ] Replace the temporary Sunlit foliage bitmap with an original or
+      appropriately licensed asset without changing the hero composition

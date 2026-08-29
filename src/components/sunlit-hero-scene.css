@@ -1,0 +1,262 @@
+.sunlit-hero-overlay {
+  --sunlit-shadow: var(--text-primary-hover);
+  --sunlit-bounce-light: var(--lighting-highlight);
+  --sunlit-composite-ground: var(--background-primary);
+  --sunlit-timing: cubic-bezier(0.455, 0.19, 0, 0.985);
+  --sunlit-motion-blinds: 1s;
+  --sunlit-motion-blinds-sway: 28.8s;
+  --sunlit-motion-perspective: 1.7s;
+  --sunlit-motion-opacity: 4s;
+  --sunlit-motion-billow: 12.8s;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: clip;
+  contain: paint;
+  isolation: isolate;
+  pointer-events: none;
+  background: var(--sunlit-composite-ground);
+  mix-blend-mode: multiply;
+}
+
+.dark .sunlit-hero-overlay {
+  --sunlit-shadow: var(--lighting-shade);
+  --sunlit-composite-ground: var(--lighting-highlight);
+  mix-blend-mode: screen;
+  opacity: 0.7;
+}
+
+.sunlit-hero-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background-image: url("/images/sunlit/grain.svg");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  opacity: 0.12;
+}
+
+.dark .sunlit-hero-overlay::after {
+  mix-blend-mode: normal;
+  opacity: 0.14;
+}
+
+.sunlit-hero-overlay__glow,
+.sunlit-hero-overlay__glow-bounce,
+.sunlit-hero-overlay__progressive-blur,
+.sunlit-hero-overlay__progressive-blur > div {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.sunlit-hero-overlay__glow {
+  background: linear-gradient(
+    309deg,
+    var(--sunlit-bounce-light),
+    var(--sunlit-bounce-light) 20%,
+    transparent
+  );
+  opacity: 0.5;
+  transition: background var(--sunlit-motion-blinds) var(--sunlit-timing);
+}
+
+.sunlit-hero-overlay__glow-bounce {
+  background: linear-gradient(
+    355deg,
+    var(--sunlit-bounce-light) 0%,
+    transparent 30%,
+    transparent 100%
+  );
+  opacity: 0.5;
+  transition: background var(--sunlit-motion-blinds) var(--sunlit-timing);
+}
+
+.sunlit-hero-overlay__perspective {
+  position: absolute;
+  top: -30%;
+  right: 0;
+  width: 80%;
+  height: 130%;
+  opacity: 0.11;
+  background-blend-mode: darken;
+  transform-origin: top right;
+  transform-style: preserve-3d;
+  transform: matrix3d(
+    0.75, -0.0625, 0, 0.0008,
+    0, 1, 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  );
+  transition:
+    transform var(--sunlit-motion-perspective) var(--sunlit-timing),
+    opacity var(--sunlit-motion-opacity) ease;
+}
+
+.dark .sunlit-hero-overlay__perspective {
+  opacity: 0.42;
+  transform: matrix3d(
+    0.8333, 0.0833, 0, 0.0003,
+    0, 1, 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  );
+}
+
+.sunlit-hero-overlay__leaves {
+  position: absolute;
+  right: -700px;
+  bottom: -20px;
+  width: 1600px;
+  height: 1400px;
+  background-image: url("/images/sunlit/leaves.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  animation: sunlit-hero-billow var(--sunlit-motion-billow) ease-in-out infinite;
+}
+
+.sunlit-hero-overlay[data-sunlit-active] .sunlit-hero-overlay__leaves,
+.sunlit-hero-overlay[data-sunlit-active] .sunlit-hero-overlay__blinds {
+  will-change: transform;
+}
+
+.sunlit-hero-overlay:not([data-sunlit-active]) .sunlit-hero-overlay__leaves,
+.sunlit-hero-overlay:not([data-sunlit-active]) .sunlit-hero-overlay__blinds {
+  animation-play-state: paused;
+}
+
+.sunlit-hero-overlay__blinds {
+  position: relative;
+  width: 100%;
+  transform-origin: 50% 0;
+  animation: sunlit-hero-blinds-sway var(--sunlit-motion-blinds-sway) ease-in-out infinite;
+}
+
+.sunlit-hero-overlay__shutter,
+.sunlit-hero-overlay__bar {
+  background-color: var(--sunlit-shadow);
+}
+
+.sunlit-hero-overlay__shutters {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 60px;
+  transition: gap var(--sunlit-motion-blinds) var(--sunlit-timing);
+}
+
+.dark .sunlit-hero-overlay__shutters {
+  gap: 20px;
+}
+
+.sunlit-hero-overlay__shutter {
+  width: 100%;
+  height: 40px;
+  transition: height var(--sunlit-motion-blinds) var(--sunlit-timing);
+}
+
+.dark .sunlit-hero-overlay__shutter {
+  height: 80px;
+}
+
+.sunlit-hero-overlay__vertical {
+  position: absolute;
+  top: 0;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  height: 100%;
+}
+
+.sunlit-hero-overlay__bar {
+  width: 5px;
+  height: 100%;
+}
+
+.sunlit-hero-overlay__progressive-blur {
+  z-index: 2;
+}
+
+.sunlit-hero-overlay__progressive-blur > div {
+  -webkit-backdrop-filter: blur(var(--sunlit-blur-amount));
+  backdrop-filter: blur(var(--sunlit-blur-amount));
+  -webkit-mask-image: linear-gradient(
+    252deg,
+    transparent,
+    transparent var(--sunlit-stop-1),
+    var(--text-primary) var(--sunlit-stop-2),
+    var(--text-primary)
+  );
+  mask-image: linear-gradient(
+    252deg,
+    transparent,
+    transparent var(--sunlit-stop-1),
+    var(--text-primary) var(--sunlit-stop-2),
+    var(--text-primary)
+  );
+}
+
+.sunlit-hero-overlay__progressive-blur > div:nth-child(1) {
+  --sunlit-blur-amount: 6px;
+  --sunlit-stop-1: 0%;
+  --sunlit-stop-2: 0%;
+}
+
+.sunlit-hero-overlay__progressive-blur > div:nth-child(2) {
+  --sunlit-blur-amount: 48px;
+  --sunlit-stop-1: 40%;
+  --sunlit-stop-2: 80%;
+}
+
+@keyframes sunlit-hero-blinds-sway {
+  0%,
+  100% {
+    transform: translate3d(-0.225%, 0, 0) rotate(-0.0625deg);
+  }
+
+  50% {
+    transform: translate3d(0.225%, 0.1%, 0) rotate(0.0625deg);
+  }
+}
+
+@keyframes sunlit-hero-billow {
+  0%,
+  100% {
+    transform: perspective(400px) rotateX(0deg) rotateY(0deg) scale(1);
+  }
+
+  25% {
+    transform: perspective(400px) rotateX(1.25deg) rotateY(2.5deg) scale(1.025);
+  }
+
+  50% {
+    transform: perspective(400px) rotateX(-5deg) rotateY(-2.5deg) scale(0.9625);
+  }
+
+  75% {
+    transform: perspective(400px) rotateX(1.25deg) rotateY(-1.25deg) scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sunlit-hero-overlay__leaves,
+  .sunlit-hero-overlay__blinds {
+    animation: none;
+  }
+
+  .sunlit-hero-overlay__glow,
+  .sunlit-hero-overlay__glow-bounce,
+  .sunlit-hero-overlay__perspective,
+  .sunlit-hero-overlay__shutters,
+  .sunlit-hero-overlay__shutter {
+    transition: none;
+  }
+}
+
+@media (max-width: 48rem) {
+  .sunlit-hero-overlay__progressive-blur > div:nth-child(2) {
+    --sunlit-blur-amount: 24px;
+  }
+}
