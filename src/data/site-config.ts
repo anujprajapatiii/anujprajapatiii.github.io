@@ -8,7 +8,6 @@ export const siteConfig = {
     { label: "About", href: "/about" },
     { label: "Work", href: "/work" },
     { label: "Experiments", href: "/play" },
-    { label: "Connect", href: "/#connect" },
   ],
   social: {
     github: "https://github.com/anujprajapatiii",

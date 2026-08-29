@@ -2,7 +2,7 @@
 
 ## Status
 
-Completed
+Retired — removed from production on 2026-08-29 after visual review.
 
 ## Design Question
 
@@ -18,18 +18,17 @@ already has its own theme and surface system?
   glow, and progressively masked backdrop blur.
 - Its live SVG turbulence/displacement and full-page scene were deliberately
   excluded because they would add continuous paint work outside the hero.
-- The source foliage bitmap is temporary by Anuj's direction. Replacing it
-  with an original or appropriately licensed asset is recorded in the parking
-  lot so that the exception remains visible.
+- The source foliage bitmap was temporary by Anuj's direction and was deleted
+  with the retired treatment.
 
-## Selected Direction
+## Former Selected Direction
 
-The homepage uses a full-hero decorative light field behind the title and
-shared neutral media placeholder, and below the navigation. This preserves the
+The homepage used a full-hero decorative light field behind the title and
+shared neutral media placeholder, and below the navigation. This preserved the
 reference's spatial atmosphere without reducing contrast on the foreground
 content.
 
-The final composition keeps:
+The selected composition kept:
 
 - 23 CSS shutters and two vertical bars in the source-inspired perspective.
 - One static foliage texture with a slow transform-only billow.
@@ -40,7 +39,7 @@ The final composition keeps:
 - The existing light/dark theme control, with the dark lighting group reduced
   to 70% strength.
 
-The final composition removes:
+The selected composition removed:
 
 - The contained-image prototype.
 - Live SVG turbulence and displacement.
@@ -52,18 +51,18 @@ The final composition removes:
 
 ## Performance Guardrails
 
-- The effect is absolutely positioned, clipped, and paint-contained by the
+- The effect was absolutely positioned, clipped, and paint-contained by the
   hero rather than fixed to the viewport.
-- Only transforms animate; there is no requestAnimationFrame loop or animated
+- Only transforms animated; there was no requestAnimationFrame loop or animated
   filter.
-- IntersectionObserver pauses the foliage and blind animations when the hero
-  leaves the viewport.
-- Document visibility also pauses the scene while the tab is hidden.
-- `prefers-reduced-motion` renders the same composition as a static frame.
-- `will-change` is present only while the scene is active.
-- The implementation adds no dependency.
+- IntersectionObserver paused the foliage and blind animations when the hero
+  left the viewport.
+- Document visibility also paused the scene while the tab was hidden.
+- `prefers-reduced-motion` rendered the same composition as a static frame.
+- `will-change` was present only while the scene was active.
+- The implementation added no dependency.
 
-## Production Implementation
+## Former Production Implementation
 
 - `src/components/SunlitHeroScene.astro`: decorative markup, visibility
   lifecycle, and reduced-motion-aware activity state.
@@ -75,11 +74,11 @@ The final composition removes:
 
 ## Accessibility and Resilience
 
-- The complete scene is `aria-hidden` and does not accept pointer input.
-- Required content remains normal semantic HTML above the effect.
-- Increased-contrast and reduced-transparency preferences restore the opaque
-  navigation surface and remove its backdrop filter.
-- With JavaScript unavailable, the lighting remains visible but static.
+- The complete scene was `aria-hidden` and did not accept pointer input.
+- Required content remained normal semantic HTML above the effect.
+- Increased-contrast and reduced-transparency preferences restored the opaque
+  navigation surface and removed its backdrop filter.
+- With JavaScript unavailable, the lighting remained visible but static.
 
 ## Cleanup Before Merge
 
@@ -100,6 +99,7 @@ report `paused` after the hero leaves the viewport. The production build emits
 
 ## Decision
 
-Selected: hero-bounded, behind-content Sunlit lighting with two blur passes,
-static grain, and transform-only motion. This retains the character of the
-reference while keeping the content crisp and the runtime bounded.
+Retired: the selected hero-bounded treatment was removed because the lighting
+did not support the homepage clearly enough to justify its visual and runtime
+complexity. The exploration remains documented here as historical context;
+none of its production component, styling, runtime, or image assets remain.
