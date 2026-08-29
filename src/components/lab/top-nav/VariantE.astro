@@ -1,0 +1,39 @@
+---
+import { siteConfig } from "@/data/site-config";
+import ThemeToggle from "@/components/layout/ThemeToggle.astro";
+
+interface Props {
+  activeHref?: string;
+}
+
+const { activeHref = "/work" } = Astro.props;
+const isActive = (href: string) => href === activeHref;
+---
+
+<header class="top-nav top-nav--e" data-nav-option="E">
+  <div class="top-nav__frame top-nav-e__layout">
+    <a
+      href="/"
+      class="top-nav__identity top-nav-e__identity site-hit-target"
+      aria-current={isActive("/") ? "page" : undefined}
+    >
+      {siteConfig.name}
+    </a>
+
+    <nav class="top-nav-e__dock" aria-label="Main navigation">
+      {siteConfig.nav.map((item) => (
+        <a
+          href={item.href}
+          class="top-nav-e__route site-hit-target"
+          aria-current={isActive(item.href) ? "page" : undefined}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="top-nav-e__theme">
+      <ThemeToggle />
+    </div>
+  </div>
+</header>
