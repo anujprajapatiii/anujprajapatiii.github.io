@@ -1497,8 +1497,8 @@
 /*
   ===== Play preview list =====
   A linked experiment index beside one main preview and a three-frame
-  filmstrip. Mobile remains the complete linked list; the media controls are a
-  desktop enhancement rather than navigation someone must use.
+  filmstrip. Phones and tablets present those same links as full cards; the
+  compact index and media controls arrive together as a desktop enhancement.
 */
 .play-preview {
   display: grid;
@@ -1507,23 +1507,29 @@
   gap: var(--spacing-grid);
 }
 .play-preview__list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--spacing-grid);
   grid-column: 1 / -1;
-  /* Flex items refuse to shrink below their content; without this a long
-     subtitle pushes the row past the pane and the section scrolls sideways. */
+  /* Grid items default to their content's minimum width; without this a long
+     subtitle can push the section sideways. */
   min-width: 0;
 }
 .play-item {
   position: relative;
   display: flex;
+  height: 100%;
+  flex-direction: column;
   width: 100%;
+  padding: var(--spacing-card);
   box-shadow: var(--light-shade-raised);
 }
 .play-item__thumb {
-  width: 120px;
-  align-self: stretch;
+  order: 1;
+  aspect-ratio: 5 / 3;
+  width: 100%;
+  margin-top: var(--spacing-sm);
+  align-self: auto;
   flex-shrink: 0;
   object-fit: cover;
   background: var(--muted);
@@ -1533,7 +1539,6 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--spacing-3xs);
-  padding: var(--spacing-2xs) var(--spacing-xs);
   flex: 1;
   min-width: 0;
 }
@@ -1544,30 +1549,48 @@
   font-weight: var(--text-heading--font-weight);
   text-transform: uppercase;
 }
-/*
-  ONE LINE, ALWAYS. The design's subtitle is a short written line; the field it
-  is fed from is the item's full description, which runs to two or three. Left
-  to wrap, every row is a different height and the rows stop reading as a list.
-  Clamped rather than shortened at the source because the same description is
-  the card's paragraph elsewhere, where it should run in full.
-*/
 .play-item__subtitle {
   @apply text-body;
   color: var(--text-secondary);
   max-width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .play-preview__pane { display: none; }
 
+@media (min-width: 48rem) {
+  .play-preview__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (min-width: 56rem) {
-  .play-preview__list { grid-column: span 14; }
+  .play-preview__list {
+    display: flex;
+    grid-column: span 14;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  .play-item {
+    height: auto;
+    flex-direction: row;
+    padding: 0;
+  }
   .play-item__thumb {
+    order: 0;
+    aspect-ratio: auto;
     width: var(--spacing-3xl);
     height: var(--spacing-3xl);
+    margin-top: 0;
     align-self: auto;
+  }
+  .play-item__body {
+    padding: var(--spacing-2xs) var(--spacing-xs);
+  }
+  /* The compact desktop index stays easy to scan at a uniform row height. */
+  .play-item__subtitle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /*
