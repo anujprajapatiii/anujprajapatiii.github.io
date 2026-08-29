@@ -392,7 +392,7 @@ const pagePaletteRows = [
         roles above, while a palette remaps their structural colours for both
         modes. Status roles retain their semantic families.
       </p>
-      <DataTable label="Available page palettes">
+      <DataTable label="Available page palettes" pinFirstColumn>
         <thead>
           <tr>
             <th scope="col">Palette</th>
@@ -405,7 +405,7 @@ const pagePaletteRows = [
         <tbody>
           {pagePaletteRows.map((palette) => (
             <tr>
-              <td>{palette.name}</td>
+              <th scope="row">{palette.name}</th>
               <td><code>palette: {palette.id}</code></td>
               <td class="tabular-nums">{palette.light}</td>
               <td class="tabular-nums">{palette.dark}</td>
@@ -655,7 +655,7 @@ const pagePaletteRows = [
         </ActionLink>
         <ActionLink href="/style-guide" variant="link">Hyperlink</ActionLink>
       </Cluster>
-      <DataTable label="Button variants">
+      <DataTable label="Button variants" pinFirstColumn>
         <thead>
           <tr>
             <th scope="col">Variant</th>
@@ -666,19 +666,19 @@ const pagePaletteRows = [
         </thead>
         <tbody>
           <tr>
-            <td>primary</td>
+            <th scope="row">primary</th>
             <td>button-primary-background</td>
             <td>button-primary-background-hover</td>
             <td>button-primary-background-active</td>
           </tr>
           <tr>
-            <td>secondary</td>
+            <th scope="row">secondary</th>
             <td>button-secondary-border and foreground, transparent fill</td>
             <td>button-secondary background, border and foreground hover roles</td>
             <td>button-secondary background and border active roles</td>
           </tr>
           <tr>
-            <td>link</td>
+            <th scope="row">link</th>
             <td>button-secondary-foreground, underlined, no box</td>
             <td>button-secondary-foreground-hover</td>
             <td>same as hover</td>
@@ -761,15 +761,15 @@ const pagePaletteRows = [
         Tables
       </h2>
       <p class="mb-md max-w-measure text-body text-muted-foreground">
-        One treatment for every table: full grid, header cells in the
-        <code>.label</code> style, padding from the spacing scale, tabular
-        figures. Component tables use <code>DataTable.astro</code>, which adds
-        the horizontal-scroll container; markdown tables in a case study get
-        the same rules through <code>.prose table</code> and need nothing
-        added. A table's columns are its meaning, so it scrolls inside its own
-        box rather than reflowing.
+        One quiet-ledger treatment for every table: strong outer and column-header
+        rules, quiet row separators, no vertical cell walls, padding from the
+        spacing scale, and tabular figures. Component tables use
+        <code>DataTable.astro</code>, which adds conditional keyboard scrolling;
+        markdown tables in a case study get the same visual rules through
+        <code>.prose table</code>. A table's columns are its meaning, so it
+        scrolls inside its own box rather than reflowing.
       </p>
-      <DataTable label="Table specimen">
+      <DataTable label="Table specimen" pinFirstColumn>
         <thead>
           <tr>
             <th scope="col">Token</th>
@@ -779,19 +779,24 @@ const pagePaletteRows = [
         </thead>
         <tbody>
           <tr>
-            <td>Cell padding</td>
+            <th scope="row">Cell padding</th>
             <td>8px 12px</td>
             <td>th and td</td>
           </tr>
           <tr>
-            <td>Rule</td>
-            <td>1px border</td>
-            <td>Every cell, plus the outer edge</td>
+            <th scope="row">Rule</th>
+            <td>1px horizontal</td>
+            <td>Outer block edges, column header, and rows</td>
           </tr>
           <tr>
-            <td>Header</td>
-            <td>14px, 600, uppercase</td>
-            <td>th only</td>
+            <th scope="row">Column header</th>
+            <td>14px, 500, uppercase</td>
+            <td>thead th</td>
+          </tr>
+          <tr>
+            <th scope="row">Row header</th>
+            <td>14px, 500, natural case</td>
+            <td>tbody th</td>
           </tr>
         </tbody>
       </DataTable>

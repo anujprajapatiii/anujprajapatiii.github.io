@@ -1308,10 +1308,10 @@
 /*
   TABLES — one treatment for the whole site.
 
-  Full grid, by decision: every cell is ruled, outer border included. The
-  ruling is what makes a table read as a table instead of as a list that
-  happens to be aligned, and it is the reason the Berkeley Mono spec tables
-  were cited as the reference.
+  Quiet ledger, by decision: outer block rules and horizontal row separators
+  preserve familiar table scanning without the boxed spreadsheet texture of
+  vertical cell walls. Column headers carry the strongest internal rule;
+  explicit row headers stay primary while values recede to secondary text.
 
   The same rules serve two kinds of table, and the selectors are grouped
   rather than duplicated so the two cannot drift:
@@ -1326,7 +1326,8 @@
 .prose table {
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid var(--border);
+  border-block: 1px solid var(--border);
+  border-inline: 0;
   font-size: var(--text-body);
   line-height: var(--text-body--line-height);
   /* Digits in a column have to line up; this is the definition of a table. */
@@ -1336,19 +1337,36 @@
 .data-table td,
 .prose table th,
 .prose table td {
-  border: 1px solid var(--border);
+  border: 0;
+  border-block-end: 1px solid var(--border-tertiary);
   padding: var(--spacing-2xs) var(--spacing-xs);
   text-align: start;
   vertical-align: top;
 }
-.data-table th,
-.prose table th {
+.data-table thead th,
+.prose table thead th {
+  border-block-end-color: var(--border);
   font-size: var(--text-body);
   line-height: var(--text-body--line-height);
   text-transform: uppercase;
   font-weight: var(--text-heading--font-weight);
   color: var(--muted-foreground);
   white-space: nowrap;
+}
+.data-table tbody th,
+.prose table tbody th {
+  color: var(--foreground);
+  font-weight: var(--text-heading--font-weight);
+  text-transform: none;
+  white-space: normal;
+}
+.data-table tbody td,
+.prose table tbody td {
+  color: var(--muted-foreground);
+}
+.data-table tbody tr:last-child > *,
+.prose table tbody tr:last-child > * {
+  border-block-end-width: 0;
 }
 /*
   `color: inherit` so a link inside a cell takes the cell's colour rather than
@@ -1365,7 +1383,13 @@
   markdown emits a bare <table> with nothing to wrap it, so prose tables
   become the scroll container themselves via display: block.
 */
-.table-scroll { overflow-x: auto; }
+.table-scroll {
+  max-inline-size: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-color: var(--border-hover) var(--background-secondary);
+  scrollbar-width: thin;
+}
 .prose table {
   display: block;
   overflow-x: auto;
@@ -1373,7 +1397,7 @@
     `width: max-content` is load-bearing, not tidying. `display: block` splits
     the element in two: the block box takes the border and would stretch to
     the container, while the cells inside form an anonymous table box that
-    shrink-wraps its content. At width: 100% that draws the outer border out
+    shrink-wraps its content. At width: 100% that draws the outer rules out
     to the container edge with empty space between it and the last column.
     Sizing the block to its content makes the border hug the cells again, and
     max-width caps it so a wide table still scrolls instead of pushing the
@@ -1383,10 +1407,24 @@
   max-width: 100%;
 }
 
+.table-scroll[data-pin-first-column][data-overflowing]
+  .data-table tr > :first-child {
+  position: sticky;
+  z-index: 1;
+  inset-inline-start: 0;
+  border-inline-end: 1px solid var(--border-tertiary);
+  background: var(--background-primary);
+}
+
+.table-scroll[data-pin-first-column][data-overflowing]
+  .data-table thead > tr > :first-child {
+  z-index: 2;
+}
+
 /*
   Hero info box: the two-row box in the hero. Not a table — it has no headings
-  and none were invented for it — but it takes the table's border, padding and
-  type so it sits in the same family. Anuj's call: restyle only.
+  and none were invented for it. It keeps a full box border because it is a
+  self-contained panel, while sharing the table's padding and type.
 */
 .info-box { border: 1px solid var(--border); }
 .info-box__row {

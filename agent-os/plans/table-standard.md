@@ -2,7 +2,7 @@
 
 ## Status
 
-Complete
+Superseded by `editorial-table-exploration.md`; retained as decision history.
 
 ## Context
 

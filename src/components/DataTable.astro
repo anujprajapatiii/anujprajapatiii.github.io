@@ -14,6 +14,9 @@ interface Props {
      the surrounding heading does not already name what the table holds. */
   label?: string;
   class?: string;
+  /* Keeps an explicit row-header column visible whenever a wide table scrolls.
+     Callers must use <th scope="row"> in that column. */
+  pinFirstColumn?: boolean;
 }
 
 /*
@@ -24,10 +27,14 @@ interface Props {
   not react to the pointer, so the variant went with its one caller.
 */
 
-const { label, class: className } = Astro.props;
+const { label, class: className, pinFirstColumn = false } = Astro.props;
 ---
 
-<div class:list={["table-scroll", className]}>
+<div
+  class:list={["table-scroll", className]}
+  data-table-scroll
+  data-pin-first-column={pinFirstColumn ? "" : undefined}
+>
   <table
     class:list={["data-table"]}
     aria-label={label}
@@ -35,3 +42,48 @@ const { label, class: className } = Astro.props;
     <slot />
   </table>
 </div>
+
+<script>
+  const initializeTableScroll = (region: HTMLElement) => {
+    if (region.dataset.tableScrollReady === "true") return;
+
+    const table = region.querySelector("table");
+    if (!table) return;
+
+    region.dataset.tableScrollReady = "true";
+    const label = table.getAttribute("aria-label") ?? "Table";
+
+    const syncOverflowState = () => {
+      const isScrollable = region.scrollWidth > region.clientWidth;
+
+      region.toggleAttribute("data-overflowing", isScrollable);
+
+      if (isScrollable) {
+        region.tabIndex = 0;
+        region.setAttribute("role", "region");
+        region.setAttribute("aria-label", `${label}, scrollable`);
+      } else {
+        region.removeAttribute("tabindex");
+        region.removeAttribute("role");
+        region.removeAttribute("aria-label");
+      }
+    };
+
+    region.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+
+      event.preventDefault();
+      const direction = event.key === "ArrowRight" ? 1 : -1;
+      region.scrollBy({ left: direction * region.clientWidth });
+    });
+
+    const observer = new ResizeObserver(syncOverflowState);
+    observer.observe(region);
+    observer.observe(table);
+    syncOverflowState();
+  };
+
+  document
+    .querySelectorAll<HTMLElement>("[data-table-scroll]")
+    .forEach(initializeTableScroll);
+</script>

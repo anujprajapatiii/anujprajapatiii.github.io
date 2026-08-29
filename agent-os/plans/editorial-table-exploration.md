@@ -2,7 +2,7 @@
 
 ## Status
 
-In progress
+Complete — Quiet ledger promoted
 
 ## Design Question
 
@@ -85,14 +85,38 @@ Out:
 - Publishing or merging the temporary lab route.
 - Mixing the active light-and-shade experiment into this branch.
 
+## Promotion Scope
+
+Authorized after review and selection:
+
+- Replace the shared full-grid component and Markdown table treatment with
+  Quiet ledger's selective horizontal rules.
+- Preserve native table markup and existing content while distinguishing
+  column headers, row headers, and values through semantic roles.
+- Make component-table overflow conditionally keyboard focusable and allow
+  explicit row-header columns to remain pinned whenever their table overflows.
+- Update the public style-guide specimen and durable styling convention.
+- Remove the temporary lab route and rejected lab-only components after the
+  shared treatment is verified.
+
+Still out:
+
+- Adding Split directory or Facts rail as production variants.
+- Changing project facts, case-study prose, or table data.
+- Adding new tokens or dependencies for the table treatment.
+
 ## Files To Modify
 
-- `agent-os/plans/editorial-table-exploration.md`: frame and record the comparison.
-- `src/pages/lab/tables.astro`: temporary comparison route and shared page context.
-- `src/components/lab/tables/EditorialDirectory.astro`: split directory direction.
-- `src/components/lab/tables/QuietLedger.astro`: horizontal-rule ledger direction.
-- `src/components/lab/tables/FactsRail.astro`: row-header/value direction.
-- `src/components/lab/tables/table-lab.css`: isolated visual and responsive rules.
+- `agent-os/plans/editorial-table-exploration.md`: frame, decide, and record the
+  comparison and production promotion.
+- `src/components/DataTable.astro`: conditional keyboard overflow and optional
+  pinned row-header column.
+- `src/styles/global.css`: shared component and Markdown Quiet ledger rules.
+- `src/pages/style-guide.astro`: production specimen and row-header semantics.
+- `agent-os/conventions/styling.md`: durable Quiet ledger convention.
+- `agent-os/plans/table-standard.md`: mark the original full-grid plan as
+  superseded decision history.
+- Temporary `/lab/tables` files: removed after selection.
 
 ## Steps
 
@@ -102,6 +126,10 @@ Out:
 - [x] Review desktop/mobile and light/dark screenshots in one bounded pass.
 - [x] Fix the observed issues in one batch and confirm once.
 - [x] Record review notes and leave the selection open.
+- [x] Record Anuj's Quiet ledger selection.
+- [x] Promote the selected treatment to component and Markdown tables.
+- [x] Remove the temporary lab route and rejected variants.
+- [x] Verify real style-guide and case-study tables after promotion.
 
 ## Review Notes
 
@@ -138,25 +166,44 @@ Out:
 - Impeccable layout detector: no findings for the lab route or components.
 - Browser review: light and dark at 1440px and 390px; desktop hover, mobile
   overflow, focus ring, arrow-key scrolling, and anchor offsets confirmed.
+- Production pass: public style-guide and case-study tables use outer block
+  rules, a stronger column-header rule, quiet row separators, and no vertical
+  cell walls. Explicit row-header columns remain pinned whenever their table
+  overflows, including a 73px overflow at 768px, and return to normal flow
+  when no overflow exists. Component and Markdown tables have no page-level
+  overflow at 320px, 390px, 768px, 1024px, or 1440px. Light and dark
+  appearances, keyboard paging, focus, the clean development console, the
+  production build, convention checks, and the mechanical detector pass.
 
 ## Decision
 
-- Selected direction: Pending Anuj's review.
-- Why it was selected:
-- Useful ideas retained from other directions:
-- Ideas deliberately rejected:
+- Selected direction: Quiet ledger.
+- Why it was selected: It is the strongest shared table foundation. It keeps
+  familiar comparison behaviour and native semantics while replacing the
+  boxed spreadsheet texture with a calmer hierarchy of horizontal rules.
+- Useful ideas retained from other directions: Facts rail remains the better
+  specialist for single-project metadata. Split directory remains a useful
+  reference for future curated indexes. The selected ledger pins its project
+  column while horizontally scrolling on phones, preserving row identity.
+- Ideas deliberately rejected: Full cell borders as the default portfolio
+  treatment; Split directory as a universal comparison table; Facts rail for
+  cross-project comparison.
 
 ## Cleanup Before Pull Request
 
-- [ ] Selected direction moved into the production component.
-- [ ] Rejected variants removed.
-- [ ] Temporary `/lab/` route removed.
-- [ ] Temporary lab components, styles, assets, and imports removed.
-- [ ] No unrelated changes included.
-- [ ] Responsive and appearance states reviewed again after cleanup.
-- [ ] `pnpm check` passes.
-- [ ] `pnpm build` passes.
+- [x] Selected direction moved into the production component.
+- [x] Rejected variants removed.
+- [x] Temporary `/lab/` route removed.
+- [x] Temporary lab components, styles, assets, and imports removed.
+- [x] No unrelated tracked changes included.
+- [x] Responsive and appearance states reviewed again after cleanup.
+- [x] `pnpm check` passes.
+- [x] `pnpm build` passes.
 
 ## Learnings
 
-Pending review. No durable convention changes are made during exploration.
+Quiet ledger provides the best balance of scanability, semantic familiarity,
+and portfolio restraint for shared comparison tables. The other two directions
+solve narrower information jobs and should not be forced into a universal
+variant. The durable table convention now records the selected rule hierarchy,
+row-header treatment, conditional keyboard overflow, and pinned-column guard.

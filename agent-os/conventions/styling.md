@@ -291,45 +291,33 @@ What that means in practice:
   convention checker permits only those tokens and rejects arbitrary
   `border-radius` values, so a purposeful exception cannot quietly become a
   site-wide rounded-card style.
-- **There is one table treatment, and it is a real table.** Full grid: every
-  cell ruled, outer border included, header cells in the `.label` style,
-  padding from the spacing scale, tabular figures. Never build a table out of
-  divs, a `<dl>`, or aligned spans — if the data has columns, it is a
-  `<table>` with `<th>` headers.
+- **There is one table treatment, and it is a real table.** Quiet ledger:
+  strong outer block and column-header rules, quiet horizontal row separators,
+  no vertical cell walls, padding from the spacing scale and tabular figures.
+  Column headers use the `.label` treatment; explicit row headers use Medium
+  500 in natural case and primary text; values use secondary text. Never build
+  a table out of divs, a `<dl>`, or aligned spans — if the data has columns, it
+  is a `<table>` with `<th>` headers.
   - Component tables go through `DataTable.astro`, which supplies the class
-    and the horizontal-scroll wrapper. `pnpm check` fails on a bare `<table>`.
+    and horizontal-scroll wrapper. The wrapper becomes a labelled, keyboard-
+    focusable region only while it overflows; Left and Right Arrow page it by
+    one visible width. `pnpm check` fails on a bare `<table>`.
   - Markdown tables in a case study need nothing: `.prose table` carries the
     same rules, written as a grouped selector alongside `.data-table` so the
     two cannot drift. Header cells repeat `.label`'s declarations rather than
     requiring `class="label"`, because a markdown `<th>` cannot carry one.
   - **A table scrolls; it does not reflow.** Its columns are its meaning, so
     it scrolls inside its own container and the page never scrolls sideways.
-  - **A table whose rows are links opts in with `interactive` on
-    `DataTable`.** The whole row then takes `--background-hover`,
-    `--border-hover` on all four rules and `--text-primary`, with the same
-    treatment on `:focus-within` so keyboard users get it too, and its
-    resting cells drop to `--text-secondary`. A table without the prop is
-    inert and stays at full contrast — that is what keeps the style-guide and
-    metadata tables from reacting.
-    - It is a modifier class rather than an inferred `:has(a)` because the
-      border rules have to reach a **neighbour**, and "the next row is
-      hovered and contains a link" cannot be written: `:has()` cannot nest
-      inside `:has()`, and an invalid selector is dropped in silence. That is
-      how an open-topped highlight shipped through a first build.
-    - **Collapsed borders are shared, and the shared edge belongs to the cell
-      above**, so a hovered row's top rule is painted by whatever precedes it
-      and has to be styled through that element. Two cases, not one:
-      `tbody tr:has(+ tr:hover) > *` for rows with a row above them, and
-      `thead:has(+ tbody tr:first-child:hover) th` for the first row, whose
-      top edge belongs to the header. `thead > tr` is not a sibling of
-      `tbody > tr`, so the reach has to be thead-to-tbody — missing that is
-      why the first row alone stayed open at the top.
+  - A table with a true row-header first column may opt into
+    `pinFirstColumn` on `DataTable`; only then does that column stay visible
+    whenever the table overflows. Do not pin a value column or use the prop
+    unless every body row starts with `<th scope="row">`.
   - Prose tables need `width: max-content; max-width: 100%` with their
     `display: block`. Without it the border stretches to the container while
     the cells shrink-wrap, leaving empty space inside the outer rule.
   - The hero info box is deliberately *not* a table — it has no headings and
-    none were invented for it — but it takes the same border, padding and
-    type so it reads as part of the same family.
+    none were invented for it. It retains a full box border because it is a
+    self-contained panel, while sharing the table's padding and type.
 - **Buttons are levels of emphasis, not shapes.** `ActionLink.astro` is the
   public Astro entry point; React commands use `Button` or `IconButton`. The
   two runtimes remain separate, but share the same neutral component roles and
