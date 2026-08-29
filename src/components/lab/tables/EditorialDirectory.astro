@@ -1,0 +1,84 @@
+---
+import type { CollectionEntry } from "astro:content";
+import ActionLink from "@/components/ActionLink.astro";
+import DataTable from "@/components/DataTable.astro";
+import Grid from "@/components/primitives/Grid.astro";
+import GridItem from "@/components/primitives/GridItem.astro";
+
+interface Props {
+  projects: CollectionEntry<"projects">[];
+}
+
+const { projects } = Astro.props;
+---
+
+<article class="table-study editorial-directory">
+  <Grid as="header" class="table-study__header">
+    <GridItem spanMd={8}>
+      <h2 id="split-directory" class="text-heading">Split directory</h2>
+    </GridItem>
+    <GridItem spanMd={8} startMd={9}>
+      <p class="text-body text-muted-foreground">
+        A broad label column creates editorial pace while the repeated project
+        data stays compact and easy to scan.
+      </p>
+    </GridItem>
+    <GridItem spanMd={8} startMd={17} class="table-study__header-action">
+      <ActionLink href="/work" variant="secondary">Browse all work</ActionLink>
+    </GridItem>
+  </Grid>
+
+  <Grid class="editorial-directory__group">
+    <GridItem spanMd={8}>
+      <h3 id="selected-work-heading" class="label">
+        Selected work
+      </h3>
+    </GridItem>
+    <GridItem spanMd={16} startMd={9}>
+      <p class="table-lab__overflow-note text-body text-muted-foreground">
+        Scroll horizontally to see every column.
+      </p>
+      <DataTable
+        label="Selected portfolio projects, roles, and project links"
+        class="table-lab__scroll editorial-directory__scroll"
+      >
+        <colgroup>
+          <col class="editorial-directory__title-column" />
+          <col class="editorial-directory__role-column" />
+          <col class="editorial-directory__action-column" />
+        </colgroup>
+        <thead class="sr-only">
+          <tr>
+            <th scope="col">Project</th>
+            <th scope="col">Role</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {projects.map((project) => (
+            <tr>
+              <th scope="row">{project.data.title}</th>
+              <td>{project.data.role ?? "Role not specified"}</td>
+              <td>
+                <a
+                  class="editorial-directory__link"
+                  href={`/work/${project.id}`}
+                  aria-label={`View ${project.data.title}`}
+                >
+                  <span>View</span>
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 16 16"
+                    focusable="false"
+                  >
+                    <path d="M4 12 12 4M6 4h6v6" />
+                  </svg>
+                </a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </DataTable>
+    </GridItem>
+  </Grid>
+</article>

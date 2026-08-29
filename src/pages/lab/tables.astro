@@ -1,0 +1,135 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import ActionLink from "@/components/ActionLink.astro";
+import DataTable from "@/components/DataTable.astro";
+import Container from "@/components/primitives/Container.astro";
+import Section from "@/components/primitives/Section.astro";
+import Stack from "@/components/primitives/Stack.astro";
+import Cluster from "@/components/primitives/Cluster.astro";
+import EditorialDirectory from "@/components/lab/tables/EditorialDirectory.astro";
+import QuietLedger from "@/components/lab/tables/QuietLedger.astro";
+import FactsRail from "@/components/lab/tables/FactsRail.astro";
+import { projectTypeLabels } from "@/lib/content/project-types";
+import { getPublishedProjects } from "@/lib/content/queries";
+import "@/components/lab/tables/table-lab.css";
+
+const projects = await getPublishedProjects({ sort: "curated" });
+const featuredProject = projects[0];
+---
+
+<PageLayout
+  title="Table studies — Anuj Prajapati"
+  description="A temporary comparison of editorial table directions."
+  noindex
+>
+  <Section size="page">
+    <Container>
+      <Stack gap="lg">
+        <Stack gap="sm" class="max-w-measure">
+          <h1 class="text-title">Table studies</h1>
+          <p class="type-reading">
+            Three structures explore how selective rules and asymmetric space
+            can make portfolio tables feel more editorial. The production
+            table appears first as an unchanged control.
+          </p>
+        </Stack>
+        <nav aria-label="Table study directions">
+          <Cluster gap="md">
+            <ActionLink href="#split-directory" variant="link">
+              Split directory
+            </ActionLink>
+            <ActionLink href="#quiet-ledger" variant="link">
+              Quiet ledger
+            </ActionLink>
+            <ActionLink href="#facts-rail" variant="link">
+              Facts rail
+            </ActionLink>
+          </Cluster>
+        </nav>
+      </Stack>
+    </Container>
+  </Section>
+
+  <Section size="large">
+    <Container>
+      <Stack gap="md" class="table-lab__control">
+        <Stack gap="2xs">
+          <h2 class="text-heading">Current full grid</h2>
+          <p class="max-w-measure text-body text-muted-foreground">
+            The production treatment is the control: every cell is ruled and
+            the outer border remains visible.
+          </p>
+        </Stack>
+        <DataTable label="Current table treatment with published projects">
+          <thead>
+            <tr>
+              <th scope="col">Project</th>
+              <th scope="col">Type</th>
+              <th scope="col">Role</th>
+              <th scope="col">Year</th>
+            </tr>
+          </thead>
+          <tbody>
+            {projects.map((project) => (
+              <tr>
+                <td>{project.data.title}</td>
+                <td>{projectTypeLabels[project.data.type]}</td>
+                <td>{project.data.role ?? "Not specified"}</td>
+                <td>{project.data.publishedAt.getUTCFullYear()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </DataTable>
+      </Stack>
+    </Container>
+  </Section>
+
+  <Section size="large">
+    <Container>
+      <EditorialDirectory projects={projects} />
+    </Container>
+  </Section>
+
+  <Section size="large">
+    <Container>
+      <QuietLedger projects={projects} />
+    </Container>
+  </Section>
+
+  <Section size="large">
+    <Container>
+      <FactsRail project={featuredProject} />
+    </Container>
+  </Section>
+</PageLayout>
+
+<script>
+  document.querySelectorAll<HTMLElement>(".table-lab__scroll").forEach((region) => {
+    const label = region.querySelector("table")?.getAttribute("aria-label");
+
+    const syncOverflowState = () => {
+      const isScrollable = region.scrollWidth > region.clientWidth;
+
+      if (isScrollable) {
+        region.tabIndex = 0;
+        region.setAttribute("role", "region");
+        if (label) region.setAttribute("aria-label", `${label}, scrollable`);
+      } else {
+        region.removeAttribute("tabindex");
+        region.removeAttribute("role");
+        region.removeAttribute("aria-label");
+      }
+    };
+
+    region.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+
+      event.preventDefault();
+      const direction = event.key === "ArrowRight" ? 1 : -1;
+      region.scrollBy({ left: direction * region.clientWidth });
+    });
+
+    syncOverflowState();
+    window.addEventListener("resize", syncOverflowState);
+  });
+</script>
