@@ -72,6 +72,7 @@
 <script>
   const STORAGE_KEY = "theme";
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  const coarsePointer = window.matchMedia("(pointer: coarse)");
 
   type Theme = "light" | "dark";
 
@@ -101,19 +102,12 @@
       .forEach((button) => button.setAttribute("aria-label", label));
   }
 
-  /*
-    `render` is called directly. There used to be an applyTheme wrapper that
-    added a `theme-switching` class and held it across two rAFs, so that
-    element-level hover transitions could not chase the flipping colours
-    underneath the View Transition's snapshot. Nothing transitions any more —
-    the lift is instant, see the INTERACTION block in global.css — so the
-    class guarded nothing and the frame-juggling that held it on is gone with
-    it. The crossfade itself is unaffected: it works off snapshots, not off
-    element transitions.
-  */
+  /* Mobile browsers can briefly omit a sticky element's backdrop material
+     while compositing a full-page View Transition snapshot. Switch instantly
+     on coarse-pointer devices so the real header is present on every frame. */
   function withTransition(theme: Theme) {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!reduceMotion && document.startViewTransition) {
+    if (!reduceMotion && !coarsePointer.matches && document.startViewTransition) {
       document.startViewTransition(() => render(theme));
     } else {
       render(theme);
