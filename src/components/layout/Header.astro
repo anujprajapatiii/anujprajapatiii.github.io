@@ -17,30 +17,40 @@ function isActive(href: string) {
   <Container>
     <Grid>
       <GridItem>
-        {/* Custom responsive header bar: on wide screens the nav + toggle group
-            to the right; below --bp-md the nav wraps to its own row and the
-            toggle stays pinned to the right edge. See global.css .site-nav. */}
         <div class="site-nav">
-          {/* No colour, no hover, no fade here — the wordmark and the nav
-              links are both named in the INTERACTION block in global.css, which is
-              the only place on the site an interactive state is written. */}
           <a href="/" class="wordmark site-hit-target">
             {siteConfig.name}
           </a>
-          <nav class="site-nav__links" aria-label="Main navigation">
-            {siteConfig.nav.map((item) => (
-              <a
-                href={item.href}
-                class="site-hit-target"
-                aria-current={isActive(item.href) ? "page" : undefined}
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
-          <div class="site-nav__toggle"><ThemeToggle /></div>
+
+          <div class="site-nav__end">
+            <nav class="site-nav__links" aria-label="Main navigation">
+              {siteConfig.nav.map((item) => (
+                <a
+                  href={item.href}
+                  class="site-hit-target"
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                >
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+            <div class="site-nav__toggle"><ThemeToggle /></div>
+          </div>
         </div>
       </GridItem>
     </Grid>
   </Container>
 </header>
+
+<script>
+  const header = document.querySelector<HTMLElement>(".site-header");
+
+  if (header) {
+    const syncDivider = () => {
+      header.toggleAttribute("data-scrolled", window.scrollY > 8);
+    };
+
+    syncDivider();
+    window.addEventListener("scroll", syncDivider, { passive: true });
+  }
+</script>

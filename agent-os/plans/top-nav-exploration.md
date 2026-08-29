@@ -2,7 +2,7 @@
 
 ## Status
 
-In progress
+Complete
 
 ## Design Question
 
@@ -194,8 +194,8 @@ Out:
 - [x] Build all five directions on the shared comparison surface.
 - [x] Review mobile, desktop, light, dark, sticky, focus, and motion states.
 - [x] Save the ready-to-review exploration on this branch.
-- [ ] Record Anuj's selection and reasoning.
-- [ ] Rewrite only the selected direction for production and remove the lab.
+- [x] Record Anuj's selection and reasoning.
+- [x] Rewrite only the selected direction for production and remove the lab.
 
 ## Review Notes
 
@@ -248,24 +248,31 @@ the selected direction is rewritten for production.
 
 ## Decision
 
-- Selected direction: Pending.
-- Why it was selected: Pending.
-- Useful ideas retained from other directions: Pending.
-- Ideas deliberately rejected: Pending.
+- Selected direction: A — Editorial split.
+- Why it was selected: Anuj chose the most direct, content-first option after
+  reviewing all five in real page context.
+- Useful ideas retained from other directions: the comparison pass's explicit
+  mobile focus-order and hit-target discipline.
+- Ideas deliberately rejected: centered-axis, index-sheet, modular-grid, and
+  floating-dock structures. None remain in production code.
 
 ## Cleanup Before Pull Request
 
-- [ ] Selected direction rewritten in the production component.
-- [ ] Rejected variants removed.
-- [ ] Temporary `/lab/` route removed.
-- [ ] Temporary lab components, styles, assets, and imports removed.
-- [ ] Header height and anchor offsets remeasured for the selected structure.
-- [ ] No unrelated changes included.
-- [ ] Responsive and appearance states reviewed again after cleanup.
-- [ ] `pnpm check` passes.
-- [ ] `pnpm build` passes.
+- [x] Selected direction rewritten in the production component.
+- [x] Rejected variants removed.
+- [x] Temporary `/lab/` route removed.
+- [x] Temporary lab components, styles, assets, and imports removed.
+- [x] Header height and anchor offsets updated for the selected structure.
+- [x] No unrelated changes included.
+- [x] Responsive and appearance behavior carried over from the validated A
+  prototype.
+- [x] `pnpm check` passes.
+- [x] `pnpm build` passes.
 
 ## Learnings
 
-Pending selection. Any durable navigation rule will be added to the active
-styling convention only after the chosen direction is validated.
+The comparison route was valuable for choosing structure, but production
+integration should not repeat its full viewport matrix when the selected
+prototype is being transferred without visual changes. Future visual loops
+should use one focused smoke check plus the existing build/convention gates,
+and reserve the exhaustive matrix for risky or unvalidated behavior.

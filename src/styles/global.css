@@ -736,12 +736,11 @@
       the on-this-page rail.
 
       It is a literal because CSS cannot ask an element how tall it is, and it
-      has two values because the header has two shapes: below --bp-md the nav
-      wraps onto its own row. Measured at 64px and 101px respectively, with
-      the border gone. If the header's padding or the nav's type ever changes,
-      re-measure — nothing here will tell you it drifted.
+      has two values because the editorial header has two shapes: 96px of
+      mobile rows or one 64px desktop row, plus its persistent 1px edge.
+      If either row changes, re-measure these offsets with it.
     */
-    --header-height: 101px;
+    --header-height: 97px;
 
     /* ---- TYPE SCALE ----
        Each role carries its own line-height and weight, so `text-title` alone
@@ -1032,16 +1031,15 @@
   background: var(--decorative-accent);
 }
 /*
-  STICKY HEADER, TRANSLUCENT, NO DIVIDER.
+  STICKY EDITORIAL HEADER.
 
   It is a floating layer that content passes under rather than a strip the
   page reserves. The separation comes from the material — a blur plus a
-  partly-transparent ground — instead of a 1px rule, which is why the border
-  is gone rather than merely hidden: with the blur doing the work a line under
-  it reads as belt-and-braces.
+  partly-transparent ground. Its edge is transparent at the top and resolves
+  to one quiet hairline after the page starts moving underneath it.
 
   The ground is mixed FROM the page token, not written as a literal rgba, so
-  it follows the theme like everything else: 72% of --background-primary over
+  it follows the theme like everything else: 76% of --background-primary over
   nothing. The opaque declaration above it is the fallback for engines without
   color-mix, which would otherwise land on `transparent` and leave the nav
   floating over the page with nothing behind it.
@@ -1059,17 +1057,20 @@
   position: sticky;
   top: 0;
   z-index: 10;
-  padding-block: var(--spacing-sm);
+  border-block-end: 1px solid transparent;
   background: var(--background-primary);
-  background: color-mix(in srgb, var(--background-primary) 72%, transparent);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  backdrop-filter: blur(20px) saturate(180%);
+  background: color-mix(in srgb, var(--background-primary) 76%, transparent);
+  -webkit-backdrop-filter: blur(var(--spacing-sm)) saturate(160%);
+  backdrop-filter: blur(var(--spacing-sm)) saturate(160%);
+}
+.site-header[data-scrolled] {
+  border-block-end-color: var(--border-tertiary);
 }
 /*
   Three ways this degrades, all to the same place: an opaque bar.
 
   A blur that does not composite is worse than no blur — the header would be
-  72% transparent with content legible straight through the nav.
+  partly transparent with content legible straight through the nav.
 */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .site-header { background: var(--background-primary); }
@@ -1092,10 +1093,10 @@
     background: var(--background-primary);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
-    border-bottom: 1px solid var(--border);
+    border-block-end-color: var(--border);
   }
 }
-@media (min-width: 38rem) { :root { --header-height: 64px; } }
+@media (min-width: 38rem) { :root { --header-height: 65px; } }
 .site-footer { border-top: 1px solid var(--border); padding-block: var(--spacing-lg); }
 /*
   The wordmark is navigation-sized furniture, not a heading. It shares the
@@ -1110,31 +1111,35 @@
 }
 
 /*
-  Responsive header bar (component-internal layout). Mobile-first:
-  the nav wraps onto its own full-width row while the toggle stays pinned to
-  the right edge next to the wordmark. At --bp-md (768px) the nav and toggle
-  group to the right on one line.
+  Editorial split. Mobile keeps identity in one 48px row and routes followed
+  by appearance in a second, so DOM order, visual order and touch targets all
+  agree. At the content-driven breakpoint it becomes one 64px split rail.
 */
 .site-nav {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-rows: repeat(2, var(--control-height-touch));
   align-items: center;
-  column-gap: var(--spacing-md);
-  row-gap: var(--spacing-sm);
+  min-height: calc(2 * var(--control-height-touch));
+}
+.site-nav__end {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-width: 0;
 }
 .site-nav__links {
-  order: 3;              /* below the nav breakpoint: own row */
-  flex-basis: 100%;
   display: flex;
-  flex-wrap: wrap;
+  flex: 1 1 auto;
   align-items: center;
-  gap: var(--spacing-md);
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  min-width: 0;
   font-size: var(--text-body);
   font-weight: var(--text-heading--font-weight);
   text-transform: uppercase;
 }
 .site-nav__links a { display: inline-flex; align-items: center; }
-.site-nav__toggle { margin-inline-start: auto; }   /* pin toggle to right edge */
+.site-nav__toggle { flex: none; }
 
 /*
   Site furniture keeps its compact visual box while exposing a 48px pointer
@@ -1163,25 +1168,17 @@
   extra headroom covers one more nav item before this needs revisiting.
 */
 @media (min-width: 38rem) {
-  .site-nav__links {
-    order: 0;            /* rejoin the single top row, pushed right */
-    flex-basis: auto;
+  .site-nav {
+    display: flex;
+    min-height: var(--spacing-2xl);
+  }
+  .site-nav__end {
     margin-inline-start: auto;
   }
-  .site-nav__toggle { margin-inline-start: var(--spacing-sm); }
-  /*
-    Separators exist only in the single-row layout. A pipe cannot survive a
-    line break in either form: as a sibling element it dangles at the end of
-    a row, and as a pseudo-element it leads the next one — CSS cannot know
-    which item starts a line. Below this width the nav has its own full-width
-    row and 24px gaps, so space carries the separation on its own.
-  */
-  .site-nav__links a:not(:first-child)::before {
-    content: "";
-    width: 1px;
-    height: 1rem;
-    margin-inline-end: var(--spacing-md);
-    background: var(--decorative-accent);
+  .site-nav__links {
+    flex: none;
+    justify-content: flex-start;
+    gap: var(--spacing-md);
   }
 }
 
@@ -2203,6 +2200,7 @@
 :is(.site-nav__links, .on-this-page) a[aria-current] {
   --lift-text: var(--text-primary);
 }
+.site-nav__links a[aria-current] { --lift-line: currentColor; }
 .on-this-page a[aria-current] { --lift-rule: var(--text-primary); }
 
 /* The rail's 2px rule is its own channel; the border longhands that draw it
