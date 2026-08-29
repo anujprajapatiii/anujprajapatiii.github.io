@@ -105,14 +105,15 @@ const RULES = [
   {
     id: "no-raw-hex",
     test: /#[0-9a-fA-F]{3,8}\b/,
-    // primitives are defined in global.css; the style guide documents them as data
-    only: (f) => !f.endsWith("global.css") && !f.endsWith("style-guide.astro"),
+    // Primitive literals are defined only in global.css. The style guide reads
+    // their rendered custom-property values instead of copying hex values.
+    only: (f) => !f.endsWith("global.css"),
     msg: "raw hex in a component — colours come from semantic tokens",
   },
   {
     id: "no-inline-layout",
     test: /(?<![\w-])mx-auto(?![\w-])|style=(?:"[^"]*(?:display\s*:\s*(?:grid|flex)|grid-(?:template-columns|column)\s*:|max-width\s*:|(?:padding|margin)-(?:block|inline)\s*:)[^"]*"|'[^']*(?:display\s*:\s*(?:grid|flex)|grid-(?:template-columns|column)\s*:|max-width\s*:|(?:padding|margin)-(?:block|inline)\s*:)[^']*')/,
-    only: (f) => (f.startsWith("src/pages") || f.startsWith("src/components")) && !f.endsWith("style-guide.astro"),
+    only: (f) => f.startsWith("src/pages") || f.startsWith("src/components"),
     msg: "layout comes from primitives — compose Section > Container > Stack | Grid | Cluster",
   },
   {

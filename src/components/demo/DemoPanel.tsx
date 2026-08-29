@@ -14,7 +14,7 @@ type DemoPanelHeaderProps = {
   description: string;
   current?: number;
   total?: number;
-  headingLevel?: "h2" | "h3";
+  headingLevel?: "h2" | "h3" | "h4";
 };
 
 function DemoPanelHeader({
@@ -48,7 +48,7 @@ function DemoPanelHeader({
 type DemoStepDetailProps = ComponentPropsWithoutRef<"section"> & {
   title: string;
   children: ReactNode;
-  headingLevel?: "h3" | "h4";
+  headingLevel?: "h3" | "h4" | "h5";
 };
 
 function DemoStepDetail({

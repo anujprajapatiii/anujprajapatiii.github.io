@@ -985,24 +985,6 @@
   .grid-item--lg-start-19 { --grid-start: 19; }
 }
 
-/* Style-guide-only view of the real structural grid. */
-.grid-specimen__track {
-  min-height: var(--spacing-xl);
-  background: var(--background-secondary);
-  border: 1px solid var(--border);
-}
-.grid-specimen__item {
-  min-height: var(--spacing-xl);
-  display: flex;
-  align-items: center;
-  padding: var(--spacing-2xs);
-  background: var(--background-secondary);
-  border: 1px solid var(--border);
-  font-size: var(--text-body);
-  line-height: var(--text-body--line-height);
-  color: var(--text-secondary);
-}
-
 /*
   Sidebar — four grid tracks beside twenty content tracks.
 
@@ -2142,7 +2124,9 @@
   .site-footer a,
   .theme-toggle,
   .on-this-page a,
-  .play-item
+  .play-item,
+  .style-guide-chapter-link,
+  .style-guide-disclosure > summary
 ) {
   color:                 var(--lift-text,    currentColor);
   background-color:      var(--lift-surface, transparent);
@@ -2319,7 +2303,3 @@ html[data-theme-key-active] .theme-toggle__key {
   color: var(--text-primary);
   box-shadow: var(--light-shade-pressed);
 }
-
-/* Style-guide specimens expose the compound effects without recreating them. */
-.light-shade-specimen--raised { box-shadow: var(--light-shade-raised); }
-.light-shade-specimen--hover { box-shadow: var(--light-shade-raised-hover); }

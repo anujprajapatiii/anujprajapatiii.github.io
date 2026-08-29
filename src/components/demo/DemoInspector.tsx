@@ -2,7 +2,7 @@ import { useId, type ComponentPropsWithoutRef } from "react";
 
 import { cn } from "@/lib/utils";
 
-type DemoHeadingLevel = "h2" | "h3" | "h4";
+type DemoHeadingLevel = "h2" | "h3" | "h4" | "h5";
 
 type DemoInspectorProps = ComponentPropsWithoutRef<"aside">;
 
@@ -13,7 +13,7 @@ function DemoInspector({ className, ...props }: DemoInspectorProps) {
 type DemoInspectorHeaderProps = ComponentPropsWithoutRef<"header"> & {
   title: string;
   description?: string;
-  headingLevel?: Extract<DemoHeadingLevel, "h2" | "h3">;
+  headingLevel?: Extract<DemoHeadingLevel, "h2" | "h3" | "h4">;
 };
 
 function DemoInspectorHeader({
@@ -39,7 +39,7 @@ type DemoInspectorSectionProps = Omit<
 > & {
   title: string;
   description?: string;
-  headingLevel?: Extract<DemoHeadingLevel, "h3" | "h4">;
+  headingLevel?: Extract<DemoHeadingLevel, "h3" | "h4" | "h5">;
 };
 
 function DemoInspectorSection({

@@ -1,826 +1,779 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
 import ActionLink from "@/components/ActionLink.astro";
-import Section from "@/components/primitives/Section.astro";
+import DataTable from "@/components/DataTable.astro";
+import DemoInspectorSpecimen from "@/components/DemoInspectorSpecimen";
+import DemoPrimitivesSpecimen from "@/components/DemoPrimitivesSpecimen";
+import OnThisPage from "@/components/OnThisPage.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import Cluster from "@/components/primitives/Cluster.astro";
 import Container from "@/components/primitives/Container.astro";
 import Grid from "@/components/primitives/Grid.astro";
 import GridItem from "@/components/primitives/GridItem.astro";
+import Section from "@/components/primitives/Section.astro";
+import Sidebar from "@/components/primitives/Sidebar.astro";
 import Stack from "@/components/primitives/Stack.astro";
-import Cluster from "@/components/primitives/Cluster.astro";
-import DataTable from "@/components/DataTable.astro";
-import ProjectCard from "@/components/ProjectCard.astro";
-import DemoInspectorSpecimen from "@/components/DemoInspectorSpecimen";
-import DemoPrimitivesSpecimen from "@/components/DemoPrimitivesSpecimen";
-
-/* Keep these arrays in sync with the token block in src/styles/global.css
-   (see agent-os/plans/design-token-session.md). */
-
-/* Only names and mappings live here. Swatches read computed CSS variables, so
-   global.css remains the implementation source of truth for actual values. */
-const primitiveFamilies = [
-  {
-    name: "Neutral",
-    prefix: "neutral",
-    swatches: ["black", "900", "800", "700", "600", "500", "400", "375", "350", "325", "300", "200", "150", "100", "white"],
-  },
-  {
-    name: "Brown",
-    prefix: "brown",
-    swatches: ["600", "500", "400", "300", "200", "100", "50"],
-  },
-  {
-    name: "Amber",
-    prefix: "amber",
-    swatches: ["400", "300", "200", "100"],
-  },
-  {
-    name: "Blue",
-    prefix: "blue",
-    swatches: ["950", "900", "800", "700", "600", "500", "400", "350", "300", "200", "100", "50"],
-  },
-  {
-    name: "Green",
-    prefix: "green",
-    swatches: ["400", "300", "200", "100"],
-  },
-  {
-    name: "Sage",
-    prefix: "sage",
-    swatches: ["900", "700", "500"],
-  },
-  {
-    name: "Red",
-    prefix: "red",
-    swatches: ["400", "300", "200", "100"],
-  },
-  {
-    name: "Yellow",
-    prefix: "yellow",
-    swatches: ["600", "500", "400", "300", "200", "100"],
-  },
-];
-
-const backgroundTokens = [
-  { name: "primary", light: "neutral-150", dark: "neutral-800" },
-  { name: "secondary", light: "neutral-200", dark: "neutral-900" },
-  { name: "tertiary", light: "yellow-500", dark: "yellow-500" },
-  { name: "quaternary", light: "neutral-100", dark: "neutral-700" },
-  { name: "primary-hover", light: "neutral-100", dark: "neutral-700" },
-  { name: "secondary-hover", light: "neutral-150", dark: "neutral-800" },
-  { name: "tertiary-hover", light: "yellow-600", dark: "yellow-400" },
-  { name: "quaternary-hover", light: "white", dark: "neutral-600" },
-  { name: "black-solid", light: "neutral-800", dark: "neutral-100" },
-  { name: "black-solid-hover", light: "black", dark: "white" },
-  { name: "disabled", light: "neutral-200", dark: "neutral-600" },
-  { name: "disabled-alt", light: "neutral-100", dark: "neutral-700" },
-  { name: "accent-primary", light: "sage-500", dark: "sage-700" },
-  { name: "accent-primary-hover", light: "sage-700", dark: "sage-500" },
-  { name: "accent-solid", light: "sage-500", dark: "sage-700" },
-  { name: "accent-solid-hover", light: "sage-700", dark: "sage-500" },
-  { name: "error-primary", light: "red-100", dark: "red-100" },
-  { name: "error-primary-hover", light: "red-200", dark: "red-200" },
-  { name: "error-secondary", light: "red-300", dark: "red-300" },
-  { name: "error-secondary-hover", light: "red-400", dark: "red-400" },
-  { name: "success-primary", light: "green-100", dark: "green-100" },
-  { name: "success-primary-hover", light: "green-200", dark: "green-200" },
-  { name: "success-secondary", light: "green-300", dark: "green-300" },
-  { name: "success-secondary-hover", light: "green-400", dark: "green-400" },
-  { name: "warning-primary", light: "yellow-200", dark: "yellow-200" },
-  { name: "warning-primary-hover", light: "yellow-300", dark: "yellow-300" },
-  { name: "warning-secondary", light: "yellow-400", dark: "yellow-400" },
-  { name: "warning-secondary-hover", light: "yellow-500", dark: "yellow-500" },
-  { name: "info-primary", light: "blue-100", dark: "blue-100" },
-  { name: "info-primary-hover", light: "blue-200", dark: "blue-200" },
-  { name: "info-secondary", light: "blue-400", dark: "blue-400" },
-  { name: "info-secondary-hover", light: "blue-500", dark: "blue-500" },
-];
-
-const textTokens = [
-  { name: "primary", light: "neutral-600", dark: "neutral-200" },
-  { name: "secondary", light: "neutral-400", dark: "neutral-300" },
-  { name: "tertiary", light: "neutral-375", dark: "neutral-325" },
-  { name: "primary-hover", light: "neutral-900", dark: "neutral-100" },
-  { name: "secondary-hover", light: "neutral-600", dark: "neutral-200" },
-  { name: "tertiary-hover", light: "neutral-400", dark: "neutral-300" },
-  { name: "disabled", light: "neutral-300", dark: "neutral-500" },
-  { name: "disabled-alt", light: "neutral-200", dark: "neutral-400" },
-  { name: "placeholder", light: "neutral-375", dark: "neutral-325" },
-  { name: "accent-primary", light: "white", dark: "neutral-150" },
-  { name: "accent-secondary", light: "sage-500", dark: "sage-500" },
-  { name: "accent-primary-hover", light: "white", dark: "white" },
-  { name: "accent-secondary-hover", light: "sage-700", dark: "sage-500" },
-  { name: "error-primary", light: "red-400", dark: "red-100" },
-  { name: "error-secondary", light: "red-300", dark: "red-200" },
-  { name: "error-primary-hover", light: "red-400", dark: "red-100" },
-  { name: "error-secondary-hover", light: "red-400", dark: "red-100" },
-  { name: "success-primary", light: "green-400", dark: "green-100" },
-  { name: "success-secondary", light: "green-300", dark: "green-200" },
-  { name: "success-primary-hover", light: "green-400", dark: "green-100" },
-  { name: "success-secondary-hover", light: "green-400", dark: "green-100" },
-  { name: "warning-primary", light: "yellow-600", dark: "yellow-200" },
-  { name: "warning-secondary", light: "yellow-500", dark: "yellow-300" },
-  { name: "warning-primary-hover", light: "yellow-600", dark: "yellow-100" },
-  { name: "warning-secondary-hover", light: "yellow-600", dark: "yellow-200" },
-  { name: "info-primary", light: "blue-600", dark: "blue-200" },
-  { name: "info-secondary", light: "blue-500", dark: "blue-300" },
-  { name: "info-primary-hover", light: "blue-600", dark: "blue-100" },
-  { name: "info-secondary-hover", light: "blue-600", dark: "blue-200" },
-];
-
-const iconTokens = textTokens.map((token) => {
-  switch (token.name) {
-    case "accent-primary":
-      return { ...token, light: "sage-500", dark: "sage-500" };
-    case "accent-secondary":
-      return { ...token, light: "sage-700", dark: "sage-700" };
-    case "accent-primary-hover":
-      return { ...token, light: "sage-700", dark: "sage-500" };
-    case "accent-secondary-hover":
-      return { ...token, light: "sage-900", dark: "sage-500" };
-    default:
-      return token;
-  }
-});
-
-const borderTokens = [
-  { name: "primary", light: "neutral-300", dark: "neutral-500" },
-  { name: "interactive", light: "neutral-350", dark: "neutral-350" },
-  { name: "secondary", light: "sage-500", dark: "sage-700" },
-  { name: "tertiary", light: "neutral-200", dark: "neutral-600" },
-  { name: "primary-solid", light: "neutral-800", dark: "neutral-100" },
-  { name: "disabled", light: "neutral-200", dark: "neutral-600" },
-  { name: "disabled-alt", light: "neutral-100", dark: "neutral-700" },
-  { name: "accent-primary", light: "sage-500", dark: "sage-500" },
-  { name: "accent-secondary", light: "sage-700", dark: "sage-700" },
-  { name: "error-primary", light: "red-300", dark: "red-200" },
-  { name: "error-secondary", light: "red-100", dark: "red-400" },
-  { name: "success-primary", light: "green-300", dark: "green-200" },
-  { name: "success-secondary", light: "green-100", dark: "green-400" },
-  { name: "warning-primary", light: "yellow-500", dark: "yellow-300" },
-  { name: "warning-secondary", light: "yellow-300", dark: "yellow-600" },
-  { name: "info-primary", light: "blue-400", dark: "blue-300" },
-  { name: "info-secondary", light: "blue-200", dark: "blue-600" },
-];
-
-const semanticGroups = [
-  {
-    name: "Background",
-    tokens: backgroundTokens.map((token) => ({ ...token, name: `bg-${token.name}` })),
-  },
-  {
-    name: "Text",
-    tokens: textTokens.map((token) => ({ ...token, name: `text-${token.name}` })),
-  },
-  {
-    name: "Icon",
-    tokens: iconTokens.map((token) => ({ ...token, name: `icon-${token.name}` })),
-  },
-  {
-    name: "Border",
-    tokens: borderTokens.map((token) => ({ ...token, name: `border-${token.name}` })),
-  },
-  {
-    name: "Portfolio-specific",
-    tokens: [
-      { name: "background-primary", light: "bg-primary", dark: "bg-primary" },
-      { name: "background-secondary", light: "bg-secondary", dark: "bg-secondary" },
-      { name: "background-alternate", light: "bg-black-solid", dark: "bg-black-solid" },
-      { name: "background-alternate-hover", light: "bg-black-solid-hover", dark: "bg-black-solid-hover" },
-      { name: "background-hover", light: "bg-primary-hover", dark: "bg-primary-hover" },
-      { name: "background-elevated", light: "bg-quaternary", dark: "bg-quaternary" },
-      { name: "background-elevated-hover", light: "bg-quaternary-hover", dark: "bg-quaternary-hover" },
-      { name: "text-interactive", light: "text-primary-hover", dark: "text-primary-hover" },
-      { name: "text-reading", light: "text-secondary", dark: "text-secondary" },
-      { name: "text-alternate", light: "neutral-100", dark: "neutral-800" },
-      { name: "border-hover", light: "neutral-400", dark: "neutral-300" },
-      { name: "decorative-accent", light: "sage-500", dark: "sage-500" },
-      { name: "lighting-highlight", light: "neutral-white", dark: "neutral-500" },
-      { name: "lighting-shade", light: "neutral-300", dark: "neutral-black" },
-    ],
-  },
-  {
-    name: "Button component",
-    tokens: [
-      { name: "button-primary-background", light: "neutral-500", dark: "neutral-300" },
-      { name: "button-primary-background-hover", light: "neutral-700", dark: "neutral-200" },
-      { name: "button-primary-background-active", light: "neutral-black", dark: "neutral-white" },
-      { name: "button-primary-foreground", light: "neutral-100", dark: "neutral-800" },
-      { name: "button-secondary-background-hover", light: "neutral-100", dark: "neutral-700" },
-      { name: "button-secondary-background-active", light: "neutral-200", dark: "neutral-900" },
-      { name: "button-secondary-foreground", light: "neutral-600", dark: "neutral-200" },
-      { name: "button-secondary-foreground-hover", light: "neutral-900", dark: "neutral-100" },
-      { name: "button-secondary-border", light: "neutral-350", dark: "neutral-350" },
-      { name: "button-secondary-border-hover", light: "neutral-400", dark: "neutral-300" },
-      { name: "button-secondary-border-active", light: "neutral-600", dark: "neutral-200" },
-      { name: "button-quiet-foreground", light: "neutral-400", dark: "neutral-300" },
-      { name: "button-quiet-foreground-hover", light: "neutral-600", dark: "neutral-200" },
-      { name: "button-disabled-background", light: "neutral-100", dark: "neutral-700" },
-      { name: "button-disabled-foreground", light: "neutral-300", dark: "neutral-500" },
-      { name: "button-disabled-border", light: "neutral-200", dark: "neutral-600" },
-    ],
-  },
-];
-
-const typeScale = [
-  { name: "display", class: "text-display", size: "clamp(40px → 64px) / 1.02", weight: "Apparat Regular 400", sample: "Display" },
-  { name: "title", class: "text-title", size: "36px / 1.08", weight: "Apparat Regular 400", sample: "Page or homepage section title" },
-  { name: "heading", class: "text-heading", size: "20px / 1.3", weight: "Apparat Medium 500", sample: "Shared heading" },
-  { name: "body", class: "text-body", size: "14px / 1.5", weight: "Apparat Regular 400", sample: "Body text, metadata, captions, and compact interface text." },
-];
-
-const spacingScale = [
-  { name: "3xs", value: "0.25rem", px: "4px" },
-  { name: "2xs", value: "0.5rem", px: "8px" },
-  { name: "xs", value: "0.75rem", px: "12px" },
-  { name: "sm", value: "1rem", px: "16px" },
-  { name: "md", value: "1.5rem", px: "24px" },
-  { name: "lg", value: "2rem", px: "32px" },
-  { name: "xl", value: "3rem", px: "48px" },
-  { name: "2xl", value: "4rem", px: "64px" },
-  { name: "3xl", value: "6rem", px: "96px" },
-  { name: "4xl", value: "8rem", px: "128px" },
-];
-
-const semanticSpacing = [
-  { name: "gutter", value: "20px — page inset and safe-area floor" },
-  { name: "section", value: "clamp(48px → 96px) — section rhythm" },
-  { name: "stack", value: "16px — gap between stacked elements" },
-  { name: "card", value: "16px — card interior padding" },
-  { name: "grid", value: "10px — structural grid gutter" },
-];
-
-const containers = [
-  { name: "page", value: "81.25rem", px: "1300px content + 20px insets" },
-  { name: "measure", value: "36rem", px: "576px" },
-];
-
-const aliases = [
-  { name: "background", to: "background-primary" },
-  { name: "foreground", to: "text-primary" },
-  { name: "card", to: "background-elevated" },
-  { name: "muted", to: "background-secondary" },
-  { name: "muted-foreground", to: "text-secondary" },
-  { name: "accent", to: "text-interactive" },
-  { name: "accent-foreground", to: "text-alternate" },
-  { name: "border", to: "border-primary" },
-  { name: "ring", to: "border-hover" },
-];
-
-const pagePaletteRows = [
-  {
-    name: "Default",
-    id: "default",
-    light: "neutral-150 / neutral-600 / sage-500",
-    dark: "neutral-800 / neutral-200 / sage-500",
-    use: "Site default",
-  },
-  {
-    name: "Blue",
-    id: "blue",
-    light: "blue-100 / blue-600 / blue-400",
-    dark: "blue-900 / blue-200 / blue-300",
-    use: "Sample Case Study",
-  },
-  {
-    name: "Sage accent",
-    id: "sage",
-    light: "neutral-150 / neutral-600 / sage-500",
-    dark: "neutral-800 / neutral-200 / sage-500",
-    use: "Authored experiment accent",
-  },
-];
+import {
+  aliases,
+  containers,
+  coreColourRoles,
+  interactionFoundations,
+  pagePaletteRows,
+  primitiveFamilies,
+  semanticGroups,
+  semanticSpacing,
+  spacingScale,
+  styleGuideChapters,
+  styleGuideHeadings,
+  typeScale,
+} from "@/data/style-guide";
+import "@/components/style-guide/style-guide.css";
 ---
 
-<PageLayout title="Style Guide — Anuj Prajapati" description="Internal design-system reference." noindex>
+<PageLayout
+  title="Style Guide — Anuj Prajapati"
+  description="Internal design-system reference."
+  noindex
+>
   <Section size="page">
     <Container>
-    <h1 class="mb-2xs text-title">Style guide</h1>
-    <p class="mb-xl text-muted-foreground">
-      Internal reference for the token system — base tokens live in
-      <code>src/styles/global.css</code> and authored page palettes live in
-      <code>src/styles/themes/</code>. Toggle dark mode in the header to check
-      both appearance modes. Update this page whenever tokens change.
-    </p>
+      <Stack gap="2xl">
+        <header class="style-guide-intro">
+          <Stack gap="lg">
+            <Stack gap="sm">
+              <h1 class="text-title">Style guide</h1>
+              <p class="max-w-measure text-muted-foreground">
+                A working reference for the portfolio’s foundations, layout,
+                and shared components. Start with the decision you need; open
+                the exhaustive token catalogs only when implementation detail
+                matters.
+              </p>
+            </Stack>
 
-    <Section size="standard" class="border-t border-border">
-      <h2 class="label mb-2xs">
-        Primitives
-      </h2>
-      <p class="mb-md text-body text-muted-foreground">
-        Raw palette. Same values in both themes; components never use these directly.
-      </p>
-      <Stack gap="md">
-        {primitiveFamilies.map((family) => (
-          <div>
-            <p class="label mb-2xs">{family.name}</p>
-            <Cluster gap="2xs" align="start">
-              {family.swatches.map((swatch) => (
-                <div class="w-16">
-                  <div
-                    class="h-10 border border-border"
-                    style={`background: var(--${family.prefix}-${swatch})`}
-                  ></div>
-                  <p class="mt-3xs text-body tabular-nums text-muted-foreground">
-                    {swatch}<br /><span data-swatch-value={`--${family.prefix}-${swatch}`}>…</span>
-                  </p>
-                </div>
-              ))}
-            </Cluster>
-          </div>
-        ))}
-      </Stack>
-    </Section>
+            <nav aria-label="Style guide chapters">
+              <Grid>
+                {styleGuideChapters.map((chapter) => (
+                  <GridItem span={12} spanMd={12} spanLg={6}>
+                    <a class="style-guide-chapter-link" href={`#${chapter.slug}`}>
+                      <span class="label">{chapter.index}</span>
+                      <span class="style-guide-chapter-link__title text-heading">
+                        {chapter.title}
+                      </span>
+                      <span class="style-guide-chapter-link__description text-muted-foreground">
+                        {chapter.description}
+                      </span>
+                    </a>
+                  </GridItem>
+                ))}
+              </Grid>
+            </nav>
+          </Stack>
+        </header>
 
-    <Section size="standard" class="border-t border-border">
-      <h2 class="label mb-2xs">
-        Semantic tokens
-      </h2>
-      <p class="mb-md text-body text-muted-foreground">
-        Semantic role names. The swatch shows the token in the theme you're
-        viewing; the caption lists its light → dark primitive mapping.
-      </p>
-      <Stack gap="lg">
-        {semanticGroups.map((group) => (
-          <div>
-            <p class="label mb-2xs">{group.name}</p>
-            <Grid>
-              {group.tokens.map((token) => (
-                <GridItem span={12} spanMd={8}>
-                  <div class="border border-border p-xs">
-                    <div
-                      class="h-12 border border-border"
-                      style={`background: var(--${token.name})`}
-                    ></div>
-                    <p class="mt-2xs text-body">--{token.name}</p>
-                    <p class="text-body tabular-nums text-muted-foreground">
-                      {token.light} → {token.dark}
+        <Sidebar>
+          <OnThisPage items={styleGuideHeadings} />
+
+          <div class="style-guide-content">
+            <Stack gap="2xl">
+              <section class="style-guide-chapter" aria-labelledby="foundations">
+                <Stack gap="xl">
+                  <header class="style-guide-chapter__header">
+                    <SectionHeading id="foundations">Foundations</SectionHeading>
+                    <p class="max-w-measure text-muted-foreground">
+                      The small set of decisions every interface inherits before
+                      component styling begins.
                     </p>
-                  </div>
-                </GridItem>
-              ))}
-            </Grid>
+                  </header>
+
+                  <section class="style-guide-topic" aria-labelledby="colour">
+                    <Stack gap="md">
+                      <header class="style-guide-topic__header">
+                        <h3 id="colour" class="text-heading">Colour system</h3>
+                        <p class="max-w-measure text-muted-foreground">
+                          Components use semantic roles, never primitive colours.
+                          Appearance mode remaps those roles without changing
+                          component code.
+                        </p>
+                      </header>
+
+                      <div>
+                        <p class="label mb-2xs">Core roles</p>
+                        <Grid>
+                          {coreColourRoles.map((role) => (
+                            <GridItem span={24} spanMd={8}>
+                              <div class="style-guide-role">
+                                <span
+                                  class="style-guide-role__sample"
+                                  style={`--style-guide-role: var(--${role.name})`}
+                                  aria-hidden="true"
+                                ></span>
+                                <span>
+                                  <span class="style-guide-role__label">{role.label}</span>
+                                  <code>--{role.name}</code>
+                                </span>
+                              </div>
+                            </GridItem>
+                          ))}
+                        </Grid>
+                      </div>
+
+                      <p class="max-w-measure text-muted-foreground">
+                        The complete primitive palette, canonical semantic roles,
+                        page palettes, and compatibility aliases live in
+                        <ActionLink href="#reference" variant="link">Reference</ActionLink>.
+                      </p>
+                    </Stack>
+                  </section>
+
+                  <section class="style-guide-topic" aria-labelledby="typography">
+                    <Stack gap="md">
+                      <header class="style-guide-topic__header">
+                        <h3 id="typography" class="text-heading">Typography</h3>
+                        <p class="max-w-measure text-muted-foreground">
+                          Four sizes carry the system. Regular carries display,
+                          title, and body; Medium separates headings and genuine
+                          labels. Tracking stays at zero.
+                        </p>
+                      </header>
+
+                      <Stack gap="md">
+                        {typeScale.map((type) => (
+                          <div class="style-guide-type-specimen">
+                            <p class={type.class}>{type.sample}</p>
+                            <p class="text-body tabular-nums text-muted-foreground">
+                              text-{type.name} · {type.size} · {type.weight}
+                            </p>
+                          </div>
+                        ))}
+                      </Stack>
+
+                      <div class="style-guide-reading-specimen">
+                        <Stack gap="sm">
+                          <p class="text-title">Sample Case Study</p>
+                          <p class="type-reading max-w-measure">
+                            Titles carry hierarchy. Reading text uses secondary
+                            colour and a tighter reading leading without creating
+                            another font size.
+                          </p>
+                          <div>
+                            <p class="text-heading">Section heading</p>
+                            <p class="type-reading max-w-measure">
+                              Semantic h2 and h3 elements can share this visual
+                              role; document structure and space explain their
+                              relationship.
+                            </p>
+                          </div>
+                        </Stack>
+                      </div>
+
+                      <details class="style-guide-disclosure">
+                        <summary>
+                          <span>Font implementation</span>
+                          <span class="style-guide-disclosure__meta">Reference note</span>
+                        </summary>
+                        <div class="style-guide-disclosure__body">
+                          <Stack gap="sm">
+                            <p class="max-w-measure text-muted-foreground">
+                              KMR Apparat is self-hosted from the original Kimera
+                              WOFF2 files. Regular and Medium serve the shared
+                              roles; Light is approved but currently unassigned.
+                            </p>
+                            <p class="max-w-measure text-muted-foreground">
+                              Role tokens own size, leading, and weight. Call
+                              sites never add tracking, leading, or weight
+                              utilities, and the browser does not synthesize
+                              missing cuts.
+                            </p>
+                          </Stack>
+                        </div>
+                      </details>
+                    </Stack>
+                  </section>
+
+                  <section class="style-guide-topic" aria-labelledby="spacing">
+                    <Stack gap="md">
+                      <header class="style-guide-topic__header">
+                        <h3 id="spacing" class="text-heading">Spacing</h3>
+                        <p class="max-w-measure text-muted-foreground">
+                          Content rhythm follows a 4px base scale. Structural
+                          roles name page geometry separately from component
+                          spacing.
+                        </p>
+                      </header>
+
+                      <div class="style-guide-spacing-scale">
+                        {spacingScale.map((space) => (
+                          <div class="style-guide-spacing-row">
+                            <code>{space.name}</code>
+                            <span
+                              class="style-guide-spacing-bar"
+                              style={`--style-guide-size: ${space.value}`}
+                              aria-hidden="true"
+                            ></span>
+                            <span class="tabular-nums text-muted-foreground">
+                              {space.value} · {space.px}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <DataTable label="Semantic spacing roles" pinFirstColumn>
+                        <thead>
+                          <tr>
+                            <th scope="col">Role</th>
+                            <th scope="col">Value and use</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {semanticSpacing.map((space) => (
+                            <tr>
+                              <th scope="row"><code>--spacing-{space.name}</code></th>
+                              <td>{space.value}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </DataTable>
+                    </Stack>
+                  </section>
+
+                  <section class="style-guide-topic" aria-labelledby="surfaces">
+                    <Stack gap="md">
+                      <header class="style-guide-topic__header">
+                        <h3 id="surfaces" class="text-heading">Surfaces and interaction</h3>
+                        <p class="max-w-measure text-muted-foreground">
+                          Tone carries depth: canvas, inset, raised, then raised
+                          hover. A fixed top-left light adds crisp one-pixel edge
+                          definition to selected interactive surfaces.
+                        </p>
+                      </header>
+
+                      <div class="style-guide-surface-canvas">
+                        <p class="label mb-sm">Canvas</p>
+                        <Grid>
+                          <GridItem spanMd={12}>
+                            <div class="style-guide-surface light-shade-specimen--raised">
+                              <p class="label">Raised</p>
+                              <p class="text-muted-foreground">Card rest</p>
+                              <div class="style-guide-surface__inset">
+                                <p class="label">Inset</p>
+                                <p class="text-muted-foreground">Media and recessed content</p>
+                              </div>
+                            </div>
+                          </GridItem>
+                          <GridItem spanMd={12}>
+                            <div class="style-guide-surface style-guide-surface--hover light-shade-specimen--hover">
+                              <p class="label">Raised hover</p>
+                              <p class="text-muted-foreground">One tonal step forward</p>
+                              <div class="style-guide-surface__inset">
+                                <p class="label">Inset</p>
+                                <p class="text-muted-foreground">Still distinct from its parent</p>
+                              </div>
+                            </div>
+                          </GridItem>
+                        </Grid>
+                      </div>
+
+                      <Grid>
+                        {interactionFoundations.map((foundation) => (
+                          <GridItem spanMd={12} spanLg={8}>
+                            <article class="style-guide-foundation-card">
+                              <p class="label">{foundation.name}</p>
+                              <p class="style-guide-foundation-card__description text-muted-foreground">
+                                {foundation.description}
+                              </p>
+                              <dl class="style-guide-definition-list">
+                                {foundation.rows.map((row) => (
+                                  <div>
+                                    <dt><code>{row.token}</code></dt>
+                                    <dd>{row.value}</dd>
+                                  </div>
+                                ))}
+                              </dl>
+                            </article>
+                          </GridItem>
+                        ))}
+                      </Grid>
+
+                      <div>
+                        <p class="label mb-sm">Live raised surface</p>
+                        <Grid>
+                          <GridItem spanMd={12}>
+                            <ProjectCard
+                              id="sample-case-study"
+                              title="Project card"
+                              description="Raised surface with inset media and one whole-card link."
+                              headingLevel="h4"
+                            />
+                          </GridItem>
+                        </Grid>
+                      </div>
+                    </Stack>
+                  </section>
+                </Stack>
+              </section>
+
+              <section class="style-guide-chapter" aria-labelledby="layout">
+                <Stack gap="xl">
+                  <header class="style-guide-chapter__header">
+                    <SectionHeading id="layout">Layout</SectionHeading>
+                    <p class="max-w-measure text-muted-foreground">
+                      One page container, one reading measure, and one structural
+                      grid keep every route on the same geometry.
+                    </p>
+                  </header>
+
+                  <section class="style-guide-topic" aria-labelledby="composition">
+                    <Stack gap="md">
+                      <header class="style-guide-topic__header">
+                        <h3 id="composition" class="text-heading">Composition</h3>
+                        <p class="max-w-measure text-muted-foreground">
+                          Pages compose <code>Section &gt; Container &gt; Stack | Grid + GridItem | Cluster</code>.
+                          The grid has 24 tracks and a 10px gutter; items begin
+                          full width, then opt into named fractions.
+                        </p>
+                      </header>
+
+                      <Stack gap="md">
+                        <div>
+                          <p class="label mb-2xs">24 tracks</p>
+                          <Grid class="grid-specimen" aria-hidden="true">
+                            {Array.from({ length: 24 }).map(() => (
+                              <span class="grid-specimen__track"></span>
+                            ))}
+                          </Grid>
+                        </div>
+
+                        <Grid class="grid-specimen">
+                          <GridItem spanLg={8} class="grid-specimen__item">8 columns</GridItem>
+                          <GridItem spanLg={16} class="grid-specimen__item">16 columns</GridItem>
+                        </Grid>
+                        <Grid class="grid-specimen">
+                          <GridItem spanMd={12} class="grid-specimen__item">12 columns</GridItem>
+                          <GridItem spanMd={12} class="grid-specimen__item">12 columns</GridItem>
+                        </Grid>
+                        <Grid class="grid-specimen">
+                          <GridItem spanMd={12} spanLg={8} class="grid-specimen__item">8 columns</GridItem>
+                          <GridItem spanMd={12} spanLg={8} class="grid-specimen__item">8 columns</GridItem>
+                          <GridItem spanMd={12} spanLg={8} class="grid-specimen__item">8 columns</GridItem>
+                        </Grid>
+                      </Stack>
+
+                      <div>
+                        <p class="label mb-2xs">Container roles</p>
+                        <Stack gap="sm">
+                          {containers.map((container) => (
+                            <div class="style-guide-container-specimen">
+                              <span
+                                class="style-guide-container-specimen__bar"
+                                style={`--style-guide-container: ${container.value}`}
+                                aria-hidden="true"
+                              ></span>
+                              <p class="tabular-nums text-muted-foreground">
+                                <code>--container-{container.name}</code> · {container.value} · {container.description}
+                              </p>
+                            </div>
+                          ))}
+                        </Stack>
+                      </div>
+
+                      <p class="max-w-measure text-muted-foreground">
+                        <code>Sidebar</code> uses the same grid for a 4 / 20
+                        content split and collapses below its measured 56rem
+                        boundary. This page’s desktop directory is the live
+                        specimen.
+                      </p>
+                    </Stack>
+                  </section>
+                </Stack>
+              </section>
+
+              <section class="style-guide-chapter" aria-labelledby="components">
+                <Stack gap="xl">
+                  <header class="style-guide-chapter__header">
+                    <SectionHeading id="components">Components</SectionHeading>
+                    <p class="max-w-measure text-muted-foreground">
+                      Shared patterns shown in their real states and with their
+                      implementation contracts close at hand.
+                    </p>
+                  </header>
+
+                  <section class="style-guide-topic" aria-labelledby="actions">
+                    <Stack gap="md">
+                      <header class="style-guide-topic__header">
+                        <h3 id="actions" class="text-heading">Actions</h3>
+                        <p class="max-w-measure text-muted-foreground">
+                          Primary names the action a region is for. Secondary is
+                          the bordered default; link belongs inside or beside
+                          running text. React commands share the same roles.
+                        </p>
+                      </header>
+
+                      <Cluster gap="sm">
+                        <ActionLink href="#actions" variant="primary">
+                          Primary action
+                          <span aria-hidden="true">&rarr;</span>
+                        </ActionLink>
+                        <ActionLink href="#actions">
+                          Secondary action
+                          <span aria-hidden="true">&rarr;</span>
+                        </ActionLink>
+                        <ActionLink href="#actions" variant="link">Inline action</ActionLink>
+                      </Cluster>
+
+                      <DataTable label="Action variants" pinFirstColumn>
+                        <thead>
+                          <tr>
+                            <th scope="col">Variant</th>
+                            <th scope="col">Use</th>
+                            <th scope="col">State model</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row">Primary</th>
+                            <td>One defining action per region</td>
+                            <td>Filled rest, hover, and pressed surfaces</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Secondary</th>
+                            <td>Supporting or navigational action</td>
+                            <td>Transparent rest; surface and border strengthen</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Link</th>
+                            <td>Action in or beside text</td>
+                            <td>Underlined, wrapping, and boxless</td>
+                          </tr>
+                        </tbody>
+                      </DataTable>
+
+                      <details class="style-guide-disclosure">
+                        <summary>
+                          <span>Theme shortcut keycap</span>
+                          <span class="style-guide-disclosure__meta">Nested affordance</span>
+                        </summary>
+                        <div class="style-guide-disclosure__body">
+                          <Stack gap="sm">
+                            <p class="max-w-measure text-muted-foreground">
+                              The keycap is a shortcut hint inside the theme
+                              toggle’s one action, not a standalone button.
+                            </p>
+                            <DataTable label="Theme shortcut keycap states">
+                              <thead>
+                                <tr>
+                                  <th scope="col">State</th>
+                                  <th scope="col">Effect</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr><td>Rest</td><td>Raised</td></tr>
+                                <tr><td>Hover or keyboard focus</td><td>Raised hover</td></tr>
+                                <tr><td>Pointer or physical key press</td><td>Pressed</td></tr>
+                              </tbody>
+                            </DataTable>
+                          </Stack>
+                        </div>
+                      </details>
+                    </Stack>
+                  </section>
+
+                  <section class="style-guide-topic" aria-labelledby="tables">
+                    <Stack gap="md">
+                      <header class="style-guide-topic__header">
+                        <h3 id="tables" class="text-heading">Tables</h3>
+                        <p class="max-w-measure text-muted-foreground">
+                          One quiet-ledger treatment: strong outer and header
+                          rules, quiet row separators, no vertical walls, and
+                          tabular figures. Wide tables scroll inside their own
+                          labelled region rather than reflowing.
+                        </p>
+                      </header>
+
+                      <DataTable label="Table specimen" pinFirstColumn>
+                        <thead>
+                          <tr>
+                            <th scope="col">Token</th>
+                            <th scope="col">Value</th>
+                            <th scope="col">Applies to</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row">Cell padding</th>
+                            <td>8px 12px</td>
+                            <td>Header and value cells</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Rule</th>
+                            <td>1px horizontal</td>
+                            <td>Outer block, column header, and rows</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Column header</th>
+                            <td>14px, 500, uppercase</td>
+                            <td><code>thead th</code></td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Row header</th>
+                            <td>14px, 500, natural case</td>
+                            <td><code>tbody th</code></td>
+                          </tr>
+                        </tbody>
+                      </DataTable>
+                    </Stack>
+                  </section>
+
+                  <section class="style-guide-topic" aria-labelledby="experiment-interfaces">
+                    <Stack gap="md">
+                      <header class="style-guide-topic__header">
+                        <h3 id="experiment-interfaces" class="text-heading">Experiment interfaces</h3>
+                        <p class="max-w-measure text-muted-foreground">
+                          Two compositions share the same accessible controls.
+                          The guided panel teaches a sequence; the candidate
+                          inspector keeps persistent settings available.
+                        </p>
+                      </header>
+
+                      <div class="style-guide-disclosure-list">
+                        <details class="style-guide-disclosure">
+                          <summary>
+                            <span>Guided panel</span>
+                            <span class="style-guide-disclosure__meta">Supported</span>
+                          </summary>
+                          <div class="style-guide-disclosure__body">
+                            <Stack gap="sm">
+                              <p class="max-w-measure text-muted-foreground">
+                                Use when a visitor learns the experiment one
+                                part at a time.
+                              </p>
+                              <DemoPrimitivesSpecimen client:visible />
+                            </Stack>
+                          </div>
+                        </details>
+
+                        <details class="style-guide-disclosure">
+                          <summary>
+                            <span>Control panel</span>
+                            <span class="style-guide-disclosure__meta">Candidate</span>
+                          </summary>
+                          <div class="style-guide-disclosure__body">
+                            <Stack gap="sm">
+                              <p class="max-w-measure text-muted-foreground">
+                                Use for settings that remain available while a
+                                visitor changes the stage. The API stays flexible
+                                until a real experiment adopts it.
+                              </p>
+                              <DemoInspectorSpecimen client:visible />
+                            </Stack>
+                          </div>
+                        </details>
+                      </div>
+                    </Stack>
+                  </section>
+                </Stack>
+              </section>
+
+              <section class="style-guide-chapter" aria-labelledby="reference">
+                <Stack gap="xl">
+                  <header class="style-guide-chapter__header">
+                    <SectionHeading id="reference">Reference</SectionHeading>
+                    <p class="max-w-measure text-muted-foreground">
+                      Exhaustive implementation detail. These catalogs remain
+                      complete, but stay out of the main reading path until
+                      they are needed.
+                    </p>
+                  </header>
+
+                  <section class="style-guide-topic" aria-labelledby="page-palettes">
+                    <Stack gap="md">
+                      <header class="style-guide-topic__header">
+                        <h3 id="page-palettes" class="text-heading">Page palettes</h3>
+                        <p class="max-w-measure text-muted-foreground">
+                          An authored page palette is separate from the visitor’s
+                          light or dark appearance. The infrastructure remains
+                          available even when no published content opts in.
+                        </p>
+                      </header>
+
+                      <DataTable label="Available page palettes" pinFirstColumn>
+                        <thead>
+                          <tr>
+                            <th scope="col">Palette</th>
+                            <th scope="col">Appearance mapping</th>
+                            <th scope="col">Current use</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {pagePaletteRows.map((palette) => (
+                            <tr>
+                              <th scope="row">
+                                {palette.name}<br />
+                                <code>palette: {palette.id}</code>
+                              </th>
+                              <td>
+                                <div class="style-guide-palette-mapping">
+                                  <p><span class="label">Light</span> {palette.light}</p>
+                                  <p><span class="label">Dark</span> {palette.dark}</p>
+                                </div>
+                              </td>
+                              <td>{palette.use}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </DataTable>
+                    </Stack>
+                  </section>
+
+                  <section class="style-guide-topic" aria-labelledby="primitive-colours">
+                    <Stack gap="md">
+                      <header class="style-guide-topic__header">
+                        <h3 id="primitive-colours" class="text-heading">Primitive colours</h3>
+                        <p class="max-w-measure text-muted-foreground">
+                          Raw palette values are identical in both appearances.
+                          Components never consume them directly.
+                        </p>
+                      </header>
+
+                      <div class="style-guide-disclosure-list">
+                        {primitiveFamilies.map((family) => (
+                          <details class="style-guide-disclosure">
+                            <summary>
+                              <span>{family.name}</span>
+                              <span class="style-guide-disclosure__meta">
+                                {family.swatches.length} values
+                              </span>
+                            </summary>
+                            <div class="style-guide-disclosure__body">
+                              <Cluster gap="2xs" align="start">
+                                {family.swatches.map((swatch) => (
+                                  <div class="style-guide-primitive">
+                                    <span
+                                      class="style-guide-primitive__chip"
+                                      style={`background: var(--${family.prefix}-${swatch})`}
+                                      aria-hidden="true"
+                                    ></span>
+                                    <p class="tabular-nums text-muted-foreground">
+                                      {swatch}<br />
+                                      <span data-swatch-value={`--${family.prefix}-${swatch}`}>
+                                        CSS value
+                                      </span>
+                                    </p>
+                                  </div>
+                                ))}
+                              </Cluster>
+                            </div>
+                          </details>
+                        ))}
+                      </div>
+                    </Stack>
+                  </section>
+
+                  <section class="style-guide-topic" aria-labelledby="semantic-tokens">
+                    <Stack gap="md">
+                      <header class="style-guide-topic__header">
+                        <h3 id="semantic-tokens" class="text-heading">Semantic tokens</h3>
+                        <p class="max-w-measure text-muted-foreground">
+                          Role names map to different primitives in light and
+                          dark appearance. Open only the family you need.
+                        </p>
+                      </header>
+
+                      <div class="style-guide-disclosure-list">
+                        {semanticGroups.map((group) => (
+                          <details class="style-guide-disclosure">
+                            <summary>
+                              <span>{group.name}</span>
+                              <span class="style-guide-disclosure__meta">
+                                {group.tokens.length} roles
+                              </span>
+                            </summary>
+                            <div class="style-guide-disclosure__body">
+                              <Grid>
+                                {group.tokens.map((token) => (
+                                  <GridItem span={24} spanMd={12} spanLg={8}>
+                                    <article class="style-guide-token">
+                                      <span
+                                        class="style-guide-token__sample"
+                                        style={`--style-guide-token: var(--${token.name})`}
+                                        aria-hidden="true"
+                                      ></span>
+                                      <code>--{token.name}</code>
+                                      <dl class="style-guide-token__mapping">
+                                        <div>
+                                          <dt>Light</dt>
+                                          <dd>{token.light}</dd>
+                                        </div>
+                                        <div>
+                                          <dt>Dark</dt>
+                                          <dd>{token.dark}</dd>
+                                        </div>
+                                      </dl>
+                                    </article>
+                                  </GridItem>
+                                ))}
+                              </Grid>
+                            </div>
+                          </details>
+                        ))}
+                      </div>
+                    </Stack>
+                  </section>
+
+                  <section class="style-guide-topic" aria-labelledby="compatibility-aliases">
+                    <Stack gap="md">
+                      <header class="style-guide-topic__header">
+                        <h3 id="compatibility-aliases" class="text-heading">Compatibility aliases</h3>
+                        <p class="max-w-measure text-muted-foreground">
+                          Tailwind and shadcn-facing names point to the canonical
+                          semantic roles above. They are a bridge, not a second
+                          colour system.
+                        </p>
+                      </header>
+
+                      <DataTable label="Tailwind compatibility aliases" pinFirstColumn>
+                        <thead>
+                          <tr>
+                            <th scope="col">Alias</th>
+                            <th scope="col">Canonical role</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {aliases.map((alias) => (
+                            <tr>
+                              <th scope="row"><code>--{alias.name}</code></th>
+                              <td><code>--{alias.to}</code></td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </DataTable>
+
+                      <p class="max-w-measure text-muted-foreground">
+                        Base tokens live in <code>src/styles/global.css</code>;
+                        authored palette remaps live in <code>src/styles/themes/</code>.
+                        Update this reference whenever those contracts change.
+                      </p>
+                    </Stack>
+                  </section>
+                </Stack>
+              </section>
+            </Stack>
           </div>
-        ))}
+        </Sidebar>
       </Stack>
-    </Section>
-
-    <Section size="standard" class="border-t border-border">
-      <h2 class="label mb-2xs">
-        Aliases
-      </h2>
-      <p class="mb-md text-body text-muted-foreground">
-        Internal names the components use, pointed at the semantic tokens above.
-      </p>
-      <Grid>
-        {aliases.map((alias) => (
-          <GridItem spanMd={12}>
-            <p class="text-body text-muted-foreground">
-              --{alias.name} → {alias.to}
-            </p>
-          </GridItem>
-        ))}
-      </Grid>
-    </Section>
-
-    <Section size="standard" class="border-t border-border">
-      <h2 class="label mb-2xs">
-        Page palettes
-      </h2>
-      <p class="mb-md max-w-measure text-body text-muted-foreground">
-        A page palette is authored content identity; light/dark is the
-        visitor's appearance preference. Components keep using the semantic
-        roles above, while a palette remaps their structural colours for both
-        modes. Status roles retain their semantic families.
-      </p>
-      <DataTable label="Available page palettes" pinFirstColumn>
-        <thead>
-          <tr>
-            <th scope="col">Palette</th>
-            <th scope="col">Frontmatter</th>
-            <th scope="col">Light canvas / title / accent</th>
-            <th scope="col">Dark canvas / title / accent</th>
-            <th scope="col">Current use</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pagePaletteRows.map((palette) => (
-            <tr>
-              <th scope="row">{palette.name}</th>
-              <td><code>palette: {palette.id}</code></td>
-              <td class="tabular-nums">{palette.light}</td>
-              <td class="tabular-nums">{palette.dark}</td>
-              <td>{palette.use}</td>
-            </tr>
-          ))}
-        </tbody>
-      </DataTable>
-    </Section>
-
-    <Section size="standard" class="border-t border-border">
-      <h2 class="label mb-2xs">
-        Type scale
-      </h2>
-      <p class="mb-md max-w-measure text-body text-muted-foreground">
-        KMR Apparat carries every interface and reading role: Light (300),
-        Regular (400), and Medium (500). Size, line-height and weight travel
-        inside the role, and tracking is 0 on every step, so
-        <code>text-heading</code> alone produces finished type and nothing writes
-        <code>tracking-*</code>, <code>leading-*</code> or <code>font-*</code>
-        at a call site. Size carries the hierarchy at display scale; weight
-        takes over once the sizes get close to body.
-      </p>
-      <p class="mb-md max-w-measure text-body text-muted-foreground">
-        Display, title, body, and metadata use Apparat Regular. Headings, the
-        wordmark, genuine labels, table headers, and strong emphasis use
-        Medium. Light remains available but is not assigned to a shared role.
-        No role asks the browser to synthesise a weight.
-      </p>
-      <p class="mb-md max-w-measure text-body text-muted-foreground">
-        The three original Kimera WOFF2 files are self-hosted under the Web
-        License and share one Arial fallback calibrated from Apparat's x-height
-        and vertical metrics. All three authored roles are preloaded because
-        standard pages use them above the fold.
-      </p>
-      <p class="mb-md max-w-measure text-body text-muted-foreground">
-        Four unique sizes carry the whole site: display, title, one shared
-        heading, and body. The former h2 and h3 steps share the 20px heading
-        role; semantic structure and spacing distinguish their level. Body,
-        metadata, captions, and compact interface text share the 14px body
-        role. Long-form reading adds secondary colour and 1.4 leading rather
-        than another size.
-      </p>
-      <Stack gap="md">
-        {typeScale.map((t) => (
-          <div>
-            <p class={t.class}>{t.sample}</p>
-            <p class="mt-3xs text-body tabular-nums text-muted-foreground">
-              text-{t.name} · {t.size} · {t.weight}
-            </p>
-          </div>
-        ))}
-      </Stack>
-      <div class="mt-xl border border-border p-card">
-        <Stack gap="sm">
-          <p class="text-title">Sample Case Study</p>
-          <p class="type-reading max-w-measure">
-            Titles carry the hierarchy; reading text stays quieter and more
-            compact without introducing another font size.
-          </p>
-          <div>
-            <h2 class="text-heading">Section heading</h2>
-            <p class="type-reading max-w-measure">
-              A semantic h2 and h3 can share one visual role. Space and document
-              structure explain their relationship.
-            </p>
-            <h3 class="mt-lg text-heading">Nested heading</h3>
-          </div>
-        </Stack>
-      </div>
-    </Section>
-
-    <Section size="standard" class="border-t border-border">
-      <h2 class="label mb-2xs">
-        Spacing
-      </h2>
-      <p class="mb-md text-body text-muted-foreground">
-        4px base scale, plus semantic roles a brief can name directly.
-      </p>
-      <Stack gap="2xs">
-        {spacingScale.map((s) => (
-          <Cluster gap="sm">
-            <span class="w-20 shrink-0 text-body tabular-nums text-muted-foreground">{s.name}</span>
-            <span class="h-4 bg-accent" style={`width: ${s.value}`}></span>
-            <span class="text-body tabular-nums text-muted-foreground">{s.px}</span>
-          </Cluster>
-        ))}
-      </Stack>
-      <Grid class="mt-md">
-        {semanticSpacing.map((s) => (
-          <GridItem spanMd={12}>
-            <p class="text-body text-muted-foreground">--spacing-{s.name} → {s.value}</p>
-          </GridItem>
-        ))}
-      </Grid>
-    </Section>
-
-    <Section size="standard" class="border-t border-border">
-      <h2 class="label mb-2xs">
-        Layout primitives
-      </h2>
-      <p class="mb-md max-w-measure text-body text-muted-foreground">
-        Pages compose <code>Section &gt; Container &gt; Stack | Grid + GridItem | Cluster</code>
-        and never inline layout. The structural grid has 24 tracks and one 10px
-        gutter. Items are full-width on phones, then opt into named tablet and
-        desktop fractions. <code>Sidebar</code> uses the same math for a 4 / 20
-        case-study split and collapses below its measured 56rem boundary.
-      </p>
-      <Stack gap="md">
-        <div>
-          <p class="mb-2xs text-body text-muted-foreground">24 tracks</p>
-          <Grid class="grid-specimen" aria-hidden="true">
-            {Array.from({ length: 24 }).map(() => <span class="grid-specimen__track"></span>)}
-          </Grid>
-        </div>
-
-        <Grid class="grid-specimen">
-          <GridItem spanLg={8} class="grid-specimen__item">8 columns</GridItem>
-          <GridItem spanLg={16} class="grid-specimen__item">16 columns</GridItem>
-        </Grid>
-
-        <Grid class="grid-specimen">
-          <GridItem spanMd={12} class="grid-specimen__item">12 columns</GridItem>
-          <GridItem spanMd={12} class="grid-specimen__item">12 columns</GridItem>
-        </Grid>
-
-        <Grid class="grid-specimen">
-          <GridItem spanMd={12} spanLg={8} class="grid-specimen__item">8 columns</GridItem>
-          <GridItem spanMd={12} spanLg={8} class="grid-specimen__item">8 columns</GridItem>
-          <GridItem spanMd={12} spanLg={8} class="grid-specimen__item">8 columns</GridItem>
-        </Grid>
-
-        <Grid class="grid-specimen">
-          <GridItem spanMd={12} spanLg={6} class="grid-specimen__item">6 columns</GridItem>
-          <GridItem spanMd={12} spanLg={6} class="grid-specimen__item">6 columns</GridItem>
-          <GridItem spanMd={12} spanLg={6} class="grid-specimen__item">6 columns</GridItem>
-          <GridItem spanMd={12} spanLg={6} class="grid-specimen__item">6 columns</GridItem>
-        </Grid>
-
-        <Grid class="grid-specimen">
-          <GridItem class="grid-specimen__item">24 columns</GridItem>
-        </Grid>
-      </Stack>
-    </Section>
-
-    <Section size="standard" class="border-t border-border">
-      <h2 class="label mb-2xs">
-        Containers
-      </h2>
-      <p class="mb-md max-w-measure text-body text-muted-foreground">
-        One page container, used by the header, the footer and every page, so
-        everything sits on the same two vertical edges. <code>Container</code>
-        has no size prop. <code>max-w-measure</code> is not a container — it
-        is the shared measure for long-form text and lead paragraphs, and it
-        must never be collapsed into the page width.
-      </p>
-      <Stack gap="2xs">
-        {containers.map((c) => (
-          <div>
-            <div class="h-3 bg-muted" style={`max-width: ${c.value}; width: 100%`}></div>
-            <p class="mt-3xs text-body tabular-nums text-muted-foreground">max-w-{c.name} · {c.value} ({c.px})</p>
-          </div>
-        ))}
-      </Stack>
-    </Section>
-
-    <Section size="standard" class="border-t border-border">
-      <h2 class="label mb-2xs">
-        Surfaces
-      </h2>
-      <p class="mb-md max-w-measure text-body text-muted-foreground">
-        One depth model in both appearances: canvas, inset, raised, then raised
-        hover. A fixed top-left light adds fine edge definition and crisp
-        contact depth to selected raised surfaces; tone still carries the main
-        hierarchy. The repeated nested inset proves that adjacent levels remain
-        distinct instead of merging at rest or during interaction.
-      </p>
-      <div class="bg-background p-md">
-        <p class="label mb-sm">Canvas</p>
-        <Grid>
-          <GridItem spanMd={12}>
-            <div class="light-shade-specimen--raised bg-card p-md">
-              <p class="label">Raised</p>
-              <p class="mt-3xs text-body text-muted-foreground">Card rest / canvas hover</p>
-              <div class="mt-sm bg-muted p-sm">
-                <p class="label">Inset</p>
-                <p class="mt-3xs text-body text-muted-foreground">Media, code and recessed content</p>
-              </div>
-            </div>
-          </GridItem>
-          <GridItem spanMd={12}>
-            <div class="light-shade-specimen--hover bg-background-elevated-hover p-md">
-              <p class="label">Raised hover</p>
-              <p class="mt-3xs text-body text-muted-foreground">A quiet step beyond raised</p>
-              <div class="mt-sm bg-muted p-sm">
-                <p class="label">Inset</p>
-                <p class="mt-3xs text-body text-muted-foreground">Still distinct from its parent</p>
-              </div>
-            </div>
-          </GridItem>
-        </Grid>
-      </div>
-      <h3 class="label mb-sm mt-md">Live components</h3>
-      <Grid>
-        <GridItem spanMd={12}>
-          <ProjectCard
-            id="sample-case-study"
-            title="Project card"
-            description="Raised surface with inset media and one whole-card link."
-          />
-        </GridItem>
-        <GridItem spanMd={12}>
-          <div class="bg-muted p-md">
-            <p class="label">Muted surface</p>
-            <p class="mt-3xs text-body text-muted-foreground">bg-muted, no border</p>
-          </div>
-        </GridItem>
-      </Grid>
-    </Section>
-
-    <Section size="standard" class="border-t border-border">
-      <h2 class="label mb-2xs">
-        Buttons
-      </h2>
-      <p class="mb-md max-w-measure text-body text-muted-foreground">
-        One hierarchy serves both runtimes. Use <code>ActionLink</code> when an
-        Astro link is presented as an action, and <code>Button</code> or
-        <code>IconButton</code> for React commands. Primary is the action a
-        region is for; secondary is the bordered default; quiet supports a
-        primary inside an experiment; link belongs inside or beside text.
-      </p>
-      <p class="mb-md max-w-measure text-body text-muted-foreground">
-        Button colours stay neutral in light and dark appearance. Authored
-        page palettes do not remap them. Rest, hover and pressed are separate
-        tonal steps; focus adds the shared outline without impersonating
-        hover, disabled is neutral, and loading retains its action hierarchy
-        while preserving the label's space.
-      </p>
-      <Cluster gap="sm" class="mb-md">
-        <ActionLink href="/style-guide" variant="primary">
-          Primary
-          <span aria-hidden="true">&rarr;</span>
-        </ActionLink>
-        <ActionLink href="/style-guide">
-          Secondary
-          <span aria-hidden="true">&rarr;</span>
-        </ActionLink>
-        <ActionLink href="/style-guide" variant="link">Hyperlink</ActionLink>
-      </Cluster>
-      <DataTable label="Button variants" pinFirstColumn>
-        <thead>
-          <tr>
-            <th scope="col">Variant</th>
-            <th scope="col">Rest</th>
-            <th scope="col">Hover</th>
-            <th scope="col">Pressed</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">primary</th>
-            <td>button-primary-background</td>
-            <td>button-primary-background-hover</td>
-            <td>button-primary-background-active</td>
-          </tr>
-          <tr>
-            <th scope="row">secondary</th>
-            <td>button-secondary-border and foreground, transparent fill</td>
-            <td>button-secondary background, border and foreground hover roles</td>
-            <td>button-secondary background and border active roles</td>
-          </tr>
-          <tr>
-            <th scope="row">link</th>
-            <td>button-secondary-foreground, underlined, no box</td>
-            <td>button-secondary-foreground-hover</td>
-            <td>same as hover</td>
-          </tr>
-        </tbody>
-      </DataTable>
-      <h3 class="label mb-sm mt-md">Theme keycap states</h3>
-      <p class="mb-md max-w-measure text-body text-muted-foreground">
-        The keycap is a shortcut hint inside the theme toggle's one action,
-        not a standalone button variant. It stays square and borderless while
-        reusing the shared light/shade effects.
-      </p>
-      <DataTable label="Theme keycap states">
-        <thead>
-          <tr>
-            <th scope="col">State</th>
-            <th scope="col">Effect</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>rest</td>
-            <td>raised</td>
-          </tr>
-          <tr>
-            <td>hover or keyboard focus</td>
-            <td>raised-hover</td>
-          </tr>
-          <tr>
-            <td>pointer or physical key press</td>
-            <td>pressed</td>
-          </tr>
-        </tbody>
-      </DataTable>
-    </Section>
-
-    <Section
-      id="experiment-interfaces"
-      size="standard"
-      class="border-t border-border"
-    >
-      <h2 class="label mb-2xs">
-        Experiment interfaces
-      </h2>
-      <p class="mb-md max-w-measure text-body text-muted-foreground">
-        Two compositions share the same controls without forcing every
-        experiment into one layout. The guided panel teaches a sequence; the
-        inspector keeps persistent settings available. Both inherit the page
-        palette, stay compact on desktop, and expose larger touch targets.
-      </p>
-      <Stack gap="xl">
-        <Stack gap="sm">
-          <div>
-            <h3 class="label mb-2xs">Guided panel — supported</h3>
-            <p class="max-w-measure text-body text-muted-foreground">
-              Use when the visitor is learning the experiment one part at a
-              time. Its supported structure remains documented in the
-              specimen below.
-            </p>
-          </div>
-          <DemoPrimitivesSpecimen client:load />
-        </Stack>
-
-        <Stack gap="sm">
-          <div>
-            <h3 class="label mb-2xs">Control panel — candidate</h3>
-            <p class="max-w-measure text-body text-muted-foreground">
-              Use for settings that remain available while the visitor
-              changes the stage. Its API stays flexible until a real
-              experiment adopts it.
-            </p>
-          </div>
-          <DemoInspectorSpecimen client:load />
-        </Stack>
-      </Stack>
-    </Section>
-
-    <Section size="standard" class="border-t border-border">
-      <h2 class="label mb-2xs">
-        Tables
-      </h2>
-      <p class="mb-md max-w-measure text-body text-muted-foreground">
-        One quiet-ledger treatment for every table: strong outer and column-header
-        rules, quiet row separators, no vertical cell walls, padding from the
-        spacing scale, and tabular figures. Component tables use
-        <code>DataTable.astro</code>, which adds conditional keyboard scrolling;
-        markdown tables in a case study get the same visual rules through
-        <code>.prose table</code>. A table's columns are its meaning, so it
-        scrolls inside its own box rather than reflowing.
-      </p>
-      <DataTable label="Table specimen" pinFirstColumn>
-        <thead>
-          <tr>
-            <th scope="col">Token</th>
-            <th scope="col">Value</th>
-            <th scope="col">Applies to</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">Cell padding</th>
-            <td>8px 12px</td>
-            <td>th and td</td>
-          </tr>
-          <tr>
-            <th scope="row">Rule</th>
-            <td>1px horizontal</td>
-            <td>Outer block edges, column header, and rows</td>
-          </tr>
-          <tr>
-            <th scope="row">Column header</th>
-            <td>14px, 500, uppercase</td>
-            <td>thead th</td>
-          </tr>
-          <tr>
-            <th scope="row">Row header</th>
-            <td>14px, 500, natural case</td>
-            <td>tbody th</td>
-          </tr>
-        </tbody>
-      </DataTable>
-    </Section>
     </Container>
   </Section>
 </PageLayout>
 
 <script>
-  /*
-    Fills each primitive swatch's caption with the colour the stylesheet
-    actually resolved, rather than a hex literal copied into this file.
-
-    The copies were the problem: 39 of them, hand-maintained, in the page whose
-    job is to document the source of truth. Nothing checked them, so this page
-    could show one colour while the site rendered another and look correct
-    doing it. Reading the computed value means the caption is wrong only if the
-    swatch beside it is wrong too.
-  */
+  /* Primitive captions read the rendered token value from the stylesheet, so
+     the visual chip and its label cannot disagree. The fallback text remains
+     meaningful if JavaScript is unavailable. */
   const root = getComputedStyle(document.documentElement);
-  for (const el of document.querySelectorAll<HTMLElement>("[data-swatch-value]")) {
-    const raw = root.getPropertyValue(el.dataset.swatchValue!).trim();
-    /* The build minifies #000000 to #000, so some values can arrive
-       three digits wide and the caption column would carry two formats. */
-    el.textContent = raw.replace(/^#([\da-f])([\da-f])([\da-f])$/i, "#$1$1$2$2$3$3") || "—";
+  for (const element of document.querySelectorAll<HTMLElement>("[data-swatch-value]")) {
+    const value = root.getPropertyValue(element.dataset.swatchValue!).trim();
+    element.textContent =
+      value.replace(/^#([\da-f])([\da-f])([\da-f])$/i, "#$1$1$2$2$3$3") ||
+      "CSS value";
   }
 </script>

@@ -100,11 +100,11 @@ What that means in practice:
     the neutral stack and remap one authored accent family, as Sage does.
     Error, success, warning and info retain their canonical families so state
     meaning is not erased for the sake of content identity.
-  - `--text-reading` is the long-form body-copy role. It aliases primary text
-    by default, while a page palette can make reading text quieter than titles
-    without weakening headings, navigation states, or controls. Prose headings
-    stay on `--text-primary`; prose paragraphs and lists use
-    `--text-reading`.
+  - `--text-reading` is the long-form body-copy role. It aliases secondary text
+    by default, keeping reading copy quieter than titles without weakening
+    headings, navigation states, or controls. A page palette may remap the role
+    independently. Prose headings stay on `--text-primary`; prose paragraphs
+    and lists use `--text-reading`.
   - Valid names live in `src/data/page-palettes.ts`. Adding a palette means
     registering the name, adding its mapping file, importing it in
     `global.css`, and documenting it on `/style-guide`.
@@ -526,8 +526,10 @@ What that means in practice:
   96px bottom) — the header supplies weight above, so the top needs less air.
   Other semantic sizes are `compact`, `standard`, `large`, and `hero`; their
   names describe page rhythm rather than pretending to be raw scale aliases.
-- The `/style-guide` page must stay in sync with the token system — update it
-  when tokens change.
+- The `/style-guide` page must stay in sync with the token system and remain
+  task-first: decision guidance is visible, exhaustive inventories use native
+  progressive disclosure, and every major topic has a stable anchor. Update it
+  when tokens or shared component contracts change.
 
 ## Related Files
 

@@ -81,13 +81,13 @@ export default function DemoInspectorSpecimen() {
         <DemoInspectorHeader
           title="Adjust the specimen"
           description="Change a few persistent settings and watch the result."
-          headingLevel="h3"
+          headingLevel="h4"
         />
 
         <DemoInspectorSection
           title="Appearance"
           description="Controls stay grouped by what they change."
-          headingLevel="h4"
+          headingLevel="h5"
         >
           <FieldGroup>
             <Field>

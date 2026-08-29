@@ -71,7 +71,7 @@ export default function DemoPrimitivesSpecimen() {
         <DemoPanelHeader
           title="Explore the specimen"
           description="Choose a part to see how the shared panel explains it."
-          headingLevel="h3"
+          headingLevel="h4"
           current={activeIndex + 1}
           total={STEP_ORDER.length}
         />
@@ -87,7 +87,7 @@ export default function DemoPrimitivesSpecimen() {
         <DemoStepDetail
           id="demo-specimen-step-detail"
           title={step.title}
-          headingLevel="h4"
+          headingLevel="h5"
         >
           {step.text}
         </DemoStepDetail>

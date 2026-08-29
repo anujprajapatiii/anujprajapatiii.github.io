@@ -1,0 +1,371 @@
+/*
+  The style guide is a reference tool, not a second visual system. Everything
+  here is page-local composition built from the portfolio's existing tokens.
+*/
+
+.style-guide-intro {
+  padding-block-end: var(--spacing-xl);
+  border-block-end: 1px solid var(--border);
+}
+
+.style-guide-chapter-link {
+  display: block;
+  min-block-size: 100%;
+  padding: var(--spacing-sm);
+  border-block: 1px solid var(--border);
+  text-decoration-line: none;
+  --lift-text: var(--text-primary);
+  --lift-text-on: var(--text-interactive);
+  --lift-surface: transparent;
+  --lift-surface-on: var(--background-elevated);
+}
+
+.style-guide-chapter-link__title,
+.style-guide-chapter-link__description {
+  display: block;
+}
+
+.style-guide-chapter-link__title {
+  margin-block-start: var(--spacing-2xs);
+}
+
+.style-guide-chapter-link__description {
+  margin-block-start: var(--spacing-3xs);
+}
+
+.style-guide-content {
+  min-width: 0;
+}
+
+.style-guide-chapter {
+  padding-block-start: var(--spacing-xl);
+  border-block-start: 1px solid var(--border);
+}
+
+.style-guide-chapter:first-child {
+  padding-block-start: 0;
+  border-block-start: 0;
+}
+
+.style-guide-chapter__header,
+.style-guide-topic__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+}
+
+.style-guide-topic + .style-guide-topic {
+  padding-block-start: var(--spacing-xl);
+  border-block-start: 1px solid var(--border-tertiary);
+}
+
+.style-guide-role {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  min-block-size: var(--control-height-touch);
+  padding-block: var(--spacing-2xs);
+  border-block: 1px solid var(--border-tertiary);
+}
+
+.style-guide-role__sample {
+  flex: 0 0 var(--control-height-compact);
+  inline-size: var(--control-height-compact);
+  block-size: var(--control-height-compact);
+  border: 1px solid var(--border);
+  background: var(--style-guide-role);
+}
+
+.style-guide-role__label,
+.style-guide-role code {
+  display: block;
+}
+
+.style-guide-role code {
+  color: var(--text-secondary);
+}
+
+.style-guide-type-specimen {
+  padding-block-end: var(--spacing-sm);
+  border-block-end: 1px solid var(--border-tertiary);
+}
+
+.style-guide-type-specimen > :last-child {
+  margin-block-start: var(--spacing-3xs);
+}
+
+.style-guide-reading-specimen {
+  padding: var(--spacing-card);
+  background: var(--background-elevated);
+}
+
+.style-guide-spacing-scale {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+}
+
+.style-guide-spacing-row {
+  display: grid;
+  grid-template-columns: var(--spacing-xl) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-width: 0;
+}
+
+.style-guide-spacing-bar {
+  display: block;
+  inline-size: min(var(--style-guide-size), 100%);
+  block-size: var(--spacing-3xs);
+  background: var(--decorative-accent);
+}
+
+.style-guide-surface-canvas {
+  padding: var(--spacing-md);
+  border: 1px solid var(--border);
+  background: var(--background-primary);
+}
+
+.style-guide-surface {
+  padding: var(--spacing-md);
+  background: var(--background-elevated);
+}
+
+.style-guide-surface--hover {
+  background: var(--background-elevated-hover);
+}
+
+.style-guide-surface__inset {
+  margin-block-start: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: var(--background-secondary);
+}
+
+.style-guide-foundation-card {
+  min-block-size: 100%;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--border);
+}
+
+.style-guide-foundation-card__description {
+  margin-block-start: var(--spacing-3xs);
+}
+
+.style-guide-definition-list {
+  margin-block-start: var(--spacing-sm);
+}
+
+.style-guide-definition-list > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--spacing-sm);
+  padding-block: var(--spacing-2xs);
+  border-block-start: 1px solid var(--border-tertiary);
+}
+
+.style-guide-definition-list dd {
+  color: var(--text-secondary);
+  text-align: end;
+}
+
+.style-guide-container-specimen__bar {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: var(--style-guide-container);
+  block-size: var(--spacing-xs);
+  margin-block-end: var(--spacing-3xs);
+  background: var(--background-secondary);
+}
+
+/* Native disclosure keeps the long catalogs keyboard-operable without a
+   client-side component or custom state model. */
+.style-guide-disclosure {
+  border-block: 1px solid var(--border);
+}
+
+.style-guide-disclosure-list .style-guide-disclosure {
+  border-block-end-width: 0;
+}
+
+.style-guide-disclosure-list {
+  border-block-end: 1px solid var(--border);
+}
+
+.style-guide-disclosure > summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-block-size: var(--control-height-touch);
+  padding-block: var(--spacing-xs);
+  padding-inline: var(--spacing-xs);
+  cursor: pointer;
+  list-style: none;
+  font-weight: var(--text-heading--font-weight);
+  --lift-text: var(--text-primary);
+  --lift-text-on: var(--text-interactive);
+  --lift-surface: transparent;
+  --lift-surface-on: var(--background-secondary);
+}
+
+.style-guide-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+
+.style-guide-disclosure > summary::after {
+  content: "+";
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.style-guide-disclosure[open] > summary::after {
+  content: "−";
+}
+
+.style-guide-disclosure[open] > summary {
+  border-block-end: 1px solid var(--border-tertiary);
+}
+
+.style-guide-disclosure__meta {
+  color: var(--text-secondary);
+  font-weight: var(--text-body--font-weight);
+}
+
+.style-guide-disclosure__body {
+  padding-block: var(--spacing-md);
+  padding-inline: var(--spacing-xs);
+}
+
+/* Style-guide-only view of the real structural grid. */
+.grid-specimen__track {
+  min-block-size: var(--spacing-xl);
+  border: 1px solid var(--border);
+  background: var(--background-secondary);
+}
+
+.grid-specimen__item {
+  display: flex;
+  align-items: center;
+  min-block-size: var(--spacing-xl);
+  padding: var(--spacing-2xs);
+  border: 1px solid var(--border);
+  background: var(--background-secondary);
+  color: var(--text-secondary);
+}
+
+.style-guide-primitive {
+  inline-size: var(--spacing-2xl);
+}
+
+.style-guide-primitive__chip {
+  display: block;
+  block-size: var(--spacing-xl);
+  margin-block-end: var(--spacing-3xs);
+  border: 1px solid var(--border);
+}
+
+.style-guide-palette-mapping > * + * {
+  margin-block-start: var(--spacing-3xs);
+}
+
+.style-guide-palette-mapping .label {
+  display: inline-block;
+  min-inline-size: var(--spacing-xl);
+  margin-inline-end: var(--spacing-2xs);
+}
+
+.style-guide-token {
+  min-block-size: 100%;
+  padding: var(--spacing-xs);
+  border: 1px solid var(--border);
+}
+
+.style-guide-token__sample {
+  display: block;
+  block-size: var(--control-height-compact);
+  margin-block-end: var(--spacing-2xs);
+  border: 1px solid var(--border-tertiary);
+  background: var(--style-guide-token);
+}
+
+.style-guide-token > code {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.style-guide-token__mapping {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--spacing-2xs);
+  margin-block-start: var(--spacing-2xs);
+  color: var(--text-secondary);
+}
+
+.style-guide-token__mapping dt {
+  text-transform: uppercase;
+  font-weight: var(--text-heading--font-weight);
+}
+
+.style-guide-token__mapping dd {
+  overflow-wrap: anywhere;
+}
+
+/* The compound effects stay sourced from the shared material tokens. */
+.light-shade-specimen--raised {
+  box-shadow: var(--light-shade-raised);
+}
+
+.light-shade-specimen--hover {
+  box-shadow: var(--light-shade-raised-hover);
+}
+
+@media (max-width: 40rem) {
+  .style-guide-chapter-link__description {
+    display: none;
+  }
+}
+
+/* At 320px the four site links need a second nav line, making the measured
+   sticky header one spacing-xl taller than its normal compact shape. */
+@media (max-width: 24rem) {
+  .style-guide-content :is(h2, h3)[id] {
+    scroll-margin-top: calc(
+      var(--header-height) + var(--spacing-xl) + var(--spacing-2xs)
+    );
+  }
+}
+
+@media (max-width: 30rem) {
+  .style-guide-spacing-row {
+    grid-template-columns: var(--spacing-lg) minmax(0, 1fr);
+    gap: var(--spacing-2xs);
+  }
+
+  .style-guide-spacing-row > :last-child {
+    grid-column: 1 / -1;
+  }
+
+  .style-guide-disclosure > summary {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .style-guide-disclosure__meta {
+    display: none;
+  }
+
+  .style-guide-definition-list > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--spacing-3xs);
+  }
+
+  .style-guide-definition-list dd {
+    text-align: start;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .style-guide-chapter-link,
+  .style-guide-disclosure > summary {
+    background: var(--background-primary);
+  }
+}

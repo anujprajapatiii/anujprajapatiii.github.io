@@ -11,12 +11,23 @@ import type { MarkdownHeading } from "astro";
   Depth 3 is included even though no case study uses it yet: it costs nothing
   now and means the rail keeps working as entries grow.
 */
-interface Props {
-  headings: MarkdownHeading[];
+interface NavigationHeading {
+  depth: 2 | 3;
+  slug: string;
+  text: string;
 }
 
-const { headings } = Astro.props;
-const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+type Props =
+  /* Markdown routes receive Astro's rendered heading list. Authored reference
+     pages can provide the same small shape without pretending their content
+     came from Markdown. */
+  | { headings: MarkdownHeading[]; items?: never }
+  | { items: readonly NavigationHeading[]; headings?: never };
+
+const sourceItems = Astro.props.items ?? Astro.props.headings;
+const items = sourceItems.filter(
+  (heading) => heading.depth === 2 || heading.depth === 3,
+);
 
 /* One heading is a list of one — not worth a rail. */
 const show = items.length > 1;
