@@ -1407,12 +1407,40 @@
 }
 
 /*
-  Theme toggle icons. The button shows the CURRENT appearance — sun in light,
-  moon in dark — and the swap is done here in CSS, off the same `.dark` class
-  the pre-paint script sets. Doing it in JS instead would paint whichever icon
-  the HTML happened to ship with and correct it a frame later, which is the
-  same flash of wrong state the pre-paint script exists to prevent.
+  Theme toggle. The icon shows the CURRENT appearance — sun in light, moon in
+  dark — and the swap is done here in CSS, off the same `.dark` class the
+  pre-paint script sets. The adjacent keycap exposes the L shortcut and uses
+  the same raised, hover and pressed material states as linked cards. It is a
+  hint inside the toggle's single click target, not a second control.
 */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  padding: var(--spacing-3xs);
+}
+.theme-toggle__icon,
+.theme-toggle__key {
+  display: grid;
+  place-items: center;
+}
+.theme-toggle__icon {
+  width: var(--control-icon-size);
+  height: var(--control-icon-size);
+}
+.theme-toggle__key {
+  width: var(--control-height-compact);
+  height: var(--control-height-compact);
+  border: 0;
+  background: var(--background-elevated);
+  color: var(--text-secondary);
+  box-shadow: var(--light-shade-raised);
+  font-family: inherit;
+  font-size: var(--text-body);
+  font-weight: var(--text-heading--font-weight);
+  line-height: var(--text-body--line-height);
+  text-decoration-line: none;
+}
 .theme-toggle__sun { display: block; }
 .theme-toggle__moon { display: none; }
 .dark .theme-toggle__sun { display: none; }
@@ -2255,6 +2283,28 @@
   box-shadow: var(--light-shade-pressed);
 }
 .project-card__meta { color: var(--text-secondary); }
+
+/* The keycap is the shortcut affordance inside one theme-toggle action. Its
+   material response mirrors cards while the button keeps the shared focus
+   outline and the icon keeps the furniture text ladder. */
+.theme-toggle:focus-visible .theme-toggle__key {
+  background: var(--background-elevated-hover);
+  color: var(--text-primary);
+  box-shadow: var(--light-shade-raised-hover);
+}
+@media (hover: hover) {
+  .theme-toggle:hover .theme-toggle__key {
+    background: var(--background-elevated-hover);
+    color: var(--text-primary);
+    box-shadow: var(--light-shade-raised-hover);
+  }
+}
+.theme-toggle:active .theme-toggle__key,
+html[data-theme-key-active] .theme-toggle__key {
+  background: var(--background-elevated);
+  color: var(--text-primary);
+  box-shadow: var(--light-shade-pressed);
+}
 
 /* Style-guide specimens expose the compound effects without recreating them. */
 .light-shade-specimen--raised { box-shadow: var(--light-shade-raised); }

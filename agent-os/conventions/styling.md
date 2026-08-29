@@ -374,6 +374,13 @@ What that means in practice:
     site furniture with their own quiet treatment (`--text-secondary`, no
     underline); giving them `.btn--link` would make both louder than the
     content they frame.
+  - The theme shortcut keycap is an affordance inside the theme toggle's one
+    click target, not a standalone action or a fourth public button variant.
+    It is square and borderless, uses the shared raised effect at rest, the
+    raised-hover effect on pointer hover and keyboard focus, and the pressed
+    effect for both pointer press and the physical `L` key. The visible `L` is
+    hidden from assistive technology because the button owns the action label
+    and declares `aria-keyshortcuts="L"`.
 - **Long-form text is capped to the reading measure.** `.prose` applies
   `var(--container-measure)` to `p`/`ul`/`ol`/`blockquote` only, so images and
   code blocks still run the full width of their wrapper.
