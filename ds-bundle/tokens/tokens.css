@@ -207,6 +207,23 @@
     --border-hover: var(--neutral-400);
     --decorative-accent: var(--sage-500);
 
+    /* Fixed top-left light source. These are semantic colours; the compound
+       effects below own hard-edged geometry and opacity so components consume
+       one finished material decision instead of assembling local shadows. */
+    --lighting-highlight: var(--neutral-white);
+    --lighting-shade: var(--neutral-300);
+    --light-shade-raised:
+      inset 1px 1px 0 color-mix(in srgb, var(--lighting-highlight) 42%, transparent),
+      inset -1px -1px 0 color-mix(in srgb, var(--lighting-shade) 6%, transparent),
+      1px 1px 0 color-mix(in srgb, var(--lighting-shade) 8%, transparent);
+    --light-shade-raised-hover:
+      inset 1px 1px 0 color-mix(in srgb, var(--lighting-highlight) 50%, transparent),
+      inset -1px -1px 0 color-mix(in srgb, var(--lighting-shade) 8%, transparent),
+      1px 1px 0 color-mix(in srgb, var(--lighting-shade) 12%, transparent);
+    --light-shade-pressed:
+      inset 1px 1px 0 color-mix(in srgb, var(--lighting-shade) 14%, transparent),
+      inset -1px -1px 0 color-mix(in srgb, var(--lighting-highlight) 38%, transparent);
+
     /* Button component roles stay deliberately neutral. Page palettes are
        authored content identity; they do not recolour action hierarchy. */
     --button-primary-background: var(--neutral-500);
@@ -359,6 +376,8 @@
     --text-alternate: var(--neutral-800);
     --border-hover: var(--neutral-300);
     --decorative-accent: var(--sage-500);
+    --lighting-highlight: var(--neutral-500);
+    --lighting-shade: var(--neutral-black);
 
     /* Dark appearance remaps the same neutral button hierarchy. */
     --button-primary-background: var(--neutral-300);

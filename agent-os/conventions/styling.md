@@ -219,12 +219,21 @@ What that means in practice:
   metadata, captions and compact interface text all share 14px / 1.5.
   - Project cards and homepage experiment rows are quiet, borderless linked
     surfaces. Copy comes first and project-card media comes last. Titles and
-    descriptions use the 4px `3xs` gap. Hover, focus and press move only the
-    elevated background role; primary/secondary text colours remain stable.
+    descriptions use the 4px `3xs` gap. Their tonal surface ladder remains the
+    main depth cue, while the shared `--light-shade-raised`,
+    `--light-shade-raised-hover` and `--light-shade-pressed` effects add a
+    fixed top-left light source. Every edge is one pixel, zero blur and low
+    opacity; do not substitute soft shadows, rounded halos or component-local
+    values. Cards and experiment rows consume the same rest, hover/focus and
+    pressed effects, while primary/secondary text colours remain stable.
     The experiment row's thin accent/progress strip is selection state, not a
-    border, and remains independent of the shared interaction treatment.
+    border, and remains independent of the shared interaction treatment. A
+    selected desktop row may retain the elevated-hover surface, but it must not
+    override the shared shadow state.
     The desktop experiment preview pane shares the card's borderless raised
     surface and interior padding; its main frame and filmstrip are inset media.
+    The sticky header stays outside this system and retains its vanilla
+    translucent material without a light/shade effect.
   - `.type-reading` layers secondary reading colour and
     `--leading-reading` (1.4) on the 14px body role. Rendered prose shares the
     same declarations. This is a treatment, not a fifth size, and it never

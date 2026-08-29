@@ -194,6 +194,8 @@ const semanticGroups = [
       { name: "text-alternate", light: "neutral-100", dark: "neutral-800" },
       { name: "border-hover", light: "neutral-400", dark: "neutral-300" },
       { name: "decorative-accent", light: "sage-500", dark: "sage-500" },
+      { name: "lighting-highlight", light: "neutral-white", dark: "neutral-500" },
+      { name: "lighting-shade", light: "neutral-300", dark: "neutral-black" },
     ],
   },
   {
@@ -576,14 +578,16 @@ const pagePaletteRows = [
       </h2>
       <p class="mb-md max-w-measure text-body text-muted-foreground">
         One depth model in both appearances: canvas, inset, raised, then raised
-        hover. The repeated nested inset proves that adjacent levels remain
+        hover. A fixed top-left light adds fine edge definition and crisp
+        contact depth to selected raised surfaces; tone still carries the main
+        hierarchy. The repeated nested inset proves that adjacent levels remain
         distinct instead of merging at rest or during interaction.
       </p>
       <div class="bg-background p-md">
         <p class="label mb-sm">Canvas</p>
         <Grid>
           <GridItem spanMd={12}>
-            <div class="bg-card p-md">
+            <div class="light-shade-specimen--raised bg-card p-md">
               <p class="label">Raised</p>
               <p class="mt-3xs text-body text-muted-foreground">Card rest / canvas hover</p>
               <div class="mt-sm bg-muted p-sm">
@@ -593,7 +597,7 @@ const pagePaletteRows = [
             </div>
           </GridItem>
           <GridItem spanMd={12}>
-            <div class="bg-background-elevated-hover p-md">
+            <div class="light-shade-specimen--hover bg-background-elevated-hover p-md">
               <p class="label">Raised hover</p>
               <p class="mt-3xs text-body text-muted-foreground">A quiet step beyond raised</p>
               <div class="mt-sm bg-muted p-sm">
