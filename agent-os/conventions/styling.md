@@ -171,9 +171,10 @@ What that means in practice:
   - `Stack` and `Cluster` gap props map literally: `gap="md"` means
     `--spacing-md` (24px), never a remapped neighbouring value. Their allowed
     names are `2xs`, `xs`, `sm`, `md`, `lg`, `xl`, and `2xl`.
-  - The homepage hero split uses the existing `--spacing-md` (24px) as its
-    column gap so the copy and media breathe without changing the global grid
-    gutter.
+  - The homepage hero uses the shared `page` opener rhythm. Its split uses the
+    existing `--spacing-md` (24px) between stacked content on narrow layouts
+    and between copy and media columns on desktop, without changing the global
+    grid gutter.
   - Major Work and Experiments prose groups use the existing `2xl` spacing
     token (64px), applied before each body `h2`. Within each group, paragraphs
     and title-to-body transitions use `--spacing-stack` (16px).
@@ -204,14 +205,15 @@ What that means in practice:
   line-height and weight, so **never write `tracking-*`, `leading-*` or
   `font-*` at a call site**: if a step needs to change, change the token in
   global.css and every use follows.
-- **Four sizes, by decision: 64 → 36 → 20 → 14.** Display is fluid
-  from 40–64px; title is a fixed 36px; heading is a fixed 20px. The old
-  h2 and h3 steps share `text-heading` in prose and cards: semantic document
-  structure and space distinguish their level instead of a second size.
-  Homepage section h2s use `text-title` (36px) to carry the same major
-  rhythm as page titles. The homepage hero alone uses the named `hero-display`
-  treatment: it keeps the display token's size and leading, then applies
-  Medium 500 and uppercase. All project, work, and experiment card titles use
+- **Four responsive roles, by decision.** Mobile uses 36 → 28 → 18 → 14;
+  the roles expand fluidly to 64 → 36 → 20 → 14 on desktop. Body remains the
+  fixed 14px floor. The old h2 and h3 steps share `text-heading` in prose and
+  cards: semantic document structure and space distinguish their level instead
+  of a second size. Homepage section h2s use the fluid `text-title` role to
+  carry the same major rhythm as page titles. The homepage hero alone uses the
+  named `hero-display` treatment: it keeps the display token's size and
+  leading, then applies Medium 500 and uppercase. All project, work, and
+  experiment card titles use
   `text-body` (14px), medium weight (500), uppercase, and the primary text
   colour. Apply uppercase as a presentation rule so content titles retain
   their natural casing everywhere else. Card descriptions use `text-body` in

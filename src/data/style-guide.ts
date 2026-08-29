@@ -271,9 +271,9 @@ export const semanticGroups = [
 ] as const;
 
 export const typeScale = [
-  { name: "display", class: "text-display", size: "clamp(40px → 64px) / 1.02", weight: "Apparat Regular 400", sample: "Display" },
-  { name: "title", class: "text-title", size: "36px / 1.08", weight: "Apparat Regular 400", sample: "Page or section title" },
-  { name: "heading", class: "text-heading", size: "20px / 1.3", weight: "Apparat Medium 500", sample: "Shared heading" },
+  { name: "display", class: "text-display", size: "clamp(36px → 64px) / 1.02", weight: "Apparat Regular 400", sample: "Display" },
+  { name: "title", class: "text-title", size: "clamp(28px → 36px) / 1.08", weight: "Apparat Regular 400", sample: "Page or section title" },
+  { name: "heading", class: "text-heading", size: "clamp(18px → 20px) / 1.3", weight: "Apparat Medium 500", sample: "Shared heading" },
   { name: "body", class: "text-body", size: "14px / 1.5", weight: "Apparat Regular 400", sample: "Body, metadata, captions, and compact interface text." },
 ] as const;
 

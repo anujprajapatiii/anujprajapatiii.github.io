@@ -757,10 +757,11 @@
        per-size tracking "to tighten the hero" — that is the variation this
        system exists to prevent.
 
-       Four unique sizes, named by intent rather than HTML tags:
-       64 → 36 → 20 → 14. Prose h2s and card/prose h3s share one heading
-       role; semantic structure and spacing distinguish their level. Homepage
-       section h2s deliberately use title to carry the landing-page rhythm.
+       Four roles, named by intent rather than HTML tags. The mobile hierarchy
+       is 36 → 28 → 18 → 14 and expands fluidly to 64 → 36 → 20 → 14 on
+       desktop. Prose h2s and card/prose h3s share one heading role; semantic
+       structure and spacing distinguish their level. Homepage section h2s
+       deliberately use title to carry the landing-page rhythm.
 
        There was also an 18px lead and a 12px label; both are gone, because
        neither earned a place in the scale. The lead sat one notch off body
@@ -779,13 +780,13 @@
        Light/Regular/Medium hierarchy, mapped to 300/400/500. Display and title
        use Regular 400; heading uses Medium 500 for quiet separation. Medium
        also carries emphasis and genuine labels. */
-    --text-display: clamp(2.5rem, 7vw, 4rem);
+    --text-display: clamp(2.25rem, 1.5rem + 3.75vw, 4rem);
     --text-display--line-height: 1.02;
     --text-display--font-weight: 400;
-    --text-title: 2.25rem;
+    --text-title: clamp(1.75rem, 1.5rem + 1.25vw, 2.25rem);
     --text-title--line-height: 1.08;
     --text-title--font-weight: 400;
-    --text-heading: 1.25rem;
+    --text-heading: clamp(1.125rem, 1.0625rem + 0.3125vw, 1.25rem);
     --text-heading--line-height: 1.3;
     --text-heading--font-weight: 500;
     --text-body: 0.875rem;
@@ -926,7 +927,10 @@
 }
 /* The larger split gap starts with the split itself. Across 24 mobile tracks,
    23 × 24px of gap alone is wider than a phone viewport. */
-.hero-grid { column-gap: var(--spacing-grid); }
+.hero-grid {
+  column-gap: var(--spacing-grid);
+  row-gap: var(--spacing-md);
+}
 .hero-display {
   @apply text-display;
   font-weight: var(--text-heading--font-weight);
@@ -1406,9 +1410,9 @@
 /*
   Theme toggle. The icon shows the CURRENT appearance — sun in light, moon in
   dark — and the swap is done here in CSS, off the same `.dark` class the
-  pre-paint script sets. The adjacent keycap exposes the L shortcut and uses
-  the same raised, hover and pressed material states as linked cards. It is a
-  hint inside the toggle's single click target, not a second control.
+  pre-paint script sets. On desktop, the adjacent keycap exposes the L shortcut
+  and uses the same raised, hover and pressed material states as linked cards.
+  Mobile keeps only the icon because a keyboard hint is not useful there.
 */
 .theme-toggle {
   display: inline-flex;
@@ -1416,16 +1420,14 @@
   gap: var(--spacing-2xs);
   padding: var(--spacing-3xs);
 }
-.theme-toggle__icon,
-.theme-toggle__key {
+.theme-toggle__icon {
   display: grid;
   place-items: center;
-}
-.theme-toggle__icon {
   width: var(--control-icon-size);
   height: var(--control-icon-size);
 }
 .theme-toggle__key {
+  display: none;
   width: var(--control-height-compact);
   height: var(--control-height-compact);
   border: 0;
@@ -1437,6 +1439,12 @@
   font-weight: var(--text-heading--font-weight);
   line-height: var(--text-body--line-height);
   text-decoration-line: none;
+}
+@media (min-width: 38rem) {
+  .theme-toggle__key {
+    display: grid;
+    place-items: center;
+  }
 }
 .theme-toggle__sun { display: block; }
 .theme-toggle__moon { display: none; }
