@@ -80,7 +80,6 @@ const mobileLiveActionUsesEmbedFallback = Boolean(
                     variant="primary"
                   >
                     Try it live
-                    <span aria-hidden="true">&rarr;</span>
                   </ActionLink>
                 </Cluster>
               )}
@@ -102,7 +101,7 @@ const mobileLiveActionUsesEmbedFallback = Boolean(
       <Stack gap="lg">
         {/*
           An embed is its own hero. Entries without an embed or authored hero
-          show the neutral placeholder until real media lands.
+          show the neutral placeholder.
         */}
         {item.data.media.hero ? (
           <ThemeImage

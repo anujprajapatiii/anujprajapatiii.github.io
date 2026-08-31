@@ -36,5 +36,11 @@ jobs:
       - name: Check design-system conventions
         run: pnpm check
 
+      - name: Install Chromium for Tabs tests
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Test Tabs behavior
+        run: pnpm test:tabs
+
       - name: Build the production site
         run: pnpm build

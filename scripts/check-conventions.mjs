@@ -13,7 +13,7 @@
 
   Run: pnpm check
 */
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { globSync } from "node:fs";
 import { designBundleDrift } from "./sync-design-bundle.mjs";
 
@@ -226,12 +226,15 @@ function lineAt(source, index) {
 /*
   CSS accepts an unknown custom property and only fails when it is consumed,
   so a typo is invisible to both Astro and the browser console. Inventory every
-  local definition and reference. Base UI owns the four allowlisted properties
-  at runtime; all other references must resolve inside this repository.
+  local definition and reference. Base UI owns the allowlisted properties at
+  runtime; all other references must resolve inside this repository.
 */
 const RUNTIME_CUSTOM_PROPERTIES = new Set([
+  "--active-tab-bottom",
+  "--active-tab-height",
   "--active-tab-left",
   "--active-tab-right",
+  "--active-tab-top",
   "--active-tab-width",
   "--transform-origin",
 ]);
@@ -395,6 +398,23 @@ if (
   );
 }
 
+for (const file of FILES.filter(
+  (candidate) => candidate.endsWith(".astro") || candidate.endsWith(".tsx"),
+)) {
+  const source = withoutComments(readFileSync(file, "utf8"));
+  for (const match of source.matchAll(
+    /<(ActionLink|Button)\b[^>]*>[\s\S]*?(?:&rarr;|&#(?:8594|x2192);|→)[\s\S]*?<\/\1>/g,
+  )) {
+    report(
+      file,
+      lineAt(source, match.index),
+      "button-decorative-arrow",
+      match[1],
+      "button labels stand on their own; do not append a decorative arrow",
+    );
+  }
+}
+
 const reactButtonSource = readFileSync("src/components/ui/button.tsx", "utf8");
 for (const requirement of [
   /loading\?: boolean/,
@@ -413,11 +433,108 @@ for (const requirement of [
 }
 
 const uiControlsCss = readFileSync("src/styles/ui-controls.css", "utf8");
+
+/* Tabs is Supported through the behaviourally-complex exception, so the
+   formal variants, visual ownership and evidence cannot silently disappear.
+   These checks inspect comment-free source and tolerate whitespace or quote
+   changes; they protect structure rather than one preferred formatting. */
+const tabsFile = "src/components/ui/tabs.tsx";
+const tabsSource = withoutComments(readFileSync(tabsFile, "utf8"));
+const tabsVariantContracts = [
+  {
+    name: "contained",
+    test: /\bcontained\s*:\s*["']ui-tabs__list--contained["']/,
+  },
+  {
+    name: "line",
+    test: /\bline\s*:\s*["']ui-tabs__list--line["']/,
+  },
+];
+for (const contract of tabsVariantContracts) {
+  if (contract.test.test(tabsSource)) continue;
+  report(
+    tabsFile,
+    1,
+    "tabs-formal-variants",
+    contract.name,
+    "Supported Tabs must retain formal contained and line variant mappings",
+  );
+}
+
+const tabsIndicators = [...tabsSource.matchAll(/<TabsPrimitive\.Indicator\b/g)];
+const lineOwnsIndicator =
+  /\{\s*variant\s*===\s*["']line["']\s*(?:&&|\?)\s*\(?\s*<TabsPrimitive\.Indicator\b/.test(
+    tabsSource,
+  );
+if (tabsIndicators.length !== 1 || !lineOwnsIndicator) {
+  report(
+    tabsFile,
+    tabsIndicators[0] ? lineAt(tabsSource, tabsIndicators[0].index) : 1,
+    "tabs-line-indicator",
+    `${tabsIndicators.length} indicator${tabsIndicators.length === 1 ? "" : "s"}`,
+    "render one Tabs indicator, directly guarded by variant === 'line'; Contained tabs have no hidden indicator work",
+  );
+}
+
+const uiControlsSource = withoutComments(uiControlsCss);
+const tabsIndicatorRules = [...uiControlsSource.matchAll(/([^{}]+)\{([^{}]*)\}/g)].filter(
+  (match) => match[1].includes(".ui-tabs__indicator"),
+);
+const hasNeutralLineIndicator = tabsIndicatorRules.some((match) =>
+  /background(?:-color)?\s*:\s*var\(\s*--border-primary-solid\s*\)\s*;/.test(match[2]),
+);
+if (!hasNeutralLineIndicator) {
+  const indicatorIndex = uiControlsSource.indexOf(".ui-tabs__indicator");
+  report(
+    "src/styles/ui-controls.css",
+    indicatorIndex >= 0 ? lineAt(uiControlsSource, indicatorIndex) : 1,
+    "tabs-neutral-indicator",
+    ".ui-tabs__indicator",
+    "the Line indicator uses the neutral --border-primary-solid semantic role",
+  );
+}
+
+const styleGuideFile = "src/pages/style-guide.astro";
+const styleGuideSource = withoutComments(readFileSync(styleGuideFile, "utf8"));
+const tabsSpecimenImport = styleGuideSource.match(
+  /import\s+([A-Za-z_$][\w$]*)\s+from\s+["']@\/components\/TabsSpecimen(?:\.tsx)?["']\s*;?/,
+);
+const importedTabsSpecimen = tabsSpecimenImport?.[1];
+const tabsSection = styleGuideSource.match(
+  /<section\b[^>]*class=["'][^"']*\bstyle-guide-topic\b[^"']*["'][^>]*aria-labelledby=["']tabs["'][^>]*>[\s\S]*?<\/section>/,
+)?.[0];
+const usesTabsSpecimen = importedTabsSpecimen
+  ? new RegExp(`<${importedTabsSpecimen}\\b`).test(tabsSection ?? "")
+  : false;
+const hasTabsHeading = /<h3\b[^>]*id=["']tabs["'][^>]*>\s*Tabs\s*<\/h3>/.test(
+  tabsSection ?? "",
+);
+if (!tabsSpecimenImport || !usesTabsSpecimen || !hasTabsHeading) {
+  report(
+    styleGuideFile,
+    1,
+    "tabs-supported-specimen",
+    "Tabs section / TabsSpecimen",
+    "the style guide renders TabsSpecimen as a normal peer section beside Actions and Tables",
+  );
+}
+
+const tabsTestFile = "tests/tabs.spec.ts";
+if (!existsSync(tabsTestFile)) {
+  report(
+    tabsTestFile,
+    1,
+    "tabs-behaviour-evidence",
+    "missing file",
+    "Supported Tabs require the focused Playwright behaviour suite at tests/tabs.spec.ts",
+  );
+}
+
 const buttonStateCssContracts = [
   {
     file: "src/styles/global.css",
     source: globalCss,
-    test: /\.btn--primary:active\s*\{[\s\S]*?--lift-surface-on:\s*var\(--button-primary-background-active\)/,
+    test: /\.btn--primary:active\s*\{[\s\S]*?--lift-text-on:\s*var\(--button-primary-foreground-active\)[\s\S]*?--lift-surface-on:\s*var\(--button-primary-background-active\)/,
     found: ".btn--primary:active",
   },
   {
@@ -435,7 +552,7 @@ const buttonStateCssContracts = [
   {
     file: "src/styles/ui-controls.css",
     source: uiControlsCss,
-    test: /\.ui-button--primary:active:not\(:disabled\):not\(\[data-disabled\]\)\s*\{[\s\S]*?background:\s*var\(--button-primary-background-active\)/,
+    test: /\.ui-button--primary:active:not\(:disabled\):not\(\[data-disabled\]\)\s*\{[\s\S]*?background:\s*var\(--button-primary-background-active\)[\s\S]*?color:\s*var\(--button-primary-foreground-active\)/,
     found: ".ui-button--primary:active",
   },
   {
@@ -473,7 +590,7 @@ for (const file of FILES.filter((candidate) => !candidate.startsWith("src/compon
       lineAt(source, match.index),
       "base-ui-boundary",
       match[1],
-      "import Base UI only inside src/components/ui; experiments and demo recipes use the local wrappers",
+      "import Base UI only inside src/components/ui; experiments use the local wrappers",
     );
   }
 }
@@ -481,10 +598,7 @@ for (const file of FILES.filter((candidate) => !candidate.startsWith("src/compon
 /* Shared component visuals have one owner. Experiment-local styles may lay
    components out through their own wrapper, but cannot reach into `.ui-*`
    selectors to change a primitive's colours, type or interaction states. */
-const SHARED_UI_STYLE_OWNERS = new Set([
-  "src/styles/ui-controls.css",
-  "src/styles/demo-recipes.css",
-]);
+const SHARED_UI_STYLE_OWNERS = new Set(["src/styles/ui-controls.css"]);
 for (const file of FILES.filter(
   (candidate) => candidate.endsWith(".css") && !SHARED_UI_STYLE_OWNERS.has(candidate),
 )) {
@@ -497,7 +611,7 @@ for (const file of FILES.filter(
       index + 1,
       "shared-ui-style-owner",
       match[0],
-      "shared `.ui-*` selectors are styled only in the central primitive or recipe stylesheets",
+      "shared `.ui-*` selectors are styled only in the central primitive stylesheet",
     );
   });
 }
@@ -611,6 +725,7 @@ const neutralButtonRoles = [
   "--button-primary-background-hover",
   "--button-primary-background-active",
   "--button-primary-foreground",
+  "--button-primary-foreground-active",
   "--button-secondary-background-hover",
   "--button-secondary-background-active",
   "--button-secondary-foreground",
@@ -647,8 +762,11 @@ const buttonContrastContracts = [
     backgrounds: [
       "--button-primary-background",
       "--button-primary-background-hover",
-      "--button-primary-background-active",
     ],
+  },
+  {
+    foreground: "--button-primary-foreground-active",
+    backgrounds: ["--button-primary-background-active"],
   },
   {
     foreground: "--button-secondary-foreground",

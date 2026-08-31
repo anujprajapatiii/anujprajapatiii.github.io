@@ -42,7 +42,7 @@
 @import "shadcn/tailwind.css";
 @import "./themes/blue.css";
 @import "./themes/sage.css";
-@import "./demo-controls.css";
+@import "./ui-controls.css";
 
 /*
   KMR Apparat — Kimera. The purchased Web License permits the original font
@@ -337,8 +337,9 @@
        authored content identity; they do not recolour action hierarchy. */
     --button-primary-background: var(--neutral-500);
     --button-primary-background-hover: var(--neutral-700);
-    --button-primary-background-active: var(--neutral-black);
+    --button-primary-background-active: var(--neutral-100);
     --button-primary-foreground: var(--neutral-100);
+    --button-primary-foreground-active: var(--neutral-800);
     --button-secondary-background-hover: var(--neutral-100);
     --button-secondary-background-active: var(--neutral-200);
     --button-secondary-foreground: var(--neutral-600);
@@ -490,9 +491,10 @@
 
     /* Dark appearance remaps the same neutral button hierarchy. */
     --button-primary-background: var(--neutral-300);
-    --button-primary-background-hover: var(--neutral-200);
+    --button-primary-background-hover: var(--neutral-325);
     --button-primary-background-active: var(--neutral-white);
     --button-primary-foreground: var(--neutral-800);
+    --button-primary-foreground-active: var(--neutral-800);
     --button-secondary-background-hover: var(--neutral-700);
     --button-secondary-background-active: var(--neutral-900);
     --button-secondary-foreground: var(--neutral-200);
@@ -699,7 +701,6 @@
     --control-switch-thumb: var(--spacing-sm);
     --control-switch-offset: 0.125rem;
     --control-tooltip-max-width: 18rem;
-    --demo-step-detail-min-height: 7rem;
 
     /* Purposeful radii: modest controls, genuinely round geometry, and
        physical device silhouettes. A panel or card gets none by default. */
@@ -2270,8 +2271,8 @@
   --lift-surface-on: var(--button-secondary-background-active);
 }
 
-/* Primary uses one neutral tonal ladder. The label holds still while the
-   surface moves from rest to hover to a distinct pressed state. */
+/* Primary darkens on hover, then flips to a light pressed surface. The
+   pressed foreground changes with it so the label keeps its contrast. */
 .btn--primary {
   --lift-text: var(--button-primary-foreground);
   --lift-text-on: var(--button-primary-foreground);
@@ -2285,6 +2286,7 @@
   --lift-rule-on: var(--button-primary-background);
 }
 .btn--primary:active {
+  --lift-text-on: var(--button-primary-foreground-active);
   --lift-surface-on: var(--button-primary-background-active);
   --lift-rule-on: var(--button-primary-background-active);
 }

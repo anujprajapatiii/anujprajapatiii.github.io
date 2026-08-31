@@ -5,10 +5,9 @@ promotion remain gated by real experiment needs.
 
 ## Purpose
 
-This system gives native experiments a small, reliable interface kit for
-control panels, guided explainers, toolbars and live outputs. It should make a
-new experiment quicker to build without making every experiment look or
-behave the same.
+This system gives native experiments a small, reliable kit of accessible
+interaction primitives. It should make a new experiment quicker to build
+without imposing a shared panel or page composition.
 
 The intended experience is calm, direct and curious. Controls should feel
 immediate and physical, but the styling stays consistent with the portfolio:
@@ -17,13 +16,11 @@ chrome.
 
 ## Working Model
 
-For day-to-day design work, remember six things:
+For day-to-day design work, remember four things:
 
 - **Tokens are the materials:** colour, type, space, radius and motion.
 - **Primitives are the parts:** button, switch, segmented control and slider.
 - **Fields arrange the parts:** label, control and optional explanation.
-- **`DemoPanel` teaches:** use it for a guided sequence.
-- **`DemoInspector` adjusts:** use it for settings that stay available.
 - **The experiment owns the idea:** its state, behaviour and visual character
   remain local.
 
@@ -49,8 +46,7 @@ higher layers.
 | --- | --- | --- | --- |
 | Foundations | Semantic colour, type, space, radius, size and motion tokens | Component markup or experiment identity | `src/styles/global.css`, `src/styles/themes/` |
 | UI primitives | Semantics, keyboard/pointer behaviour, focus, disabled and validation states | Experiment state or page layout | `src/components/ui/` |
-| Control anatomy | Label, description, message, units and field grouping | A complete panel or domain-specific copy | `src/components/ui/` |
-| Demo recipes | Stage/panel layout, control sections, guided steps, toolbar and output regions | Domain state, calculations or timers | `src/components/demo/` |
+| Control anatomy | Label, description, message, units and field grouping | Page composition or domain-specific copy | `src/components/ui/` |
 | Experiment | Domain state, data, simulation, timing and authored visual identity | Reimplementing shared control behaviour | Experiment component and local stylesheet |
 
 State flows from the experiment into controlled primitives. Events flow back
@@ -77,25 +73,20 @@ Promotion happens after live use exposes the right API.
 | --- | --- | --- |
 | `Button`, `IconButton` | Supported | Previously validated in Interaction Anatomy; this accessibility-critical action primitive has a deliberately small API and a shared `data-icon` contract. |
 | `Switch` | Supported | Previously validated in Interaction Anatomy; keep the accessible toggle for immediate boolean settings. |
-| `SegmentedControl` | Candidate | Previously tested in Nutrition Labels and retained in the inspector specimen; validate it with the next real mode switch. |
-| `Tabs` | Candidate | Wrapper exists but has no live adopter. Keep only after its first real content-view use. |
+| `SegmentedControl` | Candidate | Previously tested in Nutrition Labels; validate it with the next real mode switch. |
+| `Tabs` | Supported | Promoted through the behaviourally-complex exception: the formal style-guide specimen and browser suite protect Line, Contained, direction, collection, keyboard and overflow behaviour before production adoption. |
 | `Slider` | Candidate | Wrapper exists but has no live adopter. Prove with a continuous-value experiment. |
 | `Tooltip` / `Hint` | Candidate | Provider exists, but the content wrapper has no live adopter. Overlay placement remains owned by Base UI and hints stay supplemental. |
-| `DemoShell`, `DemoStage` | Supported | The responsive two-region behaviour was validated in Interaction Anatomy and remains documented in the style guide. |
-| `DemoPanel` family | Supported | The guided interaction was validated in Interaction Anatomy and remains documented in the style guide; reserve it for guided explanation. |
-| `Field`, `FieldLabel` | Supported | The accessibility-critical label/control relationship was validated through `DemoSetting` in Interaction Anatomy. |
-| Remaining field anatomy | Candidate | `FieldGroup`, `FieldContent` and `FieldDescription` are shown in the inspector specimen; fieldset and error APIs remain unproven. |
-| `DemoInspector` | Candidate | Implemented and documented in the style guide; keep its API flexible until a real experiment adopts it. |
+| `Field`, `FieldLabel` | Supported | The accessibility-critical label/control relationship was validated in Interaction Anatomy. |
+| Remaining field anatomy | Candidate | `FieldGroup`, `FieldContent` and `FieldDescription` exist, but fieldset and error APIs remain unproven in live use. |
 
 ### Lean foundation implemented
 
-- Primitive and recipe styles have separate owners behind the existing
-  compatibility import.
+- Shared UI primitive styles have one owner in `src/styles/ui-controls.css`.
 - The field family provides shared label, description, grouping, disabled and
   invalid anatomy without introducing a form framework.
-- `DemoInspector` provides a child-composed control panel next to the existing
-  guided `DemoPanel`.
-- `/style-guide` shows both recipes and labels the inspector Candidate.
+- `/style-guide` documents supported primitives as ordinary top-level sections,
+  alongside established sections such as Actions and Tables.
 - Convention checks protect the Base UI import boundary and shared `.ui-*`
   style ownership.
 
@@ -125,6 +116,76 @@ Choose the native interaction model before choosing its appearance.
 Controls outside this table start inside the experiment. Promote them only
 after a repeated need or a complex accessibility requirement becomes clear.
 
+### `Tabs`
+
+Tabs are Supported through the behaviourally-complex maturity exception. The
+formal style-guide specimen is the stable proving ground, and the repeatable
+browser suite provides the evidence required for this composite widget before
+production adoption. Keep one local `Tabs` family rather than separate Line
+and Contained implementations so semantics, focus and fallback behaviour
+cannot drift between appearances.
+
+Choose the appearance by panel context:
+
+- **Line** (`variant="line"`) connects a content view to the edge of its
+  panel with a quiet rule and neutral active indicator. It defaults to
+  `layout="content"`, allowing each visible label to take the width it needs.
+- **Contained** (`variant="contained"`) groups a compact set of peer views on
+  one bounded neutral surface. The selected trigger uses a surface shift plus
+  paired light-and-shadow inset borders, with no indicator line. It defaults
+  to `layout="equal"` so short, comparable choices carry equal weight.
+- `layout` is an intentional sizing override, not a third appearance. Use
+  `equal` only when the set is small, labels are similarly short and the
+  available inline size remains comfortable. Use `content` for varied,
+  translated, long or dynamic labels. Omitting it preserves the
+  variant-aware defaults above.
+
+The shared behaviour contract is the same for both appearances:
+
+- Trigger and panel values are stable, unique strings. Every server-rendered
+  set supplies exactly one explicit enabled `defaultValue`, or one enabled
+  controlled `value`; the server cannot infer which registered trigger is
+  enabled. A controlled owner remains responsible when its selected value
+  becomes disabled or disappears. An uncontrolled set may use Base UI's
+  first-enabled fallback. Its `onValueChange` handler must also accept `null`
+  because no fallback exists if a dynamic collection removes every enabled
+  tab; supported call sites keep at least one enabled tab available.
+- Activation is manual by default: horizontal or vertical Arrow keys move
+  focus, Home and End reach the bounds, and Enter or Space selects the focused
+  view. Pointer activation selects immediately. Set `activateOnFocus` only
+  when every panel is already available and changing views has no delay,
+  destructive effect or expensive work.
+- A disabled trigger remains discoverable in the roving-focus sequence and
+  exposes `aria-disabled`, but pointer, Enter and Space cannot activate it.
+  Do not replace that composite-widget behaviour with a native disabled
+  button or remove it from the collection merely to skip focus.
+- Set `orientation` from the visual arrangement and set `dir` on `Tabs` when
+  direction is known. Horizontal Arrow behavior mirrors in RTL; vertical
+  Up/Down behavior does not. A live direction switch preserves selection and
+  causes the Line indicator to remeasure after layout. Call sites do not
+  reverse arrays or patch physical CSS to simulate direction.
+- Inactive panels unmount by default. Use `keepMounted` only when panel-local
+  state, measured layout or persistent DOM is a documented requirement; a
+  hidden mounted panel remains non-interactive.
+
+Tabs scale by preserving the interaction model, not by squeezing labels.
+Labels are visible, one-line panel identities in sentence case; icons may be
+supplemental but icon-only tabs are outside the supported contract. A
+horizontal list stays on one row and scrolls within its own inline region when
+content no longer fits. It never wraps, shrinks its touch targets or makes the
+page scroll sideways. Prefer `content` sizing before labels collide, and let
+keyboard focus expose an off-screen trigger. A vertical set needs enough
+inline room for both the list and its panel.
+
+The formal contract supports Line and Contained appearances, horizontal and
+vertical orientation, LTR and RTL, controlled and uncontrolled values,
+manual and automatic activation, disabled items, dynamic collections,
+optional mounted panels, and single-axis overflow. It does not cover route or
+URL navigation, closable or reorderable tabs, nested tabsets, icon-only tabs,
+asynchronously unavailable panels, experiment-local recolouring, or a third
+visual variant. Those needs require a separate design decision rather than
+more props on this primitive.
+
 ## Shared Control Anatomy
 
 Every form-like control composes from the same anatomy:
@@ -134,7 +195,7 @@ Every form-like control composes from the same anatomy:
 3. `FieldDescription` explains consequences or units only when necessary.
 4. The primitive owns the input behaviour.
 5. `FieldError` reports validation; connect its `id` to the control with
-   `aria-describedby`. Non-error output belongs in `DemoOutput`.
+   `aria-describedby`. Non-error output remains local to the experiment.
 
 Use `FieldGroup` to group related fields and `fieldset`/`legend` semantics for
 a true set of choices. Required, invalid, read-only and disabled are distinct
@@ -143,49 +204,6 @@ states and must remain distinct visually and semantically.
 Labels describe the setting, not the widget: “Show highlight,” not “Toggle.”
 Place units next to the value they qualify. Do not put essential instructions
 only in placeholders or tooltips.
-
-## Demo Recipes
-
-Recipes are composable structure, not configuration objects that render an
-entire interface from a schema.
-
-### `DemoShell` and `DemoStage`
-
-Keep the stage and controls in one responsive frame. The stage receives the
-largest stable area and contains the experiment object. The default reading
-order is stage first, controls second; reverse it only when the control is the
-primary learning object and document that decision.
-
-### `DemoPanel`
-
-Use the existing guided panel when the visitor is learning an interface one
-part at a time. It owns the heading, progress, step list, explanation, one or
-two contextual settings and previous/next actions. It is not a general
-control panel.
-
-### `DemoInspector` (planned)
-
-Use for persistent controls that manipulate the stage. Compose it from:
-
-- `DemoInspectorHeader`: title and optional short description;
-- `DemoControlSection`: labelled group of related fields;
-- field anatomy and UI primitives;
-- `DemoInspectorFooter`: optional reset or primary action;
-- `DemoAdvanced`: optional disclosure for secondary or diagnostic controls.
-
-The inspector should accept children rather than a control schema. The
-experiment remains responsible for values, callbacks, validation and reset
-logic.
-
-### Optional recipes
-
-- `DemoToolbar`: a small set of immediate stage actions. Prefer labelled
-  buttons; icon-only actions require an accessible label and hint.
-- `DemoOutput`: a labelled result, measurement or short status region. Use a
-  polite live region only when an update would otherwise be missed.
-- `DemoDiagnostics`: event history, raw values or playback controls behind an
-  explicit disclosure. Never visible by default without a visitor-facing
-  reason.
 
 ## Visual Contract
 
@@ -227,7 +245,7 @@ Every applicable primitive documents and tests:
 Hover is an enhancement, never the only signal. Selected, invalid and status
 states cannot rely on colour alone.
 
-For actions, use one hierarchy across recipes:
+For actions, use one hierarchy across the site:
 
 - primary advances or completes the action a region is for;
 - secondary supports that action without competing;
@@ -237,7 +255,9 @@ For actions, use one hierarchy across recipes:
 
 Button rest, hover and active colours come from the neutral `--button-*`
 component roles. Experiment-local CSS must not recolour them, and authored page
-palettes do not remap them.
+palettes do not remap them. Primary hover moves to a slightly darker surface;
+pressed/active flips to the light surface. Text contrast follows that surface
+change. Button labels do not append decorative arrows.
 
 ### Customization boundary
 
@@ -247,8 +267,8 @@ palettes do not remap them.
 - If two experiments need a new shared appearance, add a named variant to the
   shared component. If only one experiment needs it, build a domain-local
   control without a shared `.ui-*` class.
-- Base UI imports are allowed only inside `src/components/ui/`. Demo recipes
-  and experiments consume the local wrappers.
+- Base UI imports are allowed only inside `src/components/ui/`. Experiments
+  consume the local wrappers.
 - Use the configured Lucide icon set. Icons inside controls follow the
   `data-icon` contract so sizing belongs to the control, not every call site.
 - Public links presented as actions use `ActionLink.astro`; React commands use
@@ -288,8 +308,8 @@ complete:
   rapid drag values continuously.
 - The interface reflows at 320 CSS pixels and 200% zoom without two-axis
   scrolling, clipped controls or a trapped nested scroll area.
-- The stage remains usable with keyboard, touch and coarse pointer input; it
-  does not depend on hover.
+- The experiment remains usable with keyboard, touch and coarse pointer input;
+  it does not depend on hover.
 - Layout and icon direction remain correct when an experiment is tested in
   right-to-left direction, even if the portfolio is not localized yet.
 
@@ -298,28 +318,28 @@ complete:
 - Let content and control minimum widths determine breakpoints; do not target
   named devices.
 - Preserve document reading order. CSS may change columns, not meaning.
-- On narrow screens, stack stage then panel and let the page scroll. Avoid a
-  fixed-height control panel with its own scroll unless the experiment truly
-  requires it.
-- Sticky controls must not obscure the stage, keyboard focus or the browser's
-  own interface.
+- On narrow screens, preserve the authored reading order and let the page
+  scroll. Avoid fixed-height nested control regions unless the experiment
+  truly requires them.
+- Sticky controls must not obscure experiment content, keyboard focus or the
+  browser's own interface.
 - A continuous control keeps enough inline room for its label, value and
   thumb. Move the value to a new row before shrinking the hit target.
 
 ## Documentation Workbench
 
 `/style-guide` is the in-product source of truth for the implemented system.
-Expand it in three layers:
+Expand it in two layers:
 
 1. **Primitive matrix:** variants and meaningful states in light/dark and
    relevant page palettes.
 2. **Control anatomy:** label, description, units, required, invalid,
    read-only and disabled examples.
-3. **Recipes:** one guided panel and one control-heavy inspector at desktop
-   and narrow widths.
 
-Each specimen names the component's maturity and links to one live adopter.
-Do not document a planned API as if it is shipped.
+Actions, Tables and Tabs are ordinary top-level sections rather than content
+nested inside a special panel specimen. Each specimen names the component's
+maturity and points to a live adopter when one exists. Do not document a
+planned API as if it is shipped.
 
 ## Governance and Delivery
 

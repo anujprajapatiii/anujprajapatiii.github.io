@@ -43,6 +43,31 @@ function validateFeaturedOrder(
   }
 }
 
+function validateExperiment(
+  data: {
+    featured: boolean;
+    featuredOrder?: number;
+    embedUrl?: string;
+    media: { hero?: string };
+  },
+  context: z.RefinementCtx,
+) {
+  validateFeaturedOrder(data, context);
+
+  const heroSources = [
+    data.embedUrl,
+    data.media.hero,
+  ].filter(Boolean);
+
+  if (heroSources.length > 1) {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["embedUrl"],
+      message: "Choose only one of embedUrl or media.hero.",
+    });
+  }
+}
+
 const projectSchema = z
   .object({
     ...baseCaseStudyShape,
@@ -70,7 +95,7 @@ const experimentSchema = z
     // renders: .mp4/.webm/.mov become <video>, anything else an <img>.
     previews: z.array(z.string()).max(3).default([]),
   })
-  .superRefine(validateFeaturedOrder);
+  .superRefine(validateExperiment);
 
 const projects = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/projects" }),

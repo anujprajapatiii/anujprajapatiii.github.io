@@ -9,6 +9,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "node scripts/check-conventions.mjs",
+    "test:tabs": "playwright test tests/tabs.spec.ts --project=chromium",
+    "test:tabs:headed": "playwright test tests/tabs.spec.ts --project=chromium --headed",
     "sync:design-bundle": "node scripts/sync-design-bundle.mjs"
   },
   "dependencies": {
@@ -27,5 +29,8 @@
     "shadcn": "^4.0.0",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1"
   }
 }

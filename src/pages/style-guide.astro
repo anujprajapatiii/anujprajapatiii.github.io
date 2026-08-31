@@ -2,10 +2,9 @@
 import PageLayout from "@/layouts/PageLayout.astro";
 import ActionLink from "@/components/ActionLink.astro";
 import DataTable from "@/components/DataTable.astro";
-import DemoInspectorSpecimen from "@/components/DemoInspectorSpecimen";
-import DemoPrimitivesSpecimen from "@/components/DemoPrimitivesSpecimen";
 import OnThisPage from "@/components/OnThisPage.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
+import TabsSpecimen from "@/components/TabsSpecimen";
 import SectionHeading from "@/components/SectionHeading.astro";
 import Cluster from "@/components/primitives/Cluster.astro";
 import Container from "@/components/primitives/Container.astro";
@@ -412,11 +411,9 @@ import "@/components/style-guide/style-guide.css";
                       <Cluster gap="sm">
                         <ActionLink href="#actions" variant="primary">
                           Primary action
-                          <span aria-hidden="true">&rarr;</span>
                         </ActionLink>
                         <ActionLink href="#actions">
                           Secondary action
-                          <span aria-hidden="true">&rarr;</span>
                         </ActionLink>
                         <ActionLink href="#actions" variant="link">Inline action</ActionLink>
                       </Cluster>
@@ -524,51 +521,17 @@ import "@/components/style-guide/style-guide.css";
                     </Stack>
                   </section>
 
-                  <section class="style-guide-topic" aria-labelledby="experiment-interfaces">
+                  <section class="style-guide-topic" aria-labelledby="tabs">
                     <Stack gap="md">
                       <header class="style-guide-topic__header">
-                        <h3 id="experiment-interfaces" class="text-heading">Experiment interfaces</h3>
+                        <h3 id="tabs" class="text-heading">Tabs</h3>
                         <p class="max-w-measure text-muted-foreground">
-                          Two compositions share the same accessible controls.
-                          The guided panel teaches a sequence; the candidate
-                          inspector keeps persistent settings available.
+                          Line and Contained tabs share one accessible behaviour
+                          contract. Use them for a small set of peer content
+                          views shown one at a time.
                         </p>
                       </header>
-
-                      <div class="style-guide-disclosure-list">
-                        <details class="style-guide-disclosure">
-                          <summary>
-                            <span>Guided panel</span>
-                            <span class="style-guide-disclosure__meta">Supported</span>
-                          </summary>
-                          <div class="style-guide-disclosure__body">
-                            <Stack gap="sm">
-                              <p class="max-w-measure text-muted-foreground">
-                                Use when a visitor learns the experiment one
-                                part at a time.
-                              </p>
-                              <DemoPrimitivesSpecimen client:visible />
-                            </Stack>
-                          </div>
-                        </details>
-
-                        <details class="style-guide-disclosure">
-                          <summary>
-                            <span>Control panel</span>
-                            <span class="style-guide-disclosure__meta">Candidate</span>
-                          </summary>
-                          <div class="style-guide-disclosure__body">
-                            <Stack gap="sm">
-                              <p class="max-w-measure text-muted-foreground">
-                                Use for settings that remain available while a
-                                visitor changes the stage. The API stays flexible
-                                until a real experiment adopts it.
-                              </p>
-                              <DemoInspectorSpecimen client:visible />
-                            </Stack>
-                          </div>
-                        </details>
-                      </div>
+                      <TabsSpecimen client:visible />
                     </Stack>
                   </section>
                 </Stack>

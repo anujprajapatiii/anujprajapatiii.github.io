@@ -1,3 +1,0 @@
-/* Compatibility entrypoint. Ownership is split between primitives and recipes. */
-@import "./ui-controls.css";
-@import "./demo-recipes.css";

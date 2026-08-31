@@ -253,21 +253,14 @@ What that means in practice:
 - **Uppercase micro-text uses `.label`**, not a pile of utilities. It is a
   treatment, not a size: uppercase and Medium 500 carry it, it draws its size
   from `--text-body` like everything else, and tracking stays at 0.
-- **Demo interfaces use the shared primitive contract.** Low-level behaviour
-  and states live in `src/components/ui/`; guided stage/panel composition lives
-  in `src/components/demo/`; experiment-specific CSS owns only the artifact and
-  domain visuals. New demos compose those layers instead of hand-rolling tabs,
-  switches, tooltips or action buttons.
+- **Experiment interfaces use the shared primitive contract.** Low-level
+  behaviour and states live in `src/components/ui/`; experiment-specific CSS
+  owns page composition, the artifact and domain visuals. New experiments use
+  those primitives instead of hand-rolling tabs, switches, tooltips or action
+  buttons.
   - Compact desktop controls use `--control-height-compact` (32px), and
     coarse-pointer layouts grow them to `--control-height-touch` (48px).
     Icons use `--control-icon-size` (16px).
-  - Guided panels use one 20px Medium heading. Steps, explanations, settings
-    and actions all use the 14px body role; colour and Regular/Medium weight
-    carry hierarchy instead of extra sizes or fonts.
-  - The default panel contains one ordered task, its current explanation, at
-    most a small number of secondary settings, and wayfinding. Raw state,
-    event logs, code and playback controls require an explicit disclosure and
-    a demonstrated visitor need. Canvas status badges are opt-in, not default.
   - Binary controls use the familiar shadcn/Base UI switch anatomy: a 32×20
     round track, a 16px round thumb and an enlarged 48px coarse-pointer target.
     Off uses `--border-interactive` as a neutral track; on moves the thumb and
@@ -275,10 +268,30 @@ What that means in practice:
     the state, so colour is never the only signal. The thumb stays on
     `--background-primary`, preserving at least 3:1 separation from both tracks
     across default, Blue and Sage palettes in light and dark mode.
+  - Tabs are square, neutral peer-view controls. Neither the list nor its
+    triggers receives a radius, capsule treatment or decorative accent.
+    Line tabs end in `--border-tertiary` and mark selection with the neutral
+    `--border-primary-solid` indicator. Contained tabs use
+    `--background-secondary` for the bounded list and
+    `--background-elevated` for the selected trigger, plus paired inset borders
+    that place the shared light edge against the shared shadow edge. They have
+    no indicator line. Primary/secondary text, the surface shift and that
+    light-and-shadow boundary carry selection across appearance modes;
+    experiment CSS does not recolour either variant.
+    - Line defaults to content-width triggers; Contained defaults to equal
+      triggers. An explicit layout override changes sizing only, never colour,
+      selection treatment or behaviour.
+    - Labels name the panel in visible, concise, sentence-case text and stay on
+      one line. Icons are supplemental. Use content sizing for varied, long,
+      translated or dynamic labels rather than truncating their distinguishing
+      words; equal sizing is for a small set of similarly short labels.
+    - A horizontal list never wraps. When it no longer fits, it scrolls on its
+      own inline axis, keeps the page width stable and preserves full targets.
+      A focused off-screen trigger must become visible. Do not reduce type,
+      touch size or inter-trigger space to force every label into one viewport.
   - Rest, hover, press, selected, focus and disabled states use semantic
-    surface/text roles. Guided-step selection gets a quiet neutral surface,
-    primary text and `aria-current`; it does not add an accent rule.
-  - Demo motion uses `--motion-feedback` for immediate response and
+    surface/text roles.
+  - Experiment motion uses `--motion-feedback` for immediate response and
     `--motion-settle` for restrained state settling. Reduced motion removes
     travel; reduced transparency returns materials to solid semantic surfaces.
   - Page palettes and dark mode work by remapping semantic roles. Shared
@@ -322,8 +335,9 @@ What that means in practice:
   two runtimes remain separate, but share the same neutral component roles and
   state vocabulary.
   - `primary` — the action a region is *for*. Use one per action group; a
-    simulated device and its surrounding guided panel are separate regions.
-    Its surface follows a real three-step neutral ladder: rest, hover, pressed.
+    page region defines its own action group. Its surface follows a neutral
+    three-step state sequence: rest, slightly darker hover, then a light/white
+    pressed surface with the foreground adjusted for contrast.
   - `secondary` — the bordered default for navigation and supporting actions.
     Rest is transparent; hover and pressed use separate neutral surfaces while
     border and text move with them.
@@ -334,6 +348,9 @@ What that means in practice:
   - **Do not hand-author `.btn` at a call site.** Pass `variant` to
     `ActionLink`; the component writes both classes and the checker rejects raw
     CTA class lists elsewhere.
+  - **Do not append decorative arrows to button labels.** Use plain action copy.
+    An icon belongs only when it conveys information the words do not, and
+    must use the shared icon contract.
   - The base carries `border: 1px solid transparent` so a filled button and an
     outlined one are the same height. Without it the primary sits 2px shorter,
     which is only visible once two variants stand side by side — by which time
@@ -463,13 +480,11 @@ What that means in practice:
     13.26:1 dark — the rule above is satisfied, just from a quieter start.
     Resting muted is what makes the lift readable: if every row already sat at
     full contrast, hover would have nothing left to add.
-  - **Measured on the neutral buttons**, rest → hover → pressed: primary is
-    12.05 → 15.41 → 19.58 light and 6.95 → 12.55 → 18.13 dark. Secondary is
-    13.47 → 17.87 → 10.65 light and 12.55 → 15.41 → 13.26 dark; its resting
-    boundary remains 4.08:1 / 3.89:1 and strengthens in interactive states.
-    Link is 13.47 → 16.78 light and 12.55 → 16.90 dark. Label readability and
-    state visibility are reviewed separately; a high text-contrast number does
-    not prove that two surfaces look different.
+  - **Measure neutral button states separately.** Primary hover is the darker
+    intermediate surface and pressed flips to the light/white surface;
+    secondary and link states retain their own neutral ladders. Label
+    readability and state visibility are reviewed separately; a high
+    text-contrast number does not prove that two surfaces look different.
   - **`--background-hover` brightens in both themes**, to white on light and
     neutral-700 on dark, rather than changing direction between modes. It was
     `neutral-200`, which laid a heavy grey band under a hovered row; one step

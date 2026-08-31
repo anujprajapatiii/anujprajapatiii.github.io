@@ -228,8 +228,9 @@
        authored content identity; they do not recolour action hierarchy. */
     --button-primary-background: var(--neutral-500);
     --button-primary-background-hover: var(--neutral-700);
-    --button-primary-background-active: var(--neutral-black);
+    --button-primary-background-active: var(--neutral-100);
     --button-primary-foreground: var(--neutral-100);
+    --button-primary-foreground-active: var(--neutral-800);
     --button-secondary-background-hover: var(--neutral-100);
     --button-secondary-background-active: var(--neutral-200);
     --button-secondary-foreground: var(--neutral-600);
@@ -381,9 +382,10 @@
 
     /* Dark appearance remaps the same neutral button hierarchy. */
     --button-primary-background: var(--neutral-300);
-    --button-primary-background-hover: var(--neutral-200);
+    --button-primary-background-hover: var(--neutral-325);
     --button-primary-background-active: var(--neutral-white);
     --button-primary-foreground: var(--neutral-800);
+    --button-primary-foreground-active: var(--neutral-800);
     --button-secondary-background-hover: var(--neutral-700);
     --button-secondary-background-active: var(--neutral-900);
     --button-secondary-foreground: var(--neutral-200);

@@ -30,13 +30,8 @@
 - Experiments may name an approved coded hero treatment under `heroOverlay`.
   Keep the allow-list in the content schema and render the component in the
   shared Play route; never bake reusable interface UI into the image asset.
-- A stateful experiment that should inherit the portfolio system may name an
-  approved component under `interactiveDemo`. Keep the allow-list in the
-  content schema and render it at full content width in the shared Play route.
-  The component owns only its interaction state; the content entry still owns
-  metadata and prose, and the route still owns the page shell. Use semantic
-  tokens and a focused React island rather than an iframe when visual and
-  appearance-mode inheritance are part of the experiment.
+- Choose one case-study hero mode: `media.hero` or `embedUrl`. A thumbnail may
+  accompany either.
 
 ## Work Types
 

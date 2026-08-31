@@ -112,6 +112,7 @@
 .ui-button--primary:active:not(:disabled):not([data-disabled]) {
   border-color: var(--button-primary-background-active);
   background: var(--button-primary-background-active);
+  color: var(--button-primary-foreground-active);
 }
 
 .ui-button--secondary:active:not(:disabled):not([data-disabled]) {
@@ -227,55 +228,125 @@ label.ui-field__label {
   min-width: 0;
 }
 
+.ui-tabs[data-orientation="vertical"] {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  align-items: start;
+  gap: var(--spacing-sm);
+}
+
 .ui-tabs__list {
   position: relative;
   display: flex;
   min-width: 0;
   gap: var(--spacing-3xs);
-  padding: var(--spacing-3xs);
   overflow-x: auto;
-  background: var(--background-secondary);
-  border-radius: var(--radius-control);
+  overscroll-behavior-inline: contain;
+  scroll-padding-inline: var(--spacing-xs);
+  scroll-snap-type: inline proximity;
   scrollbar-width: none;
+}
+
+.ui-tabs__list::-webkit-scrollbar {
+  display: none;
+}
+
+.ui-tabs__list--contained {
+  padding: var(--spacing-3xs);
+  background: var(--background-secondary);
+}
+
+.ui-tabs__list--line {
+  padding-block: var(--spacing-3xs);
+  border-block-end: var(--control-indicator-size) solid var(--border-tertiary);
+}
+
+.ui-tabs[data-orientation="vertical"] .ui-tabs__list {
+  flex-direction: column;
+  overflow-x: visible;
+  overflow-y: auto;
+  scroll-snap-type: block proximity;
+}
+
+.ui-tabs[data-orientation="vertical"] .ui-tabs__list--line {
+  border-block-end: 0;
+  border-inline-end: var(--control-indicator-size) solid var(--border-tertiary);
 }
 
 .ui-tabs__trigger {
   position: relative;
   z-index: 1;
+  display: inline-flex;
   min-width: max-content;
   min-height: var(--control-height-compact);
   flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2xs);
   padding-inline: var(--spacing-xs);
   border: 0;
-  border-radius: var(--radius-control);
   background: transparent;
   color: var(--text-secondary);
   font-size: var(--text-body);
   line-height: var(--text-body--line-height);
+  font-weight: var(--text-heading--font-weight);
+  scroll-snap-align: start;
+  white-space: nowrap;
   transition:
     color var(--motion-feedback) var(--ease-feedback),
     background-color var(--motion-feedback) var(--ease-feedback);
 }
 
+.ui-tabs__list--content .ui-tabs__trigger {
+  flex: none;
+}
+
+.ui-tabs__list--equal .ui-tabs__trigger {
+  min-width: 0;
+}
+
+.ui-tabs[data-orientation="vertical"] .ui-tabs__trigger {
+  width: 100%;
+  flex: none;
+  justify-content: flex-start;
+  text-align: start;
+}
+
+.ui-tabs__trigger:focus-visible {
+  outline-offset: calc(var(--control-indicator-size) * -2);
+}
+
 @media (hover: hover) {
-  .ui-tabs__trigger:hover {
-    background: var(--background-hover);
+  .ui-tabs__trigger:hover:not(:disabled):not([data-disabled]) {
     color: var(--text-primary);
+  }
+
+  .ui-tabs__list--contained .ui-tabs__trigger:hover:not(:disabled):not([data-disabled]) {
+    background: var(--background-hover);
   }
 }
 
 .ui-tabs__trigger[data-active] {
-  background: var(--background-elevated);
   color: var(--text-primary);
 }
 
-.ui-tabs__trigger:active:not(:disabled) {
-  background: var(--background-primary);
+.ui-tabs__list--contained .ui-tabs__trigger[data-active] {
+  background: var(--background-elevated);
+  box-shadow: var(--light-shade-raised);
+}
+
+.ui-tabs__trigger:active:not(:disabled):not([data-disabled]) {
+  color: var(--text-interactive);
   transition-duration: var(--motion-none);
+}
+
+.ui-tabs__list--contained .ui-tabs__trigger:active:not(:disabled):not([data-disabled]) {
+  background: var(--background-primary);
+  box-shadow: var(--light-shade-pressed);
 }
 
 .ui-tabs__trigger:disabled,
 .ui-tabs__trigger[data-disabled] {
+  background: transparent;
   color: var(--text-disabled);
   cursor: not-allowed;
 }
@@ -283,25 +354,36 @@ label.ui-field__label {
 .ui-tabs__indicator {
   position: absolute;
   z-index: 2;
+  background: var(--border-primary-solid);
+  pointer-events: none;
+}
+
+.ui-tabs[data-orientation="horizontal"] .ui-tabs__indicator {
   inset-block-end: 0;
-  inset-inline-start: 0;
+  /* Base UI exposes physical offsets. Matching that coordinate space lets one
+     rule position the indicator after either an LTR or RTL measurement. */
+  left: 0;
   width: var(--active-tab-width);
   height: var(--control-indicator-size);
-  background: var(--decorative-accent);
-  pointer-events: none;
   transform: translateX(var(--active-tab-left));
   transition:
     width var(--motion-settle) var(--ease-settle),
     transform var(--motion-settle) var(--ease-settle);
 }
 
-:dir(rtl) .ui-tabs__indicator {
-  transform: translateX(calc(var(--active-tab-right) * -1));
+.ui-tabs[data-orientation="vertical"] .ui-tabs__indicator {
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  width: var(--control-indicator-size);
+  height: var(--active-tab-height);
+  transform: translateY(var(--active-tab-top));
+  transition:
+    height var(--motion-settle) var(--ease-settle),
+    transform var(--motion-settle) var(--ease-settle);
 }
 
 .ui-tabs__content {
   min-width: 0;
-  outline: none;
 }
 
 .ui-segmented {
@@ -522,12 +604,17 @@ label.ui-field__label {
   .ui-field[data-orientation="horizontal"] {
     min-height: var(--control-height-touch);
   }
+
+  .ui-tabs__trigger {
+    min-inline-size: var(--control-height-touch);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ui-button,
   .ui-tabs__trigger,
-  .ui-tabs__indicator,
+  .ui-tabs[data-orientation="horizontal"] .ui-tabs__indicator,
+  .ui-tabs[data-orientation="vertical"] .ui-tabs__indicator,
   .ui-segmented__item,
   .ui-switch,
   .ui-switch__thumb,
@@ -542,13 +629,42 @@ label.ui-field__label {
 }
 
 @media (prefers-contrast: more) {
-  .ui-tabs__list,
+  .ui-tabs__list--contained,
   .ui-segmented {
     outline: 1px solid var(--border-primary-solid);
     outline-offset: 0;
   }
 
-  .ui-tabs__indicator {
+  .ui-tabs[data-orientation="horizontal"] .ui-tabs__indicator {
     height: calc(var(--control-indicator-size) * 2);
+  }
+
+  .ui-tabs[data-orientation="vertical"] .ui-tabs__indicator {
+    width: calc(var(--control-indicator-size) * 2);
+  }
+}
+
+@media (forced-colors: active) {
+  .ui-tabs__list--line {
+    border-color: currentColor;
+  }
+
+  .ui-tabs__list--contained {
+    outline: var(--control-indicator-size) solid currentColor;
+    outline-offset: 0;
+  }
+
+  .ui-tabs__indicator {
+    background: currentColor;
+  }
+}
+
+@media (prefers-contrast: more), (forced-colors: active) {
+  .ui-tabs__list--contained .ui-tabs__trigger[data-active]::after {
+    position: absolute;
+    inset: 0;
+    border: var(--control-indicator-size) solid currentColor;
+    content: "";
+    pointer-events: none;
   }
 }
