@@ -102,20 +102,17 @@ test("keeps Option A flush with a 3+3 dot edge grip", async ({ page }) => {
       rowRects[2].top - rowRects[1].bottom,
       gripRect.bottom - rowRects[2].bottom,
     ];
-    const horizontalGaps = [
-      dotRects[0].left - gripRect.left,
-      dotRects[1].left - dotRects[0].right,
-      gripRect.right - dotRects[1].right,
-    ];
+    const columnGap = dotRects[1].left - dotRects[0].right;
+    const rowGap = dotRects[2].top - dotRects[0].bottom;
 
     return {
       bottomGap: trackRect.bottom - indicatorRect.bottom,
+      columnGap,
       dotCount: dots.length,
-      horizontalGapSpread:
-        Math.max(...horizontalGaps) - Math.min(...horizontalGaps),
       gripOpacity: getComputedStyle(grip).opacity,
       indicatorColor: getComputedStyle(indicator).backgroundColor,
       innerEdgeGap: indicatorRect.right - gripRect.right,
+      rowGap,
       thumbBackground: getComputedStyle(thumb).backgroundColor,
       topGap: indicatorRect.top - trackRect.top,
       trackColor: getComputedStyle(track).backgroundColor,
@@ -128,7 +125,7 @@ test("keeps Option A flush with a 3+3 dot edge grip", async ({ page }) => {
   expect(geometry.dotCount).toBe(6);
   expect(geometry.gripOpacity).toBe("0");
   expect(geometry.innerEdgeGap).toBeCloseTo(4, 1);
-  expect(geometry.horizontalGapSpread).toBeLessThanOrEqual(0.1);
+  expect(geometry.columnGap).toBeCloseTo(geometry.rowGap, 1);
   expect(geometry.verticalGapSpread).toBeLessThanOrEqual(0.1);
   expect(geometry.thumbBackground).toBe("rgba(0, 0, 0, 0)");
   expect(geometry.topGap).toBe(0);

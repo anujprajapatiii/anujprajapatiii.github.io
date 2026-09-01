@@ -220,10 +220,11 @@
   inset-block: 0;
   inset-inline-end: calc(50% + var(--spacing-3xs));
   display: grid;
-  width: var(--spacing-xs);
+  width: calc(var(--spacing-grid) + var(--spacing-3xs));
   grid-template-columns: repeat(2, calc(var(--spacing-3xs) / 2));
   grid-template-rows: repeat(3, calc(var(--spacing-3xs) / 2));
-  place-content: space-evenly;
+  place-content: center;
+  gap: var(--spacing-grid);
   opacity: 0;
   transition: opacity var(--motion-feedback) var(--ease-feedback);
 }
