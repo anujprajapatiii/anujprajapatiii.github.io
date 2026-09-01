@@ -130,7 +130,15 @@
 
   function isEditable(target: EventTarget | null) {
     if (!(target instanceof HTMLElement)) return false;
-    return Boolean(target.closest("input, textarea, select, [contenteditable]"));
+    const editable = target.closest("input, textarea, select, [contenteditable]");
+
+    /* Range inputs keep focus after dragging, but letter keys do not edit
+       their value. Keep the global theme shortcut available from sliders. */
+    if (editable instanceof HTMLInputElement && editable.type === "range") {
+      return false;
+    }
+
+    return Boolean(editable);
   }
 
   function onShortcutDown(event: KeyboardEvent) {

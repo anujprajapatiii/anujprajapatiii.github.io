@@ -65,6 +65,32 @@ test("keeps fine precision without making the label noisy", async ({ page }) => 
   await expect(value).toHaveText("81%");
 });
 
+test("keeps the theme shortcut available after using a slider", async ({
+  page,
+}) => {
+  await page.goto("/lab/sliders");
+
+  const slider = page
+    .locator('[data-slider-direction="A"]')
+    .getByRole("slider")
+    .first();
+  const startedDark = await page.evaluate(() =>
+    document.documentElement.classList.contains("dark"),
+  );
+
+  await slider.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(slider).toBeFocused();
+  await page.keyboard.press("l");
+
+  await expect
+    .poll(() =>
+      page.evaluate(() => document.documentElement.classList.contains("dark")),
+    )
+    .toBe(!startedDark);
+  await expect(slider).toBeFocused();
+});
+
 test("keeps Option A flush with a 3+3 dot edge grip", async ({ page }) => {
   await page.goto("/lab/sliders");
 
