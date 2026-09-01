@@ -29,7 +29,7 @@ const DIRECTIONS: SliderDirection[] = [
     name: "Calibrated rule",
     premise:
       "A narrow index moves across fine ticks, making position feel measured.",
-    useCase: "Stepped thresholds",
+    useCase: "Measured adjustments",
     variant: "rule",
   },
   {

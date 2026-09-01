@@ -27,7 +27,7 @@ function ExperimentalSlider({
   max = 125,
   min = 50,
   onValueChange,
-  step = 5,
+  step = 1,
   value,
   variant,
 }: ExperimentalSliderProps) {
