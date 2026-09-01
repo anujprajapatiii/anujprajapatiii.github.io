@@ -111,7 +111,8 @@ test("keeps Option A flush with a 3+3 dot edge grip", async ({ page }) => {
       dotCount: dots.length,
       gripOpacity: getComputedStyle(grip).opacity,
       indicatorColor: getComputedStyle(indicator).backgroundColor,
-      innerEdgeGap: indicatorRect.right - gripRect.right,
+      fillEdgeGap:
+        indicatorRect.right - Math.max(...dotRects.map((dot) => dot.right)),
       rowGap,
       thumbBackground: getComputedStyle(thumb).backgroundColor,
       topGap: indicatorRect.top - trackRect.top,
@@ -124,8 +125,9 @@ test("keeps Option A flush with a 3+3 dot edge grip", async ({ page }) => {
 
   expect(geometry.dotCount).toBe(6);
   expect(geometry.gripOpacity).toBe("0");
-  expect(geometry.innerEdgeGap).toBeCloseTo(4, 1);
+  expect(geometry.fillEdgeGap).toBeCloseTo(8, 1);
   expect(geometry.columnGap).toBeCloseTo(geometry.rowGap, 1);
+  expect(geometry.columnGap).toBeCloseTo(8, 1);
   expect(geometry.verticalGapSpread).toBeLessThanOrEqual(0.1);
   expect(geometry.thumbBackground).toBe("rgba(0, 0, 0, 0)");
   expect(geometry.topGap).toBe(0);

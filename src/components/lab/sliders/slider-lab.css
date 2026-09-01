@@ -217,14 +217,14 @@
 
 .slider-option__grip {
   position: absolute;
-  inset-block: 0;
-  inset-inline-end: calc(50% + var(--spacing-3xs));
+  inset-block: var(--spacing-3xs);
+  inset-inline-end: calc(50% + var(--spacing-2xs));
   display: grid;
-  width: calc(var(--spacing-grid) + var(--spacing-3xs));
+  width: var(--spacing-xs);
   grid-template-columns: repeat(2, calc(var(--spacing-3xs) / 2));
   grid-template-rows: repeat(3, calc(var(--spacing-3xs) / 2));
   place-content: center;
-  gap: var(--spacing-grid);
+  gap: var(--spacing-2xs);
   opacity: 0;
   transition: opacity var(--motion-feedback) var(--ease-feedback);
 }
