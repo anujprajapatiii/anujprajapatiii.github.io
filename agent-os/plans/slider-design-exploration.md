@@ -133,3 +133,6 @@ The recessed channel needs both a surface shift and the shared light/shade edge
 before the thumb reads as a moving part rather than a gap in the track.
 The calibrated ticks should remain visual reference marks and must not force
 coarse keyboard or drag increments.
+The slider keeps decimal precision internally for close pointer tracking while
+presenting a rounded whole-number label. Track presses use the shared settle
+motion, while direct dragging remains immediate.
