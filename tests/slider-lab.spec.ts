@@ -65,7 +65,7 @@ test("keeps fine precision without making the label noisy", async ({ page }) => 
   await expect(value).toHaveText("81%");
 });
 
-test("keeps Option A flush with a one-pixel position edge", async ({ page }) => {
+test("keeps Option A flush with a six-dot edge grip", async ({ page }) => {
   await page.goto("/lab/sliders");
 
   const slider = page
@@ -84,21 +84,29 @@ test("keeps Option A flush with a one-pixel position edge", async ({ page }) => 
       throw new Error("Option A anatomy is incomplete");
     }
 
+    const dots = element.querySelectorAll(".slider-option__grip-dot");
     const surfaceRect = surface.getBoundingClientRect();
     const trackRect = track.getBoundingClientRect();
     const indicatorRect = indicator.getBoundingClientRect();
+    const thumbRect = thumb.getBoundingClientRect();
 
     return {
       bottomGap: trackRect.bottom - indicatorRect.bottom,
+      dotCount: dots.length,
+      edgeOffset: Math.abs(
+        thumbRect.left + thumbRect.width / 2 - indicatorRect.right,
+      ),
       indicatorColor: getComputedStyle(indicator).backgroundColor,
-      thumbWidth: thumb.getBoundingClientRect().width,
+      thumbBackground: getComputedStyle(thumb).backgroundColor,
       topGap: indicatorRect.top - trackRect.top,
       trackColor: getComputedStyle(track).backgroundColor,
       trackInset: trackRect.left - surfaceRect.left,
     };
   });
 
-  expect(geometry.thumbWidth).toBe(1);
+  expect(geometry.dotCount).toBe(6);
+  expect(geometry.edgeOffset).toBeLessThanOrEqual(0.1);
+  expect(geometry.thumbBackground).toBe("rgba(0, 0, 0, 0)");
   expect(geometry.topGap).toBe(0);
   expect(geometry.bottomGap).toBe(0);
   expect(geometry.trackInset).toBe(1);

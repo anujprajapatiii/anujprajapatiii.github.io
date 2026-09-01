@@ -19,6 +19,7 @@ type ExperimentalSliderProps = {
 };
 
 const TICKS = Array.from({ length: 9 }, (_, index) => index);
+const GRIP_DOTS = Array.from({ length: 6 }, (_, index) => index);
 
 function ExperimentalSlider({
   description,
@@ -69,7 +70,15 @@ function ExperimentalSlider({
               aria-valuetext={`${Math.round(value)} percent`}
               className="slider-option__thumb"
               index={0}
-            />
+            >
+              {variant === "block" && (
+                <span className="slider-option__grip" aria-hidden="true">
+                  {GRIP_DOTS.map((dot) => (
+                    <span className="slider-option__grip-dot" key={dot} />
+                  ))}
+                </span>
+              )}
+            </SliderPrimitive.Thumb>
           </SliderPrimitive.Track>
         </SliderPrimitive.Control>
 
