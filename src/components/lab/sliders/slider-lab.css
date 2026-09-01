@@ -250,7 +250,7 @@
   .slider-option--block:not([data-disabled])
     .slider-option__surface:hover
     .slider-option__grip-dot {
-    background: var(--text-interactive);
+    background: var(--text-tertiary);
   }
 }
 
