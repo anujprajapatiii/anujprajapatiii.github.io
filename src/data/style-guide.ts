@@ -15,6 +15,7 @@ export const styleGuideHeadings = [
   { depth: 3, slug: "composition", text: "Composition" },
   { depth: 2, slug: "components", text: "Components" },
   { depth: 3, slug: "actions", text: "Actions" },
+  { depth: 3, slug: "switch", text: "Switch" },
   { depth: 3, slug: "tables", text: "Tables" },
   { depth: 3, slug: "tabs", text: "Tabs" },
   { depth: 2, slug: "reference", text: "Reference" },
@@ -41,7 +42,7 @@ export const styleGuideChapters = [
     index: "03",
     slug: "components",
     title: "Components",
-    description: "Actions, tables, and tabs.",
+    description: "Actions, switches, tables, and tabs.",
   },
   {
     index: "04",
@@ -348,8 +349,9 @@ export const interactionFoundations = [
       { token: "--control-height-compact", value: "32px" },
       { token: "--control-height-touch", value: "48px" },
       { token: "--control-icon-size", value: "16px" },
-      { token: "--control-switch-width / height", value: "32px / 20px" },
-      { token: "--control-switch-thumb", value: "16px" },
+      { token: "--control-switch-width / height", value: "42px / 20px" },
+      { token: "--control-switch-thumb-width / height", value: "22px / 16px" },
+      { token: "--control-switch-inset / travel", value: "2px / 16px" },
     ],
   },
   {

@@ -2,7 +2,7 @@
 
 ## Status
 
-Complete
+Superseded by `switch-system-promotion.md`
 
 ## Context
 

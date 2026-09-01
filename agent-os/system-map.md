@@ -13,7 +13,7 @@ workflows change.
 | Work | Portfolio/case-study section at `/work` | `src/content/projects/`, rendered through `/work` routes |
 | Content queries | Published filtering, recency, type filtering, and homepage curation | `src/lib/content/queries.ts`, `src/lib/content/project-types.ts` |
 | Experiments | Published Play entries with shared detail routes, neutral media fallbacks, and optional live links or embeds | `src/content/play/`, `src/content.config.ts`, `src/pages/play/` |
-| Interface primitives | Accessible shared controls, including Supported Buttons and Tabs; experiments retain their own state and page-specific composition, while Candidate components require live proof | `src/components/ui/`, `src/components/TabsSpecimen.tsx`, `src/styles/ui-controls.css`, `agent-os/conventions/experiment-interfaces.md` |
+| Interface primitives | Accessible shared controls, including Supported Buttons, Switch and Tabs; experiments retain their own state and page-specific composition, while Candidate components require live proof | `src/components/ui/`, `src/components/SwitchSpecimen.tsx`, `src/components/TabsSpecimen.tsx`, `src/styles/ui-controls.css`, `agent-os/conventions/experiment-interfaces.md` |
 | Design tokens | Base color, type, spacing, and container tokens; light/dark appearance modes | `src/styles/global.css` |
 | Page palettes | Authored per-page semantic colour remaps, independent of light/dark mode | `src/data/page-palettes.ts`, `src/styles/themes/`, layout palette props |
 | Theme-aware media | Selects matched light and dark imagery while preserving shared layout and accessibility semantics | `src/components/ThemeImage.astro` |
@@ -61,6 +61,7 @@ and light/dark behavior around that authored content.
 pnpm dev       # local dev server at localhost:4321
 pnpm build     # production build to dist/
 pnpm preview   # preview the production build
+pnpm test:switch # focused Chromium Switch behavior and geometry suite
 pnpm test:tabs # focused Chromium behavior and scalability suite
 ```
 
@@ -74,9 +75,9 @@ survives cleanup and review.
 
 Pull requests into `main` run `.github/workflows/checks.yml`. The workflow
 installs the locked dependencies, runs `pnpm check`, exercises the Supported
-Tabs contract in Chromium, and builds the production site without deploying
-it. Temporary lab routes and rejected alternatives are removed before the pull
-request is ready to merge.
+Switch and Tabs contracts in Chromium, and builds the production site without
+deploying it. Temporary lab routes and rejected alternatives are removed
+before the pull request is ready to merge.
 
 ## Deployment
 
@@ -85,7 +86,8 @@ Pushes to `main` trigger `.github/workflows/deploy.yml`. The workflow uses
 GitHub Pages.
 
 Pull requests do not deploy. They use `.github/workflows/checks.yml` to catch
-convention or production-build failures before merge.
+convention, supported-component behavior, or production-build failures before
+merge.
 
 Before merging changes that affect routes, content schema, or layouts, run
 `pnpm build`. For visual changes, also run `pnpm dev` and check the affected

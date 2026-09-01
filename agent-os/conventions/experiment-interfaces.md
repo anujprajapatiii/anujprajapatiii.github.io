@@ -72,7 +72,7 @@ Promotion happens after live use exposes the right API.
 | Component | Current maturity | Evidence / next action |
 | --- | --- | --- |
 | `Button`, `IconButton` | Supported | Previously validated in Interaction Anatomy; this accessibility-critical action primitive has a deliberately small API and a shared `data-icon` contract. |
-| `Switch` | Supported | Previously validated in Interaction Anatomy; keep the accessible toggle for immediate boolean settings. |
+| `Switch` | Supported | Accessibility-critical primitive with a permanent Style Guide specimen and focused browser coverage for semantics, geometry, themes, direction, motion, and narrow layouts. |
 | `SegmentedControl` | Candidate | Previously tested in Nutrition Labels; validate it with the next real mode switch. |
 | `Tabs` | Supported | Promoted through the behaviourally-complex exception: the formal style-guide specimen and browser suite protect Line, Contained, direction, collection, keyboard and overflow behaviour before production adoption. |
 | `Slider` | Candidate | Wrapper exists but has no live adopter. Prove with a continuous-value experiment. |
@@ -115,6 +115,36 @@ Choose the native interaction model before choosing its appearance.
 
 Controls outside this table start inside the experiment. Promote them only
 after a repeated need or a complex accessibility requirement becomes clear.
+
+### `Switch`
+
+Switch is the Supported control for an immediate boolean setting. Keep one
+local Base UI-backed module so pointer, keyboard, form, focus, checked, and
+disabled behavior remain behind the same small interface.
+
+- The visual contract is one 42×20 square solid rail with a 22×16 borderless
+  thumb, a 2px resting inset on every near edge, and 16px of travel. There are
+  no appearance or size variants.
+- Off uses the persistent neutral `--border-interactive` rail. On uses
+  `--background-alternate`. The thumb uses the elevated surface while off and
+  the primary surface while on. Hover, active, disabled, increased-contrast,
+  forced-colour, and reduced-motion treatments stay in the shared stylesheet.
+- Thumb position is the required non-colour state cue. A nearby visible On/Off
+  value is recommended when settings are scanned in rows, but the programmatic
+  label must still name the setting itself rather than the widget.
+- Use controlled state when the owner needs the value immediately. The Base UI
+  uncontrolled interface remains available for simple local settings. Do not
+  place save semantics inside the Switch; if a change waits for form
+  submission, use Checkbox instead.
+- Logical direction is inherited. In RTL, the unchecked and checked resting
+  edges mirror without callers reversing state or changing the value model.
+- The compact visible control retains a 48×48px effective target on coarse
+  pointers without changing surrounding layout.
+
+The formal contract does not include icons, inner marks, loading state,
+indeterminate state, labels inside the rail, accent-colour variants, or a size
+selector. Those needs require a separate design decision rather than more
+props on this primitive.
 
 ### `Tabs`
 
@@ -336,10 +366,10 @@ Expand it in two layers:
 2. **Control anatomy:** label, description, units, required, invalid,
    read-only and disabled examples.
 
-Actions, Tables and Tabs are ordinary top-level sections rather than content
-nested inside a special panel specimen. Each specimen names the component's
-maturity and points to a live adopter when one exists. Do not document a
-planned API as if it is shipped.
+Actions, Switch, Tables and Tabs are ordinary top-level sections rather than
+content nested inside a special panel specimen. Each specimen names the
+component's maturity and points to a live adopter when one exists. Do not
+document a planned API as if it is shipped.
 
 ## Governance and Delivery
 

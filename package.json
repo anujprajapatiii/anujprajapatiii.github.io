@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "node scripts/check-conventions.mjs",
+    "test:switch": "playwright test tests/switch.spec.ts --project=chromium",
     "test:tabs": "playwright test tests/tabs.spec.ts --project=chromium",
     "test:tabs:headed": "playwright test tests/tabs.spec.ts --project=chromium --headed",
     "sync:design-bundle": "node scripts/sync-design-bundle.mjs"

@@ -4,6 +4,7 @@ import ActionLink from "@/components/ActionLink.astro";
 import DataTable from "@/components/DataTable.astro";
 import OnThisPage from "@/components/OnThisPage.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
+import SwitchSpecimen from "@/components/SwitchSpecimen";
 import TabsSpecimen from "@/components/TabsSpecimen";
 import SectionHeading from "@/components/SectionHeading.astro";
 import Cluster from "@/components/primitives/Cluster.astro";
@@ -472,6 +473,21 @@ import "@/components/style-guide/style-guide.css";
                           </Stack>
                         </div>
                       </details>
+                    </Stack>
+                  </section>
+
+                  <section class="style-guide-topic" aria-labelledby="switch">
+                    <Stack gap="md">
+                      <header class="style-guide-topic__header">
+                        <h3 id="switch" class="text-heading">Switch</h3>
+                        <p class="max-w-measure text-muted-foreground">
+                          Use Switch for an immediate boolean setting. The
+                          supported primitive keeps one compact, neutral
+                          treatment across themes and page palettes.
+                        </p>
+                      </header>
+
+                      <SwitchSpecimen client:visible />
                     </Stack>
                   </section>
 

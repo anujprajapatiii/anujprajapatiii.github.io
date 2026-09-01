@@ -44,8 +44,8 @@ What that means in practice:
 - **Geometry follows function.** Structural cards, images, embeds and code
   blocks stay crisp and square. Controls and physical simulations may use the
   small semantic radius vocabulary when curvature clarifies their behaviour:
-  modest control corners, fully round switches/thumbs and a device radius.
-  Rounding is never a decorative skin applied to an entire page.
+  modest control corners and a device radius. Rounding is never a decorative
+  skin applied to an entire page; the shared Switch is deliberately square.
 - **Space does the grouping.** Rules and separators are a last resort, used
   only where a line genuinely beats space. Tables are the standing exception:
   there the rules *are* the structure, and they are drawn in full.
@@ -261,13 +261,15 @@ What that means in practice:
   - Compact desktop controls use `--control-height-compact` (32px), and
     coarse-pointer layouts grow them to `--control-height-touch` (48px).
     Icons use `--control-icon-size` (16px).
-  - Binary controls use the familiar shadcn/Base UI switch anatomy: a 32×20
-    round track, a 16px round thumb and an enlarged 48px coarse-pointer target.
-    Off uses `--border-interactive` as a neutral track; on moves the thumb and
-    fills the track with `--background-alternate`. The position change carries
-    the state, so colour is never the only signal. The thumb stays on
-    `--background-primary`, preserving at least 3:1 separation from both tracks
-    across default, Blue and Sage palettes in light and dark mode.
+  - Binary controls use the shared shadcn/Base UI switch anatomy: a 42×20
+    square solid rail, a 22×16 borderless thumb, a 2px resting inset and 16px
+    of travel. Off uses `--border-interactive` as a persistent neutral track;
+    on moves the thumb and fills the track with `--background-alternate`.
+    Position carries the non-colour state cue, while nearby visible On/Off text
+    may reinforce it in dense settings. The thumb moves between elevated and
+    primary semantic surfaces so it remains distinct across default, Blue and
+    Sage palettes in light and dark mode. A layout-neutral pseudo-element keeps
+    the effective coarse-pointer target at 48×48px.
   - Tabs are square, neutral peer-view controls. Neither the list nor its
     triggers receives a radius, capsule treatment or decorative accent.
     Line tabs end in `--border-tertiary` and mark selection with the neutral

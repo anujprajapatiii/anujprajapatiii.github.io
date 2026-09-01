@@ -2,12 +2,19 @@ import { Switch as SwitchPrimitive } from "@base-ui/react/switch";
 
 import { cn } from "@/lib/utils";
 
-function Switch({ className, ...props }: SwitchPrimitive.Root.Props) {
+type SwitchProps = Omit<
+  SwitchPrimitive.Root.Props,
+  "children" | "className" | "nativeButton" | "render"
+> & {
+  className?: string;
+};
+
+function Switch({ className, ...props }: SwitchProps) {
   return (
     <SwitchPrimitive.Root
+      {...props}
       data-slot="switch"
       className={cn("ui-switch", className)}
-      {...props}
     >
       <SwitchPrimitive.Thumb
         data-slot="switch-thumb"
@@ -18,3 +25,4 @@ function Switch({ className, ...props }: SwitchPrimitive.Root.Props) {
 }
 
 export { Switch };
+export type { SwitchProps };

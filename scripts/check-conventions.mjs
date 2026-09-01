@@ -530,6 +530,125 @@ if (!existsSync(tabsTestFile)) {
   );
 }
 
+/* Switch is Supported and has one stable visual/behaviour seam. Protect the
+   selected geometry, centralized style ownership, permanent specimen, and
+   browser evidence so temporary lab code cannot quietly return. */
+const switchFile = "src/components/ui/switch.tsx";
+const switchSource = withoutComments(readFileSync(switchFile, "utf8"));
+for (const requirement of [
+  /data-slot=["']switch["']/,
+  /className=\{cn\(["']ui-switch["'],\s*className\)\}/,
+  /<SwitchPrimitive\.Thumb\b/,
+  /data-slot=["']switch-thumb["']/,
+]) {
+  if (requirement.test(switchSource)) continue;
+  report(
+    switchFile,
+    1,
+    "switch-interface-contract",
+    requirement.source,
+    "Supported Switch keeps one Base UI root-and-thumb interface behind the local wrapper",
+  );
+}
+
+const switchGeometryContracts = [
+  {
+    source: globalCss,
+    test: /--control-switch-width:\s*2\.625rem;/,
+    found: "--control-switch-width",
+  },
+  {
+    source: globalCss,
+    test: /--control-switch-height:\s*1\.25rem;/,
+    found: "--control-switch-height",
+  },
+  {
+    source: globalCss,
+    test: /--control-switch-thumb-width:\s*1\.375rem;/,
+    found: "--control-switch-thumb-width",
+  },
+  {
+    source: globalCss,
+    test: /--control-switch-thumb-height:\s*var\(--spacing-sm\);/,
+    found: "--control-switch-thumb-height",
+  },
+  {
+    source: uiControlsCss,
+    test: /\.ui-switch\s*\{[\s\S]*?padding:\s*var\(--control-switch-inset\);[\s\S]*?border:\s*0;/,
+    found: ".ui-switch geometry",
+  },
+  {
+    source: uiControlsCss,
+    test: /\.ui-switch__thumb\s*\{[\s\S]*?width:\s*var\(--control-switch-thumb-width\);[\s\S]*?height:\s*var\(--control-switch-thumb-height\);[\s\S]*?border:\s*0;/,
+    found: ".ui-switch__thumb geometry",
+  },
+  {
+    source: uiControlsCss,
+    test: /\.ui-switch\[data-checked\]\s+\.ui-switch__thumb\s*\{[\s\S]*?transform:\s*translateX\(var\(--control-switch-travel\)\);/,
+    found: "checked thumb travel",
+  },
+];
+for (const contract of switchGeometryContracts) {
+  if (contract.test.test(withoutComments(contract.source))) continue;
+  report(
+    contract.source === globalCss ? "src/styles/global.css" : "src/styles/ui-controls.css",
+    1,
+    "switch-geometry-contract",
+    contract.found,
+    "Supported Switch keeps the selected 42×20 track, 22×16 thumb, square edges, and equal resting inset",
+  );
+}
+
+const switchSpecimenImport = styleGuideSource.match(
+  /import\s+([A-Za-z_$][\w$]*)\s+from\s+["']@\/components\/SwitchSpecimen(?:\.tsx)?["']\s*;?/,
+);
+const importedSwitchSpecimen = switchSpecimenImport?.[1];
+const switchSection = styleGuideSource.match(
+  /<section\b[^>]*class=["'][^"']*\bstyle-guide-topic\b[^"']*["'][^>]*aria-labelledby=["']switch["'][^>]*>[\s\S]*?<\/section>/,
+)?.[0];
+const usesSwitchSpecimen = importedSwitchSpecimen
+  ? new RegExp(`<${importedSwitchSpecimen}\\b`).test(switchSection ?? "")
+  : false;
+const hasSwitchHeading = /<h3\b[^>]*id=["']switch["'][^>]*>\s*Switch\s*<\/h3>/.test(
+  switchSection ?? "",
+);
+if (!switchSpecimenImport || !usesSwitchSpecimen || !hasSwitchHeading) {
+  report(
+    styleGuideFile,
+    1,
+    "switch-supported-specimen",
+    "Switch section / SwitchSpecimen",
+    "the style guide renders SwitchSpecimen as a normal peer section beside Actions, Tables, and Tabs",
+  );
+}
+
+const switchTestFile = "tests/switch.spec.ts";
+if (!existsSync(switchTestFile)) {
+  report(
+    switchTestFile,
+    1,
+    "switch-behaviour-evidence",
+    "missing file",
+    "Supported Switch requires the focused Playwright behavior suite at tests/switch.spec.ts",
+  );
+}
+
+for (const temporarySwitchFile of [
+  "src/pages/lab/switches.astro",
+  "src/components/lab/switches/SwitchLab.tsx",
+  "src/components/lab/switches/switch-lab.css",
+  "src/components/ui/experimental-switch.tsx",
+]) {
+  if (!existsSync(temporarySwitchFile)) continue;
+  report(
+    temporarySwitchFile,
+    1,
+    "switch-lab-cleanup",
+    "temporary file remains",
+    "the selected Switch now lives in the permanent primitive and Style Guide specimen",
+  );
+}
+
 const buttonStateCssContracts = [
   {
     file: "src/styles/global.css",

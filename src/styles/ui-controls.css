@@ -437,65 +437,94 @@ label.ui-field__label {
 
 .ui-switch {
   position: relative;
+  isolation: isolate;
   display: inline-flex;
   width: var(--control-switch-width);
   height: var(--control-switch-height);
+  box-sizing: border-box;
   flex: none;
   align-items: center;
-  padding: 0;
-  border: 1px solid transparent;
-  border-radius: var(--radius-round);
+  padding: var(--control-switch-inset);
+  border: 0;
+  appearance: none;
   background: var(--border-interactive);
+  color: var(--background-primary);
   transition:
     background-color var(--motion-feedback) var(--ease-feedback),
-    border-color var(--motion-feedback) var(--ease-feedback);
+    box-shadow var(--motion-feedback) var(--ease-feedback);
 }
 
 .ui-switch__thumb {
-  display: block;
-  width: var(--control-switch-thumb);
-  height: var(--control-switch-thumb);
-  border-radius: var(--radius-round);
-  background: var(--background-primary);
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: var(--control-switch-thumb-width);
+  height: var(--control-switch-thumb-height);
+  box-sizing: border-box;
+  place-items: center;
+  border: 0;
+  background: var(--background-elevated);
+  color: var(--text-primary);
   transform: translateX(0);
   transition:
     background-color var(--motion-feedback) var(--ease-feedback),
+    box-shadow var(--motion-feedback) var(--ease-feedback),
     transform var(--motion-settle) var(--ease-settle);
 }
 
 .ui-switch[data-checked] {
   background: var(--background-alternate);
+  color: var(--text-alternate);
 }
 
 .ui-switch[data-checked] .ui-switch__thumb {
   background: var(--background-primary);
-  transform: translateX(calc(100% - var(--control-switch-offset)));
+  color: var(--text-primary);
+  transform: translateX(var(--control-switch-travel));
 }
 
 :dir(rtl) .ui-switch[data-checked] .ui-switch__thumb {
-  transform: translateX(calc(var(--control-switch-offset) - 100%));
+  transform: translateX(calc(-1 * var(--control-switch-travel)));
 }
 
-.ui-switch:active:not(:disabled):not([data-checked]) {
+@media (hover: hover) {
+  .ui-switch:hover:not(:disabled):not([data-disabled]) {
+    background: var(--border-hover);
+  }
+
+  .ui-switch[data-checked]:hover:not(:disabled):not([data-disabled]) {
+    background: var(--background-alternate-hover);
+  }
+
+  .ui-switch:hover:not(:disabled):not([data-disabled]):not([data-checked])
+    .ui-switch__thumb {
+    background: var(--background-elevated-hover);
+  }
+}
+
+.ui-switch:active:not(:disabled):not([data-disabled]):not([data-checked]) {
   background: var(--border-hover);
   transition-duration: var(--motion-none);
 }
 
-.ui-switch[data-checked]:active:not(:disabled) {
+.ui-switch[data-checked]:active:not(:disabled):not([data-disabled]) {
   background: var(--background-alternate-hover);
   transition-duration: var(--motion-none);
 }
 
 .ui-switch:disabled,
 .ui-switch[data-disabled] {
-  border-color: transparent;
   background: var(--border-disabled);
+  color: var(--text-disabled);
+  box-shadow: none;
   cursor: not-allowed;
 }
 
 .ui-switch:disabled .ui-switch__thumb,
 .ui-switch[data-disabled] .ui-switch__thumb {
   background: var(--text-disabled);
+  color: var(--text-disabled-alt);
+  box-shadow: none;
 }
 
 .ui-slider {
@@ -629,6 +658,11 @@ label.ui-field__label {
 }
 
 @media (prefers-contrast: more) {
+  .ui-switch {
+    box-shadow: inset 0 0 0 var(--control-indicator-size)
+      var(--border-primary-solid);
+  }
+
   .ui-tabs__list--contained,
   .ui-segmented {
     outline: 1px solid var(--border-primary-solid);
@@ -645,6 +679,28 @@ label.ui-field__label {
 }
 
 @media (forced-colors: active) {
+  .ui-switch {
+    background: Canvas;
+    color: ButtonText;
+    box-shadow: inset 0 0 0 var(--control-indicator-size) ButtonText;
+    forced-color-adjust: none;
+  }
+
+  .ui-switch[data-checked] {
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .ui-switch__thumb {
+    background: ButtonText;
+    color: Canvas;
+  }
+
+  .ui-switch[data-checked] .ui-switch__thumb {
+    background: Canvas;
+    color: ButtonText;
+  }
+
   .ui-tabs__list--line {
     border-color: currentColor;
   }

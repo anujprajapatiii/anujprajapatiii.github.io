@@ -696,10 +696,12 @@
     --control-height-touch: var(--spacing-xl);
     --control-icon-size: var(--spacing-sm);
     --control-indicator-size: 0.0625rem;
-    --control-switch-width: 2rem;
+    --control-switch-width: 2.625rem;
     --control-switch-height: 1.25rem;
-    --control-switch-thumb: var(--spacing-sm);
-    --control-switch-offset: 0.125rem;
+    --control-switch-thumb-width: 1.375rem;
+    --control-switch-thumb-height: var(--spacing-sm);
+    --control-switch-inset: 0.125rem;
+    --control-switch-travel: var(--spacing-sm);
     --control-tooltip-max-width: 18rem;
 
     /* Purposeful radii: modest controls, genuinely round geometry, and
