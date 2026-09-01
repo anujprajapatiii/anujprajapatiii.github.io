@@ -200,8 +200,20 @@
 }
 
 .slider-option--block .slider-option__surface {
-  box-shadow: inset 0 0 0 var(--control-indicator-size)
-    var(--background-primary);
+  box-shadow: none;
+}
+
+.slider-option--block .slider-option__indicator {
+  background: var(--background-secondary);
+}
+
+.slider-option--block .slider-option__thumb {
+  width: var(--control-indicator-size);
+  height: 100%;
+}
+
+.dark .slider-option--block .slider-option__indicator {
+  background: var(--background-primary);
 }
 
 .slider-option--rule .slider-option__track {

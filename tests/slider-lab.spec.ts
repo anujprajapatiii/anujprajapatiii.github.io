@@ -1,5 +1,14 @@
 import { expect, test } from "@playwright/test";
 
+function lightness(color: string) {
+  const channels = color.match(/[\d.]+/g)?.slice(0, 3).map(Number);
+  if (!channels || channels.length !== 3) {
+    throw new Error(`Could not read colour: ${color}`);
+  }
+
+  return channels.reduce((total, channel) => total + channel, 0);
+}
+
 test("keeps the label and percentage inside every slider surface", async ({
   page,
 }) => {
@@ -54,6 +63,48 @@ test("keeps fine precision without making the label noisy", async ({ page }) => 
   await page.keyboard.press("Shift+ArrowRight");
   await expect(slider).toHaveAttribute("aria-valuenow", "81.1");
   await expect(value).toHaveText("81%");
+});
+
+test("keeps Option A flush with a one-pixel position edge", async ({ page }) => {
+  await page.goto("/lab/sliders");
+
+  const slider = page
+    .locator('[data-slider-direction="A"] .slider-option')
+    .first();
+  const geometry = await slider.evaluate((element) => {
+    const surface = element.querySelector<HTMLElement>(
+      ".slider-option__surface",
+    );
+    const track = element.querySelector<HTMLElement>(".slider-option__track");
+    const indicator = element.querySelector<HTMLElement>(
+      ".slider-option__indicator",
+    );
+    const thumb = element.querySelector<HTMLElement>(".slider-option__thumb");
+    if (!surface || !track || !indicator || !thumb) {
+      throw new Error("Option A anatomy is incomplete");
+    }
+
+    const surfaceRect = surface.getBoundingClientRect();
+    const trackRect = track.getBoundingClientRect();
+    const indicatorRect = indicator.getBoundingClientRect();
+
+    return {
+      bottomGap: trackRect.bottom - indicatorRect.bottom,
+      indicatorColor: getComputedStyle(indicator).backgroundColor,
+      thumbWidth: thumb.getBoundingClientRect().width,
+      topGap: indicatorRect.top - trackRect.top,
+      trackColor: getComputedStyle(track).backgroundColor,
+      trackInset: trackRect.left - surfaceRect.left,
+    };
+  });
+
+  expect(geometry.thumbWidth).toBe(1);
+  expect(geometry.topGap).toBe(0);
+  expect(geometry.bottomGap).toBe(0);
+  expect(geometry.trackInset).toBe(1);
+  expect(lightness(geometry.indicatorColor)).toBeLessThan(
+    lightness(geometry.trackColor),
+  );
 });
 
 test("settles rail clicks but tracks direct dragging immediately", async ({
