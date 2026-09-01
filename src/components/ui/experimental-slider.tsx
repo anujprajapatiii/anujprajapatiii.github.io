@@ -52,40 +52,41 @@ function ExperimentalSlider({
       thumbAlignment="edge"
       value={value}
     >
-      <div className="slider-option__header">
-        <div className="slider-option__copy">
+      <div className="slider-option__surface">
+        <SliderPrimitive.Control className="slider-option__control">
+          {variant === "rule" && (
+            <span className="slider-option__ticks" aria-hidden="true">
+              {TICKS.map((tick) => (
+                <span key={tick} />
+              ))}
+            </span>
+          )}
+
+          <SliderPrimitive.Track className="slider-option__track">
+            <SliderPrimitive.Indicator className="slider-option__indicator" />
+            <SliderPrimitive.Thumb
+              aria-describedby={`${id}-description`}
+              aria-valuetext={`${Math.round(value)} percent`}
+              className="slider-option__thumb"
+              index={0}
+            />
+          </SliderPrimitive.Track>
+        </SliderPrimitive.Control>
+
+        <div className="slider-option__readout">
           <SliderPrimitive.Label className="slider-option__label">
             {label}
           </SliderPrimitive.Label>
-          <p className="slider-option__description" id={`${id}-description`}>
-            {description}
-          </p>
-        </div>
 
-        <SliderPrimitive.Value className="slider-option__value">
-          {(_, values) => `${Math.round(values[0])}%`}
-        </SliderPrimitive.Value>
+          <SliderPrimitive.Value className="slider-option__value">
+            {(_, values) => `${Math.round(values[0])}%`}
+          </SliderPrimitive.Value>
+        </div>
       </div>
 
-      <SliderPrimitive.Control className="slider-option__control">
-        {variant === "rule" && (
-          <span className="slider-option__ticks" aria-hidden="true">
-            {TICKS.map((tick) => (
-              <span key={tick} />
-            ))}
-          </span>
-        )}
-
-        <SliderPrimitive.Track className="slider-option__track">
-          <SliderPrimitive.Indicator className="slider-option__indicator" />
-          <SliderPrimitive.Thumb
-            aria-describedby={`${id}-description`}
-            aria-valuetext={`${Math.round(value)} percent`}
-            className="slider-option__thumb"
-            index={0}
-          />
-        </SliderPrimitive.Track>
-      </SliderPrimitive.Control>
+      <p className="slider-option__description" id={`${id}-description`}>
+        {description}
+      </p>
 
       <div className="slider-option__endpoints" aria-hidden="true">
         <span>{min}%</span>

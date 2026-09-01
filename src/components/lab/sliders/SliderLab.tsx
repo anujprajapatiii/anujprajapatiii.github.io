@@ -18,26 +18,26 @@ type SliderDirection = {
 const DIRECTIONS: SliderDirection[] = [
   {
     key: "A",
-    name: "Block rail",
+    name: "Fill field",
     premise:
-      "A familiar low rail with a compact square thumb and a decisive filled range.",
-    useCase: "General settings",
+      "The label and value sit directly over a quiet full-height progress fill.",
+    useCase: "Compact settings panels",
     variant: "block",
   },
   {
     key: "B",
-    name: "Calibrated rule",
+    name: "Index rule",
     premise:
-      "A narrow index moves across fine ticks, making position feel measured.",
+      "Fine tactical marks and a narrow index make small adjustments easy to read.",
     useCase: "Measured adjustments",
     variant: "rule",
   },
   {
     key: "C",
-    name: "Inset channel",
+    name: "Inset meter",
     premise:
-      "A raised square thumb travels inside a recessed channel for the strongest physical cue.",
-    useCase: "Prominent canvas controls",
+      "A recessed meter and raised thumb add physical depth without separating the readout.",
+    useCase: "Prominent live controls",
     variant: "channel",
   },
 ];

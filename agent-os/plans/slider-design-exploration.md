@@ -34,9 +34,9 @@ square neutral direction established by Actions, Tabs, and Switch.
 
 | Direction | Idea being tested | Expected strength | Possible weakness |
 | --- | --- | --- | --- |
-| A — Block rail | Pair a familiar low rail with a compact square thumb and strong filled segment. | Clearest baseline and easiest to understand. | Least distinctive. |
-| B — Calibrated rule | Add thin neutral ticks and a narrow index thumb to make position feel measured. | Strong precision and tactical character. | Detail may be unnecessary for loose values. |
-| C — Inset channel | Place a raised square thumb inside a thicker recessed channel using the shared light/shade effect. | Strongest visibility and physical relationship. | Heavier than other portfolio controls. |
+| A — Fill field | Place label and value over a quiet full-height progress fill. | Most compact and easiest to scan in a settings panel. | The moving boundary can pass behind the text. |
+| B — Index rule | Place the inline readout over thin neutral ticks and a narrow index. | Strong precision and tactical character. | Detail may be unnecessary for loose values. |
+| C — Inset meter | Place the inline readout over a recessed meter with a raised thumb. | Strongest visibility and physical relationship. | Heavier than the other compact options. |
 
 ## Comparison Surface
 
@@ -85,26 +85,26 @@ Out:
 
 ## Review Notes
 
-### Direction A — Block rail
+### Direction A — Fill field
 
-- Works well: the filled segment and bordered square thumb read immediately in
-  light and dark mode. It is the calmest general-purpose option.
-- Concerns: it is intentionally the most familiar and contributes the least
-  distinctive character.
+- Works well: the full-height fill creates the clearest compact row and keeps
+  the label, current value, and interaction in one scan path.
+- Concerns: the fill boundary can travel behind either text label at extreme
+  values, so both background tones must preserve text contrast.
 
-### Direction B — Calibrated rule
+### Direction B — Index rule
 
-- Works well: the thin rule, nine measured ticks, and narrow index create the
-  strongest precision cue without adding colour.
-- Concerns: the full rule does not communicate elapsed range as strongly as a
-  filled rail, and the ticks may be unnecessary for loose values.
+- Works well: the low rule, nine measured ticks, and narrow index create the
+  strongest precision cue without drawing through the inline readout.
+- Concerns: it communicates exact position more strongly than elapsed range,
+  and the ticks may be unnecessary for loose values.
 
-### Direction C — Inset channel
+### Direction C — Inset meter
 
-- Works well: the thick recessed channel, raised thumb, and light/shade edge
-  make the fixed and moving parts easiest to distinguish physically.
-- Concerns: its visual weight competes more with nearby labels and values than
-  the other directions.
+- Works well: the recessed field, raised thumb, and light/shade edge make the
+  fixed and moving parts easiest to distinguish physically.
+- Concerns: its depth treatment has more visual weight than the other compact
+  rows.
 
 ## Decision
 
@@ -136,3 +136,6 @@ coarse keyboard or drag increments.
 The slider keeps decimal precision internally for close pointer tracking while
 presenting a rounded whole-number label. Track presses use the shared settle
 motion, while direct dragging remains immediate.
+DialKit's compact control-row idea translates cleanly when the label and value
+remain a non-intercepting layer above the interactive surface. This preserves
+the full 48px pointer target instead of creating separate dead zones for text.
