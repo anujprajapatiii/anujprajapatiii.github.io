@@ -91,7 +91,9 @@ test("keeps the theme shortcut available after using a slider", async ({
   await expect(slider).toBeFocused();
 });
 
-test("keeps Option A flush with a 3+3 dot edge grip", async ({ page }) => {
+test("keeps Option A flush with an always-visible 3+3 dot edge grip", async ({
+  page,
+}) => {
   await page.goto("/lab/sliders");
 
   const slider = page
@@ -150,7 +152,7 @@ test("keeps Option A flush with a 3+3 dot edge grip", async ({ page }) => {
   });
 
   expect(geometry.dotCount).toBe(6);
-  expect(geometry.gripOpacity).toBe("0");
+  expect(geometry.gripOpacity).toBe("1");
   expect(geometry.fillEdgeGap).toBeCloseTo(8, 1);
   expect(geometry.columnGap).toBeCloseTo(geometry.rowGap, 1);
   expect(geometry.columnGap).toBeCloseTo(8, 1);
@@ -163,14 +165,6 @@ test("keeps Option A flush with a 3+3 dot edge grip", async ({ page }) => {
     lightness(geometry.trackColor),
   );
 
-  await slider.locator(".slider-option__surface").hover();
-  await expect
-    .poll(() =>
-      slider
-        .locator(".slider-option__grip")
-        .evaluate((element) => getComputedStyle(element).opacity),
-    )
-    .toBe("1");
 });
 
 test("maps Option A from 0% to 100% without endpoint gaps", async ({ page }) => {

@@ -225,32 +225,19 @@
   grid-template-rows: repeat(3, calc(var(--spacing-3xs) / 2));
   place-content: center;
   gap: var(--spacing-2xs);
-  opacity: 0;
-  transition: opacity var(--motion-feedback) var(--ease-feedback);
+  opacity: 1;
 }
 
 .slider-option__grip-dot {
   width: calc(var(--spacing-3xs) / 2);
   height: calc(var(--spacing-3xs) / 2);
   border-radius: var(--radius-round);
-  background: var(--border-primary-solid);
+  background: var(--text-tertiary);
 }
 
 @media (hover: hover) {
   .slider-option--block:not([data-disabled]) .slider-option__thumb:hover {
     background: transparent;
-  }
-
-  .slider-option--block:not([data-disabled])
-    .slider-option__surface:hover
-    .slider-option__grip {
-    opacity: 1;
-  }
-
-  .slider-option--block:not([data-disabled])
-    .slider-option__surface:hover
-    .slider-option__grip-dot {
-    background: var(--text-tertiary);
   }
 }
 
@@ -376,7 +363,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .slider-option[data-position-animation="settle"] .slider-option__indicator,
-  .slider-option__grip,
   .slider-option__thumb {
     transition-duration: var(--motion-none);
   }
