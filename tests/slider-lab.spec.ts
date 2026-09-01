@@ -65,7 +65,7 @@ test("keeps fine precision without making the label noisy", async ({ page }) => 
   await expect(value).toHaveText("81%");
 });
 
-test("keeps Option A flush with a six-dot edge grip", async ({ page }) => {
+test("keeps Option A flush with a 3+3 dot edge grip", async ({ page }) => {
   await page.goto("/lab/sliders");
 
   const slider = page
@@ -95,16 +95,24 @@ test("keeps Option A flush with a six-dot edge grip", async ({ page }) => {
     const indicatorRect = indicator.getBoundingClientRect();
     const gripRect = grip.getBoundingClientRect();
     const dotRects = dots.map((dot) => dot.getBoundingClientRect());
+    const rowRects = [dotRects[0], dotRects[2], dotRects[4]];
     const verticalGaps = [
-      dotRects[0].top - gripRect.top,
-      ...dotRects.slice(1).map((dot, index) => dot.top - dotRects[index].bottom),
-      gripRect.bottom - dotRects.at(-1)!.bottom,
+      rowRects[0].top - gripRect.top,
+      rowRects[1].top - rowRects[0].bottom,
+      rowRects[2].top - rowRects[1].bottom,
+      gripRect.bottom - rowRects[2].bottom,
+    ];
+    const horizontalGaps = [
+      dotRects[0].left - gripRect.left,
+      dotRects[1].left - dotRects[0].right,
+      gripRect.right - dotRects[1].right,
     ];
 
     return {
       bottomGap: trackRect.bottom - indicatorRect.bottom,
       dotCount: dots.length,
-      gapSpread: Math.max(...verticalGaps) - Math.min(...verticalGaps),
+      horizontalGapSpread:
+        Math.max(...horizontalGaps) - Math.min(...horizontalGaps),
       gripOpacity: getComputedStyle(grip).opacity,
       indicatorColor: getComputedStyle(indicator).backgroundColor,
       innerEdgeGap: indicatorRect.right - gripRect.right,
@@ -112,13 +120,16 @@ test("keeps Option A flush with a six-dot edge grip", async ({ page }) => {
       topGap: indicatorRect.top - trackRect.top,
       trackColor: getComputedStyle(track).backgroundColor,
       trackInset: trackRect.left - surfaceRect.left,
+      verticalGapSpread:
+        Math.max(...verticalGaps) - Math.min(...verticalGaps),
     };
   });
 
   expect(geometry.dotCount).toBe(6);
   expect(geometry.gripOpacity).toBe("0");
   expect(geometry.innerEdgeGap).toBeCloseTo(4, 1);
-  expect(geometry.gapSpread).toBeLessThanOrEqual(0.1);
+  expect(geometry.horizontalGapSpread).toBeLessThanOrEqual(0.1);
+  expect(geometry.verticalGapSpread).toBeLessThanOrEqual(0.1);
   expect(geometry.thumbBackground).toBe("rgba(0, 0, 0, 0)");
   expect(geometry.topGap).toBe(0);
   expect(geometry.bottomGap).toBe(0);

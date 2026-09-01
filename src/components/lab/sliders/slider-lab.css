@@ -219,10 +219,11 @@
   position: absolute;
   inset-block: 0;
   inset-inline-end: calc(50% + var(--spacing-3xs));
-  display: flex;
-  width: calc(var(--spacing-3xs) / 2);
-  flex-direction: column;
-  justify-content: space-evenly;
+  display: grid;
+  width: var(--spacing-xs);
+  grid-template-columns: repeat(2, calc(var(--spacing-3xs) / 2));
+  grid-template-rows: repeat(3, calc(var(--spacing-3xs) / 2));
+  place-content: space-evenly;
   opacity: 0;
   transition: opacity var(--motion-feedback) var(--ease-feedback);
 }
