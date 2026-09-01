@@ -84,19 +84,30 @@ test("keeps Option A flush with a six-dot edge grip", async ({ page }) => {
       throw new Error("Option A anatomy is incomplete");
     }
 
-    const dots = element.querySelectorAll(".slider-option__grip-dot");
+    const grip = element.querySelector<HTMLElement>(".slider-option__grip");
+    const dots = Array.from(
+      element.querySelectorAll<HTMLElement>(".slider-option__grip-dot"),
+    );
+    if (!grip) throw new Error("Option A grip is missing");
+
     const surfaceRect = surface.getBoundingClientRect();
     const trackRect = track.getBoundingClientRect();
     const indicatorRect = indicator.getBoundingClientRect();
-    const thumbRect = thumb.getBoundingClientRect();
+    const gripRect = grip.getBoundingClientRect();
+    const dotRects = dots.map((dot) => dot.getBoundingClientRect());
+    const verticalGaps = [
+      dotRects[0].top - gripRect.top,
+      ...dotRects.slice(1).map((dot, index) => dot.top - dotRects[index].bottom),
+      gripRect.bottom - dotRects.at(-1)!.bottom,
+    ];
 
     return {
       bottomGap: trackRect.bottom - indicatorRect.bottom,
       dotCount: dots.length,
-      edgeOffset: Math.abs(
-        thumbRect.left + thumbRect.width / 2 - indicatorRect.right,
-      ),
+      gapSpread: Math.max(...verticalGaps) - Math.min(...verticalGaps),
+      gripOpacity: getComputedStyle(grip).opacity,
       indicatorColor: getComputedStyle(indicator).backgroundColor,
+      innerEdgeGap: indicatorRect.right - gripRect.right,
       thumbBackground: getComputedStyle(thumb).backgroundColor,
       topGap: indicatorRect.top - trackRect.top,
       trackColor: getComputedStyle(track).backgroundColor,
@@ -105,7 +116,9 @@ test("keeps Option A flush with a six-dot edge grip", async ({ page }) => {
   });
 
   expect(geometry.dotCount).toBe(6);
-  expect(geometry.edgeOffset).toBeLessThanOrEqual(0.1);
+  expect(geometry.gripOpacity).toBe("0");
+  expect(geometry.innerEdgeGap).toBeCloseTo(4, 1);
+  expect(geometry.gapSpread).toBeLessThanOrEqual(0.1);
   expect(geometry.thumbBackground).toBe("rgba(0, 0, 0, 0)");
   expect(geometry.topGap).toBe(0);
   expect(geometry.bottomGap).toBe(0);
@@ -113,6 +126,15 @@ test("keeps Option A flush with a six-dot edge grip", async ({ page }) => {
   expect(lightness(geometry.indicatorColor)).toBeLessThan(
     lightness(geometry.trackColor),
   );
+
+  await slider.locator(".slider-option__surface").hover();
+  await expect
+    .poll(() =>
+      slider
+        .locator(".slider-option__grip")
+        .evaluate((element) => getComputedStyle(element).opacity),
+    )
+    .toBe("1");
 });
 
 test("settles rail clicks but tracks direct dragging immediately", async ({
