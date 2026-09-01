@@ -145,6 +145,63 @@ test("keeps Option A flush with a 3+3 dot edge grip", async ({ page }) => {
     .toBe("1");
 });
 
+test("maps Option A from 0% to 100% without endpoint gaps", async ({ page }) => {
+  await page.goto("/lab/sliders");
+
+  const specimen = page
+    .locator('[data-slider-direction="A"] .slider-option')
+    .first();
+  const slider = specimen.getByRole("slider");
+
+  await expect(slider).toHaveAttribute("aria-labelledby", /.+/);
+  await expect(slider).toHaveAttribute("min", "0");
+  await expect(slider).toHaveAttribute("max", "100");
+  await slider.focus();
+
+  await page.keyboard.press("Home");
+  await expect(slider).toHaveAttribute("aria-valuenow", "0");
+  const atMinimum = await specimen.evaluate((element) => {
+    const track = element.querySelector<HTMLElement>(".slider-option__track");
+    const indicator = element.querySelector<HTMLElement>(
+      ".slider-option__indicator",
+    );
+    if (!track || !indicator) throw new Error("Option A track is incomplete");
+
+    const trackRect = track.getBoundingClientRect();
+    const indicatorRect = indicator.getBoundingClientRect();
+    return {
+      indicatorLeft: indicatorRect.left,
+      indicatorWidth: indicatorRect.width,
+      trackLeft: trackRect.left,
+    };
+  });
+
+  expect(atMinimum.indicatorLeft).toBeCloseTo(atMinimum.trackLeft, 1);
+  expect(atMinimum.indicatorWidth).toBeCloseTo(0, 1);
+
+  await page.keyboard.press("End");
+  await expect(slider).toHaveAttribute("aria-valuenow", "100");
+  const atMaximum = await specimen.evaluate((element) => {
+    const track = element.querySelector<HTMLElement>(".slider-option__track");
+    const indicator = element.querySelector<HTMLElement>(
+      ".slider-option__indicator",
+    );
+    if (!track || !indicator) throw new Error("Option A track is incomplete");
+
+    const trackRect = track.getBoundingClientRect();
+    const indicatorRect = indicator.getBoundingClientRect();
+    return {
+      indicatorLeft: indicatorRect.left,
+      indicatorRight: indicatorRect.right,
+      trackLeft: trackRect.left,
+      trackRight: trackRect.right,
+    };
+  });
+
+  expect(atMaximum.indicatorLeft).toBeCloseTo(atMaximum.trackLeft, 1);
+  expect(atMaximum.indicatorRight).toBeCloseTo(atMaximum.trackRight, 1);
+});
+
 test("settles rail clicks but tracks direct dragging immediately", async ({
   page,
 }) => {

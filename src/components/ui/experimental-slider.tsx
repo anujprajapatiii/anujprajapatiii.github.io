@@ -26,8 +26,8 @@ function ExperimentalSlider({
   disabled = false,
   id,
   label,
-  max = 125,
-  min = 50,
+  max = 100,
+  min = 0,
   onValueChange,
   step = 0.1,
   value,
@@ -50,7 +50,7 @@ function ExperimentalSlider({
         onValueChange?.(nextValue);
       }}
       step={step}
-      thumbAlignment="edge"
+      thumbAlignment={variant === "block" ? "center" : "edge"}
       value={value}
     >
       <div className="slider-option__surface">

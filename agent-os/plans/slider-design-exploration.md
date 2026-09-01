@@ -139,3 +139,5 @@ motion, while direct dragging remains immediate.
 DialKit's compact control-row idea translates cleanly when the label and value
 remain a non-intercepting layer above the interactive surface. This preserves
 the full 48px pointer target instead of creating separate dead zones for text.
+Full-range fills need center thumb alignment so 0% and 100% map to the track
+edges; edge alignment deliberately reserves half a thumb of travel at each end.
