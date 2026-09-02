@@ -4,6 +4,7 @@ import ActionLink from "@/components/ActionLink.astro";
 import DataTable from "@/components/DataTable.astro";
 import OnThisPage from "@/components/OnThisPage.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
+import SliderSpecimen from "@/components/SliderSpecimen";
 import SwitchSpecimen from "@/components/SwitchSpecimen";
 import TabsSpecimen from "@/components/TabsSpecimen";
 import SectionHeading from "@/components/SectionHeading.astro";
@@ -488,6 +489,21 @@ import "@/components/style-guide/style-guide.css";
                       </header>
 
                       <SwitchSpecimen client:visible />
+                    </Stack>
+                  </section>
+
+                  <section class="style-guide-topic" aria-labelledby="slider">
+                    <Stack gap="md">
+                      <header class="style-guide-topic__header">
+                        <h3 id="slider" class="text-heading">Slider</h3>
+                        <p class="max-w-measure text-muted-foreground">
+                          Use Slider for an approximate continuous value. Its
+                          full field supports quick movement while the inline
+                          value and endpoints keep the current range visible.
+                        </p>
+                      </header>
+
+                      <SliderSpecimen client:visible />
                     </Stack>
                   </section>
 

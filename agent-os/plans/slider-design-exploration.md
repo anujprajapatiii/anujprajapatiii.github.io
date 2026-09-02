@@ -2,7 +2,7 @@
 
 ## Status
 
-Complete — awaiting selection
+Complete — Option A selected and promoted
 
 ## Design Question
 
@@ -108,21 +108,25 @@ Out:
 
 ## Decision
 
-- Selected direction: Pending review.
-- Why it was selected: Pending review.
-- Useful ideas retained from other directions: Pending review.
-- Ideas deliberately rejected: Pending review.
+- Selected direction: A — Fill field.
+- Why it was selected: it keeps the label, live value, range and pointer target
+  in one compact scan path while preserving fine continuous control.
+- Useful ideas retained from other directions: Option C's quieter neutral
+  surfaces and restrained light/shade boundary informed the selected field.
+- Ideas deliberately rejected: Option B's tactical and segmented marks added
+  unnecessary visual frequency; Option C's inset channel and raised thumb were
+  too heavy for the compact default.
 
 ## Cleanup Before Pull Request
 
-- [ ] Selected direction moved into the production component.
-- [ ] Rejected variants removed.
-- [ ] Temporary `/lab/sliders` route removed.
-- [ ] Temporary lab components, styles, assets, and imports removed.
+- [x] Selected direction moved into the production component.
+- [x] Rejected variants removed.
+- [x] Temporary `/lab/sliders` route removed.
+- [x] Temporary lab components, styles, assets, and imports removed.
 - [x] No unrelated changes included.
-- [ ] Responsive and appearance states reviewed again after cleanup.
-- [ ] `pnpm check` passes.
-- [ ] `pnpm build` passes.
+- [x] Responsive and appearance states reviewed again after cleanup.
+- [x] `pnpm check` passes.
+- [x] `pnpm build` passes.
 
 ## Learnings
 

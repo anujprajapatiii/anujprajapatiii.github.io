@@ -75,7 +75,7 @@ Promotion happens after live use exposes the right API.
 | `Switch` | Supported | Accessibility-critical primitive with a permanent Style Guide specimen and focused browser coverage for semantics, geometry, themes, direction, motion, and narrow layouts. |
 | `SegmentedControl` | Candidate | Previously tested in Nutrition Labels; validate it with the next real mode switch. |
 | `Tabs` | Supported | Promoted through the behaviourally-complex exception: the formal style-guide specimen and browser suite protect Line, Contained, direction, collection, keyboard and overflow behaviour before production adoption. |
-| `Slider` | Candidate | Wrapper exists but has no live adopter. Prove with a continuous-value experiment. |
+| `Slider` | Supported | The continuous-value experiment selected one single-value fill field; a permanent Style Guide specimen and focused browser suite protect semantics, precision, geometry, themes, motion, endpoints, and narrow layouts. |
 | `Tooltip` / `Hint` | Candidate | Provider exists, but the content wrapper has no live adopter. Overlay placement remains owned by Base UI and hints stay supplemental. |
 | `Field`, `FieldLabel` | Supported | The accessibility-critical label/control relationship was validated in Interaction Anatomy. |
 | Remaining field anatomy | Candidate | `FieldGroup`, `FieldContent` and `FieldDescription` exist, but fieldset and error APIs remain unproven in live use. |
@@ -145,6 +145,37 @@ The formal contract does not include icons, inner marks, loading state,
 indeterminate state, labels inside the rail, accent-colour variants, or a size
 selector. Those needs require a separate design decision rather than more
 props on this primitive.
+
+### `Slider`
+
+Slider is the Supported control for an approximate continuous value. Keep one
+local Base UI-backed module so pointer dragging, track presses, keyboard input,
+focus, disabled state, form behavior, and accessible value text remain behind
+the same interface.
+
+- The supported anatomy is horizontal and single-value: a visible label and
+  rounded live value inside one square 44px field, an optional description,
+  and formatted minimum and maximum endpoints below it.
+- The 48×8px handle is center-aligned to the fill edge, projects 2px above and
+  below the field, and allows the indicator to map exactly from the minimum to
+  the maximum without reserving endpoint gaps.
+- Controlled and uncontrolled values are supported. The default step is 0.1
+  for fine pointer and Arrow-key control; the default large step is 1. The
+  displayed value may round more coarsely than the stored value, and custom
+  ranges use one `formatValue` function for the live value, endpoints, and
+  assistive value text.
+- Direct dragging remains immediate. Track presses alone use the shared brief
+  settle motion, and reduced-motion removes that travel without changing the
+  final value.
+- The label is required and programmatically names the slider. Description is
+  optional but, when present, is associated with the nested range input.
+- The primitive inherits logical direction, appearance mode, and authored page
+  palettes through semantic roles. Disabled, increased-contrast, and
+  forced-colour treatments stay centralized in `ui-controls.css`.
+
+The formal contract does not include segmented, inset, vertical, range,
+multiple-thumb, icon, accent-colour, or size variants. Those needs require a
+new design decision rather than more props on this primitive.
 
 ### `Tabs`
 

@@ -702,6 +702,9 @@
     --control-switch-thumb-height: var(--spacing-sm);
     --control-switch-inset: 0.125rem;
     --control-switch-travel: var(--spacing-sm);
+    --control-slider-field-height: calc(var(--control-height-touch) - var(--spacing-3xs));
+    --control-slider-handle-width: var(--spacing-2xs);
+    --control-slider-handle-height: var(--control-height-touch);
     --control-tooltip-max-width: 18rem;
 
     /* Purposeful radii: modest controls, genuinely round geometry, and

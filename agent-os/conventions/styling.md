@@ -291,6 +291,17 @@ What that means in practice:
       own inline axis, keeps the page width stable and preserves full targets.
       A focused off-screen trigger must become visible. Do not reduce type,
       touch size or inter-trigger space to force every label into one viewport.
+  - Sliders use one square, neutral fill-field treatment for approximate
+    continuous values. The visible field is 44px high, its 48×8px handle
+    projects 2px above and below, and the 48px total layout footprint preserves
+    the shared target rhythm. The full-height `--background-primary` indicator
+    is slightly darker than the `--background-elevated-hover` track in light
+    mode and remains distinct after dark or page-palette remapping. A quiet
+    structural border plus `--light-shade-raised` defines the outer field.
+    Label and formatted value sit inside the field; description and formatted
+    endpoints remain directly below it. The handle uses only a flat neutral
+    surface and darkens on hover or drag. Do not add rounded rails, accent
+    colour, internal segments or experiment-local `.ui-slider*` overrides.
   - Rest, hover, press, selected, focus and disabled states use semantic
     surface/text roles.
   - Experiment motion uses `--motion-feedback` for immediate response and

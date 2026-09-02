@@ -649,6 +649,140 @@ for (const temporarySwitchFile of [
   );
 }
 
+/* Slider is Supported as one horizontal, single-value fill field. Protect the
+   selected geometry, fine-step behavior, permanent specimen, browser evidence,
+   and complete lab cleanup. */
+const sliderFile = "src/components/ui/slider.tsx";
+const sliderSource = withoutComments(readFileSync(sliderFile, "utf8"));
+for (const requirement of [
+  /data-slot=["']slider["']/,
+  /<SliderPrimitive\.Label\b/,
+  /<SliderPrimitive\.Value\b/,
+  /<SliderPrimitive\.Thumb\b[\s\S]*?index=\{0\}/,
+  /thumbAlignment=["']center["']/,
+  /step\s*=\s*0\.1/,
+  /largeStep\s*=\s*1/,
+]) {
+  if (requirement.test(sliderSource)) continue;
+  report(
+    sliderFile,
+    1,
+    "slider-interface-contract",
+    requirement.source,
+    "Supported Slider keeps one labelled Base UI single-value interface with fine default stepping and complete endpoint travel",
+  );
+}
+
+const sliderGeometryContracts = [
+  {
+    source: globalCss,
+    test: /--control-slider-field-height:\s*calc\(var\(--control-height-touch\) - var\(--spacing-3xs\)\);/,
+    found: "--control-slider-field-height",
+  },
+  {
+    source: globalCss,
+    test: /--control-slider-handle-width:\s*var\(--spacing-2xs\);/,
+    found: "--control-slider-handle-width",
+  },
+  {
+    source: globalCss,
+    test: /--control-slider-handle-height:\s*var\(--control-height-touch\);/,
+    found: "--control-slider-handle-height",
+  },
+  {
+    source: uiControlsCss,
+    test: /\.ui-slider__surface\s*\{[\s\S]*?height:\s*var\(--control-slider-field-height\);[\s\S]*?border:\s*var\(--control-indicator-size\) solid var\(--border\);/,
+    found: ".ui-slider__surface geometry",
+  },
+  {
+    source: uiControlsCss,
+    test: /\.ui-slider__thumb\s*\{[\s\S]*?width:\s*var\(--control-slider-handle-width\);[\s\S]*?height:\s*var\(--control-slider-handle-height\);[\s\S]*?border:\s*0;/,
+    found: ".ui-slider__thumb geometry",
+  },
+];
+for (const contract of sliderGeometryContracts) {
+  if (contract.test.test(withoutComments(contract.source))) continue;
+  report(
+    contract.source === globalCss ? "src/styles/global.css" : "src/styles/ui-controls.css",
+    1,
+    "slider-geometry-contract",
+    contract.found,
+    "Supported Slider keeps the selected 44px field and square 48×8px overhanging handle",
+  );
+}
+
+const sliderSpecimenImport = styleGuideSource.match(
+  /import\s+([A-Za-z_$][\w$]*)\s+from\s+["']@\/components\/SliderSpecimen(?:\.tsx)?["']\s*;?/,
+);
+const importedSliderSpecimen = sliderSpecimenImport?.[1];
+const sliderSection = styleGuideSource.match(
+  /<section\b[^>]*class=["'][^"']*\bstyle-guide-topic\b[^"']*["'][^>]*aria-labelledby=["']slider["'][^>]*>[\s\S]*?<\/section>/,
+)?.[0];
+const usesSliderSpecimen = importedSliderSpecimen
+  ? new RegExp(`<${importedSliderSpecimen}\\b`).test(sliderSection ?? "")
+  : false;
+const hasSliderHeading = /<h3\b[^>]*id=["']slider["'][^>]*>\s*Slider\s*<\/h3>/.test(
+  sliderSection ?? "",
+);
+if (!sliderSpecimenImport || !usesSliderSpecimen || !hasSliderHeading) {
+  report(
+    styleGuideFile,
+    1,
+    "slider-supported-specimen",
+    "Slider section / SliderSpecimen",
+    "the style guide renders SliderSpecimen as a normal peer section beside Switch and Tables",
+  );
+}
+
+const sliderTestFile = "tests/slider.spec.ts";
+if (!existsSync(sliderTestFile)) {
+  report(
+    sliderTestFile,
+    1,
+    "slider-behaviour-evidence",
+    "missing file",
+    "Supported Slider requires the focused Playwright behavior suite at tests/slider.spec.ts",
+  );
+}
+
+const packageSource = readFileSync("package.json", "utf8");
+const checksWorkflow = readFileSync(".github/workflows/checks.yml", "utf8");
+if (!/"test:slider"\s*:\s*"playwright test tests\/slider\.spec\.ts --project=chromium"/.test(packageSource)) {
+  report(
+    "package.json",
+    1,
+    "slider-test-command",
+    "test:slider",
+    "the supported Slider browser suite keeps one stable package command",
+  );
+}
+if (!/run:\s*pnpm test:slider/.test(checksWorkflow)) {
+  report(
+    ".github/workflows/checks.yml",
+    1,
+    "slider-ci-evidence",
+    "pnpm test:slider",
+    "pull-request checks must run the supported Slider browser suite",
+  );
+}
+
+for (const temporarySliderFile of [
+  "src/pages/lab/sliders.astro",
+  "src/components/lab/sliders/SliderLab.tsx",
+  "src/components/lab/sliders/slider-lab.css",
+  "src/components/ui/experimental-slider.tsx",
+  "tests/slider-lab.spec.ts",
+]) {
+  if (!existsSync(temporarySliderFile)) continue;
+  report(
+    temporarySliderFile,
+    1,
+    "slider-lab-cleanup",
+    "temporary file remains",
+    "the selected Slider now lives in the permanent primitive and Style Guide specimen",
+  );
+}
+
 const buttonStateCssContracts = [
   {
     file: "src/styles/global.css",

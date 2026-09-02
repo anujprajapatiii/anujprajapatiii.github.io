@@ -1,0 +1,21 @@
+.slider-specimen {
+  display: grid;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm);
+  border: var(--control-indicator-size) solid var(--border);
+  background: var(--background-elevated);
+}
+
+.slider-specimen__header {
+  display: grid;
+  gap: var(--spacing-2xs);
+}
+
+.slider-specimen__header > * {
+  margin: 0;
+}
+
+.slider-specimen__header p {
+  max-width: var(--container-measure);
+  color: var(--text-secondary);
+}

@@ -16,6 +16,7 @@ export const styleGuideHeadings = [
   { depth: 2, slug: "components", text: "Components" },
   { depth: 3, slug: "actions", text: "Actions" },
   { depth: 3, slug: "switch", text: "Switch" },
+  { depth: 3, slug: "slider", text: "Slider" },
   { depth: 3, slug: "tables", text: "Tables" },
   { depth: 3, slug: "tabs", text: "Tabs" },
   { depth: 2, slug: "reference", text: "Reference" },
@@ -42,7 +43,7 @@ export const styleGuideChapters = [
     index: "03",
     slug: "components",
     title: "Components",
-    description: "Actions, switches, tables, and tabs.",
+    description: "Actions, switches, sliders, tables, and tabs.",
   },
   {
     index: "04",
@@ -352,6 +353,8 @@ export const interactionFoundations = [
       { token: "--control-switch-width / height", value: "42px / 20px" },
       { token: "--control-switch-thumb-width / height", value: "22px / 16px" },
       { token: "--control-switch-inset / travel", value: "2px / 16px" },
+      { token: "--control-slider-field-height", value: "44px" },
+      { token: "--control-slider-handle-width / height", value: "8px / 48px" },
     ],
   },
   {
