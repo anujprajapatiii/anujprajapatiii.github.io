@@ -1,0 +1,60 @@
+import {chromium,expect} from '@playwright/test';
+import fs from 'node:fs';
+import ts from 'typescript';
+const src=ts.transpileModule(fs.readFileSync('src/catalog.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.ESNext}}).outputText;
+const {patterns}=await import('data:text/javascript;base64,'+Buffer.from(src).toString('base64'));
+const browser=await chromium.launch({executablePath:'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
+const page=await browser.newPage({viewport:{width:1440,height:1000}});const errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(8000);
+await page.goto('http://localhost:5173');await expect(page.locator('.pattern-card')).toHaveCount(100);await page.locator('input[aria-label="Search patterns"]').fill('cancellation');await expect(page.locator('.pattern-card')).toHaveCount(1);await page.locator('input[aria-label="Search patterns"]').fill('');
+await page.getByRole('button',{name:'Save Interactive ROI calculator',exact:true}).click();await page.reload();await expect(page.getByRole('button',{name:'Unsave Interactive ROI calculator',exact:true})).toHaveAttribute('aria-pressed','true');
+const completed=[];const layout=[];
+async function load(p){await page.evaluate(slug=>location.hash='pattern/'+slug,p.slug);await expect(page.locator('.detail-title h2')).toHaveText(p.title);await expect(page.locator('.demo-card')).toBeVisible();}
+async function action(){await page.locator('.demo-card .demo-action').click()}
+for(const p of patterns){await load(p);const d=page.locator('.demo-card');let expected='';
+ switch(p.kind){
+ case 'calculator':await d.getByRole('slider').first().focus();await page.keyboard.press('ArrowRight');await expect(d.locator('.range-label strong').first()).toHaveText('13');break;
+ case 'lead':await d.locator('input[type=email]').fill('test@acme.test');await d.locator('input:not([type=email])').fill('Acme team');await d.locator('textarea').fill('Improve customer handoffs');await action();expected='Prepared for';break;
+ case 'quiz':await d.locator('.choice').nth(1).click();await action();expected='A starting point, picked for you';break;
+ case 'checklist':for(const label of await d.locator('.check-row').all())await label.click();expected='All set.';break;
+ case 'wizard':await action();await expect(d.locator('.error')).toContainText('name');await d.locator('input').fill('Acme launch');await action();await d.locator('.choice').nth(1).click();await action();await expect(d).toContainText('Acme launch');await action();expected=p.id===88?'Story draft prepared':'Your setup is ready';break;
+ case 'import':await d.getByRole('button',{name:p.id===80?'Preview sample export':'Use sample data',exact:true}).click();await expect(d.locator('tbody tr')).toHaveCount(3);await action();expected=p.id===80?'Your export is downloaded':'3 records imported';break;
+ case 'invite':await d.getByRole('button',{name:'Add sample teammates',exact:true}).click();await expect(d.locator('.person-row')).toHaveCount(3);await action();expected=p.id===20?'Invitation accepted in preview':'Invitations prepared';break;
+ case 'connect':await d.getByRole('button',{name:'Connect',exact:true}).first().click();await expect(d.locator('.sync-preview')).toContainText('3 sample records');await d.getByRole('button',{name:'Disconnect',exact:true}).click();await expect(d.locator('.sync-preview')).toHaveCount(0);break;
+ case 'template':await d.locator('.template-option').nth(1).click();await action();expected=p.id===83?'Contribution draft created':'Template added to your preview';break;
+ case 'tour':await action();await action();await action();expected='You’re ready to explore';break;
+ case 'create':await d.locator('input').fill('Acme launch');await action();await expect(d.locator('.project-row')).toHaveCount(1);expected='Acme launch';break;
+ case 'search':await d.locator('input').fill(p.items[0].slice(0,7));await d.locator('.search-results button').first().click();expected=p.id===16?'Join request prepared':'Action opened';break;
+ case 'segment':await d.locator('.choice').nth(1).click();await expect(d.locator('.data-row')).toHaveCount(3);await d.getByRole('textbox',{name:'View name'}).fill('My team view');await action();expected='My team view';break;
+ case 'notification':await d.getByRole('switch').first().click();await action();expected='1 optional updates enabled';break;
+ case 'digest':await d.locator('input[type=email]').fill('alex@acme.test');await d.getByRole('switch').click();await action();expected='delivery prepared';break;
+ case 'goal':await d.getByRole('button',{name:'Log progress',exact:true}).click();await expect(d.locator('.goal-summary>strong')).toContainText('4');await action();expected='saved in this demo';break;
+ case 'milestone':for(const label of await d.locator('.check-row').all())await label.click();expected='Milestone reached';break;
+ case 'feedback':case 'survey':await d.locator('.choice').nth(1).click();await d.locator('textarea').fill('We need a simpler workflow');await action();expected='Thanks for the context';break;
+ case 'pricing':case 'downgrade':await d.locator('.plan').nth(1).click();await action();expected=p.kind==='downgrade'?'Plan change previewed':'Your plan selection is ready';break;
+ case 'upgrade':case 'paywall':await action();expected='Team plan unlocked in preview';break;
+ case 'limit':await d.getByRole('button',{name:'Create a sample project',exact:true}).click();await expect(d.locator('.usage-total strong')).toContainText('23');await action();expected='Business plan preview';break;
+ case 'annual':await d.getByRole('switch').click();await action();expected='$2,160 per year';break;
+ case 'seat':await d.getByRole('slider').focus();await page.keyboard.press('ArrowRight');await action();expected='13 paid seats selected';break;
+ case 'addon':await d.locator('.check-row').first().click();await expect(d.locator('.seat-total')).toContainText('$110');await action();expected='Selected:';break;
+ case 'billing':await d.locator('input[type=email]').fill('billing@acme.test');await d.locator('.check-row').click();await action();expected='Billing review complete';break;
+ case 'trial':await d.locator('.check-row').first().click();await action();expected='1 of 3 evaluation steps complete';break;
+ case 'cancel':await action();await action();expected='Cancellation confirmed in preview';break;
+ case 'pause':await d.locator('.choice').nth(1).click();await action();expected='Pause scheduled in preview';break;
+ case 'referral':await d.getByRole('button',{name:'Simulate a referral',exact:true}).click();await expect(d.locator('.referral-status')).toContainText('1');await d.getByRole('button',{name:'Revoke link',exact:true}).click();await expect(d.getByRole('button',{name:'Simulate a referral',exact:true})).toBeDisabled();expected='Link revoked';break;
+ case 'share':await d.getByRole('switch').click();await action();expected='example URL';break;
+ case 'reward':await action();await action();await action();expected='One month of credit claimed';break;
+ case 'winback':await d.locator('.choice').nth(1).click();await action();expected='Your next step is ready';break;
+ }
+ if(expected)await expect(d).toContainText(expected);
+ await page.getByRole('button',{name:'Reset demo',exact:true}).click();
+ await page.getByRole('button',{name:'Mobile preview',exact:true}).click();
+ const overflow=await d.evaluate(el=>el.scrollWidth>el.clientWidth+1);if(overflow)layout.push(p.id);
+ await page.getByRole('tab',{name:'Design notes',exact:true}).click();await expect(page.locator('.notes-panel')).toContainText(p.metric);await page.getByRole('tab',{name:'Live preview',exact:true}).click();
+ completed.push(p.id);
+ if(p.id%20===0)console.log('Passed interactive paths: '+p.id+'/100');
+}
+await page.getByRole('button',{name:'Close pattern',exact:true}).click();await page.setViewportSize({width:320,height:740});await expect(page.locator('.mobile-header')).toBeVisible();await page.getByRole('button',{name:'Open navigation',exact:true}).click();await page.locator('.mobile-nav').getByRole('button',{name:/Monetization 10/}).click();await expect(page.locator('.pattern-card')).toHaveCount(10);const pageOverflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
+await page.screenshot({path:'/tmp/growth-mobile-final.png'});
+console.log(JSON.stringify({interactivePassed:completed.length,demoOverflows:layout,pageOverflow,runtimeErrors:errors}));
+fs.writeFileSync('/tmp/growth-qa.json',JSON.stringify({interactivePassed:completed.length,demoOverflows:layout,pageOverflow,runtimeErrors:errors}));
+await browser.close();if(errors.length||layout.length||pageOverflow)process.exit(1);

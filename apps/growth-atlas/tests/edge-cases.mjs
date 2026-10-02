@@ -1,0 +1,13 @@
+import {chromium,expect} from '@playwright/test';
+const browser=await chromium.launch({executablePath:'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
+const page=await browser.newPage({viewport:{width:390,height:844}});page.setDefaultTimeout(6000);
+await page.goto('http://localhost:5173/#pattern/csv-import-with-review');await page.waitForSelector('.demo-card');
+await page.locator('input[type=file]').setInputFiles({name:'bad.csv',mimeType:'text/csv',buffer:Buffer.from('Account,Owner,Status\nBroken,row')});
+await page.getByRole('button',{name:'Validate & preview',exact:true}).click();await expect(page.locator('.error')).toContainText('three non-empty');await expect(page.locator('.demo-action')).toBeDisabled();
+await page.locator('input[type=file]').setInputFiles({name:'valid.csv',mimeType:'text/csv',buffer:Buffer.from('Account,Owner,Status\n"Acme, Inc.",Alex,Active')});await page.getByRole('button',{name:'Validate & preview',exact:true}).click();await expect(page.locator('tbody')).toContainText('Acme, Inc.');await expect(page.locator('tbody tr')).toHaveCount(1);
+await page.getByRole('button',{name:'Close pattern',exact:true}).click();await page.keyboard.press('/');await expect(page.locator('[aria-label="Search patterns"]')).toBeFocused();
+await page.locator('[aria-label="Search patterns"]').fill('no such pattern');await expect(page.locator('.empty-results')).toContainText('No patterns found');await page.getByRole('button',{name:'Explore all patterns',exact:true}).click();await expect(page.locator('.pattern-card')).toHaveCount(100);
+await page.getByRole('button',{name:'Filters',exact:true}).click();await page.getByRole('combobox',{name:'Pattern format',exact:true}).click();await page.getByRole('option',{name:'Flow',exact:true}).click();await expect(page.locator('.card-footer>span:first-child').first()).toHaveText('Flow');
+await page.getByRole('button',{name:'Explore Value-first demo request',exact:true}).click();await page.getByRole('button',{name:'Prepare request',exact:true}).click();await expect(page.locator('.result')).toHaveCount(0);
+await page.keyboard.press('Escape');await expect(page.locator('.pattern-dialog')).toHaveCount(0);
+console.log('Passed CSV validation/quoted cells, search keyboard shortcut, empty state, format filtering, required fields, and Escape dismissal.');await browser.close();

@@ -5,7 +5,7 @@
   "packageManager": "pnpm@10.31.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "npm run build:growth-atlas && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "check": "node scripts/check-conventions.mjs",
@@ -13,7 +13,8 @@
     "test:slider": "playwright test tests/slider.spec.ts --project=chromium",
     "test:tabs": "playwright test tests/tabs.spec.ts --project=chromium",
     "test:tabs:headed": "playwright test tests/tabs.spec.ts --project=chromium --headed",
-    "sync:design-bundle": "node scripts/sync-design-bundle.mjs"
+    "sync:design-bundle": "node scripts/sync-design-bundle.mjs",
+    "build:growth-atlas": "BASE_PATH=/growth-atlas/ npm --prefix apps/growth-atlas run build -- --outDir ../../public/growth-atlas --emptyOutDir"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",

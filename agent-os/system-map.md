@@ -19,6 +19,7 @@ workflows change.
 | Theme-aware media | Selects matched light and dark imagery while preserving shared layout and accessibility semantics | `src/components/ThemeImage.astro` |
 | Layout primitives | One 1300px page container plus Section/Stack/Cluster and a typed 24-track Grid/GridItem system | `src/components/primitives/`, CSS in `src/styles/global.css` |
 | Deployment | Static build published to GitHub Pages | `.github/workflows/deploy.yml` |
+| Growth Atlas | Standalone React/Vite pattern library, built into the combined Pages artifact | `apps/growth-atlas/`, root `build:growth-atlas` script |
 | Design exploration | Isolated worktree and branch workflow for comparing alternatives, selecting one, and cleaning temporary lab code before merge | `agent-os/conventions/design-exploration.md`, `agent-os/plans/design-exploration-template.md` |
 | Pull-request review | Non-deploying convention, focused Switch, Slider, and Tabs browser-behaviour checks, and a production build plus a human design-review checklist | `.github/workflows/checks.yml`, `tests/switch.spec.ts`, `tests/slider.spec.ts`, `tests/tabs.spec.ts`, `.github/pull_request_template.md` |
 | Work orchestration | Strategy, plans, conventions, learnings | `agent-os/` |
@@ -34,6 +35,7 @@ workflows change.
 | `/play` | Experiments index |
 | `/play/<slug>` | Experiment detail pages with optional live links and embeds |
 | `/style-guide` | Internal design-system reference page |
+| `/growth-atlas/` | Interactive growth-pattern library with hash routes and source downloads |
 
 ## Content Model
 
@@ -85,6 +87,13 @@ before the pull request is ready to merge.
 Pushes to `main` trigger `.github/workflows/deploy.yml`. The workflow uses
 `withastro/action@v3` to build and `actions/deploy-pages@v4` to publish to
 GitHub Pages.
+
+Growth Atlas retains its own npm lockfile and dependencies under
+`apps/growth-atlas/`. CI installs them before the combined build. The root
+build first generates `public/growth-atlas/` with a `/growth-atlas/` asset base,
+then Astro copies it into `dist/`. Generated app output is ignored. The app
+keeps its own grayscale design and controls; portfolio design-system rules
+remain scoped to the portfolio's `src/` tree.
 
 Pull requests do not deploy. They use `.github/workflows/checks.yml` to catch
 convention, supported-component behavior, or production-build failures before

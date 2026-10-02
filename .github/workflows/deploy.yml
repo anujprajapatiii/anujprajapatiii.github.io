@@ -21,6 +21,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Growth Atlas dependencies
+        run: npm ci --prefix apps/growth-atlas
+
       # Runs before the build on purpose: these violations produce valid CSS
       # that renders wrongly, so a green build proves nothing about them.
       - name: Check design system
@@ -28,6 +36,8 @@ jobs:
 
       - name: Build with Astro
         uses: withastro/action@v3
+        with:
+          node-version: 22
 
   deploy:
     needs: build

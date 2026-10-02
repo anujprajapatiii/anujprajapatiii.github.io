@@ -1,0 +1,663 @@
+[
+  {
+    "product": "Notion",
+    "title": "Start with a Notion template",
+    "url": "https://www.notion.com/help/start-with-a-template",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Notion documents starter templates selected from answers given during onboarding. Users can add or delete these templates, and templates added from Marketplace remain editable.",
+    "appliesTo": [
+      5,
+      12
+    ],
+    "limits": "Documentation review, not visual inspection. This supports optional, editable starting structures; it does not establish that personalization improves activation.",
+    "id": "source-001"
+  },
+  {
+    "product": "Notion",
+    "title": "Manage members, admins & guests in Notion",
+    "url": "https://www.notion.com/help/add-members-admins-guests-and-groups",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Notion separates workspace members from page-scoped guests. Invitations include a chosen role; allowed email domains can surface a workspace during onboarding, and joining as a member has paid-seat implications on paid plans.",
+    "appliesTo": [
+      16,
+      20,
+      24,
+      59,
+      82
+    ],
+    "limits": "Documentation review, not visual inspection. Available roles and guest behavior depend on plan and workspace policy; this is not evidence for the demo’s exact invitation-acceptance layout.",
+    "id": "source-002"
+  },
+  {
+    "product": "Notion",
+    "title": "Import data into Notion",
+    "url": "https://www.notion.com/help/import-data-into-notion",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Notion offers imports through Settings or slash-command search, documents what does and does not transfer, and shows import status. Its Trello importer requires authorization, board selection, and a destination; importing into an existing database includes field mapping.",
+    "appliesTo": [
+      23,
+      25,
+      48
+    ],
+    "limits": "Documentation review, not visual inspection. Imports are documented for desktop and web, not mobile; the catalog’s mobile demo is an original adaptation. Slash-command evidence here is specific to finding import actions.",
+    "id": "source-003"
+  },
+  {
+    "product": "Slack",
+    "title": "Create a Slack workspace",
+    "url": "https://slack.com/help/articles/206845317-Create-a-Slack-workspace",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Slack documents an email-confirmation step before workspace creation, identifies the creator as Workspace Primary Owner, and follows creation with coworker invitations and setup guidance. The guide provides distinct desktop, iOS, and Android paths.",
+    "appliesTo": [
+      11,
+      13,
+      21
+    ],
+    "limits": "Documentation review, not visual inspection. The guide supports a sequence of identity, workspace, and team setup; it does not document an outcome checklist or conversion effect.",
+    "id": "source-004"
+  },
+  {
+    "product": "Slack",
+    "title": "Configure your Slack notifications",
+    "url": "https://slack.com/help/articles/201355156-Configure-your-Slack-notifications",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Slack lets people choose all messages or mentions and direct messages, add channel exceptions, configure mobile overrides, and schedule quiet hours. Mobile notification timing can depend on desktop inactivity.",
+    "appliesTo": [
+      42
+    ],
+    "limits": "Documentation review, not visual inspection. Some options depend on plan or device. The article supports notification controls, not a weekly digest cadence.",
+    "id": "source-005"
+  },
+  {
+    "product": "Slack",
+    "title": "Invite new members to your workspace",
+    "url": "https://slack.com/help/articles/201330256-Invite-new-members-to-your-workspace",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Slack invitations depend on role, plan, and workspace policy; members can request approval when direct invitations are restricted. Paid-plan admins can choose member or guest access and guest channels; invitations expire and pending invitations can be reactivated.",
+    "appliesTo": [
+      20,
+      24,
+      68
+    ],
+    "limits": "Documentation review, not visual inspection. Guest invitations and invite-link creation differ by device. Invitation-acceptance screen content was not observed.",
+    "id": "source-006"
+  },
+  {
+    "product": "Slack",
+    "title": "Export your workspace data",
+    "url": "https://slack.com/help/articles/201658943-Export-your-workspace-data",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Slack documents export scope by plan and role. Eligible admins select a date range, start an asynchronous export, receive an email when it is ready, and download a ZIP; expanded conversation exports require additional approval.",
+    "appliesTo": [
+      80
+    ],
+    "limits": "Documentation review, not visual inspection. Public-channel exports contain messages and file links in JSON; this is not a promise of universal access to private conversations or downloadable file contents.",
+    "id": "source-007"
+  },
+  {
+    "product": "Linear",
+    "title": "Start Guide – Linear Docs",
+    "url": "https://linear.app/docs/start-guide",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Linear’s Start Guide offers a browser-local demo before workspace setup, then work-email signup and workspace creation. It routes learning material separately for admins by team size and for members joining an existing workspace.",
+    "appliesTo": [
+      8,
+      11,
+      12,
+      13,
+      21
+    ],
+    "limits": "Documentation review, not visual inspection. The documented demo resets on refresh and excludes settings and SLAs. Learning-route personalization does not establish a role-selection screen or an in-product checklist.",
+    "id": "source-008"
+  },
+  {
+    "product": "Airtable",
+    "title": "CSV import extension",
+    "url": "https://support.airtable.com/articles/3067164948-csv-import-extension",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Airtable’s CSV import extension documents field mapping, sample-record previews, and counts for updated, unchanged, and newly created records before commit. Merging uses a selected field and offers a setting to skip blank or invalid values.",
+    "appliesTo": [
+      23
+    ],
+    "limits": "Documentation review, not visual inspection. This is the paid CSV import extension, not every Airtable import path. The documentation warns that unsupported values can become empty cells without an import error and recommends inspecting imported records.",
+    "id": "source-009"
+  },
+  {
+    "product": "Airtable",
+    "title": "Getting started with Airtable automations",
+    "url": "https://support.airtable.com/articles/3669392397-getting-started-with-airtable-automations",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Airtable documents a trigger-and-action builder with required trigger testing, action testing, and an explicit on/off control. Run history distinguishes successful, failed, and canceled runs, and failure notifications go to the last person who enabled the automation.",
+    "appliesTo": [
+      36,
+      52
+    ],
+    "limits": "Documentation review, not visual inspection. Run limits vary by plan, and both successful and failed attempts count toward usage. The article does not establish measured time savings or describe the catalog’s simulated recipe execution.",
+    "id": "source-010"
+  },
+  {
+    "product": "Trello",
+    "title": "Turn your board into a template",
+    "url": "https://support.atlassian.com/trello/docs/creating-template-boards/",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Trello separates a reusable template from the board created from it. Creating from a template asks for a board name, Workspace, and visibility; templates retain their own visibility rules, hide comments and activity, and can be viewed and copied on mobile.",
+    "appliesTo": [
+      5,
+      13,
+      82
+    ],
+    "limits": "Documentation review, not visual inspection. Private and Workspace-visible templates require Premium or Enterprise; turning boards into templates is documented only on web. No template-copy conversion rate is provided.",
+    "id": "source-011"
+  },
+  {
+    "product": "Jira",
+    "title": " Jira Templates for Every Team",
+    "url": "https://www.atlassian.com/software/jira/templates",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official template catalog",
+    "observed": "The public Jira template directory groups ready-made workflows by team, including software development, marketing, design, sales, operations, HR, legal, and finance. It describes Scrum, Kanban, bug tracking, and other structures, offers Use template and Learn more, and invites customers to submit a workflow idea so Atlassian can help build a template others can use.",
+    "appliesTo": [
+      5,
+      83
+    ],
+    "limits": "This is an official template directory. The observed contribution is an idea-submission invitation, not direct self-publication. The fetched page does not establish the submission review process, privacy checks, copying behavior, or adoption outcomes.",
+    "id": "source-012"
+  },
+  {
+    "product": "HubSpot",
+    "title": "Free Demo of HubSpot's CRM Software",
+    "url": "https://www.hubspot.com/products/crm/demo",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official product page",
+    "observed": "The CRM demo page invites visitors to request a free demo, then organizes the proposition around unifying data, teams, and tools, with named capabilities under each area.",
+    "appliesTo": [
+      2
+    ],
+    "limits": "Public demo landing-page copy only. The fetched page reports “Form not available”; form fields, submission behavior, and conversion effects were not verified.",
+    "id": "source-013"
+  },
+  {
+    "product": "Intercom",
+    "title": "Intercom Pricing | Plans for every team size",
+    "url": "https://www.intercom.com/pricing",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official pricing page",
+    "observed": "Pricing separates paid Full seats from usage charges and limited Lite seats. It provides cost-estimate and savings-calculator entry points, lists optional add-ons, and describes a 14-day trial without a credit card. The FAQ says downgrades typically take effect at renewal.",
+    "appliesTo": [
+      1,
+      4,
+      54,
+      55,
+      58,
+      59,
+      73
+    ],
+    "limits": "Public pricing and FAQ text. Calculator links were observed, but their interactions were not tested. Prices and contract terms vary; no uplift or authenticated billing flow was verified.",
+    "id": "source-014"
+  },
+  {
+    "product": "Zendesk",
+    "title": "Zendesk Pricing Plans | Starting from $19/month",
+    "url": "https://www.zendesk.com/pricing/",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official pricing page",
+    "observed": "Plans combine per-agent subscription charges, optional add-ons, and some usage charges. The page distinguishes online purchase from sales-assisted buying, describes a 14-day Suite Professional trial, and directs security evaluators to its Trust Center.",
+    "appliesTo": [
+      2,
+      4,
+      10,
+      54,
+      55,
+      57,
+      58,
+      59
+    ],
+    "limits": "Pricing and FAQ documentation only. The Trust Center was referenced rather than audited; security controls, trial screens, and checkout completion were not independently verified.",
+    "id": "source-015"
+  },
+  {
+    "product": "ClickUp",
+    "title": "ClickUp Pricing and Plans",
+    "url": "https://clickup.com/pricing",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official pricing page",
+    "observed": "The FAQ says an upgrade covers the whole Workspace; additional paid users are prorated and separate Workspaces require separate upgrades. Limited feature uses serve as previews: reaching their limit preserves existing data but prevents creating or editing with that feature. Cancellation normally preserves the plan until the billing-cycle end, with an immediate-downgrade option.",
+    "appliesTo": [
+      4,
+      51,
+      52,
+      53,
+      54,
+      59,
+      71,
+      73
+    ],
+    "limits": "Public pricing FAQ and feature comparison. Feature-use limits differ from storage and monthly automation limits. No in-product notification placement, guest classification, or payment was tested.",
+    "id": "source-016"
+  },
+  {
+    "product": "GitHub",
+    "title": "Upgrading your account's plan - GitHub Docs",
+    "url": "https://docs.github.com/en/billing/how-tos/manage-plan-and-licenses/upgrade-plan",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "The documented upgrade flow compares plans, chooses monthly or yearly payment, collects billing and payment details, then asks the buyer to review the charge and billing date before confirming. Organization billing changes require an organization owner or billing manager; personal-account and organization upgrades are separate.",
+    "appliesTo": [
+      51,
+      54,
+      57,
+      59
+    ],
+    "limits": "Documented steps, not an authenticated walkthrough. This source does not establish the visual layout, proration calculation, or payment success of the catalog demo.",
+    "id": "source-017"
+  },
+  {
+    "product": "GitHub",
+    "title": "Pricing · Plans for every developer · GitHub",
+    "url": "https://github.com/pricing",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official pricing page",
+    "observed": "The page compares Free, Team, and Enterprise on the same feature dimensions, including Actions minutes and storage allowances. Separately priced add-ons and a pricing-calculator link sit alongside the tier comparison; paid per-user prices include an explicit first-12-month qualification.",
+    "appliesTo": [
+      4,
+      52,
+      58,
+      59
+    ],
+    "limits": "Fetched comparison text contains component-loading error messages, so only readable plan and allowance text supports this observation. The calculator and purchase flow were not exercised.",
+    "id": "source-018"
+  },
+  {
+    "product": "Zapier",
+    "title": "Plans & Pricing | Zapier",
+    "url": "https://zapier.com/pricing",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official pricing page",
+    "observed": "The FAQ documents email warnings near and at task limits. With pay-per-task enabled, workflows continue at a higher per-task rate until a maximum; with it disabled they pause at the plan limit. It also describes a no-card 14-day Professional trial, immediate prorated upgrades, and downgrades or cancellations that retain paid access to the billing-cycle end.",
+    "appliesTo": [
+      4,
+      42,
+      51,
+      52,
+      55,
+      71,
+      73
+    ],
+    "limits": "Public FAQ documentation, not tested account behavior. The page has mixed wording about automatic overages; the observation follows the explicit enabled/disabled behavior in its task-limit answer.",
+    "id": "source-019"
+  },
+  {
+    "product": "Webflow",
+    "title": "Plans & pricing | Webflow",
+    "url": "https://webflow.com/pricing",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official pricing page",
+    "observed": "The pricing page separates Site, Workspace, and Platform plans. Workspace comparisons state that one full owner seat is included, while agency/freelancer guests can be added without consuming seats. It distinguishes site-specific access, roles, publishing permissions, and staging allowances across tiers.",
+    "appliesTo": [
+      4,
+      51,
+      59,
+      68
+    ],
+    "limits": "Public pricing comparison. Guest eligibility and limits depend on plan; no actual workspace upgrade, permission change, or staging behavior was tested.",
+    "id": "source-020"
+  },
+  {
+    "product": "Stripe",
+    "title": "Pause payment collection | Stripe Documentation",
+    "url": "https://docs.stripe.com/billing/subscriptions/pause-payment",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Stripe distinguishes pausing payment collection from pausing access or canceling renewal. Payment collection can resume on a chosen date or remain paused indefinitely. The subscription stays active and invoices continue; the integrator chooses draft, uncollectible, or void invoice handling.",
+    "appliesTo": [
+      72
+    ],
+    "limits": "Billing-platform capability, not evidence that a SaaS product offers customer-facing pause. Access, invoice handling, resumption, and any customer-facing pause experience require explicit implementation.",
+    "id": "source-021"
+  },
+  {
+    "product": "Stripe",
+    "title": "Revenue recovery | Stripe Documentation",
+    "url": "https://docs.stripe.com/billing/revenue-recovery",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "The recovery guide describes configurable failed-payment retries, emails for failed payments or expiring cards, payment-method updates, and recovery analytics. It also lists custom workflows such as annual-subscriber dunning and subscription-cancellation confirmations.",
+    "appliesTo": [
+      42,
+      77
+    ],
+    "limits": "Provider documentation for recurring-revenue recovery, not an observed customer UI or evidence of a recovery-rate improvement. Delivery and successful payment require actual provider events.",
+    "id": "source-022"
+  },
+  {
+    "product": "Stripe",
+    "title": "Provide a customer portal to your customers | Stripe Documentation",
+    "url": "https://docs.stripe.com/customer-management",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "The portal supports updating payment details, viewing or paying invoices, and canceling immediately or at the current period’s end. Cancellation reasons and coupon offers are optional. The guide lists restrictions: certain subscription types can be canceled but not updated, and scheduled changes can block both actions.",
+    "appliesTo": [
+      57,
+      71,
+      73,
+      76,
+      77
+    ],
+    "limits": "Configurable billing-platform behavior, not a universal SaaS flow. Trial modifications can end a trial and invoice immediately by default; subscription eligibility and portal settings must be checked.",
+    "id": "source-023"
+  },
+  {
+    "product": "Buffer",
+    "title": "Pricing | Buffer",
+    "url": "https://buffer.com/pricing",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official pricing page",
+    "observed": "The page prices by connected channel and presents a channel-count control plus monthly/yearly choices. Annual offers show both the monthly equivalent and yearly charge. Its FAQ says a trial without payment details downgrades to Free; channels beyond the free allowance lock, affecting which scheduled posts can publish.",
+    "appliesTo": [
+      4,
+      52,
+      54,
+      55,
+      59,
+      73
+    ],
+    "limits": "Public pricing and FAQ text. The count control was not interacted with. Channel-based capacity is analogous to seat estimation but is not a per-seat billing example; exact limits and prices can change.",
+    "id": "source-024"
+  },
+  {
+    "product": "Amplitude",
+    "title": "Amplitude Pricing",
+    "url": "https://amplitude.com/pricing",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official pricing page",
+    "observed": "The page distinguishes a no-card Free plan with an event-volume limit from paid expansion based on usage. It defines an event and a monthly tracked user separately, provides an estimate-bill entry point, and compares capability, retention, permission, and saved-chart limits across plans.",
+    "appliesTo": [
+      4,
+      51,
+      52,
+      58
+    ],
+    "limits": "Public pricing and FAQ text. Calculator behavior and account usage indicators were not tested. The source describes commercial limits, not the visual design of a usage meter or demonstrated business impact.",
+    "id": "source-025"
+  },
+  {
+    "product": "Dropbox",
+    "title": "How to refer friends to Dropbox - Dropbox Help",
+    "url": "https://help.dropbox.com/storage-space/earn-space-referring-friends",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Dropbox documents copying a referral link or sending a chosen email invitation from Settings → Refer a friend. Both parties receive storage only after the recipient completes the required account, installation, login, and email-verification steps. The tracker distinguishes Invitation sent, Waiting for install, Waiting for email verification, Completed, and Ineligible. Attribution goes to the referral link used; sharing a folder does not qualify.",
+    "appliesTo": [
+      81,
+      85
+    ],
+    "limits": "This program applies to Basic, Plus, Family, and Professional accounts; Dropbox team accounts cannot send referrals. The source supports eligibility, attribution, and status transparency, not a B2B team referral program, link revocation, conversion uplift, or the demo’s reward amount. Public documentation was read; no authenticated interface was tested.",
+    "id": "source-026"
+  },
+  {
+    "product": "Calendly",
+    "title": "Help Center — Connect your calendar to Calendly",
+    "url": "https://calendly.com/help",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Calendly’s Help Center quick answer for calendar connections instructs users to choose a calendar provider, sign in and allow access, select calendars to check for conflicts, choose where new bookings go, then save and verify connected status. If more than one calendar is connected, one is chosen as the main calendar for bookings.",
+    "appliesTo": [
+      25
+    ],
+    "limits": "The requested scheduling-share article redirected to this Help Center page; the cited behavior comes from its visible calendar-connection quick answer. It supports initial connection and source selection, not expired-token recovery, scope changes, or a verified authenticated OAuth flow.",
+    "id": "source-027"
+  },
+  {
+    "product": "Typeform",
+    "title": "Plans & Pricing | Typeform",
+    "url": "https://www.typeform.com/pricing",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official pricing page",
+    "observed": "Typeform’s pricing FAQ says customers can upgrade, downgrade, or switch plans, but cannot pause a prepaid subscription. Cancellation takes effect at the end of the prepaid period. Existing forms and collected responses are not deleted when the paid plan expires, while forms may close to new responses and the seat count may fall. The FAQ recommends downgrading when usage temporarily decreases.",
+    "appliesTo": [
+      71,
+      72,
+      73
+    ],
+    "limits": "These are published plan-change terms, not observations of the cancellation UI. Typeform is a counterexample to offering pause universally: its page explicitly says pause is unavailable. The fetched page contains inconsistent price and savings fragments, so no exact price or discount is asserted.",
+    "id": "source-028"
+  },
+  {
+    "product": "SurveyMonkey",
+    "title": "SurveyMonkey Plans and Pricing",
+    "url": "https://www.surveymonkey.com/pricing/",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official pricing page",
+    "observed": "SurveyMonkey distinguishes Full Access seats from Analyst seats: Analysts can view, comment on, and analyze surveys shared with them. Team plans start at three users; inviting beyond purchased seats incurs a prorated overage. Its FAQ says turning off auto-renew downgrades the account at the billing-cycle end, and responses above the Basic limit that are older than 365 days are then subject to deletion. Paid response overages are separately disclosed.",
+    "appliesTo": [
+      4,
+      24,
+      59,
+      73
+    ],
+    "limits": "The source is the public pricing page and its FAQ, not an observed invitation, checkout, or downgrade flow. Region, plan, and contract terms may differ. The distinct seat permissions and possible data loss are design constraints to disclose; they are not evidence that the demo reproduces SurveyMonkey’s interface.",
+    "id": "source-029"
+  },
+  {
+    "product": "monday.com",
+    "title": "monday.com pricing and plans",
+    "url": "https://monday.com/pricing",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official pricing page",
+    "observed": "monday.com’s work-management pricing presents a team-size selector, monthly versus yearly billing, per-seat prices, and a total calculated for the chosen seats. Basic includes unlimited free read-only viewers. Standard describes guests as external users limited to invited boards. The FAQ directs plan changes through Admin → Billing → change plan and notes that downgrades after the refund period do not receive refunds.",
+    "appliesTo": [
+      4,
+      54,
+      59,
+      73
+    ],
+    "limits": "The fetched page contains several monday product price tables and promotional terms. These observations concern work management and the page’s plan-change FAQ; they do not establish a specific customer quote, permission-review sequence, or prorating outcome. No checkout was completed.",
+    "id": "source-030"
+  },
+  {
+    "product": "Docusign",
+    "title": "Docusign Pricing | eSignature Plans for Personal & Business",
+    "url": "https://ecom.docusign.com/plans-and-pricing/esignature",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official pricing page",
+    "observed": "Docusign separates the payment cadence from the commitment: its Annual | Billed monthly option displays a monthly price and the full annual commitment. The FAQ says cancellation after the initial 30-day period still requires the remaining annual balance, taxes, and overages. Add-ons require a base plan and may have recurring or usage-based charges; existing customers can find them under Account → Settings → Plan and Billing → Add-ons.",
+    "appliesTo": [
+      4,
+      54,
+      58,
+      71
+    ],
+    "limits": "The pricing page provides material purchase and cancellation terms, not a tested checkout or cancellation screen. Availability, taxes, region, and contract terms vary. Monthly installment billing must not be interpreted as a month-to-month commitment; no exact personalized charge is asserted.",
+    "id": "source-031"
+  },
+  {
+    "product": "Zoom",
+    "title": "Zoom Workplace: Team Collaboration Tools | Zoom",
+    "url": "https://www.zoom.com/en/products/collaboration-tools/?cms_guid=false",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official product page",
+    "observed": "Zoom Workplace’s public page includes a cost-comparison estimator that asks which software the visitor uses and organization size, recommends a Workspace plan, and describes per-user and total monthly savings. The disclaimer says the estimate is informational, assumes cancellation of at least four third-party plans, and uses publicly available US-dollar list prices as of March 2025. The same page compares Basic, Pro, and Business feature limits.",
+    "appliesTo": [
+      1,
+      3,
+      4
+    ],
+    "limits": "This is a product page with embedded pricing and a calculator, read as text. The calculator was not executed and no savings result was validated. Its baseline date and cancellation assumptions limit the estimate; observed marketing claims are not proof of realized savings or conversion uplift.",
+    "id": "source-032"
+  },
+  {
+    "product": "Metabase",
+    "title": "Dashboard subscriptions",
+    "url": "https://www.metabase.com/docs/latest/dashboards/subscriptions",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Metabase dashboard subscriptions separate recipients, delivery frequency, filters, and attachments. They support email or Slack, immediate test delivery, skipping empty results, and deleting a subscription; weekly and monthly schedules require a day and time.",
+    "appliesTo": [
+      41
+    ],
+    "limits": "Documentation review, not visual inspection. Email or Slack must be configured, and per-subscription filter customization requires Pro or Enterprise. Test delivery goes to every configured recipient, so the guide recommends a test address or channel first.",
+    "id": "source-033"
+  },
+  {
+    "product": "Metabase",
+    "title": "Filtering",
+    "url": "https://www.metabase.com/docs/latest/questions/query-builder/filters",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Metabase selects filter controls based on column type, displays applied filters as editable controls, and distinguishes fixed dates from relative ranges that move with time. Named segments provide reusable combinations of common organizational filters.",
+    "appliesTo": [
+      35,
+      43
+    ],
+    "limits": "Documentation review, not visual inspection. This supports report filtering and reusable filter logic; the article does not document saving a complete custom view or establish improved return frequency.",
+    "id": "source-034"
+  },
+  {
+    "product": "PostHog",
+    "title": "Creating insights - Docs - PostHog",
+    "url": "https://posthog.com/docs/product-analytics/insights",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "PostHog maps insight types to analytical questions, including trends, conversion funnels, retention, and user paths. Users can choose an insight type, customize it, change types through tabs, and save it; an insight created from a dashboard is added there automatically.",
+    "appliesTo": [
+      35
+    ],
+    "limits": "Documentation review, not visual inspection. The source supports selectable analytical starting points and save behavior, not the catalog’s exact guided wizard or any claimed reporting-time improvement.",
+    "id": "source-035"
+  },
+  {
+    "product": "PostHog",
+    "title": "Creating surveys - Docs - PostHog",
+    "url": "https://posthog.com/docs/surveys/creating-surveys",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "PostHog documents in-app surveys with rating, free-text, and choice questions. Display conditions can target an event, URL, feature flag, or user properties; wait periods and once-only event settings control repetition, while confirmation text is configurable.",
+    "appliesTo": [
+      46,
+      76
+    ],
+    "limits": "Documentation review, not visual inspection. Hosted surveys do not use the same display conditions. Event targeting makes post-task feedback possible but does not prove the trigger represents successful task completion or that responses improve retention.",
+    "id": "source-036"
+  },
+  {
+    "product": "Linear",
+    "title": "Custom Views – Linear Docs",
+    "url": "https://linear.app/docs/custom-views",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Linear lets users save a filtered list or board as a named custom view, edit or duplicate it, and favorite it for sidebar access. Views have an owner and sharing scope; copying a URL, including temporary filters, does not grant access.",
+    "appliesTo": [
+      43,
+      82
+    ],
+    "limits": "Documentation review, not visual inspection. Initiative views require Enterprise. The article supports durable views and permission-aware sharing, not a public report-sharing workflow.",
+    "id": "source-037"
+  },
+  {
+    "product": "Sentry",
+    "title": "Organization and User Management",
+    "url": "https://docs.sentry.io/organization/membership/",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Sentry distinguishes organization roles from team roles and separates billing authority from project access. With open membership disabled, joining a team and inviting others require approval; managers or owners can allow members to invite without that approval.",
+    "appliesTo": [
+      16,
+      24,
+      51,
+      68
+    ],
+    "limits": "Documentation review, not visual inspection. Team-level roles require Business or Enterprise. This documents authority and membership rules, not a seat-price calculation or a particular upgrade-request screen.",
+    "id": "source-038"
+  },
+  {
+    "product": "Notion",
+    "title": "Log in & out of Notion",
+    "url": "https://www.notion.com/help/log-in-and-out",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Notion documents email verification-code login alongside passwords, identity providers, passkeys, and workspace-enabled SAML SSO. A workspace can require a specific sign-in provider, and organizations with multiple providers prompt the user to choose.",
+    "appliesTo": [
+      11
+    ],
+    "limits": "Documentation review, not visual inspection. This primarily describes login and identity recovery choices, not account-creation conversion. SAML SSO requires a supported plan and workspace configuration.",
+    "id": "source-039"
+  },
+  {
+    "product": "Slack",
+    "title": "Join a Slack workspace",
+    "url": "https://slack.com/help/articles/212675257-Join-a-Slack-workspace",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Slack’s workspace-joining guide asks for an email confirmation code before listing invitations that can be accepted. An emailed invitation leads to Join Now and name entry, with separate desktop, iOS, and Android instructions.",
+    "appliesTo": [
+      16,
+      20
+    ],
+    "limits": "Documentation review, not visual inspection. The documented list contains invitations for the verified email; it is not evidence that arbitrary private workspaces are discoverable by company name or domain.",
+    "id": "source-040"
+  },
+  {
+    "product": "Notion",
+    "title": "Notion Security & Compliance",
+    "url": "https://www.notion.com/security",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official security overview",
+    "observed": "Notion’s public security page separates security practices, privacy agreements, compliance, and service reliability. It directs evaluators to a Trust Center for compliance reports and to the relevant terms, policies, and service-status resources.",
+    "appliesTo": [
+      10
+    ],
+    "limits": "Official security-page text review, not visual inspection or an independent security audit. Compliance reports were not accessed; assertions on the page remain vendor claims, not certifications of this catalog.",
+    "id": "source-041"
+  },
+  {
+    "product": "Asana",
+    "title": "Explore Asana Goal Tracking & Reporting Features • Asana",
+    "url": "https://asana.com/features/goals-reporting",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official product overview",
+    "observed": "Asana describes linking a goal to supporting projects, portfolios, or tasks so progress updates from the connected work. Goals can be visible to the organization or restricted to specific members.",
+    "appliesTo": [
+      44
+    ],
+    "limits": "Official product-page text review, not visual inspection. Goals require Advanced or higher. This describes linked work and visibility; it does not establish that the catalog’s manual progress controls reproduce Asana or cause better outcomes.",
+    "id": "source-042"
+  },
+  {
+    "product": "Microsoft 365",
+    "title": "Microsoft 365 Admin Center Usage Reports Overview - Microsoft 365 admin",
+    "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/activity-reports/activity-reports?view=o365-worldwide",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Microsoft 365 usage reports offer an activity overview with service-level drilldowns and reporting windows generally covering 7, 30, 90, and 180 days. Administrators can use these reports alongside license assignments to review adoption, while user identifiers are hidden by default.",
+    "appliesTo": [
+      74,
+      59
+    ],
+    "limits": "Documentation review, not visual inspection. Reports require an eligible role, vary by service and environment, and commonly lag by 24–72 hours or longer. Usage demonstrates activity, not realized savings, business value, or renewal impact.",
+    "id": "source-043"
+  },
+  {
+    "product": "Linear",
+    "title": "Projects – Linear Docs",
+    "url": "https://linear.app/docs/projects",
+    "checkedAt": "2026-10-02",
+    "evidenceType": "Official documentation",
+    "observed": "Linear documents project creation from workspace or team project views with only a project name required. A lead, status, labels, and other properties can be supplied at creation or edited later; projects group work around a clear outcome or planned completion.",
+    "appliesTo": [
+      31
+    ],
+    "limits": "Documentation review, not visual inspection. This supports minimal required input and later configuration, not an observed first-project empty state, validation layout, or activation improvement.",
+    "id": "source-044"
+  }
+]

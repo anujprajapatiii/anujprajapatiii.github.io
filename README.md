@@ -10,11 +10,19 @@ Personal portfolio site, built with Astro and maintained with Claude Code.
 
 ```bash
 pnpm install
+npm ci --prefix apps/growth-atlas
 pnpm dev      # http://localhost:4321
 pnpm build    # production build to dist/
 ```
 
 ## How this repo is organized
+
+Growth Atlas lives in `apps/growth-atlas/` and is published at
+https://anujprajapatiii.github.io/growth-atlas/. Its Vite build generates the
+ignored `public/growth-atlas/` directory before Astro copies it into the
+combined Pages artifact. Edit its source, then run `pnpm build`; generated
+files should not be committed. For app development, use
+`npm --prefix apps/growth-atlas run dev`.
 
 Agent and maintainer guidance lives in [AGENTS.md](AGENTS.md). Strategy, plans,
 conventions, and learnings live in [agent-os/](agent-os/).
